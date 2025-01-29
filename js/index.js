@@ -45,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
         loadHistory(new URLSearchParams(window.location.search.slice(1)).get("page")).click();
         window.addEventListener("popstate", e => {
             const targetPage = new URLSearchParams(e.target.location.search.slice(1)).get("page");
-            console.log(targetPage);
             setPage(loadHistory(targetPage));
             loadTo(targetPage, true);
         });
@@ -54,7 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadTo(src, skipHistory = false) {
     if(!skipHistory) {
-        window.history.pushState(src, "", `/?page=${src}`);
+        const url = new URL(window.location);
+        url.searchParams.set("page", src);
+        window.history.pushState(src, "", url);
     }
     const frame = document.querySelector("#content-page");
     const loadEvt = frame.onload;
