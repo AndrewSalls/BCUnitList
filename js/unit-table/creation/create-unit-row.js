@@ -47,8 +47,8 @@ export function createIconBox(id, currentForm, maxForm, nameCallback) {
 
     const rowIMG = document.createElement("img");
     rowIMG.classList.add("unit-icon");
-    rowIMG.src = `../../res/img/unit_icon/${id}_${currentForm}.png`;
-    rowIMG.onerror = () => { rowIMG.onerror = null; rowIMG.src = "../../res/img/unit_icon/unknown.png"; }
+    rowIMG.src = `../../assets/img/unit_icon/${id}_${currentForm}.png`;
+    rowIMG.onerror = () => { rowIMG.onerror = null; rowIMG.src = "../../assets/img/unit_icon/unknown.png"; }
     rowImage.appendChild(rowIMG);
 
     rowIMG.addEventListener("click", () => {
@@ -59,7 +59,7 @@ export function createIconBox(id, currentForm, maxForm, nameCallback) {
         }
 
         if(!rowIMG.classList.contains("hidden")) {
-            rowIMG.src = `../../res/img/unit_icon/${id}_${rowImage.dataset.form}.png`;
+            rowIMG.src = `../../assets/img/unit_icon/${id}_${rowImage.dataset.form}.png`;
         }
         nameCallback(parseInt(rowImage.dataset.form));
     });
@@ -158,7 +158,7 @@ export function createOrbBox(existingOrbs, orbAmount) {
     }
 
     return [rowOrb, orbAmount > 0 ? () => {
-        horizontalAlign.querySelectorAll(".orb-color").forEach(oc => { oc.dataset.trait = "none"; oc.src = "../../res/img/orb/empty-orb.png"; });
+        horizontalAlign.querySelectorAll(".orb-color").forEach(oc => { oc.dataset.trait = "none"; oc.src = "../../assets/img/orb/empty-orb.png"; });
         horizontalAlign.querySelectorAll(".orb-type").forEach(ot => { ot.dataset.type = "none"; ot.src = ""; ot.classList.add("invisible"); });
         horizontalAlign.querySelectorAll(".orb-rank").forEach(or => { or.dataset.rank = "none"; or.src = ""; or.classList.add("invisible"); });
     } : null];
@@ -172,15 +172,15 @@ export function createFavoriteBox(isFavorited) {
 
     const favIcon = document.createElement("img");
     favIcon.classList.add("fav-icon");
-    favIcon.src = "../../res/img/fav-empty.png";
+    favIcon.src = "../../assets/img/fav-empty.png";
     favWrapper.dataset.favorited = isFavorited ? 0 : 1; // Inverted since a click event gets called to update image
 
     favIcon.onclick = () => {
         if(favWrapper.dataset.favorited === "0") {
-            favIcon.src = "../../res/img/fav-full.png";
+            favIcon.src = "../../assets/img/fav-full.png";
             favWrapper.dataset.favorited = 1;
         } else {
-            favIcon.src = "../../res/img/fav-empty.png";
+            favIcon.src = "../../assets/img/fav-empty.png";
             favWrapper.dataset.favorited = 0;
         }
     };

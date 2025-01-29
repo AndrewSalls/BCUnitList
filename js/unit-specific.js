@@ -88,7 +88,7 @@ function loadSpecific(id) {
             document.querySelector("#catseye-wrapper").classList.toggle("hidden", entry.rarity === "N");
             if(entry.rarity !== "N") {
                 setupCostValue("catseye", cost[`catseye_${entry.rarity}`], cost.ultra[`catseye_${entry.rarity}`]);
-                document.querySelector("#catseye-img").src = `../res/img/evo_mats/${RARITY_MAP[entry.rarity].replace("-", "_")}_catseye.png`;
+                document.querySelector("#catseye-img").src = `../assets/img/evo_mats/${RARITY_MAP[entry.rarity].replace("-", "_")}_catseye.png`;
             }
             document.querySelector("#dark-wrapper").classList.toggle("hidden", entry.rarity !== "UR");
             if(entry.rarity === "UR") {
