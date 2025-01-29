@@ -28,3 +28,15 @@ https://mygamatoto.com
 https://github.com/battlecatsinfo/battlecatsinfo.github.io
 
 https://github.com/battlecatsultimate/BCU-java-PC (BCU)
+
+## Planned (Near) Future Features (Ignore that settings says version 1.0, it's not actually 1.0 until at the very least the home page and data saving are finished)
+- Home page
+- Saving data
+- Creating custom categories
+- Banishing units to the shadow realm
+
+## Potential (Slightly less) Future Features
+- Cannon/style/base levels
+- Creating, saving, and sharing unit loadouts
+- Unit stats/abilities & ability to search/filter by abilities
+- Mobile/vertical orientation support
