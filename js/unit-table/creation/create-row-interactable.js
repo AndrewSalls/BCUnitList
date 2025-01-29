@@ -60,7 +60,7 @@ export function createTalentInteractable(talentName, talentMax, talentLevel, isU
     container.title = `${talentName.replace("_", " ")} - Max level: ${talentMax}`;
 
     const image = document.createElement("img");
-    image.src = `assets/img/ability/${talentName}.png`;
+    image.src = `/assets/img/ability/${talentName}.png`;
 
     const number = document.createElement("p");
     number.classList.add("talent-level");
@@ -127,14 +127,14 @@ export function createOrbInteractable(orbData) {
 
     if(orbData) {
         orbColor.dataset.trait = orbData.trait;
-        orbColor.src = `assets/img/orb/${orbData.trait}.png`;
+        orbColor.src = `/assets/img/orb/${orbData.trait}.png`;
         orbType.dataset.type = orbData.type;
-        orbType.src = `assets/img/orb/${orbData.type}.png`;
+        orbType.src = `/assets/img/orb/${orbData.type}.png`;
         orbRank.dataset.rank = orbData.rank;
-        orbRank.src = `assets/img/orb/${orbData.rank}.png`;
+        orbRank.src = `/assets/img/orb/${orbData.rank}.png`;
     } else {
         orbColor.dataset.trait = "none";
-        orbColor.src = "assets/img/orb/empty-orb.png";
+        orbColor.src = "/assets/img/orb/empty-orb.png";
         orbType.dataset.type = "none";
         orbType.classList.add("invisible");
         orbRank.dataset.rank = "none";

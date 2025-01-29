@@ -1,5 +1,5 @@
 export async function parseCategoryFile(file) {
-    return fetch(`assets/unit_data/category/${file}.json`)
+    return fetch(`/assets/unit_data/category/${file}.json`)
     .then(r => r.json())
     .then(async j => {
         for(const key of Object.keys(j)) {
@@ -11,7 +11,7 @@ export async function parseCategoryFile(file) {
 }
 
 export async function parseCategory(file, name) {
-    return fetch(`assets/unit_data/category/${file}.json`)
+    return fetch(`/assets/unit_data/category/${file}.json`)
     .then(r => r.json())
     .then(j => flatten(j[name]));
 }
@@ -27,7 +27,7 @@ async function flatten(arr) {
 }
 
 export async function parseAllCategories() {
-    return fetch("assets/unit_data/category/types.txt")
+    return fetch("/assets/unit_data/category/types.txt")
     .then(t => t.text())
     .then(t => t.split(" ").map(async p => {return {[p]: await parseCategoryFile(p)}}))
     .then(pl => Promise.all(pl))

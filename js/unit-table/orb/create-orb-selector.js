@@ -87,7 +87,7 @@ function createTraitSelector(traitData, traitTitle) {
     title.textContent = traitTitle;
 
     const traitImg = document.createElement("img");
-    traitImg.src = `assets/img/orb/${traitData}.png`;
+    traitImg.src = `/assets/img/orb/${traitData}.png`;
     traitImg.title = traitTitle;
 
     wrapper.append(title, traitImg);
@@ -117,7 +117,7 @@ function createTypeSelector(typeData, typeTitle) {
     title.textContent = typeTitle;
 
     const typeImg = document.createElement("img");
-    typeImg.src = `assets/img/orb/${typeData}.png`;
+    typeImg.src = `/assets/img/orb/${typeData}.png`;
     typeImg.title = typeTitle;
 
     wrapper.append(title, typeImg);
@@ -141,7 +141,7 @@ function createRankSelectionSubmenu() {
 function createRankSelector(imgData, imgTitle) {
     const img = document.createElement("img");
 
-    img.src = `assets/img/orb/${imgData}.png`;
+    img.src = `/assets/img/orb/${imgData}.png`;
     img.dataset.rank = imgData;
     img.title = imgTitle;
 
