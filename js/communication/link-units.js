@@ -8,7 +8,7 @@ let settings = {};
 
 export default async function initializeData() {
     return new Promise(async (res, _) => {
-        settings = await fetch("/assets/settings.json").then(res => res.json());
+        settings = await fetch("./assets/settings.json").then(res => res.json());
         categories = await parseAllCategories();
         unitData = await getUnitData(categories, settings);
         res();

@@ -127,7 +127,7 @@ export function openOrbSelectionModal(target) {
     }
 
     modal.querySelector("#remove-orb").onclick = () => {
-        color.src = "/assets/img/orb/empty-orb.png";
+        color.src = "./assets/img/orb/empty-orb.png";
         color.dataset.trait = "none";
         type.src = "";
         type.dataset.type = "none";
