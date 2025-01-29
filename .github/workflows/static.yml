@@ -24,7 +24,7 @@ jobs:
       # Use CLI tools to minify, overwriting existing files
       - run: for i in ./js/*.js; do terser $i --compress -o $i; done
       - run: for i in ./css/*.css; do csso $i -o $i; done
-      - run: for i in ./html/*.html; do html-minifier [--your-options-here] $i -o $i; done
+      - run: for i in ./*.html; do html-minifier [--your-options-here] $i -o $i; done
       
       # Push changes to `gh-pages` branch
       - run: |
