@@ -13,7 +13,7 @@ A site for tracking the units and upgrades obtained in the mobile game The Battl
 - Customize lists and behaviors via the settings
   - Wow, very exciting
 
-Check it out at [github.com/](https://andrewsalls.github.io/BCUnitList/)
+Check it out at [https://andrewsalls.github.io/BCUnitList/](https://andrewsalls.github.io/BCUnitList/)
 
 ## Disclaimer
 All data and images from The Battle Cats, as well as the name, brand, and any other related content belong to Ponos Corporation. I do not make any claim of ownership for anything contained in the /assets/ folder.
