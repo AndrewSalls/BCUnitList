@@ -134,8 +134,8 @@ function createIconList(idList) {
     makeRequest(REQUEST_TYPES.GET_MULTIPLE_DATA, idList).then(unitList => {
         for(const unit of unitList) {
             const iconIMG = document.createElement("img");
-            iconIMG.src = `../assets/img/unit_icon/${unit.id}_${unit.current_form}.png`;
-            iconIMG.onerror = () => iconIMG.src = "../assets/img/unit_icon/unknown.png";
+            iconIMG.src = `assets/img/unit_icon/${unit.id}_${unit.current_form}.png`;
+            iconIMG.onerror = () => iconIMG.src = "assets/img/unit_icon/unknown.png";
             iconIMG.title = [unit.normal_form, unit.evolved_form, unit.true_form, unit.ultra_form][unit.current_form];
             wrapper.appendChild(iconIMG);
         }

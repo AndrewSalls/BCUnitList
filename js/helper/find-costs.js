@@ -38,7 +38,7 @@ export function isInitialized() {
 }
 
 export async function initializeLeveling() {
-    levelingCost = await fetch("../assets/unit_data/leveling_stats.csv")
+    levelingCost = await fetch("assets/unit_data/leveling_stats.csv")
         .then(r => r.text())
         .then(t => Papa.parse(t, { header: true, dynamicTyping: true, skipEmptyLines: true }).data)
         .catch(e => console.error(e));
@@ -68,7 +68,7 @@ export default async function getCostsFor(unitList) {
 
     for(const key of Object.keys(tables)) {
         const numKey = parseInt(key);
-        promises.push(fetch(`../assets/unit_data/unit_costs_${numKey}.csv`)
+        promises.push(fetch(`assets/unit_data/unit_costs_${numKey}.csv`)
             .then(r => r.text())
             .then(t => Papa.parse(t, {
                 header: true,

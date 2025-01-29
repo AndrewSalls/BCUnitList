@@ -256,7 +256,7 @@ function copyUpdatedValues(values, toUpdate) {
 
         if(values.orb[x] === null) {
             trait.dataset.trait = "none";
-            trait.src = "./assets/img/orb/empty-orb.png";
+            trait.src = "assets/img/orb/empty-orb.png";
 
             type.classList.add("invisible");
             type.dataset.type = "none";
@@ -270,17 +270,17 @@ function copyUpdatedValues(values, toUpdate) {
         }
         
         trait.dataset.trait = values.orb[x].trait;
-        trait.src = `./assets/img/orb/${values.orb[x].trait}.png`;
+        trait.src = `assets/img/orb/${values.orb[x].trait}.png`;
 
         type.dataset.type = values.orb[x].type;
-        type.src = `./assets/img/orb/${values.orb[x].type}.png`;
+        type.src = `assets/img/orb/${values.orb[x].type}.png`;
         type.classList.remove("invisible");
 
         rank.dataset.rank = values.orb[x].rank;
-        rank.src = `./assets/img/orb/${values.orb[x].rank}.png`;
+        rank.src = `assets/img/orb/${values.orb[x].rank}.png`;
         rank.classList.remove("invisible");
     }
 
     toUpdate.querySelector(".fav-wrapper").dataset.favorited = values.favorited ? "1" : "0";
-    toUpdate.querySelector(".fav-icon").src = `./assets/img/fav-${values.favorited ? "full" : "empty"}.png`;
+    toUpdate.querySelector(".fav-icon").src = `assets/img/fav-${values.favorited ? "full" : "empty"}.png`;
 }

@@ -9,7 +9,7 @@ A site for tracking the units and upgrades obtained in the mobile game The Battl
   - e.g. only Gacha rare units, or only units that evolve from ancient eggs
 - View the materials needed to level up and evolve units
 - Filter units by various properties
-  - Including a filter for "Exists"
+  - Including a filter for "Unit exists"!
 - Customize lists and behaviors via the settings
   - Wow, very exciting
 

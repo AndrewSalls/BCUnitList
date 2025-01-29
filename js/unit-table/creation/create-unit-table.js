@@ -19,7 +19,7 @@ export default function createSearchableTable(titleText, unitData, loadingBar) {
     favIconWrapper.classList.add("fav-wrapper");
 
     const favIcon = document.createElement("img");
-    favIcon.src = "./assets/img/fav-full.png";
+    favIcon.src = "assets/img/fav-full.png";
 
     favIconWrapper.appendChild(favIcon);
     favoriteCol.appendChild(favIconWrapper);

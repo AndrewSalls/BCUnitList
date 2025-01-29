@@ -1,5 +1,5 @@
 async function getLevelCaps() {
-    return fetch("../assets/unit_data/level_cap_stats.csv").then(r => r.text()).then(t => Papa.parse(t, { header: true, dynamicTyping: true, skipEmptyLines: true }).data).catch(e => console.error(e));
+    return fetch("assets/unit_data/level_cap_stats.csv").then(r => r.text()).then(t => Papa.parse(t, { header: true, dynamicTyping: true, skipEmptyLines: true }).data).catch(e => console.error(e));
 }
 
 export async function getUnitData(categories, settings) {
@@ -10,7 +10,7 @@ export async function getUnitData(categories, settings) {
 
     const awaitFinish = [];
     for(let x = 0; x <= Math.floor(unitCount / 100); x++) {
-        awaitFinish.push(fetch(`../assets/unit_data/units_${x * 100}.csv`)
+        awaitFinish.push(fetch(`assets/unit_data/units_${x * 100}.csv`)
             .then(r => r.text())
             .then(t => Papa.parse(t, {
                 header: true,
