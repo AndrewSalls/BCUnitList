@@ -41,6 +41,8 @@ function initialize() {
 }
 
 function loadSpecific(id) {
+    const container = document.querySelector("#loading-content");
+
     makeRequest(REQUEST_TYPES.GET_ID_DATA, id, true).then(entry => {
         window.localStorage.setItem("su", id);
 
@@ -130,7 +132,7 @@ function loadSpecific(id) {
 
             observeRowChange(wrapper, () => makeRequest(REQUEST_TYPES.UPDATE_ID, getValuesFromRow(wrapper), true));
 
-            wrapper.classList.remove("hidden");
+            container.classList.remove("hidden");
         });
     });
 }

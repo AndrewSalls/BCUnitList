@@ -3,7 +3,7 @@ import getCostsFor, { isInitialized, initializeLeveling } from "../helper/find-c
 import { getUnitData } from "../helper/parse-file.js";
 
 let unitData = [];
-let categories = [];
+let categories = {};
 let settings = {};
 
 export default async function initializeData() {
@@ -11,7 +11,7 @@ export default async function initializeData() {
         settings = await fetch("./assets/settings.json").then(res => res.json());
         categories = await parseAllCategories();
         unitData = await getUnitData(categories, settings);
-        res();
+        res({ settings: settings, categories: categories, unitData: unitData });
 
         const frame = document.querySelector("#content-page");
         frame.onload = loadFrame;
@@ -19,10 +19,6 @@ export default async function initializeData() {
             frame.onload();
         }
     });
-}
-
-export function getSettings() {
-    return settings;
 }
 
 function loadFrame() {
@@ -74,7 +70,7 @@ function handleMessage(port, unitData, res) {
             port.postMessage({ m_id: res.m_id, data: unitData.filter(u => !testGlobalFilters(u, res.ignore_filters)).map(d => [d.id, d.normal_form, d.evolved_form, d.true_form, d.ultra_form]) });
             break;
         case "get_category_names":
-            port.postMessage({ m_id: res.m_id, data: categories });
+            port.postMessage({ m_id: res.m_id, data: getUnfiltedCategories(res.ignore_filters) });
             break;
         case "get_settings":
             port.postMessage({ m_id: res.m_id, data: settings });
@@ -126,4 +122,33 @@ async function updateFromData(data) {
     unitData[id].orb = data.orb ?? unitData[id].orb;
     unitData[id].favorited = data.favorited ?? unitData[id].favorited;
     unitData[id].hidden = data.hidden ?? unitData[id].hidden;
+}
+
+function getUnfiltedCategories(ignoreFilters) {
+    if(ignoreFilters) {
+        return categories;
+    }
+
+    const clone = {};
+    
+    for(const superKey of Object.keys(categories).sort()) {
+        if(window.localStorage.getItem(`gk-${superKey}`) === "0") {
+            continue;
+        }
+
+        const cloneSub = {};
+        for(const subKey of Object.keys(categories[superKey]).sort()) {
+            if(window.localStorage.getItem(`${superKey}-${subKey}`) === "0") {
+                continue;
+            }
+
+            cloneSub[subKey] = categories[superKey][subKey];
+        }
+
+        if(cloneSub) {
+            clone[superKey] = cloneSub;
+        }
+    }
+
+    return clone;
 }

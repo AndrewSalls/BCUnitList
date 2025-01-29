@@ -1,11 +1,11 @@
-import initializeData, { getSettings } from "./communication/link-units.js";
+import initializeData from "./communication/link-units.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-    initializeLocalStorage();
-    initializeData().then(() => {
+    initializeData().then(({settings, categories, unitData}) => {
+        initializeLocalStorage(categories);
         const nav = document.querySelector("#nav-bar");
 
-        nav.querySelector("#version-number").textContent = getSettings().gameVersion;
+        nav.querySelector("#version-number").textContent = settings.gameVersion;
         nav.querySelector("#version-info").classList.remove("hidden");
 
         const setPage = target => {
@@ -23,26 +23,35 @@ document.addEventListener("DOMContentLoaded", () => {
         category.onclick = _ => { if(!category.classList.contains("current")) { setPage(category); loadTo("unit-category"); }};
         const viewcost = nav.querySelector("#view-costs-button");
         viewcost.onclick = _ => { if(!viewcost.classList.contains("current")) { setPage(viewcost); loadTo("unit-costs"); }};
-        const settings = nav.querySelector("#settings-button");
-        settings.onclick = _ => { if(!settings.classList.contains("current")) { setPage(settings); loadTo("settings"); }};
+        const settingsPage = nav.querySelector("#settings-button");
+        settingsPage.onclick = _ => { if(!settingsPage.classList.contains("current")) { setPage(settingsPage); loadTo("settings"); }};
 
         const loadHistory = pageData => {
             switch(pageData) {
                 case "unit-list":
                     return viewUnit;
                 case "unit-specific":
+                    return specific;
+                case "unit-category":
                     return category;
                 case "unit-costs":
                     return viewcost;
                 case "settings":
-                    return settings;
+                    return settingsPage;
                 case "home":
                 default:
                     return home;
             }
         };
 
-        loadHistory(new URLSearchParams(window.location.search.slice(1)).get("page")).click();
+        const pageRef = new URLSearchParams(window.location.search.slice(1)).get("page");
+        if(pageRef) {
+            loadHistory(pageRef).click();
+        } else {
+            setPage(home);
+            loadTo("home", true);
+        }
+
         window.addEventListener("popstate", e => {
             const targetPage = new URLSearchParams(e.target.location.search.slice(1)).get("page") ?? "home";
             setPage(loadHistory(targetPage));
@@ -52,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadTo(src, skipHistory = false) {
-    if(!skipHistory) {
+    if(!skipHistory && window.localStorage.getItem("s6") === "0") {
         window.history.pushState(src, "", `${window.top.location.pathname}?page=${src}`);
     }
 
@@ -66,7 +75,7 @@ function loadTo(src, skipHistory = false) {
     }
 }
 
-function initializeLocalStorage() {
+function initializeLocalStorage(categories) {
     if(window.localStorage.getItem("f1") === null) {
         window.localStorage.setItem("f1", "0");
     }
@@ -96,5 +105,22 @@ function initializeLocalStorage() {
     }
     if(window.localStorage.getItem("s5") === null) {
         window.localStorage.setItem("s5", "0");
+    }
+    if(window.localStorage.getItem("s6") === null) {
+        window.localStorage.setItem("s6", "1");
+    }
+    
+    for(const superCategory of Object.keys(categories).sort()) {
+        const superKey = `gk-${superCategory}`;
+        if(!window.localStorage.getItem(superKey)) {
+            window.localStorage.setItem(superKey, "1");
+        }
+
+        for(const subCategory of Object.keys(categories[superCategory]).sort()) {
+            const key = `${superCategory}-${subCategory}`;
+            if(!window.localStorage.getItem(key)) {
+                window.localStorage.setItem(key, "1");
+            }
+        }
     }
 }

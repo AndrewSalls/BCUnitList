@@ -1,0 +1,19 @@
+li > p {
+    padding: 0;
+    margin: 0;
+    margin-top: 1vh;
+    font-weight: bolder;
+}
+
+h1, h2, h3, h4 {
+    text-align: center;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+section {
+    padding: 0;
+    margin: 0 3vw;
+}

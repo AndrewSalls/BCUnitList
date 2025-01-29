@@ -1,7 +1,21 @@
 export function allowSelection() {
     const categorySelector = document.querySelector("#category-selector");
     const categoryList = categorySelector.querySelector("#category-selector-access");
-    categoryList.onclick = () => categorySelector.classList.toggle("raised");
+    const optionList = categorySelector.querySelector("#category-selector-options");
+    categorySelector.classList.add("transitionless");
+    categorySelector.style.transform = `translateY(${optionList.clientHeight}px)`;
+    categorySelector.offsetHeight;
+    categorySelector.classList.remove("transitionless");
+
+    categoryList.onclick = () => {
+        if(categorySelector.classList.toggle("raised")) {
+            console.log(categorySelector);
+            categorySelector.style.transform = "none";
+        } else {
+            categorySelector.style.transform = `translateY(${optionList.clientHeight}px)`;
+        }
+    };
+    categorySelector.classList.remove("invisible");
 }
 
 export function createCategory(categoryName, categoryButtons) {
@@ -41,6 +55,7 @@ export function createCategoryButton(buttonText, categoryObject) {
 export function createCategorySelector() {
     const selector = document.createElement("div");
     selector.id = "category-selector";
+    selector.classList.add("invisible");
 
     const selectorAccess = document.createElement("div");
     selectorAccess.classList.add("h-align");

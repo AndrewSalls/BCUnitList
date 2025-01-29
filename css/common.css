@@ -8,8 +8,8 @@
     --highlight-content: #f7cb4d;
     --content-border: #d8a406;
     --modal-fade: #00000099;
-    --warning: #f53539;
-    --highlight-warning: #dd292c;
+    --warning: #e62427;
+    --highlight-warning: #ff5255;
     --warning-border: #c01d20;
 
     --normal-content: #c8c8c8;
@@ -205,4 +205,8 @@ img {
 
 .unscrollable {
     position: fixed;
+}
+
+.transitionless {
+    transition: none !important;
 }

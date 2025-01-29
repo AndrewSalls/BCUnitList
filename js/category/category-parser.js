@@ -33,3 +33,7 @@ export async function parseAllCategories() {
     .then(pl => Promise.all(pl))
     .then(res => res.reduce((acc, obj) => { return {...acc, ...obj}}));
 }
+
+export function parseSnakeCase(str) {
+    return str.replaceAll(/\_[a-z]/g, m => ` ${m[1].toUpperCase()}`).replace(/^[a-z]/, m => m[0].toUpperCase());    
+}

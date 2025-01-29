@@ -1,6 +1,7 @@
 import * as CategorySelector from "./category/category-selector.js";
 import createTableFromData from "./unit-table/creation/create-cost-table.js";
 import createLoadingBar from "./helper/loading.js";
+import { parseSnakeCase } from "./category/category-parser.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(CategorySelector.createCategorySelector());
@@ -10,10 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
         window.dispatchEvent("portLoaded");
     }
 });
-
-function parseSnakeCase(str) {
-    return str.replaceAll(/\_[a-z]/g, m => ` ${m[1].toUpperCase()}`).replace(/^[a-z]/, m => m[0].toUpperCase());    
-}
 
 function loadCosts() {
     const container = document.querySelectorAll(".default-table");

@@ -7,6 +7,7 @@ import createSearchableTable from "./unit-table/creation/create-unit-table.js";
 import { attachTableOptionsAndFilters, initializeTableModal } from "./unit-table/filter-units.js";
 import { getValuesFromRow, observeRowChange } from "./helper/link-row.js";
 import createRow from "./unit-table/creation/create-unit-row.js";
+import { parseSnakeCase } from "./category/category-parser.js";
 
 const rowRef = [];
 
@@ -153,10 +154,6 @@ function createTableFromData(tableName, data, loadingBar) {
 
     table.querySelector("thead tr").insertAdjacentElement("beforebegin", tableTitle);
     return table;
-}
-
-function parseSnakeCase(str) {
-    return str.replaceAll(/\_[a-z]/g, m => ` ${m[1].toUpperCase()}`).replace(/^[a-z]/, m => m[0].toUpperCase());    
 }
 
 function syncRowValues(row, id) {
