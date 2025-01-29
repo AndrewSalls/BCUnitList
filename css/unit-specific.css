@@ -1,0 +1,191 @@
+:root {
+    --icon-height: 120;
+    --icon-scale: calc(var(--icon-height) / 85);
+}
+
+#search-wrapper {
+    margin: 5vh 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#search-box {
+    width: 18vw;
+    height: 5vh;
+    border: 3px solid var(--text);
+    border-radius: 1000000000px;
+    padding: 0 1vw;
+}
+
+#unit-border {
+    --width: 80vw;
+    --row-height: 12vh;
+    --height: calc(5vh + calc(6 * var(--row-height)));
+    background-color: var(--rarity-bg);
+    border: 2px solid var(--rarity-border);
+    width: var(--width);
+    height: var(--height);
+    margin-left: calc(calc(100vw - var(--width)) / 2);
+    margin-top: calc(calc(85vh - var(--height)) / 2);
+    display: grid;
+    grid-template-rows: 5vh var(--row-height) var(--row-height) var(--row-height) var(--row-height) var(--row-height) var(--row-height);
+    grid-template-columns: 1fr calc(108px * var(--icon-scale));
+    position: relative;
+}
+
+td {
+    border: none;
+    padding: 0;
+}
+
+h4 {
+    font-size: 20pt;
+    padding: 0;
+    margin: 0;
+    width: fit-content;
+}
+
+#name-border {
+    background-color: var(--rarity-content);
+    border-bottom: 1px solid var(--rarity-border);
+    position: relative;
+    display: flex;
+    align-items: start;
+    height: 5vh;
+    grid-row: 1;
+    grid-column: 1 / 2;
+}
+
+#unit-top-section {
+    width: 100%;
+    justify-content: space-between;
+}
+
+td.row-id::before {
+    content: "ID: ";
+}
+
+td.row-image {
+    --height: var(--icon-height);
+    --scale: var(--icon-scale);
+    width: calc(110px * var(--scale));
+    min-width: calc(108px * var(--scale));
+    max-width: calc(108px * var(--scale));
+    height: calc(var(--height) * 1px);
+    overflow: hidden;
+    position: relative;
+}
+.unit-icon {
+    height: calc(127px * var(--scale));
+    position: absolute;
+    top: calc(-21px * var(--scale));
+    left: calc(-9px * var(--scale));
+    cursor: pointer;
+}
+
+td.row-id {
+    width: unset;
+}
+
+#icon-rarity-favorite {
+    border-left: 2px solid var(--rarity-border);
+    border-bottom: 2px solid var(--rarity-border);
+    grid-row: 2 / 4;
+    grid-column: 2 / 3;
+    background-color: var(--rarity-content);
+}
+
+#favorite-wrapper {
+    width: 5%;
+    height: 100%;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--rarity-border);
+}
+
+#id-border {
+    border-left: 2px solid var(--rarity-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: unset;
+    background-color: var(--rarity-content);
+    grid-row: 1;
+    grid-column: 2 / 3;
+}
+
+#talent-align {
+    width: 100%;
+    justify-content: space-around;
+    grid-row: 2;
+    grid-column: 1 / 2;
+    border-bottom: 1px solid var(--rarity-border);
+}
+
+#name-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#level-wrapper {
+    margin-left: 1vw;
+}
+
+.cost-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#xp-np-catseye-cost {
+    grid-row: 3;
+    grid-column: 1 / 2;
+    background-color: var(--rarity-bg2);
+    border-bottom: 1px solid var(--rarity-border);
+}
+
+#rarity-wrapper {
+    height: 100%;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#fruit-cost {
+    grid-row: 4;
+    grid-column: 1 / 3;
+    border-bottom: 1px solid var(--rarity-border);
+}
+
+#seed-cost {
+    grid-row: 5;
+    grid-column: 1 / 3;
+    background-color: var(--rarity-bg2);
+    border-bottom: 1px solid var(--rarity-border);
+}
+
+#gem-cost {
+    grid-row: 6;
+    grid-column: 1 / 3;
+    border-bottom: 1px solid var(--rarity-border);
+}
+
+#stone-cost {
+    grid-row: 7;
+    grid-column: 1 / 3;
+    background-color: var(--rarity-bg2);
+}
+
+.included-label {
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

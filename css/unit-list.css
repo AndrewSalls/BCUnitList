@@ -1,0 +1,84 @@
+#quick-nav {
+    position: fixed;
+    bottom: -210px;
+    left: 0;
+    width: min-content;
+    height: min-content;
+    z-index: 10;
+    background-color: var(--highlight-content);
+    border-radius: 5vh 5vh 0 0;
+    transition: bottom 0.2s ease;
+    text-wrap: nowrap;
+}
+#quick-nav.raised {
+    bottom: 0;
+}
+
+#quick-nav-access {
+    text-align: center;
+    user-select: none;
+    padding: 1vh 1vw;
+    background-color: var(--content);
+    border-bottom: 1px solid var(--content-border);
+    border-radius: 5vh 5vh 0 0;
+    height: 3vh;
+    cursor: pointer;
+}
+
+#quick-nav.raised #quick-nav-access svg {
+    transform: rotate(180deg);
+}
+#quick-nav-access svg {
+    height: 2vh;
+    padding: 0 1vw;
+}
+
+#quick-nav-access h3 {
+    margin: 0;
+    padding: 0;
+    font-weight: bolder;
+}
+
+#quick-nav-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5px 10px;
+    height: 200px;
+}
+
+#quick-nav-search {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 1vh;
+}
+#quick-nav-search label {
+    font-weight: bolder;
+}
+#quick-nav-search input {
+    font-size: 12pt;
+}
+
+#quick-nav-options button {
+    border: none;
+    font-weight: bolder;
+    font-size: 12pt;
+    transition: background-color 0.2s linear;
+    border: 2px solid var(--text);
+    color: var(--text);
+    background-color: var(--rarity-bg);
+}
+#quick-nav-options button:not(:last-child) {
+    border-bottom: 0;
+}
+#quick-nav-options button:hover {
+    background-color: var(--rarity-bg2);
+    filter: brightness(0.8);
+}
+
+#unit-search {
+    border: 2px solid var(--text);
+    color: var(--text);
+    border-radius: 5px;
+}

@@ -1,0 +1,64 @@
+#table-option-modal button:not(:last-child) {
+    border-right: 1px solid var(--content-border);
+}
+#table-option-modal button:not(:first-child) {
+    border-left: none;
+}
+#table-option-modal button:not(:last-child).active {
+    border-right: 1px solid var(--warning-border);
+}
+
+#table-option-modal h2 {
+    padding: 0;
+    margin: 0;
+}
+
+.table-filter-group h4 {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 0.5vh;
+    text-align: center;
+    width: 100%;
+}
+
+#table-filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: top;
+    justify-content: center;
+}
+
+.table-filter-group {
+    margin: 2vh 2vw;
+    min-width: 25vw;
+    width: fit-content;
+    height: fit-content;
+}
+
+.table-filter-group .h-align, #table-update-options .h-align {
+    margin: 1vh 0;
+}
+
+.table-filter-group button, #table-update-options button {
+    border-top: 2px solid var(--text);
+    border-bottom: 2px solid var(--text);
+    font-weight: bolder;
+    transition: background-color 0.2s linear;
+    padding: 0.5vw;
+    font-size: 12pt;
+}
+
+.table-filter-group button:first-child, #table-update-options button:first-child {
+    border-radius: 5px 0 0 5px;
+}
+.table-filter-group button:last-child, #table-update-options button:last-child {
+    border-radius: 0 5px 5px 0;
+}
+
+.filter-hidden {
+    display: none !important;
+}
+
+#table-option-modal label, #table-option-modal input {
+    cursor: pointer;
+}

@@ -1,0 +1,9 @@
+{
+    "Behemoth Culling": [656,658,659,663,664,669,675,676,685,697,700,706,707,716,717,720,724],
+    "Heavenly Tower": [352,383,554],
+    "Legend Cat": [24,25,["story_units", "SoL Legend"],["story_units", "UL Legend"],["story_units", "ZL Legend"],["story_units", "Heavenly Tower"]],
+    "SoL Legend": [130,172,268,323,426],
+    "Story Progression": [16,24,25,123,437,462,568,622,691,771],
+    "UL Legend": [464,532,613,653],
+    "ZL Legend": [728]
+}

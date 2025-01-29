@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/settings.css">
+    <script src="./js/settings.js" type="module"></script>
+</head>
+<body>
+    <div class="main content">
+        <h2>Settings</h2>
+        <section>
+            <h3>Global Unit Filters</h3>
+            <p>These filters apply almost everywhere on the website.</p>
+            <div class="h-align h-spacer">
+                <button type="button" class="filter-button" title="Units that haven't been released or are summons" id="fake-filter">Unreleased</button>
+                <button type="button" class="filter-button" title="Collab Exclusive Units" id="collab-filter">Collab</button>
+                <button type="button" class="filter-button" title="JP/KR/TW Exclusive Units" id="version-filter">Not in EN</button>
+                <button type="button" class="filter-button" title="Unobtained Units" id="unobtained-filter">Unobtained</button>
+                <button type="button" class="filter-button" title="Favorited Units" id="favorite-filter">Non-favorited</button>
+            </div>
+        </section>
+        <section>
+            <h3>Global Category Selection</h3>
+            <p>Choose which categories get shown.</p>
+            <div id="category-selection"></div>
+        </section>
+        <section>
+            <h3>Custom Unit Categories</h3>
+            <p>Create custom unit categories for organizing your collection.</p>
+            <div id="category-creator"></div>
+        </section>
+        <section>
+            <h3>Miscellaneous</h3>
+            <p>Settings that don't fit the other categories.</p>
+            <div class="h-align h-spacer">
+                <button type="button" class="filter-button" title="Enables/Disables arrows for changing unit XP level and talent level" id="arrow-upgrade-filter">Arrow Upgrade Controls</button>
+                <button type="button" class="filter-button" title="Whether categories are shown by default" id="hide-category-filter">Auto-Hide Categories</button>
+                <button type="button" class="filter-button" title="Whether categories are collapsed by default" id="auto-collapse-filter">Auto-Collapse Categories</button>
+                <button type="button" class="filter-button" title="Whether category sections are collapsed by default" id="auto-group-collapse-filter">Auto-Collapse Category Sections</button>
+                <button type="button" class="filter-button" title="Whether cost tables where all units are filtered out are still shown" id="show-empty-filter">Show Empty Costs</button>
+            </div>
+        </section>
+        <section>
+            <h3>Save Management</h3>
+            <p>Manage your saved information. All information is saved locally on your computer.</p>
+            <button type="button" title="Export Save as File or to Clipboard">Export Save</button>
+            <button type="button" title="Import Save from File or Clipboard">Import Save</button>
+            <button type="button" title="Delete all Saved Settings & Unit Data">Delete Save</button>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,117 @@
+.modal-bg {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999999999999999999999;
+    background-color: var(--modal-fade);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-fill {
+    width: fit-content;
+    height: fit-content;
+    max-width: 90vw;
+    max-height: 90vh;
+    background-color: var(--highlight-bg);
+    padding: 2vw;
+    border-radius: 1vh;
+    position: relative;
+}
+
+.modal-fill h2, .modal-fill h3 {
+    width: 100%;
+    text-align: center;
+}
+
+#type-selection, #rank-selection {
+    width: 90%;
+    margin: 0 5%;
+}
+
+#trait-selection, #type-selection, #rank-selection {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.image-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 1vw;
+    cursor: pointer;
+    user-select: none;
+}
+
+#type-selection h4, .image-selector h4 {
+    padding: 0;
+    margin: 0;
+}
+
+#trait-selection .image-selector img {
+    width: 60px;
+    height: 60px;
+}
+
+#rank-selection {
+    padding-bottom: 2vh;
+}
+
+#rank-selection img {
+    cursor: pointer;
+}
+
+#orb-option-centering {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#orb-option-centering button {
+    border: none;
+    font-weight: bolder;
+    transition: background-color 0.2s linear;
+    font-size: 12pt;
+    padding: 2% 3%;
+    border-radius: 1vw;
+}
+
+#remove-orb {
+    background-color: var(--warning);
+}
+#remove-orb:hover {
+    background-color: var(--highlight-warning);
+}
+
+#rank-selection img, .image-selector {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#type-selection * {
+    height: 100%;
+}
+
+.orb-selected {
+    background-color: var(--highlight-content);
+}
+
+#orb-result {
+    width: 87px;
+    height: 87px;
+    transform: scale(calc(60 / 87));
+}
+
+.modal-close {
+    width: 2vw;
+    height: 2vw;
+    position: absolute;
+    top: 1vw;
+    right: 1vw;
+    cursor: pointer;
+}
