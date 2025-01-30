@@ -1,5 +1,5 @@
 # BCUnitList
-A site for tracking the units and upgrades obtained in the mobile game The Battle Cats (EN Ver.).
+A site for tracking the units and upgrades obtained in the mobile game The Battle Cats (Mainly targets the EN version, but includes units from other versions of the game).
 
 ## Features
 - View a list of units in the game
