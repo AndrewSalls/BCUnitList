@@ -122,6 +122,16 @@ async function updateFromData(data) {
     unitData[id].orb = data.orb ?? unitData[id].orb;
     unitData[id].favorited = data.favorited ?? unitData[id].favorited;
     unitData[id].hidden = data.hidden ?? unitData[id].hidden;
+
+    if(data.current_form === 0 &&
+        data.level === 0 && data.plus_level === 0 &&
+        data.talents.every(t => t === 0) && data.ultra_talents.every(t => t === 0) &&
+        data.orb.every(o => !o) &&
+        !data.hidden && !data.favorited && window.localStorage.getItem(data.id)) {
+            window.localStorage.removeItem(data.id);
+    }
+
+    window.localStorage.setItem(data.id, window.btoa(JSON.stringify(data)));
 }
 
 function getUnfiltedCategories(ignoreFilters) {

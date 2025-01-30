@@ -29,9 +29,7 @@ https://github.com/battlecatsinfo/battlecatsinfo.github.io
 
 https://github.com/battlecatsultimate/BCU-java-PC (BCU)
 
-## Planned (Near) Future Features (Ignore that settings says version 1.0, it's not actually 1.0 until at the very least the home page and data saving are finished)
-- Home page
-- Saving data
+## Planned (Near) Future Features
 - Creating custom categories
 - Banishing units to the shadow realm
 

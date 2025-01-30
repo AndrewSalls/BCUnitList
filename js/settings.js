@@ -1,5 +1,6 @@
 import { parseSnakeCase } from "./category/category-parser.js";
 
+let topPos = 0;
 document.addEventListener("DOMContentLoaded", () => {
     loadButton("#fake-filter", "f1");
     loadButton("#collab-filter", "f2");
@@ -12,6 +13,21 @@ document.addEventListener("DOMContentLoaded", () => {
     loadButton("#hide-category-filter", "s4");
     loadButton("#auto-group-collapse-filter", "s5");
     loadButton("#history-filter", "s6");
+
+    document.querySelector("#cancel-overwrite").onclick = () => {
+        document.querySelector("#warning-modal").classList.add("hidden");
+        document.body.classList.remove("unscrollable");
+        document.documentElement.scrollTop = topPos;
+    };
+
+    const fileSelector = document.querySelector("#file-selected");
+    const fileLabel = document.querySelector("#file-name");
+    fileSelector.onchange = () => {
+        const fileName = fileSelector.files.length > 0 ? fileSelector.files[0].name : "No file selected";
+        fileLabel.textContent = fileName;
+    };
+
+    initializeSaveOptions();
 
     window.addEventListener("portLoaded", finishSetup);
     if(checkPort()) {
@@ -77,5 +93,104 @@ function finishSetup() {
             selection.appendChild(wrapper);
         }
         selection.classList.remove("hidden");
+    });
+}
+
+function openWarningModal(warningText, warningAction, confirmCallback, showFileSelector = false) {
+    document.querySelector("#warning-action-text").textContent = warningText;
+    document.querySelector("#warning-action-action").textContent = warningAction;
+    document.querySelector("#file-selector").classList.toggle("hidden", !showFileSelector);
+
+    document.querySelector("#confirm-overwrite").onclick = () => {
+        confirmCallback();
+        document.querySelector("#warning-modal").classList.add("hidden");
+        document.body.classList.remove("unscrollable");
+        document.documentElement.scrollTop = topPos;
+    };
+
+    document.querySelector("#warning-modal").classList.remove("hidden");
+    topPos = document.documentElement.scrollTop;
+    document.body.classList.add("unscrollable");
+    document.body.style.top = -1 * topPos + "px";
+}
+
+function displayMessage(message, isError) {
+    const saveText = document.querySelector("#save-change-text");
+    saveText.classList.add("hidden");
+    saveText.textContent = message;
+    saveText.classList.toggle("error-msg", isError);
+    saveText.clientHeight;
+    saveText.classList.remove("hidden");
+}
+
+function initializeSaveOptions() {
+    document.querySelector("#load-file-save").onclick = () => openWarningModal("Loading a save file", "overwrite", () => {
+        const file = document.querySelector("#file-selected").files[0];
+
+        if(file) {
+            const parser = new FileReader();
+            parser.readAsText(file);
+
+            parser.onload = () => {
+                const undata = JSON.parse(window.atob(parser.result));
+                for(const key of Object.keys(undata)) {
+                    window.localStorage.setItem(key, undata[key]);
+                }
+
+                displayMessage("File loaded!", false);
+                window.top.location.reload();
+            };
+            parser.onerror = () => {
+                displayMessage("Unable to read file!", true);
+            }
+        } else {
+            displayMessage("No file selected to load!", true);
+        }
+    }, true);
+
+    document.querySelector("#load-clipboard-save").onclick = () => openWarningModal("Pasting a save file", "overwrite", () => {
+        navigator.clipboard.readText().then(t => {
+            try {
+                const undata = JSON.parse(window.atob(t));
+                for(const key of Object.keys(undata)) {
+                    window.localStorage.setItem(key, undata[key]);
+                }
+
+                displayMessage("Save Pasted!", false);
+                window.top.location.reload();
+            } catch(e) {
+                displayMessage("Unable to parse clipboard text...", true);
+            }
+        });
+    });
+
+    document.querySelector("#write-file-save").onclick = () => {
+        const data = window.btoa(JSON.stringify({...window.localStorage}));
+        const blob = new Blob([data], { type: "text/plain" });
+        
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `BCC-Save-${new Date().toLocaleDateString()}.txt`;
+
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        displayMessage("Downloading save...", false);
+    };
+
+    document.querySelector("#write-clipboard-save").onclick = () => {
+        const data = window.btoa(JSON.stringify({...window.localStorage}));
+        navigator.clipboard.writeText(data);
+        displayMessage("Copied Save!", false);
+    };
+
+    document.querySelector("#delete-save").onclick = () => openWarningModal("Deleting your save file", "erase", () => {
+        const localKeys = {...window.localStorage};
+        for(const key of Object.keys(localKeys)) {
+            window.localStorage.removeItem(key);
+        }
+
+        displayMessage("Save deleted! Close the tab or refresh the page.", false);
     });
 }

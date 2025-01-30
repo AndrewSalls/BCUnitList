@@ -23,7 +23,7 @@ export async function getUnitData(categories, settings) {
                         levelType = levelingCaps.find(t => t.Type === "Default");
                     }
 
-                    return {
+                    const unitData = {
                         id: entry.ID,
                         rarity: entry.Rarity,
                         in_EN: entry.InEN,
@@ -41,9 +41,30 @@ export async function getUnitData(categories, settings) {
                         favorited: false,
                         level: 0,
                         plus_level: 0,
-                        current_form: 0, // 0 - 4 are unobtained, NF, EF, TF, UF
+                        current_form: 0, // 0 - 3 are NF, EF, TF, UF
                         hidden: false
                     };
+
+                    
+                    if(window.localStorage.getItem(entry.ID)) {
+                        const decompressed = JSON.parse(window.atob(window.localStorage.getItem(entry.ID)));
+                        unitData.current_form = decompressed.current_form;
+                        unitData.favorited = decompressed.favorited;
+                        unitData.hidden = decompressed.hidden;
+                        unitData.level = decompressed.level;
+                        unitData.plus_level = decompressed.plus_level;
+                        for(let x = 0; x < decompressed.orb.length; x++) {
+                            unitData.orb[x] = decompressed.orb[x];
+                        }
+                        for(let x = 0; x < decompressed.talents.length; x++) {
+                            unitData.talents[x].value = decompressed.talents[x];
+                        }
+                        for(let x = 0; x < decompressed.ultra_talents.length; x++) {
+                            unitData.ultra_talents[x].value = decompressed.ultra_talents[x];
+                        }
+                    }
+
+                    return unitData;
                 })
             ));
     }

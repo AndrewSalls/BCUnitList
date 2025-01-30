@@ -2,7 +2,7 @@ import initializeData from "./communication/link-units.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     initializeData().then(({settings, categories, unitData}) => {
-        initializeLocalStorage(categories);
+        initializeLocalStorage(settings, categories);
         const nav = document.querySelector("#nav-bar");
 
         nav.querySelector("#version-number").textContent = settings.gameVersion;
@@ -75,7 +75,7 @@ function loadTo(src, skipHistory = false) {
     }
 }
 
-function initializeLocalStorage(categories) {
+function initializeLocalStorage(settings, categories) {
     if(window.localStorage.getItem("f1") === null) {
         window.localStorage.setItem("f1", "0");
     }
@@ -123,4 +123,7 @@ function initializeLocalStorage(categories) {
             }
         }
     }
+
+    window.localStorage.setItem("lg", settings.gameVersion);
+    window.localStorage.setItem("ls", settings.version);
 }
