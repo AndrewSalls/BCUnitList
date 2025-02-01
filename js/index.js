@@ -1,5 +1,10 @@
 import initializeData from "./communication/link-units.js";
 
+const DEFAULT_SETTINGS = {
+    "f1": "0", "f2": "1", "f3": "0", "f4": "1", "f5": "1",
+    "s1": "0", "s2": "1", "s3": "0", "s4": "0", "s5": "0", "s6": "0", "s7": "0"
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     initializeData().then(({settings, categories, unitData}) => {
         initializeLocalStorage(settings, categories);
@@ -76,38 +81,10 @@ function loadTo(src, skipHistory = false) {
 }
 
 function initializeLocalStorage(settings, categories) {
-    if(window.localStorage.getItem("f1") === null) {
-        window.localStorage.setItem("f1", "0");
-    }
-    if(window.localStorage.getItem("f2") === null) {
-        window.localStorage.setItem("f2", "1");
-    }
-    if(window.localStorage.getItem("f3") === null) {
-        window.localStorage.setItem("f3", "0");
-    }
-    if(window.localStorage.getItem("f4") === null) {
-        window.localStorage.setItem("f4", "1");
-    }
-    if(window.localStorage.getItem("f5") === null) {
-        window.localStorage.setItem("f5", "1");
-    }
-    if(window.localStorage.getItem("s1") === null) {
-        window.localStorage.setItem("s1", "0");
-    }
-    if(window.localStorage.getItem("s2") === null) {
-        window.localStorage.setItem("s2", "1");
-    }
-    if(window.localStorage.getItem("s3") === null) {
-        window.localStorage.setItem("s3", "0");
-    }
-    if(window.localStorage.getItem("s4") === null) {
-        window.localStorage.setItem("s4", "0");
-    }
-    if(window.localStorage.getItem("s5") === null) {
-        window.localStorage.setItem("s5", "0");
-    }
-    if(window.localStorage.getItem("s6") === null) {
-        window.localStorage.setItem("s6", "0");
+    for(const key of Object.keys(DEFAULT_SETTINGS)) {
+        if(window.localStorage.getItem(key) === null) {
+            window.localStorage.setItem(key, DEFAULT_SETTINGS[key]);
+        }
     }
     
     for(const superCategory of Object.keys(categories).sort()) {

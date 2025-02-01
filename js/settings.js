@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadButton("#hide-category-filter", "s4");
     loadButton("#auto-group-collapse-filter", "s5");
     loadButton("#history-filter", "s6");
+    loadButton("#single-category-filter", "s7");
 
     document.querySelector("#cancel-overwrite").onclick = () => {
         document.querySelector("#warning-modal").classList.add("hidden");

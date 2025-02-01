@@ -9,7 +9,6 @@ export function allowSelection() {
 
     categoryList.onclick = () => {
         if(categorySelector.classList.toggle("raised")) {
-            console.log(categorySelector);
             categorySelector.style.transform = "none";
         } else {
             categorySelector.style.transform = `translateY(${optionList.clientHeight}px)`;

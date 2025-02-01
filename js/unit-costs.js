@@ -62,8 +62,33 @@ function loadCosts() {
         loadingBar.increment();
     });
 
-    makeRequest(REQUEST_TYPES.GET_CATEGORY_NAMES).then(c => {
-        createAllCategoryCostTables(loadingBar, c);
+    makeRequest(REQUEST_TYPES.GET_CATEGORY_NAMES).then(categories => {
+        if(window.localStorage.getItem("s7") === "0") {
+            createAllCategoryCostTables(loadingBar, categories);
+        } else {
+            const categorySearchBuiltin = document.querySelector("#builtin-categories");
+            document.querySelector("#category-label-centering").classList.add("hidden");
+
+            for(const key of Object.keys(categories).sort()) {
+                const subButtons = [];
+
+                for(const subCategory of Object.keys(categories[key]).sort()) {
+                    const categoryButton = document.createElement("button");
+                    categoryButton.type = "button";
+                    categoryButton.textContent = parseSnakeCase(subCategory);
+                    categoryButton.onclick = () => {
+                        container[7].innerHTML = "";
+                        container[7].classList.remove("hidden");
+                        createCategoryCostTable(key, subCategory, container[7], categories);
+                    };
+
+                    subButtons.push(categoryButton);
+                }
+                categorySearchBuiltin.appendChild(CategorySelector.createCategory(parseSnakeCase(key), subButtons));
+            }
+
+            loadingBar.increment();
+        }
     });
 }
 

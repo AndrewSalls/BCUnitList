@@ -49,7 +49,32 @@ function loadCategories() {
     });
 
     makeRequest(REQUEST_TYPES.GET_CATEGORY_NAMES, null).then(categories => {
-        createAllCategoryTables(loadingBar, categories);
+        if(window.localStorage.getItem("s7") === "0") {
+            createAllCategoryTables(loadingBar, categories);
+        } else {
+            const categorySearchBuiltin = document.querySelector("#builtin-categories");
+            const replaceTable = document.querySelector("#favorited-table");
+            document.querySelector("#category-label-centering").classList.add("hidden");
+
+            for(const key of Object.keys(categories).sort()) {
+                const subButtons = [];
+
+                for(const subCategory of Object.keys(categories[key]).sort()) {
+                    const categoryButton = document.createElement("button");
+                    categoryButton.type = "button";
+                    categoryButton.textContent = parseSnakeCase(subCategory);
+                    categoryButton.onclick = () => {
+                        replaceTable.innerHTML = "";
+                        createCategoryUnitTable(key, subCategory, replaceTable, categories, loadingBar);
+                    };
+
+                    subButtons.push(categoryButton);
+                }
+                categorySearchBuiltin.appendChild(CategorySelector.createCategory(parseSnakeCase(key), subButtons));
+            }
+
+            loadingBar.increment();
+        }
     });
 }
 
