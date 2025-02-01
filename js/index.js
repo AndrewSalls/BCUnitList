@@ -107,7 +107,7 @@ function initializeLocalStorage(settings, categories) {
         window.localStorage.setItem("s5", "0");
     }
     if(window.localStorage.getItem("s6") === null) {
-        window.localStorage.setItem("s6", "1");
+        window.localStorage.setItem("s6", "0");
     }
     
     for(const superCategory of Object.keys(categories).sort()) {

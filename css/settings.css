@@ -25,6 +25,8 @@ h3 {
     background-color: var(--highlight-content);
     padding: 1vh 0;
     margin-bottom: 0;
+    cursor: pointer;
+    user-select: none;
 }
 
 .h-spacer {
@@ -178,4 +180,8 @@ h4 {
 
 #save-change-text.error-msg {
     background-color: var(--msg-error);
+}
+
+.section-collapse ~ * {
+    display: none !important;
 }

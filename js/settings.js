@@ -20,6 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.documentElement.scrollTop = topPos;
     };
 
+    document.querySelectorAll("section > h3").forEach(h => h.onclick = () => h.classList.toggle("section-collapse"));
+
     const fileSelector = document.querySelector("#file-selected");
     const fileLabel = document.querySelector("#file-name");
     fileSelector.onchange = () => {

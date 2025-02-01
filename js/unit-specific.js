@@ -33,9 +33,9 @@ function initialize() {
         loadSpecific(id);
     }, true);
 
-    let target = 0;
-    if(window.localStorage.getItem("su") !== null) {
-        target = parseInt(window.localStorage.getItem("su"));
+    let target = window.localStorage.getItem("su");
+    if(!target || typeof target !== "number") {
+        target = 0;
     }
     loadSpecific(target);
 }
