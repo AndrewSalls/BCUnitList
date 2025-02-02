@@ -100,6 +100,9 @@ function initializeLocalStorage(settings, categories) {
             }
         }
     }
+    if(!window.localStorage.getItem("gk-custom")) {
+        window.localStorage.setItem("gk-custom", "1");
+    }
 
     window.localStorage.setItem("lg", settings.gameVersion);
     window.localStorage.setItem("ls", settings.version);

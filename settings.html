@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="./css/common.css">
     <link rel="stylesheet" href="./css/settings.css">
+    <link rel="stylesheet" href="./css/custom-category.css">
     <script src="./js/communication/iframe-link.js"></script>
     <script src="./js/settings.js" type="module"></script>
 </head>
@@ -28,8 +29,28 @@
         <section>
             <h3>Custom Unit Categories</h3>
             <p>Create custom unit categories for organizing your collection.</p>
-            <div id="category-creator">
-                <p>Coming soon...</p>
+            <div id="category-creator" class="v-align hidden">
+                <div class="h-align h-spacer">
+                    <label for="category-name">Enter custom category name:</label>
+                    <input type="text" id="category-name" placeholder="Enter name here..." maxlength="64">
+                </div>
+                <input type="search" id="add-unit" placeholder="Search for ID/Name..." list="add-unit-options">
+                <datalist id="add-unit-options"></datalist>
+                <div id="category-units" class="h-align h-spacer"></div>
+                <div class="h-align h-spacer">
+                    <button type="button" id="cancel-category-creation" class="filter-button active">Cancel</button>
+                    <button type="button" id="create-category-creation" class="filter-button"></button>
+                </div>
+            </div>
+            <div id="category-creator-menu" class="v-align">
+                <p>Choose an existing custom category to edit, or create a new category!</p>
+                <div id="created-category-list" class="h-align h-spacer">
+
+                </div>
+                <div class="h-align">
+                    <button type="button" title="Delete an existing category" class="filter-button active" disabled="true" id="delete-category">Delete Category</button>
+                    <button type="button" title="Create or modify a category" class="filter-button" id="open-creator">Create Category</button>
+                </div>
             </div>
         </section>
         <section>

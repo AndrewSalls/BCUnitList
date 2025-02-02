@@ -14,6 +14,9 @@ const REQUEST_TYPES = {
     GET_CATEGORY_NAMES: "get_category_names",
     GET_SETTINGS: "get_settings",
 
+    MODIFY_CUSTOM_CATEGORY: "modify_custom_category",
+    REMOVE_CUSTOM_CATEGORY: "remove_custom_category",
+
     UPDATE_ID: "update_id"
 }
 

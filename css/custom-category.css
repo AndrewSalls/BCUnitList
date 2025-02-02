@@ -1,0 +1,58 @@
+#category-creator > *:not(:last-child) {
+    margin-bottom: 2vh;
+}
+
+.chip {
+    position: relative;
+    overflow: hidden;
+    width: 110px;
+    height: 85px;
+}
+
+.chip .unit-icon {
+    position: absolute;
+    top: -21px;
+    left: -9px;
+}
+
+.chip .unit-id {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-weight: bolder;
+    font-size: 12pt;
+    margin: 0;
+    padding: 5% 5% calc(5% - 3px) 20%;
+    background-color: var(--generic-content);
+    border: 5px solid var(--text);
+    border-left: 2px solid var(--text);
+    border-top: 2px solid var(--text);
+    border-radius: 2000px 0 0 0;
+    user-select: none;
+}
+
+.chip .remove-unit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-weight: bolder;
+    font-size: 12pt;
+    padding: 0 10% 0 10%;
+    background-color: var(--highlight-warning);
+    border: 5px solid var(--text);
+    border-left: 2px solid var(--text);
+    border-bottom: 2px solid var(--text);
+    user-select: none;
+    cursor: pointer;
+}
+
+#created-category-list {
+    margin-bottom: 2vh;
+}
+
+#open-creator, #delete-category, #cancel-category-creation, #create-category-creation {
+    margin: 0 5vw;
+    width: 20vw;
+    height: 5vh;
+    border-radius: 1000000px;
+}

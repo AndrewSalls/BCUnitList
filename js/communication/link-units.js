@@ -1,4 +1,4 @@
-import { parseAllCategories } from "../category/category-parser.js";
+import { parseAllCategories, recordCustomCategory } from "../category/category-parser.js";
 import getCostsFor, { isInitialized, initializeLeveling } from "../helper/find-costs.js";
 import { getUnitData } from "../helper/parse-file.js";
 
@@ -74,6 +74,26 @@ function handleMessage(port, unitData, res) {
             break;
         case "get_settings":
             port.postMessage({ m_id: res.m_id, data: settings });
+            break;
+        case "modify_custom_category":
+            if(!categories["custom"]) {
+                categories["custom"] = {};
+            }
+
+            categories["custom"][res.content.target] = res.content.updates;
+            recordCustomCategory(res.content.target, res.content.updates);
+            port.postMessage({ m_id: res.m_id, data: categories["custom"] });
+            break;
+        case "remove_custom_category":
+            const removing = categories["custom"][res.content];
+            delete categories["custom"][res.content];
+
+            if(Object.keys(categories["custom"]).length === 0) {
+                delete categories["custom"];
+            }
+
+            recordCustomCategory(res.content, []);
+            port.postMessage({ m_id: res.m_id, data: removing });
             break;
         default:
             console.error(`Unexpected context: ${res.context}`);

@@ -1,4 +1,5 @@
-import { parseSnakeCase } from "./category/category-parser.js";
+import { initializeCategoryCreator } from "./category/category-creator.js";
+import { createSuperCategoryButton } from "./category/create-settings-category.js";
 
 let topPos = 0;
 document.addEventListener("DOMContentLoaded", () => {
@@ -47,53 +48,13 @@ function loadButton(buttonID, storageKey) {
 }
 
 function finishSetup() {
+    initializeCategoryCreator(displayMessage);
+
     const selection = document.querySelector("#category-selection");
     selection.classList.add("hidden");
     makeRequest(REQUEST_TYPES.GET_CATEGORY_NAMES, null, true).then(names => {
         for(const superCategory of Object.keys(names).sort()) {
-            const wrapper = document.createElement("div");
-            wrapper.classList.add("super-category-wrapper");
-
-            const superKey = `gk-${superCategory}`;
-            const superButton = document.createElement("button");
-            superButton.type = "button";
-            superButton.classList.add("filter-button");
-            superButton.classList.add("super-category-button");
-            superButton.textContent = parseSnakeCase(superCategory);
-
-            if(!window.localStorage.getItem(superKey)) {
-                window.localStorage.setItem(superKey, "1");
-            }
-            superButton.classList.toggle("active", window.localStorage.getItem(superKey) === "0");
-            superButton.addEventListener("click", () => {
-                window.localStorage.setItem(superKey, superButton.classList.toggle("active") ? "0" : "1");
-            });
-
-            const subWrapper = document.createElement("div");
-            subWrapper.classList.add("h-align");
-            subWrapper.classList.add("sub-category-wrapper");
-
-            for(const subCategory of Object.keys(names[superCategory]).sort()) {
-                const key = `${superCategory}-${subCategory}`;
-
-                const subButton = document.createElement("button");
-                subButton.type = "button";
-                subButton.classList.add("filter-button");
-                subButton.textContent = subCategory;
-
-                if(!window.localStorage.getItem(key)) {
-                    window.localStorage.setItem(key, "1");
-                }
-                subButton.classList.toggle("active", window.localStorage.getItem(key) === "0");
-                subButton.addEventListener("click", () => {
-                    window.localStorage.setItem(key, subButton.classList.toggle("active") ? "0" : "1");
-                });
-
-                subWrapper.appendChild(subButton);
-            }
-
-            wrapper.append(superButton, subWrapper);
-            selection.appendChild(wrapper);
+            selection.appendChild(createSuperCategoryButton(superCategory, names));
         }
         selection.classList.remove("hidden");
     });

@@ -31,9 +31,30 @@ export async function parseAllCategories() {
     .then(t => t.text())
     .then(t => t.split(" ").map(async p => {return {[p]: await parseCategoryFile(p)}}))
     .then(pl => Promise.all(pl))
-    .then(res => res.reduce((acc, obj) => { return {...acc, ...obj}}));
+    .then(res => res.reduce((acc, obj) => {
+        const parsed = {...acc, ...obj};
+
+        const toParse = Object.keys(window.localStorage).filter(k => k.startsWith("_cc-"));
+        if(toParse.length > 0) {
+            parsed["custom"] = {};
+            for(const key of toParse) {
+                const data = JSON.parse(window.atob(window.localStorage.getItem(key)));
+                parsed["custom"][data.c] = data.v;
+            }
+        }
+
+        return parsed;
+    }));
 }
 
 export function parseSnakeCase(str) {
     return str.replaceAll(/\_[a-z]/g, m => ` ${m[1].toUpperCase()}`).replace(/^[a-z]/, m => m[0].toUpperCase());    
+}
+
+export function recordCustomCategory(categoryName, categoryValues) {
+    if(categoryValues.length === 0) {
+        window.localStorage.removeItem(`_cc-${categoryName}`);
+    } else {
+        window.localStorage.setItem(`_cc-${categoryName}`, window.btoa(JSON.stringify({c:categoryName,v:categoryValues})));
+    }
 }
