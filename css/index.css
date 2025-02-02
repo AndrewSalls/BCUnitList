@@ -30,7 +30,7 @@
 #nav-bar button.current {
     background-color: var(--highlight-content);
 }
-#nav-bar button:last-child {
+#nav-bar button:last-of-type {
     border-right: 1px solid var(--content-border);
 }
 
