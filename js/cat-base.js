@@ -179,7 +179,11 @@ function createTreasureSlider(treasureType, max, initialValue, localStorageKey) 
 
 function loadCannonInfo(settings) {
     const wrapper = document.querySelector("#cat-base-selector");
-    for(let x = 1; x <= settings.ototo.count; x++) {
+    const defaultCannon = createBaseStyling(settings.ototo.names[0], settings.ototo.cannon, settings.ototo.base, settings.ototo.style, 1);
+    defaultCannon.querySelector("label[data-input-type='0']").classList.add("hidden");
+    defaultCannon.querySelector("label[data-input-type='1']").classList.add("hidden");
+    wrapper.appendChild(defaultCannon);
+    for(let x = 2; x <= settings.ototo.count; x++) {
         wrapper.appendChild(createBaseStyling(settings.ototo.names[x - 1], settings.ototo.cannon, settings.ototo.base, settings.ototo.style, x));
     }
 }
@@ -234,6 +238,7 @@ function createBaseStyling(name, cannonCap, baseCap, styleCap, id) {
 function createBaseValueInput(cap, currentValue, type, id) {
     const valueLabel = document.createElement("label");
     valueLabel.classList.add("h-align");
+    valueLabel.dataset.inputType = type;
 
     const labelText = document.createElement("p");
     switch(type) {

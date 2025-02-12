@@ -120,8 +120,8 @@
     padding: 0 0.5vw;
     font-weight: bold;
 }
-.base-values label:not(:first-child) {
-    margin-top: 2vh;
+.base-values label:not(:last-child) {
+    margin-bottom: 2vh;
 }
 
 .base-values label {
