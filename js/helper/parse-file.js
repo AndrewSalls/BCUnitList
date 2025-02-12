@@ -90,3 +90,29 @@ function parseTalents(talentString) {
         value: 0
     }});
 }
+
+export function parseUpgrades(settings) {
+    const abilityIconLevels = window.localStorage.getItem("abo");
+    let upgradeData, upgradeUR = 0;
+
+    if(!abilityIconLevels) {
+        upgradeData = settings.abilities.abilityNames.map(_ => { return {
+            level: 0,
+            plus: 0
+        }});
+    } else {
+        upgradeData = abilityIconLevels.split("-").map(s => {
+            const parts = s.split("+");
+
+            const output = {
+                level: parseInt(parts[0]),
+                plus: parseInt(parts[1])
+            };
+            upgradeUR += output.level + output.plus;
+
+            return output;
+        });
+    }
+
+    return { upData: [parseInt(window.localStorage.getItem("cgs") ?? "0"), ...upgradeData], upUR: upgradeUR };
+}

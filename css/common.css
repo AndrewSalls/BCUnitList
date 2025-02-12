@@ -140,7 +140,6 @@ html {
 
 body {
     display: grid;
-    grid-template-rows: 60px 1fr;
     background-color: var(--highlight-bg);
     padding: 0;
     margin: 0;

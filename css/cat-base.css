@@ -1,15 +1,33 @@
-#loading-content {
-    min-height: 100vh;
+html {
+    overflow-y: scroll;
 }
 
-#loading-content > div {
+#loading-content {
     min-height: 100vh;
+    background-color: var(--highlight-bg2);
     justify-content: start;
+}
+
+#tab-list {
+    height: 1fr;
+    width: 100%;
+}
+
+#ur-display {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    padding: 3vh 0;
+    background-color: var(--highlight-bg);
 }
 
 #base-section-nav {
     background-color: var(--content);
     width: 100%;
+}
+
+img {
+    user-select: none;
 }
 
 #base-section-nav > button {
@@ -32,19 +50,6 @@
 
 #base-section-nav > button.current {
     background-color: var(--highlight-content);
-}
-
-#tab-list, #treasure-selector {
-    background-color: var(--highlight-bg2);
-    width: 100%;
-}
-
-#tab-list {
-    height: 100%;
-}
-
-#tab-list > div {
-    min-height: 100%;
 }
 
 .treasure-chapter {
@@ -80,20 +85,24 @@
     transform: rotate(180deg);
 }
 
+#other-selector {
+    justify-content: start;
+}
+
 #other-selector label {
     font-weight: bolder;
     padding-right: 1vw;
 }
 #other-selector .h-align {
-    margin-top: 2vh;
+    margin: 2vh 0;
 }
 
 #cat-base-selector {
     flex-wrap: wrap;
     column-gap: 2vw;
     row-gap: 2vw;
-    width: 80vw;
-    padding: 3vh 10vw;
+    width: 80%;
+    padding: 3vh 10%;
 }
 
 .base-image {
@@ -128,12 +137,12 @@
     justify-content: end;
 }
 
-.base-values input {
+input[type='number'] {
     text-align: center;
     margin: 0.5vh 0;
 }
-.base-values input::-webkit-outer-spin-button,
-.base-values input::-webkit-inner-spin-button {
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -142,4 +151,49 @@
     height: 14px;
     cursor: pointer;
     user-select: none;
+}
+
+#quick-complete {
+    background-color: var(--highlight-bg2);
+    width: 100%;
+    column-gap: 20vw;
+    padding: 2vh 0;
+}
+
+#quick-complete button {
+    padding: 1vh 1vw;
+    transition: background-color 0.2s linear;
+    font-weight: bolder;
+    border-radius: 10000px;
+}
+
+#reset-tab {
+    background-color: var(--warning);
+}
+#reset-tab:hover {
+    background-color: var(--highlight-warning);
+}
+
+#upgrade-selector {
+    flex-wrap: wrap;
+    column-gap: 2vw;
+    row-gap: 2vw;
+    width: 80%;
+    padding: 3vh 10%;
+}
+
+#upgrade-selector > div {
+    min-width: 15vw;
+    padding: 2vh;
+    background-color: var(--highlight-bg);
+    border-radius: 2vh;
+}
+
+#upgrade-selector > div h4 {
+    margin: 0;
+}
+
+#upgrade-selector > div img {
+    aspect-ratio: 1/1;
+    width: 131px;
 }

@@ -1,18 +1,21 @@
 import { parseAllCategories, recordCustomCategory } from "../category/category-parser.js";
 import getCostsFor, { isInitialized, initializeLeveling } from "../helper/find-costs.js";
-import { getUnitData } from "../helper/parse-file.js";
+import { getUnitData, parseUpgrades } from "../helper/parse-file.js";
 
 let unitData = [];
+let upgradeData = [];
 let categories = {};
 let settings = {};
 
 export default async function initializeData() {
     return new Promise(async (res, _) => {
         settings = await fetch("./assets/settings.json").then(res => res.json());
+        const { upData, upUR } = parseUpgrades(settings);
+        upgradeData = upData;
         categories = await parseAllCategories();
         const { units, ur } = await getUnitData(categories, settings);
         unitData = units;
-        settings.userRank = ur;
+        settings.userRank = ur + upUR;
         res({ settings: settings, categories: categories, unitData: unitData });
 
         const frame = document.querySelector("#content-page");
@@ -96,6 +99,25 @@ function handleMessage(port, unitData, res) {
 
             recordCustomCategory(res.content, []);
             port.postMessage({ m_id: res.m_id, data: removing });
+            break;
+        case "get_upgrade":
+            port.postMessage({ m_id: res.m_id, data: upgradeData[res.content] });
+            break;
+        case "get_all_upgrade":
+            port.postMessage({ m_id: res.m_id, data: upgradeData });
+            break;
+        case "update_upgrade":
+            if(res.content.id === 0) { // cgs
+                upgradeData[0] = res.content.level;
+                window.localStorage.setItem("cgs", res.content.level);
+            } else { // ability upgrade
+                settings.userRank += (res.content.level - upgradeData[res.content.id].level);
+                upgradeData[res.content.id].level = res.content.level;
+                settings.userRank += (res.content.plus - upgradeData[res.content.id].plus);
+                upgradeData[res.content.id].plus = res.content.plus;
+                window.localStorage.setItem("abo", new Array(upgradeData.length - 1).fill(0).map((_, i) => `${upgradeData[i + 1].level}+${upgradeData[i + 1].plus}`).join("-"));
+            }
+            port.postMessage({ m_id: res.m_id, data: upgradeData[res.content.id] });
             break;
         default:
             console.error(`Unexpected context: ${res.context}`);

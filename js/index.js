@@ -133,11 +133,19 @@ function initializeLocalStorage(settings, categories) {
         }
     }
     
-    // Categories --------------------------------------------
+    // Base Development --------------------------------------------
     for(let b = 1; b <= settings.ototo.count; b++) {
         if(!window.localStorage.getItem(`oo_${b}`)) {
             window.localStorage.setItem(`oo_${b}`, "0-0-0");
         }
+    }
+    
+    // Ability Upgrades --------------------------------------------
+    if(!window.localStorage.getItem("abo")) {
+        window.localStorage.setItem("abo", "0+0-0+0-0+0-0+0-0+0-0+0-0+0-0+0-0+0");
+    }
+    if(!window.localStorage.getItem("cgs")) {
+        window.localStorage.setItem("cgs", 0);
     }
 
     // Other Cat Base --------------------------------------------

@@ -1,4 +1,5 @@
 const REQUEST_TYPES = {
+    UPDATE_ID: "update_id",
     GET_ID_DATA: "get_id",
     GET_MULTIPLE_DATA: "get_list",
     GET_RARITY_DATA: "get_rarity_list",
@@ -17,7 +18,9 @@ const REQUEST_TYPES = {
     MODIFY_CUSTOM_CATEGORY: "modify_custom_category",
     REMOVE_CUSTOM_CATEGORY: "remove_custom_category",
 
-    UPDATE_ID: "update_id"
+    UPDATE_UPGRADE: "update_upgrade",
+    GET_UPGRADE: "get_upgrade",
+    GET_ALL_UPGRADE: "get_all_upgrade"
 }
 
 const MAX_POST_ID = 2 << 12;

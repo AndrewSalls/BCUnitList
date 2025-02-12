@@ -1,3 +1,7 @@
+body {
+    grid-template-rows: 60px 1fr;
+}
+
 #nav-bar {
     display: flex;
     align-items: center;
