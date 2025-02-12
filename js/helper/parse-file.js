@@ -7,6 +7,7 @@ export async function getUnitData(categories, settings) {
     const levelingCaps = await getLevelCaps();
     const collabUnits = [...Object.values(categories["collabs"]).flat(), ...Object.values(categories["small_collabs"]).flat()];
     const unobtainableUnits = categories["other"]["Unobtainable"];
+    let totalLevel = 0;
 
     const awaitFinish = [];
     for(let x = 0; x <= Math.floor(unitCount / 100); x++) {
@@ -64,12 +65,16 @@ export async function getUnitData(categories, settings) {
                         }
                     }
 
+                    totalLevel += unitData.level + unitData.plus_level;
                     return unitData;
                 })
             ));
     }
 
-    return (await Promise.all(awaitFinish)).flat();
+    return {
+        units: (await Promise.all(awaitFinish)).flat(),
+        ur: totalLevel
+    };
 }
 
 function parseTalents(talentString) {

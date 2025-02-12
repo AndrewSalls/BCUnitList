@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/loading.css">
+    <link rel="stylesheet" href="./css/cat-base.css">
+    <script src="./js/communication/iframe-link.js"></script>
+    <script src="./js/cat-base.js" type="module"></script>
+</head>
+<body>
+    <div id="loading-content" class="hidden">
+        <div class="v-align">
+            <h3>User Rank: <span id="user-rank"></span></h3>
+            <div id="base-section-nav" class="h-align">
+                <button type="button" id="treasure-tab">Treasures</button>
+                <button type="button" id="cannon-tab">Ototo Development</button>
+                <button type="button" id="upgrades-tab">Base Upgrades</button>
+                <button type="button" id="other-tab">Other</button>
+            </div>
+            <div id="tab-list">
+                <div id="treasure-selector" class="v-align">
+                </div>
+                <div id="cat-base-selector" class="h-align">
+                </div>
+                <div id="upgrade-selector">
+                </div>
+                <div id="other-selector">
+                    <div class="v-align">
+                        <h3>Aku Seal</h3>
+                        <div class="h-align">
+                            <label for="seal-broken">Seal Broken?</label>
+                            <input type="checkbox" id="seal-broken" title="Whether the Aku Realms have been cleared, disabling the Aku Altar.">
+                        </div>
+                        <div class="h-align">
+                            <label for="seal-level">Aku Seal Level</label>
+                            <input type="number" min="0" max="50" step="1" id="seal-level" title="The maximum level of units while the Aku Altar is active.">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

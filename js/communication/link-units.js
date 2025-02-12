@@ -10,7 +10,9 @@ export default async function initializeData() {
     return new Promise(async (res, _) => {
         settings = await fetch("./assets/settings.json").then(res => res.json());
         categories = await parseAllCategories();
-        unitData = await getUnitData(categories, settings);
+        const { units, ur } = await getUnitData(categories, settings);
+        unitData = units;
+        settings.userRank = ur;
         res({ settings: settings, categories: categories, unitData: unitData });
 
         const frame = document.querySelector("#content-page");
@@ -127,8 +129,12 @@ async function updateFromData(data) {
     const id = data.id;
 
     unitData[id].current_form = data.current_form ?? unitData[id].current_form;
+
+    const oldURCount = unitData[id].level + unitData[id].plus_level;
     unitData[id].level = data.level ?? unitData[id].level;
     unitData[id].plus_level = data.plus_level ?? unitData[id].plus_level;
+    settings.userRank += (unitData[id].level + unitData[id].plus_level - oldURCount);
+
     if(data.talents) {
         for(let i = 0; i < unitData[id].talents.length; i++) {
             unitData[id].talents[i].value = data.talents[i];

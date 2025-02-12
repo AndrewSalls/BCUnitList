@@ -30,7 +30,6 @@ https://github.com/battlecatsinfo/battlecatsinfo.github.io
 https://github.com/battlecatsultimate/BCU-java-PC (BCU)
 
 ## Planned (Near) Future Features
-- Cannon/style/base levels
 - Creating, saving, and sharing unit loadouts
 
 ## Potential (Slightly less) Future Features

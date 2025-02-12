@@ -1,3 +1,4 @@
 *.py
 venv/*
 *.TODO
+__pycache__

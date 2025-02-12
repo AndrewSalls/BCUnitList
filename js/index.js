@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
         category.onclick = _ => { if(!category.classList.contains("current")) { setPage(category); loadTo("unit-category"); }};
         const viewcost = nav.querySelector("#view-costs-button");
         viewcost.onclick = _ => { if(!viewcost.classList.contains("current")) { setPage(viewcost); loadTo("unit-costs"); }};
+        const catBase = nav.querySelector("#cat-base-button");
+        catBase.onclick = _ => { if(!catBase.classList.contains("current")) { setPage(catBase); loadTo("cat-base"); }};
         const settingsPage = nav.querySelector("#settings-button");
         settingsPage.onclick = _ => { if(!settingsPage.classList.contains("current")) { setPage(settingsPage); loadTo("settings"); }};
 
@@ -41,6 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     return category;
                 case "unit-costs":
                     return viewcost;
+                case "cat-base":
+                    return catBase;
                 case "settings":
                     return settingsPage;
                 case "home":
@@ -81,12 +85,14 @@ function loadTo(src, skipHistory = false) {
 }
 
 function initializeLocalStorage(settings, categories) {
+    // Site Settings --------------------------------------------
     for(const key of Object.keys(DEFAULT_SETTINGS)) {
         if(window.localStorage.getItem(key) === null) {
             window.localStorage.setItem(key, DEFAULT_SETTINGS[key]);
         }
     }
     
+    // Categories --------------------------------------------
     for(const superCategory of Object.keys(categories).sort()) {
         const superKey = `gk-${superCategory}`;
         if(!window.localStorage.getItem(superKey)) {
@@ -104,6 +110,45 @@ function initializeLocalStorage(settings, categories) {
         window.localStorage.setItem("gk-custom", "1");
     }
 
+    // Treasures --------------------------------------------
+    for(let p = 1; p <= 3; p++) {
+        for(let x = 0; x < settings.treasures.eoc.length; x++) {
+            if(!window.localStorage.getItem(`eoc_${p}_${x + 1}`)) {
+                window.localStorage.setItem(`eoc_${p}_${x + 1}`, "0-0-0");
+            }
+        }
+    }
+    for(let p = 1; p <= 3; p++) {
+        for(let x = 0; x < settings.treasures.itf.length; x++) {
+            if(!window.localStorage.getItem(`itf_${p}_${x + 1}`)) {
+                window.localStorage.setItem(`itf_${p}_${x + 1}`, "0-0-0");
+            }
+        }
+    }
+    for(let p = 1; p <= 3; p++) {
+        for(let x = 0; x < settings.treasures.cotc.length; x++) {
+            if(!window.localStorage.getItem(`cotc_${p}_${x + 1}`)) {
+                window.localStorage.setItem(`cotc_${p}_${x + 1}`, "0-0-0");
+            }
+        }
+    }
+    
+    // Categories --------------------------------------------
+    for(let b = 1; b <= settings.ototo.count; b++) {
+        if(!window.localStorage.getItem(`oo_${b}`)) {
+            window.localStorage.setItem(`oo_${b}`, "0-0-0");
+        }
+    }
+
+    // Other Cat Base --------------------------------------------
+    if(!window.localStorage.getItem("akl")) {
+        window.localStorage.setItem("akl", "0");
+    }
+    if(!window.localStorage.getItem("akb")) {
+        window.localStorage.setItem("akb", "0");
+    }
+
+    // Save Metadata --------------------------------------------
     window.localStorage.setItem("lg", settings.gameVersion);
     window.localStorage.setItem("ls", settings.version);
 }
