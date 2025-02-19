@@ -2,3 +2,4 @@
 venv/*
 *.TODO
 __pycache__
+validation_log.txt

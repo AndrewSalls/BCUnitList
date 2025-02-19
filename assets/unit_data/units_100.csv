@@ -18,7 +18,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 116,RR,Y,Fuu,Fuu CC,,,GachaRare,0,,
 117,SR,Y,Aura,Aura CC,,,GachaSR,0,,
 118,SR,Y,Rei,Rei CC,,,GachaSR,0,,
-119,UR,Y,Wyvern,Wyvern Cat,Wyvern Cat & Alec,,UR,0,,
+119,UR,Y,Wyvern,Wyvern Cat,Wyvern and Alec,,UR,0,,
 120,EX,Y,Healer,Healer CC,Healer Cat CC,,,0,,
 121,EX,Y,Merc,Merc CC,Merc & Cat CC,,,0,,
 122,RR,Y,Vacation Queen,Office Lady Cat,Call Center Cat,,,0,,
@@ -33,7 +33,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 131,SR,Y,Neneko,Miss NENEKO,,,GachaSR,0,,
 132,RR,Y,Kung Fu Cat X,Drunken Master Cat X,Iron Claw X,,,0,,
 133,EX,N,Hikakin,Bikyakin,Mukyakin,,,0,,
-134,UR,Y,Urashima Taro,Guardian Gamereon,King Gamereon,,UR,1,Slow10-Freeze_Resist10-Knockback_Resist10-Defense10-Attack10,Cost_Down10-Curse10-Slow_Immune1
+134,UR,Y,Urashima Taro,Guardian Gamereon,King Gamereon,,UR,2,Slow10-Freeze_Resist10-Knockback_Resist10-Defense10-Attack10,Cost_Down10-Curse10-Slow_Immune1
 135,UR,Y,The Grateful Crane,Super Galaxy Cosmo,Ultima Galaxy Cosmo,,UR,1,Colossus_Slayer1-Curse10-Curse_Immune1-Defense10-Attack10,
 136,UR,Y,Momotaro,The Peach Angels,The Peach Devils,,UR,2,Weaken10-Freeze10-Slow_Resist10-Defense10-Attack10,Mini_Wave10-Wave_Immune1-Knockback10
 137,UR,Y,Kasa Jizo,Jizo's Moving Castle,Jizo's Mega-Castle,,UR,1,Curse_Immune1-Toxic_Immune1-Surge_Resist10-Defense10-Attack10,
