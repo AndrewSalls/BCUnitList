@@ -39,11 +39,15 @@
     font-size: 12pt;
     padding: 0 10% 0 10%;
     background-color: var(--highlight-warning);
+    transition: background-color 0.2s linear;
     border: 5px solid var(--text);
     border-left: 2px solid var(--text);
     border-bottom: 2px solid var(--text);
     user-select: none;
     cursor: pointer;
+}
+.chip .remove-unit:hover {
+    background-color: var(--warning);
 }
 
 #created-category-list {

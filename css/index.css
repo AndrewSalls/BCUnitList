@@ -24,7 +24,6 @@ body {
     height: 100%;
     border: none;
     font-weight: bolder;
-    transition: background-color 0.2s linear;
     font-size: 12pt;
     text-decoration: none;
     color: var(--text);

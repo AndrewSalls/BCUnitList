@@ -1,0 +1,39 @@
+h3 {
+    text-align: center;
+}
+
+.loadout-unit-wrapper {
+    display: grid;
+    width: max-content;
+    grid-template-columns: 110px 110px 110px 110px 110px;
+    grid-template-rows: 85px 85px;
+    row-gap: 0.5vw;
+    column-gap: 0.5vw;
+}
+
+.loadout-base-image {
+    position: relative;
+    width: 90px;
+    height: 180px;
+}
+
+.loadout-base-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.cannon {
+    z-index: 1;
+}
+.style {
+    z-index: 3;
+}
+.foundation {
+    z-index: 2;
+}
+
+.left-arrow, .right-arrow {
+    width: 16px;
+    height: 32px;
+}

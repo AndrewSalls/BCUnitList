@@ -9,7 +9,6 @@
     border: 2px solid var(--text);
     border-radius: 2px;
     height: 20px;
-    transition: background-color 0.2s linear;
     font-weight: bolder;
 }
 
@@ -137,7 +136,6 @@ h4 {
 
 #file-selector-button {
     background-color: var(--content);
-    transition: background-color 0.2s linear;
     padding: 1vh 3vw;
     border-radius: 3vw;
     text-align: center;

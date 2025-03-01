@@ -75,7 +75,6 @@
 #orb-option-centering button {
     border: none;
     font-weight: bolder;
-    transition: background-color 0.2s linear;
     font-size: 12pt;
     padding: 2% 3%;
     border-radius: 1vw;

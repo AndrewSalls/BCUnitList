@@ -156,6 +156,7 @@ iframe {
 button {
     background-color: var(--content);
     cursor: pointer;
+    transition: background-color 0.2s linear;
 }
 button:disabled {
     filter: contrast(0.5);

@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
         viewcost.onclick = _ => { if(!viewcost.classList.contains("current")) { setPage(viewcost); loadTo("unit-costs"); }};
         const catBase = nav.querySelector("#cat-base-button");
         catBase.onclick = _ => { if(!catBase.classList.contains("current")) { setPage(catBase); loadTo("cat-base"); }};
+        const loadout = nav.querySelector("#loadout-button");
+        loadout.onclick = _ => { if(!loadout.classList.contains("current")) { setPage(loadout); loadTo("loadout"); }};
         const settingsPage = nav.querySelector("#settings-button");
         settingsPage.onclick = _ => { if(!settingsPage.classList.contains("current")) { setPage(settingsPage); loadTo("settings"); }};
 
@@ -45,6 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     return viewcost;
                 case "cat-base":
                     return catBase;
+                case "loadout":
+                    return loadout;
                 case "settings":
                     return settingsPage;
                 case "home":
@@ -76,7 +80,7 @@ function loadTo(src, skipHistory = false) {
 
     const frame = document.querySelector("#content-page");
     const loadEvt = frame.onload;
-    frame.outerHTML = `<iframe src="./${src}.html" id="content-page"></iframe>`;
+    frame.outerHTML = `<iframe src="./${src}.html" id="content-page" title="Page Content"></iframe>`;
     const newFrame = document.querySelector("#content-page");
     newFrame.onload = loadEvt;
     if(newFrame.contentDocument && newFrame.contentDocument.readyState === "complete") {

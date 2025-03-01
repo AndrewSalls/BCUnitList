@@ -43,7 +43,6 @@
     border-top: 2px solid var(--text);
     border-bottom: 2px solid var(--text);
     font-weight: bolder;
-    transition: background-color 0.2s linear;
     padding: 0.5vw;
     font-size: 12pt;
 }
