@@ -1,7 +1,6 @@
 import makeSearchable from "../helper/make-searchable.js";
 import { createSubCategoryButton, createSuperCategoryButton } from "./create-settings-category.js";
 
-const CATEGORY_AMOUNT = 100;
 const MAX_CATEGORY_NAME_LENGTH = 64;
 
 let selectedUnits = new Set();
@@ -52,11 +51,7 @@ export function initializeCategoryCreator(completionMessager) {
         }
 
         opener.onclick = () => {
-            if(Object.keys(custom).length >= CATEGORY_AMOUNT) {
-                completionMessager(`You can only create up to ${CATEGORY_AMOUNT} categories!`, true);
-            } else {
-                openCategoryModifier(targetedKey, custom[targetedKey]);
-            }
+            openCategoryModifier(targetedKey, custom[targetedKey]);
         };
 
         remover.onclick = () => {

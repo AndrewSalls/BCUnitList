@@ -42,7 +42,6 @@
 .table-filter-group button, #table-update-options button {
     border-top: 2px solid var(--text);
     border-bottom: 2px solid var(--text);
-    font-weight: bolder;
     padding: 0.5vw;
     font-size: 12pt;
 }

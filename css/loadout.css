@@ -37,3 +37,39 @@ h3 {
     width: 16px;
     height: 32px;
 }
+
+.loadout-options {
+    width: 100%;
+    margin-bottom: 1vh;
+    column-gap: 1vw;
+    display: flex;
+    justify-content: space-between;
+}
+
+.loadout-options-right {
+    display: flex;
+    column-gap: 1vw;
+}
+
+.loadout-wrapper {
+    margin: 1vw;
+}
+
+#add-loadout {
+    width: 40vw;
+    height: 5vh;
+    border-radius: 100vh;
+    font-weight: bolder;
+}
+
+.unit-icon {
+    cursor: pointer;
+}
+
+ .set-unit img {
+    -webkit-user-drag: unset;
+ }
+
+ .dragover {
+    filter: brightness(0.8);
+ }

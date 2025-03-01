@@ -20,7 +20,9 @@ const REQUEST_TYPES = {
 
     UPDATE_UPGRADE: "update_upgrade",
     GET_UPGRADE: "get_upgrade",
-    GET_ALL_UPGRADE: "get_all_upgrade"
+    GET_ALL_UPGRADE: "get_all_upgrades",
+
+    GET_ALL_LOADOUT: "get_all_loadouts"
 }
 
 const MAX_POST_ID = 2 << 12;

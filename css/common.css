@@ -157,6 +157,7 @@ button {
     background-color: var(--content);
     cursor: pointer;
     transition: background-color 0.2s linear;
+    font-weight: bolder;
 }
 button:disabled {
     filter: contrast(0.5);

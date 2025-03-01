@@ -23,7 +23,6 @@ body {
     padding: 0 1vw;
     height: 100%;
     border: none;
-    font-weight: bolder;
     font-size: 12pt;
     text-decoration: none;
     color: var(--text);

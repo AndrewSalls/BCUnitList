@@ -260,7 +260,6 @@ tbody tr:nth-child(2n - 1) {
     border: 2px solid var(--text);
     border-radius: 2px;
     height: 20px;
-    font-weight: bolder;
 }
 
 .row-option-wrapper button {

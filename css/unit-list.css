@@ -62,7 +62,6 @@
 
 #quick-nav-options button {
     border: none;
-    font-weight: bolder;
     font-size: 12pt;
     border: 2px solid var(--text);
     color: var(--text);

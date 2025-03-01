@@ -36,7 +36,6 @@ img {
     padding: 2vh 0;
     height: 100%;
     border: none;
-    font-weight: bolder;
     font-size: 12pt;
     text-decoration: none;
     color: var(--text);
@@ -161,7 +160,6 @@ input[type='number']::-webkit-inner-spin-button {
 
 #quick-complete button {
     padding: 1vh 1vw;
-    font-weight: bolder;
     border-radius: 10000px;
 }
 

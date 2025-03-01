@@ -5,6 +5,7 @@ import { getUnitData, parseUpgrades } from "../helper/parse-file.js";
 let unitData = [];
 let upgradeData = [];
 let categories = {};
+let loadouts = [];
 let settings = {};
 
 export default async function initializeData() {
@@ -103,7 +104,7 @@ function handleMessage(port, unitData, res) {
         case "get_upgrade":
             port.postMessage({ m_id: res.m_id, data: upgradeData[res.content] });
             break;
-        case "get_all_upgrade":
+        case "get_all_upgrades":
             port.postMessage({ m_id: res.m_id, data: upgradeData });
             break;
         case "update_upgrade":
@@ -118,6 +119,9 @@ function handleMessage(port, unitData, res) {
                 window.localStorage.setItem("abo", new Array(upgradeData.length - 1).fill(0).map((_, i) => `${upgradeData[i + 1].level}+${upgradeData[i + 1].plus}`).join("-"));
             }
             port.postMessage({ m_id: res.m_id, data: upgradeData[res.content.id] });
+            break;
+        case "get_all_loadouts":
+            port.postMessage({ m_id: res.m_id, data: loadouts });
             break;
         default:
             console.error(`Unexpected context: ${res.context}`);
