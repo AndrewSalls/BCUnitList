@@ -36,6 +36,7 @@ h3 {
 .left-arrow, .right-arrow {
     width: 16px;
     height: 32px;
+    cursor: pointer;
 }
 
 .loadout-options {
@@ -52,6 +53,9 @@ h3 {
 }
 
 .loadout-wrapper {
+    padding: 1vw;
+    background-color: var(--highlight-bg2);
+    border-radius: 1vw;
     margin: 1vw;
 }
 
@@ -72,4 +76,38 @@ h3 {
 
  .dragover {
     filter: brightness(0.8);
+ }
+
+ .loadout-base-wrapper {
+    margin-left: 2vw;
+    height: 180px;
+ }
+
+ .left-base-arrows, .right-base-arrows {
+    position: relative;
+    height: 100%;
+    width: 16px;
+ }
+
+ .base-cannon {
+    z-index: 1;
+ }
+ .base-style {
+    z-index: 2;
+ }
+ .base-foundation {
+    z-index: 0;
+ }
+
+ .cannon-arrow {
+    position: absolute;
+    bottom: 80px;
+ }
+.style-arrow {
+    position: absolute;
+    bottom: 45px;
+}
+ .foundation-arrow {
+    position: absolute;
+    bottom: 10px;
  }

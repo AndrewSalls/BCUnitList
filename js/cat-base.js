@@ -53,12 +53,12 @@ function loadBaseSettings(loadingBar) {
         loadUpgradeInfo(settings).then(_ => loadingBar.increment());
         loadOtherInfo();
         loadingBar.increment();
-        loadTabButtons(settings);
+        loadTabButtons();
         loadingBar.increment();
     });
 }
 
-function loadTabButtons(settings) {
+function loadTabButtons() {
     document.querySelector("#reset-tab").onclick = () => {
         const action = document.querySelector("#base-section-nav .current").id;
         switch(action) {
