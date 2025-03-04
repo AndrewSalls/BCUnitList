@@ -17,8 +17,8 @@ function initializeContent() {
     const addButton = document.querySelector("#add-loadout");
     const addTo = document.querySelector("#loadout-container");
 
-    addButton.onclick = async () => {
-        addTo.appendChild(await createLoadout(null));
+    addButton.onclick = () => {
+        addTo.appendChild(createLoadout(null));
     };
 }
 
@@ -37,27 +37,23 @@ async function loadLoadouts() {
     searchSuggestions.id = "unit-search-suggestions";
     searchSuggestions.dataset.max_count = unitCount;
     document.body.appendChild(searchSuggestions);
-    initializeDatasetLimited(searchSuggestions, true);
+    await initializeDatasetLimited(searchSuggestions, true);
 
-    makeRequest(REQUEST_TYPES.GET_ALL_LOADOUT, null).then(async res => {
-        res.push({
-            title: "Funni",
-            units: [ 69, 420, 137, 101, 690, 42, 138 ],
-            forms: [ 0, 1, 2, 0, 1, 2, 3 ],
-            base: [1, 3, 8]
-        });
-
+    makeRequest(REQUEST_TYPES.GET_ALL_LOADOUT, null).then(res => {
         const wrapper = document.querySelector("#loadout-container");
         for(const loadout of res) {
-            wrapper.appendChild(await createLoadout(loadout));
+            wrapper.appendChild(createLoadout(loadout));
         }
     });
 }
 
-async function createLoadout(loadoutData = null) {
+function createLoadout(loadoutData = null) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-wrapper");
     wrapper.classList.add("v-align");
+    if(loadoutData) {
+        wrapper.classList.add("save");
+    }
 
     const options = document.createElement("div");
     options.classList.add("loadout-options");
@@ -77,6 +73,9 @@ async function createLoadout(loadoutData = null) {
     deleteOption.classList.add("active");
     deleteOption.textContent = "Delete Loadout";
     deleteOption.onclick = () => {
+        if(wrapper.classList.contains("save")) {
+            makeRequest(REQUEST_TYPES.DELETE_LOADOUT, Array.prototype.indexOf.call(document.querySelectorAll(".loadout-wrapper"), wrapper));
+        }
         wrapper.remove();
     }
 
@@ -93,27 +92,46 @@ async function createLoadout(loadoutData = null) {
     contentWrapper.classList.add("loadout-contents");
     contentWrapper.classList.add("h-align");
 
-    contentWrapper.append(await createUnitInput(loadoutData?.units, loadoutData?.forms), createCannonInput(loadoutData?.base));
+    const requestSave = () => {
+        const loadoutUnits = [...wrapper.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.id));
+        const position = Array.prototype.indexOf.call(document.querySelectorAll(".loadout-wrapper"), wrapper);
+        if(loadoutUnits.length > 0) {
+            wrapper.classList.add("save");
+            makeRequest(REQUEST_TYPES.MODIFY_LOADOUT, {
+                position: position,
+                loadout: {
+                    title: nameOption.value.trim(),
+                    units: loadoutUnits,
+                    forms: [...wrapper.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.form)),
+                    base: [parseInt(wrapper.querySelector(".base-cannon").dataset.type),
+                        parseInt(wrapper.querySelector(".base-style").dataset.type),
+                        parseInt(wrapper.querySelector(".base-foundation").dataset.type)]
+                }
+            });
+        } else if(wrapper.classList.contains("save")) {
+            makeRequest(REQUEST_TYPES.DELETE_LOADOUT, position);
+        }
+    };
+    nameOption.addEventListener("input", requestSave);
 
+    contentWrapper.append(createUnitInput(loadoutData?.units, loadoutData?.forms, requestSave), createCannonInput(loadoutData?.base, requestSave));
     wrapper.append(options, contentWrapper);
 
     return wrapper;
 }
 
-async function createUnitInput(units, forms) {
+function createUnitInput(units, forms, saveCallback) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-unit-wrapper");
 
     let x = 0;
     if(units) {
-        const unitData = await makeRequest(REQUEST_TYPES.GET_MULTIPLE_DATA, units, true);
-
         for(x = 0; x < 10 && x < units.length; x++) {
-            appendChip(units[x], forms[x], unitData[x], wrapper);
+            appendChip(units[x], forms[x], wrapper, saveCallback);
         }
     }
     while(x < 10) {
-        appendChip(null, null, null, wrapper);
+        appendChip(null, null, wrapper, saveCallback);
         x++
     }
 
@@ -122,7 +140,7 @@ async function createUnitInput(units, forms) {
     return wrapper;
 }
 
-function appendChip(id, form, unitData, parent) {
+function appendChip(id, form, parent, saveCallback) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("chip");
 
@@ -132,12 +150,13 @@ function appendChip(id, form, unitData, parent) {
     img.onclick = () => {
         if(wrapper.classList.contains("set-unit")) {
             let form = parseInt(wrapper.dataset.form) + 1;
-            if(form > unitData.current_form) {
+            if(form > parseInt(wrapper.dataset.maxForm)) {
                 form = 0;
             }
 
             wrapper.dataset.form = form;
-            img.src = `./assets/img/unit_icon/${id}_${form}.png`;
+            img.src = `./assets/img/unit_icon/${wrapper.dataset.id}_${form}.png`;
+            saveCallback();
         }
     };
 
@@ -153,6 +172,8 @@ function appendChip(id, form, unitData, parent) {
 
     removeButton.onclick = () => {
         wrapper.classList.remove("set-unit");
+        delete wrapper.dataset.id;
+        delete wrapper.dataset.maxForm;
         
         const formNameOptions = datalist.querySelectorAll(`option[data-target="${pId.textContent}"]`);
         formNameOptions.forEach(o => o.disabled = false);
@@ -164,6 +185,7 @@ function appendChip(id, form, unitData, parent) {
         removeButton.classList.add("hidden");
         unitSearchInput.classList.remove("hidden");
         sortIcons(parent.querySelectorAll(".chip"), parent);
+        saveCallback();
     }
 
     const unitSearchInput = document.createElement("input");
@@ -178,17 +200,23 @@ function appendChip(id, form, unitData, parent) {
 
         wrapper.classList.add("set-unit");
         wrapper.dataset.form = formNameOptions.length - 1;
+        wrapper.dataset.id = searchID;
+        wrapper.dataset.maxForm = formNameOptions.length - 1;
         img.src = `./assets/img/unit_icon/${searchID}_${formNameOptions.length - 1}.png`;
         img.draggable = true;
         pId.textContent = searchID;
         pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");
         unitSearchInput.classList.add("hidden");
+        sortIcons(parent.querySelectorAll(".chip"), parent);
+        saveCallback();
     });
 
     if(id !== null && form !== null) {
         wrapper.classList.add("set-unit");
         wrapper.dataset.form = form;
+        wrapper.dataset.id = id;
+        wrapper.dataset.maxForm = document.querySelectorAll(`#unit-search-suggestions option[data-target="${id}"]`).length - 1;
         img.src = `./assets/img/unit_icon/${id}_${form}.png`;
         img.draggable = true;
         pId.textContent = id;
@@ -203,7 +231,7 @@ function appendChip(id, form, unitData, parent) {
     parent.appendChild(wrapper);
 }
 
-function createCannonInput(cannonData) {
+function createCannonInput(cannonData, saveCallback) {
     cannonData = cannonData ?? [1, 1, 1];
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-base-wrapper");
@@ -233,25 +261,25 @@ function createCannonInput(cannonData) {
     baseImage.append(cannonImage, styleImage, foundationImage);
 
     leftArrowWrapper.append(
-        createBaseArrow(true, "cannon", cannonImage),
-        createBaseArrow(true, "style", styleImage),
-        createBaseArrow(true, "foundation", foundationImage)
+        createBaseArrow(true, "cannon", cannonImage, saveCallback),
+        createBaseArrow(true, "style", styleImage, saveCallback),
+        createBaseArrow(true, "foundation", foundationImage, saveCallback)
     );
 
     const rightArrowWrapper = document.createElement("div");
     rightArrowWrapper.classList.add("right-base-arrows");
 
     rightArrowWrapper.append(
-        createBaseArrow(false, "cannon", cannonImage),
-        createBaseArrow(false, "style", styleImage),
-        createBaseArrow(false, "foundation", foundationImage)
+        createBaseArrow(false, "cannon", cannonImage, saveCallback),
+        createBaseArrow(false, "style", styleImage, saveCallback),
+        createBaseArrow(false, "foundation", foundationImage, saveCallback)
     );
 
     wrapper.append(leftArrowWrapper, baseImage, rightArrowWrapper);
     return wrapper;
 }
 
-function createBaseArrow(isLeft, arrowFor, target) {
+function createBaseArrow(isLeft, arrowFor, target, saveCallback) {
     const wrapper = document.createElement("div");
     wrapper.classList.add(`${arrowFor}-arrow`)
     wrapper.classList.add(isLeft ? "left-arrow" : "right-arrow");
@@ -279,6 +307,7 @@ function createBaseArrow(isLeft, arrowFor, target) {
             extra = `_${arrowFor}`;
         }
         target.src = `./assets/img/foundation/base_${inc}${extra}.png`;
+        saveCallback();
     };
 
     return wrapper;

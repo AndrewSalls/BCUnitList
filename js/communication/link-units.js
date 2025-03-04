@@ -1,12 +1,15 @@
 import { parseAllCategories, recordCustomCategory } from "../category/category-parser.js";
 import getCostsFor, { isInitialized, initializeLeveling } from "../helper/find-costs.js";
-import { getUnitData, parseUpgrades } from "../helper/parse-file.js";
+import LoadoutManager from "../helper/loadout-storage-manager.js";
+import { getUnitData, parseLoadouts, parseUpgrades } from "../helper/parse-file.js";
 
 let unitData = [];
 let upgradeData = [];
 let categories = {};
 let loadouts = [];
 let settings = {};
+
+let loadoutManager = new LoadoutManager();
 
 export default async function initializeData() {
     return new Promise(async (res, _) => {
@@ -15,6 +18,7 @@ export default async function initializeData() {
         upgradeData = upData;
         categories = await parseAllCategories();
         const { units, ur } = await getUnitData(categories, settings);
+        loadouts = parseLoadouts();
         unitData = units;
         settings.userRank = ur + upUR;
         res({ settings: settings, categories: categories, unitData: unitData });
@@ -125,6 +129,15 @@ function handleMessage(port, unitData, res) {
             break;
         case "get_all_loadouts":
             port.postMessage({ m_id: res.m_id, data: loadouts });
+            break;
+        case "mutate_loadout_position":
+            loadouts[res.content.position] = res.content.loadout;
+            loadoutManager.update(res.content.position, loadouts[res.content.position]);
+            port.postMessage({ m_id: res.m_id, data: loadouts[res.content.position] });
+            break;
+        case "delete_loadout":
+            loadoutManager.remove(res.content);
+            port.postMessage({ m_id: res.m_id, data: loadouts.splice(res.content, 1) });
             break;
         default:
             console.error(`Unexpected context: ${res.context}`);

@@ -30,7 +30,7 @@ https://github.com/battlecatsinfo/battlecatsinfo.github.io
 https://github.com/battlecatsultimate/BCU-java-PC (BCU)
 
 ## Planned (Near) Future Features
-- Creating, saving, and sharing (import/export) unit loadouts (up to 10 units + cannon/style/foundation, like in game)
+- Sharing & viewing loadouts, and creating loadouts with customized unit levels/upgrades (for sharing strategies)
 - Importing and exporting categories
 - Being able to open a save without overwriting your data (for viewing other people's saves)
 

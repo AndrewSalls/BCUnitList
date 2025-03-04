@@ -23,7 +23,9 @@ const REQUEST_TYPES = {
     GET_UPGRADE: "get_upgrade",
     GET_ALL_UPGRADE: "get_all_upgrades",
 
-    GET_ALL_LOADOUT: "get_all_loadouts"
+    GET_ALL_LOADOUT: "get_all_loadouts",
+    MODIFY_LOADOUT: "mutate_loadout_position",
+    DELETE_LOADOUT: "delete_loadout"
 }
 
 const MAX_POST_ID = 2 << 12;

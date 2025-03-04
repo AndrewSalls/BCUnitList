@@ -118,3 +118,12 @@ export function parseUpgrades(settings) {
 
     return { upData: [parseInt(window.localStorage.getItem("cgs") ?? "0"), ...upgradeData], upUR: upgradeUR };
 }
+
+export function parseLoadouts() {
+    const llp = window.localStorage.getItem("llp");
+    if(llp) {
+        return llp.split(" ").map(b64 => JSON.parse(window.atob(b64)));
+    }
+
+    return [];
+}
