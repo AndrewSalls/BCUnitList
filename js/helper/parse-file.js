@@ -63,6 +63,8 @@ export async function getUnitData(categories, settings) {
                         for(let x = 0; x < decompressed.ultra_talents.length; x++) {
                             unitData.ultra_talents[x].value = decompressed.ultra_talents[x];
                         }
+                    } else if(entry.ID === 0) { // Cat must be at least level 1, ensures no weirdness with not owning any units
+                        unitData.level = 1;
                     }
 
                     totalLevel += unitData.level + unitData.plus_level;

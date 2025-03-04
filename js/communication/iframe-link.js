@@ -12,6 +12,7 @@ const REQUEST_TYPES = {
     GET_ALL_COST: "get_all_costs",
     
     GET_NAMES: "get_names",
+    GET_OWNED_FORM_NAMES: "get_owned_names",
     GET_CATEGORY_NAMES: "get_category_names",
     GET_SETTINGS: "get_settings",
 

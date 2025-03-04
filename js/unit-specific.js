@@ -1,5 +1,5 @@
 import { getValuesFromRow, observeRowChange } from "./helper/link-row.js";
-import makeSearchable from "./helper/make-searchable.js";
+import makeSearchable, { initializeDataset } from "./helper/make-searchable.js";
 import * as RowComponents from "./unit-table/creation/create-unit-row.js";
 import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
@@ -31,7 +31,8 @@ function initialize() {
 
     makeSearchable(document.querySelector("#search-box"), searchSuggestions, id => {
         loadSpecific(id);
-    }, true);
+    });
+    initializeDataset(searchSuggestions, true);
 
     let target = window.localStorage.getItem("su");
     if(!target || typeof target !== "number") {

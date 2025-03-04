@@ -66,7 +66,7 @@ h3 {
     font-weight: bolder;
 }
 
-.unit-icon {
+.set-unit .unit-icon {
     cursor: pointer;
 }
 
@@ -110,4 +110,47 @@ h3 {
  .foundation-arrow {
     position: absolute;
     bottom: 10px;
+ }
+
+ .unset-search {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 5px solid #000000;
+    border-top: 2px solid var(--text);
+ }
+
+ #display-loadout-wrapper {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1vw;
+ }
+
+ #display-loadout-wrapper > div:first-child {
+    margin-bottom: 1vh;
+ }
+
+ #display-loadout-wrapper h4 {
+    height: fit-content;
+    width: 10vw;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+ }
+
+ #display-loadout-wrapper button {
+    border-radius: 100000vw;
+    width: 5vh;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ }
+
+ #display-loadout-wrapper button svg {
+    width: 3vh;
+    stroke: var(--text);
+    fill: var(--text);
  }

@@ -75,6 +75,9 @@ function handleMessage(port, unitData, res) {
         case "get_names":
             port.postMessage({ m_id: res.m_id, data: unitData.filter(u => !testGlobalFilters(u, res.ignore_filters)).map(d => [d.id, d.normal_form, d.evolved_form, d.true_form, d.ultra_form]) });
             break;
+        case "get_owned_names":
+            port.postMessage({ m_id: res.m_id, data: unitData.filter(u => u.level > 0 && !testGlobalFilters(u, res.ignore_fiters)).map(d => [d.id, d.normal_form, d.evolved_form, d.true_form, d.ultra_form].slice(0, d.current_form + 2)) });
+            break;
         case "get_category_names":
             port.postMessage({ m_id: res.m_id, data: getUnfiltedCategories(res.ignore_filters) });
             break;

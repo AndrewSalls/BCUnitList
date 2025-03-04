@@ -1,8 +1,7 @@
 import makeDraggable, { sortIcons } from "./helper/make-draggable.js";
-import makeSearchable from "./helper/make-searchable.js";
+import makeSearchable, { initializeDatasetLimited } from "./helper/make-searchable.js";
 
 const MAX_LOADOUT_NAME_LENGTH = 64;
-let loadedSearch = false;
 let unlockedCannons = [];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -38,10 +37,7 @@ async function loadLoadouts() {
     searchSuggestions.id = "unit-search-suggestions";
     searchSuggestions.dataset.max_count = unitCount;
     document.body.appendChild(searchSuggestions);
-    
-    const tempInput = document.createElement("input");
-    tempInput.type = "text";
-    makeSearchable(tempInput, searchSuggestions, id => console.log(id), true).then(() => loadedSearch = true);
+    initializeDatasetLimited(searchSuggestions, true);
 
     makeRequest(REQUEST_TYPES.GET_ALL_LOADOUT, null).then(async res => {
         res.push({
@@ -108,11 +104,13 @@ async function createUnitInput(units, forms) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-unit-wrapper");
 
-    const unitData = await makeRequest(REQUEST_TYPES.GET_MULTIPLE_DATA, units, true);
-
     let x = 0;
-    for(x = 0; x < 10 && x < (units?.length ?? 0); x++) {
-        appendChip(units[x], forms[x], unitData[x], wrapper);
+    if(units) {
+        const unitData = await makeRequest(REQUEST_TYPES.GET_MULTIPLE_DATA, units, true);
+
+        for(x = 0; x < 10 && x < units.length; x++) {
+            appendChip(units[x], forms[x], unitData[x], wrapper);
+        }
     }
     while(x < 10) {
         appendChip(null, null, null, wrapper);
@@ -151,15 +149,42 @@ function appendChip(id, form, unitData, parent) {
     removeButton.textContent = "X";
     removeButton.classList.add("hidden");
 
+    const datalist = document.querySelector("#unit-search-suggestions");
+
     removeButton.onclick = () => {
         wrapper.classList.remove("set-unit");
+        
+        const formNameOptions = datalist.querySelectorAll(`option[data-target="${pId.textContent}"]`);
+        formNameOptions.forEach(o => o.disabled = false);
+
         img.src = "./assets/img/empty_unit.png";
         img.draggable = false;
         pId.textContent = "";
         pId.classList.add("hidden");
         removeButton.classList.add("hidden");
+        unitSearchInput.classList.remove("hidden");
         sortIcons(parent.querySelectorAll(".chip"), parent);
     }
+
+    const unitSearchInput = document.createElement("input");
+    unitSearchInput.classList.add("unset-search");
+    unitSearchInput.type = "search";
+    unitSearchInput.placeholder = "Search...";
+    unitSearchInput.setAttribute("list", "unit-search-suggestions");
+
+    makeSearchable(unitSearchInput, datalist, searchID => {
+        const formNameOptions = datalist.querySelectorAll(`option[data-target="${searchID}"]`);
+        formNameOptions.forEach(o => o.disabled = true);
+
+        wrapper.classList.add("set-unit");
+        wrapper.dataset.form = formNameOptions.length - 1;
+        img.src = `./assets/img/unit_icon/${searchID}_${formNameOptions.length - 1}.png`;
+        img.draggable = true;
+        pId.textContent = searchID;
+        pId.classList.remove("hidden");
+        removeButton.classList.remove("hidden");
+        unitSearchInput.classList.add("hidden");
+    });
 
     if(id !== null && form !== null) {
         wrapper.classList.add("set-unit");
@@ -169,13 +194,17 @@ function appendChip(id, form, unitData, parent) {
         pId.textContent = id;
         pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");
+        unitSearchInput.classList.add("hidden");
+        const formNameOptions = datalist.querySelectorAll(`option[data-target="${id}"]`);
+        formNameOptions.forEach(o => o.disabled = true);
     }
 
-    wrapper.append(img, pId, removeButton);
+    wrapper.append(img, pId, removeButton, unitSearchInput);
     parent.appendChild(wrapper);
 }
 
 function createCannonInput(cannonData) {
+    cannonData = cannonData ?? [1, 1, 1];
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-base-wrapper");
     wrapper.classList.add("h-align");
@@ -185,17 +214,17 @@ function createCannonInput(cannonData) {
 
     const cannonImage = document.createElement("img");
     cannonImage.classList.add("base-cannon");
-    cannonImage.dataset.type = cannonData[0] ?? 1;
+    cannonImage.dataset.type = cannonData[0];
     cannonImage.src = `./assets/img/foundation/base_${cannonData[0] ?? 1}.png`;
 
     const styleImage = document.createElement("img");
     styleImage.classList.add("base-style");
-    styleImage.dataset.type = cannonData[1] ?? 1;
+    styleImage.dataset.type = cannonData[1];
     styleImage.src = `./assets/img/foundation/base_${cannonData[1] ?? 1}_style.png`;
 
     const foundationImage = document.createElement("img");
     foundationImage.classList.add("base-foundation");
-    foundationImage.dataset.type = cannonData[2] ?? 1;
+    foundationImage.dataset.type = cannonData[2];
     foundationImage.src = `./assets/img/foundation/base_${cannonData[2] ?? 1}_foundation.png`;
 
     const leftArrowWrapper = document.createElement("div");

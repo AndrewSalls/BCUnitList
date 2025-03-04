@@ -1,4 +1,4 @@
-import makeSearchable from "../helper/make-searchable.js";
+import makeSearchable, { initializeDataset } from "../helper/make-searchable.js";
 import { createSubCategoryButton, createSuperCategoryButton } from "./create-settings-category.js";
 
 const MAX_CATEGORY_NAME_LENGTH = 64;
@@ -14,7 +14,8 @@ export function initializeCategoryCreator(completionMessager) {
     const cancelButton = document.querySelector("#cancel-category-creation");
     const createButton = document.querySelector("#create-category-creation");
 
-    makeSearchable(document.querySelector("#add-unit"), document.querySelector("#add-unit-options"), id => {
+    const searchSuggestions = document.querySelector("#add-unit-options");
+    makeSearchable(document.querySelector("#add-unit"), searchSuggestions, id => {
         if(!selectedUnits.has(id)) {
             selectedUnits.add(id);
             const chip = createChip(id);
@@ -33,6 +34,7 @@ export function initializeCategoryCreator(completionMessager) {
             }
         }
     });
+    initializeDataset(searchSuggestions);
 
     cancelButton.onclick = () => {
         antiWrapper.classList.remove("hidden");

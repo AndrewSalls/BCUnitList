@@ -4,7 +4,7 @@ import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
 import createTableOptionModal from "./unit-table/creation/create-table-modal.js";
 import createSearchableTable from "./unit-table/creation/create-unit-table.js";
 import { attachTableOptionsAndFilters, initializeTableModal } from "./unit-table/filter-units.js";
-import makeSearchable from "./helper/make-searchable.js";
+import makeSearchable, { initializeDataset } from "./helper/make-searchable.js";
 
 window.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(createOrbMenu());
@@ -36,7 +36,8 @@ async function loadUnitTables() {
         if(target && !target.classList.contains("hidden") && !target.classList.contains("filter-hidden")) {
             window.scrollTo({ left: 0, top: window.scrollY + target.getBoundingClientRect().top, behavior: "smooth" });
         }
-    }).then(_ => loadingBar.increment());
+    });
+    initializeDataset(searchSuggestions).then(_ => loadingBar.increment());
 
     const tableAppending = [
         makeRequest(REQUEST_TYPES.GET_RARITY_DATA, "N").then(units => {
