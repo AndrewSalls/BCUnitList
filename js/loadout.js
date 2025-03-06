@@ -183,7 +183,7 @@ function appendChip(id, form, parent, saveCallback) {
         pId.classList.add("hidden");
         removeButton.classList.add("hidden");
         unitSearchInput.classList.remove("hidden");
-        sortIcons(parent.querySelectorAll(".chip"), parent);
+        sortIcons(parent);
         saveCallback();
     }
 
@@ -206,7 +206,7 @@ function appendChip(id, form, parent, saveCallback) {
         pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");
         unitSearchInput.classList.add("hidden");
-        sortIcons(parent.querySelectorAll(".chip"), parent);
+        sortIcons(parent);
         saveCallback();
     });
 
