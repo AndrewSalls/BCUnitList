@@ -178,3 +178,37 @@ function createLabelledImageEvoBox(img, title, imgClass, imgSubtext, baseAmt, ul
     evoWrapper.append(imgBox, evoTotal);
     return evoWrapper;
 }
+
+export function createAbilityTableFromData(xpAmt) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("evo-table");
+    wrapper.classList.add("ability-upgrade-color");
+
+    const titleWrapper = document.createElement("div");
+    titleWrapper.classList.add("table-title-wrapper");
+
+    const collapsible = document.createElement("div");
+    collapsible.classList.add("collapsible");
+
+    const collapseBox = document.createElement("div");
+    collapseBox.classList.add("table-title-collapser");
+    collapseBox.onclick = () => collapsible.classList.toggle("hidden");
+    titleWrapper.appendChild(collapseBox);
+
+    const title = document.createElement("h5");
+    title.classList.add("table-title");
+    title.textContent = "Abilities";
+    titleWrapper.appendChild(title);
+
+    const xpRow = document.createElement("div");
+
+    xpRow.appendChild(createLabelledImageEvoBox("./assets/img/evo_mats/xp.png", "XP needed to level all units to their maximum level", "p-img", "MAX", xpAmt, 0, false));
+    collapsible.appendChild(xpRow);
+    wrapper.append(titleWrapper, collapsible);
+
+    if(window.localStorage.getItem("s2") === "1") {
+        collapseBox.click();
+    }
+
+    return wrapper;
+}

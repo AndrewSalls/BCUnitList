@@ -1,10 +1,10 @@
 import * as CategorySelector from "./category/category-selector.js";
-import createTableFromData from "./unit-table/creation/create-cost-table.js";
+import createTableFromData, { createAbilityTableFromData } from "./unit-table/creation/create-cost-table.js";
 import createLoadingBar from "./helper/loading.js";
 import { parseSnakeCase } from "./category/category-parser.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.body.appendChild(CategorySelector.createCategorySelector());
+    document.body.appendChild(CategorySelector.createCategorySelector(true));
 
     window.addEventListener("portLoaded", loadCosts);
     if(checkPort()) {
@@ -14,51 +14,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadCosts() {
     const container = document.querySelectorAll(".default-table");
-    const loadingBar = createLoadingBar(8, () => {
+    const loadingBar = createLoadingBar(9, () => {
         CategorySelector.allowSelection();
     });
 
     createTotalCostTable(container[0]);
+    makeRequest(REQUEST_TYPES.GET_UPGRADE_COST, null).then(data => {
+        container[1].appendChild(createAbilityTableFromData(data));
+        loadingBar.increment();
+    });
     makeRequest(REQUEST_TYPES.GET_RARITY_COST, "N").then(data => {
         const table = createTableFromData(data, "Normal");
         table.classList.add("normal-color");
-        container[1].appendChild(table);
+        container[2].appendChild(table);
         loadingBar.increment();
     });
     makeRequest(REQUEST_TYPES.GET_RARITY_COST, "EX").then(data => {
         const table = createTableFromData(data, "Special");
         table.classList.add("special-color");
-        container[2].appendChild(table);
+        container[3].appendChild(table);
         loadingBar.increment();
     });
     makeRequest(REQUEST_TYPES.GET_RARITY_COST, "RR").then(data => {
         const table = createTableFromData(data, "Rare");
         table.classList.add("rare-color");
-        container[3].appendChild(table);
+        container[4].appendChild(table);
         loadingBar.increment();
     });
     makeRequest(REQUEST_TYPES.GET_RARITY_COST, "SR").then(data => {
         const table = createTableFromData(data, "Super Rare");
         table.classList.add("super-rare-color");
-        container[4].appendChild(table);
+        container[5].appendChild(table);
         loadingBar.increment();
     });
     makeRequest(REQUEST_TYPES.GET_RARITY_COST, "UR").then(data => {
         const table = createTableFromData(data, "Uber Rare");
         table.classList.add("uber-rare-color");
-        container[5].appendChild(table);
+        container[6].appendChild(table);
         loadingBar.increment();
     });
     makeRequest(REQUEST_TYPES.GET_RARITY_COST, "LR").then(data => {
         const table = createTableFromData(data, "Legend Rare");
         table.classList.add("legend-rare-color");
         table.querySelector(".collapsible").classList.add("legend-rare-multi");
-        container[6].appendChild(table);
+        container[7].appendChild(table);
         loadingBar.increment();
     });
     makeRequest(REQUEST_TYPES.GET_FAVORITED_COST, null).then(data => {
         const table = createTableFromData(data, "Favorited");
-        container[7].appendChild(table);
+        container[8].appendChild(table);
         loadingBar.increment();
     });
 

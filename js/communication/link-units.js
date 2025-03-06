@@ -127,6 +127,21 @@ function handleMessage(port, unitData, res) {
             }
             port.postMessage({ m_id: res.m_id, data: upgradeData[res.content.id] });
             break;
+        case "get_upgrade_costs":
+            const xpAmt = upgradeData.reduce((sum, curr, i) => {
+                if(i === 0) {
+                    return 0;
+                } else {
+                    let currSum = 0;
+                    const costTable = settings.abilities.costs.xpAmt[settings.abilities.costs.costTypes[i - 1]];
+                    for(let x = curr.level; x < costTable.length; x++) {
+                        currSum += costTable[x];
+                    }
+                    return sum + currSum;
+                }
+            }, 0);
+            port.postMessage({ m_id: res.m_id, data: xpAmt });
+            break;
         case "get_all_loadouts":
             port.postMessage({ m_id: res.m_id, data: loadouts });
             break;

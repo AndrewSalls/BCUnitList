@@ -51,7 +51,7 @@ export function createCategoryButton(buttonText, categoryObject) {
     return button;
 }
 
-export function createCategorySelector() {
+export function createCategorySelector(includeAbilityCategory = false) {
     const selector = document.createElement("div");
     selector.id = "category-selector";
     selector.classList.add("invisible");
@@ -115,8 +115,14 @@ export function createCategorySelector() {
     row.classList.add("category-row");
 
     const defaultButtons = [];
+    let abilityButton = null;
     const defaultTables = [...document.querySelectorAll(".default-table")];
     defaultButtons.push(createCategoryButton("All Units", defaultTables[0]));
+    if(includeAbilityCategory) {
+        abilityButton = createCategoryButton("Abilities", defaultTables[1]);
+        abilityButton.classList.add("ability-upgrade-color");
+        defaultTables.splice(1, 1);
+    }
     defaultButtons.push(createCategoryButton("Normal", defaultTables[1]));
     defaultButtons[1].classList.add("normal-color");
     defaultButtons.push(createCategoryButton("Special", defaultTables[2]));
@@ -131,6 +137,9 @@ export function createCategorySelector() {
     defaultButtons[6].classList.add("legend-rare-color");
     defaultButtons[6].classList.add("legend-rare-animation");
     defaultButtons.push(createCategoryButton("Favorited", defaultTables[7]));
+    if(includeAbilityCategory) {
+        defaultButtons.splice(1, 0, abilityButton);
+    }
 
     row.append(...defaultButtons);
     baseCategories.append(label, row);

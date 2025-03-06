@@ -22,6 +22,7 @@ const REQUEST_TYPES = {
     UPDATE_UPGRADE: "update_upgrade",
     GET_UPGRADE: "get_upgrade",
     GET_ALL_UPGRADE: "get_all_upgrades",
+    GET_UPGRADE_COST: "get_upgrade_costs",
 
     GET_ALL_LOADOUT: "get_all_loadouts",
     MODIFY_LOADOUT: "mutate_loadout_position",

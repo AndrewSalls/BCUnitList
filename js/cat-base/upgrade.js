@@ -62,7 +62,7 @@ function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, i
     const [levelElm, levelInputElm] = createArrowNumberBox(levelCap, currentLevelData.level, (oldValue, newValue) => {
         userRankDisplay.textContent = parseInt(userRankDisplay.textContent) + (newValue - oldValue);
         makeRequest(REQUEST_TYPES.UPDATE_UPGRADE, { id: id + 1, level: parseInt(levelInput.value), plus: parseInt(plusLevelInput.value) });
-    });
+    }, 1);
     levelInput = levelInputElm;
     plusLevelInput = plusInputElm;
 

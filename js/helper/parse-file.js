@@ -99,7 +99,7 @@ export function parseUpgrades(settings) {
 
     if(!abilityIconLevels) {
         upgradeData = settings.abilities.abilityNames.map(_ => { return {
-            level: 0,
+            level: 1,
             plus: 0
         }});
     } else {

@@ -1,15 +1,15 @@
-export default function createArrowNumberBox(cap, currentValue, changeCallback) {
+export default function createArrowNumberBox(cap, currentValue, changeCallback, min = 0) {
     const labelInput = document.createElement("input");
     labelInput.type = "number";
     labelInput.value = currentValue;
-    labelInput.min = 0;
+    labelInput.min = min;
     labelInput.max = cap;
     labelInput.step = 1;
     labelInput.dataset.lastValue = currentValue;
 
     labelInput.onchange = () => {
-        if(parseInt(labelInput.value) < 0) {
-            labelInput.value = 0;
+        if(parseInt(labelInput.value) < min) {
+            labelInput.value = min;
         } else if(parseInt(labelInput.value) > cap) {
             labelInput.value = cap;
         }

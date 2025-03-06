@@ -81,10 +81,10 @@ export default async function getCostsFor(unitList) {
                     
                     // ------------------------------------- XP costs ------------------------------------- 
                     const xpTable = getLevelingCosts(unit, row.LevelFormat);
-                    if(unit.max_form >= 2) {
+                    if(unit.max_form >= 2 && unit.current_form < 2) {
                         tableAllValues.formXP += row.TrueXPCost;
                     }
-                    if(unit.max_form >= 3) {
+                    if(unit.max_form >= 3 && unit.current_form < 3) {
                         tableAllValues.formXP += row.UltraXPCost;
                         tableUltraValues.formXP += row.UltraXPCost;
                     }
@@ -141,20 +141,24 @@ export default async function getCostsFor(unitList) {
                         tableUltraValues.catseye_dark += darkEyes;
                     }
 
-                    // ------------------------------------- Evolution Material costs ------------------------------------- 
-                    for(let x = 1; x <= 5; x++) {
-                        const material = row[`TrueMaterial${x}`];
-                        if(material) {
-                            tableAllValues[material] += parseInt(row[`TrueMaterialCount${x}`]);
+                    // ------------------------------------- Evolution Material costs -------------------------------------
+                    if(unit.current_form < 2) {
+                        for(let x = 1; x <= 5; x++) {
+                            const material = row[`TrueMaterial${x}`];
+                            if(material) {
+                                tableAllValues[material] += parseInt(row[`TrueMaterialCount${x}`]);
+                            }
                         }
                     }
 
-                    for(let x = 1; x <= 5; x++) {
-                        const material = row[`UltraMaterial${x}`];
-                        if(material) {
-                            const increase = parseInt(row[`UltraMaterialCount${x}`]);
-                            tableAllValues[material] += increase;
-                            tableUltraValues[material] += increase;
+                    if(unit.current_form < 3) {
+                        for(let x = 1; x <= 5; x++) {
+                            const material = row[`UltraMaterial${x}`];
+                            if(material) {
+                                const increase = parseInt(row[`UltraMaterialCount${x}`]);
+                                tableAllValues[material] += increase;
+                                tableUltraValues[material] += increase;
+                            }
                         }
                     }
                 }

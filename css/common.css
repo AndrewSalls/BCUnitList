@@ -48,6 +48,11 @@
     --rainbow-bg7: #cc99ff;
     --rainbow-bg8: #ff99e6;
 
+    --ability-upgade-content: #2ce5e6;
+    --ability-upgade-bg: #baf2f4;
+    --ability-upgade-bg2: #a0e6e9;
+    --ability-upgade-border: #09b0ad;
+
     --generic-content: #ffa620;
     --generic-bg: #fff0d2;
     --generic-bg2: #ffeac0;
@@ -58,6 +63,12 @@
     --rarity-border: var(--generic-border);
 }
 
+.ability-upgrade-color {
+    --rarity-content: var(--ability-upgade-content);
+    --rarity-bg: var(--ability-upgade-bg);
+    --rarity-bg2: var(--ability-upgade-bg2);
+    --rarity-border: var(--ability-upgade-border);
+}
 .normal-color {
     --rarity-content: var(--normal-content);
     --rarity-bg: var(--normal-bg);
