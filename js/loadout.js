@@ -135,7 +135,7 @@ function createUnitInput(units, forms, saveCallback) {
         x++
     }
 
-    makeDraggable(wrapper);
+    makeDraggable(wrapper, saveCallback);
 
     return wrapper;
 }
@@ -179,7 +179,6 @@ function appendChip(id, form, parent, saveCallback) {
         formNameOptions.forEach(o => o.disabled = false);
 
         img.src = "./assets/img/empty_unit.png";
-        img.draggable = false;
         pId.textContent = "";
         pId.classList.add("hidden");
         removeButton.classList.add("hidden");
@@ -203,7 +202,6 @@ function appendChip(id, form, parent, saveCallback) {
         wrapper.dataset.id = searchID;
         wrapper.dataset.maxForm = formNameOptions.length - 1;
         img.src = `./assets/img/unit_icon/${searchID}_${formNameOptions.length - 1}.png`;
-        img.draggable = true;
         pId.textContent = searchID;
         pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");
@@ -218,7 +216,6 @@ function appendChip(id, form, parent, saveCallback) {
         wrapper.dataset.id = id;
         wrapper.dataset.maxForm = document.querySelectorAll(`#unit-search-suggestions option[data-target="${id}"]`).length - 1;
         img.src = `./assets/img/unit_icon/${id}_${form}.png`;
-        img.draggable = true;
         pId.textContent = id;
         pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");

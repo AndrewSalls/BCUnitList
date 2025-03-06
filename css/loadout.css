@@ -70,10 +70,6 @@ h3 {
     cursor: pointer;
 }
 
- .set-unit img {
-    -webkit-user-drag: unset;
- }
-
  .dragover {
     filter: brightness(0.8);
  }

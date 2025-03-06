@@ -169,6 +169,7 @@ button {
     cursor: pointer;
     transition: background-color 0.2s linear;
     font-weight: bolder;
+    user-select: none;
 }
 button:disabled {
     filter: contrast(0.5);
@@ -189,6 +190,7 @@ body > .main {
 
 img {
     -webkit-user-drag: none;
+    user-select: none;
 }
 
 .h-align {
