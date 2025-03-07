@@ -35,6 +35,11 @@ function loadCategories() {
         const subWrapper = document.querySelector("#favorited-table");
         subWrapper.classList.add("table-wrapper");
 
+        const favoritedHiddenLabel = document.createElement("p");
+        favoritedHiddenLabel.textContent = "Favorited";
+        favoritedHiddenLabel.classList.add("hidden");
+        subWrapper.appendChild(favoritedHiddenLabel);
+
         const table = createTableFromData("Favorited", data, loadingBar);
         table.classList.add("favorited-table-marker");
         subWrapper.appendChild(table);

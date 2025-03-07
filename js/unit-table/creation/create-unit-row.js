@@ -19,7 +19,7 @@ export default function createRow(entry) {
             icon: iconReset, level: levelReset, plusLevel: plusLevelReset, talent: talentReset, ultraTalent: ultraTalentReset, orb: orbReset, favorite: favoriteReset
         },
         max: {
-            icon: iconMax, level: levelMax, plusLevel: plusLevelMax, talent: talentMax, ultratalent: ultraTalentMax
+            icon: iconMax, level: levelMax, plusLevel: plusLevelMax, talent: talentMax, ultraTalent: ultraTalentMax
         },
         hide: () => {
             row.classList.add("hidden");
