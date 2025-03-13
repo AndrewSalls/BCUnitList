@@ -5,7 +5,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 103,EX,Y,Cabaret Cat,Mega Cat,Mega Cat EX,,,0,,
 104,RR,Y,Koi Cat,Gross Koi Cat,Kiss and Koi,,,0,,
 105,UR,Y,Kuu,"Kuu, type γ",Divine Kuu,,UR,2,Weaken10-Wave_Resist10-Curse_Immune1-Defense10-Attack10,Attack_Rate10-Target_Relic1-Surge_Immune1
-106,UR,Y,Kai,"Kai, type μ",Divine Kai,,UR,1,Shield_Pierce10-Wave_Resist10-Weaken_Resist10-Slow_Resist10-Attack10,
+106,UR,Y,Kai,"Kai, type μ",Divine Kai,,UR,2,Shield_Pierce10-Wave_Resist10-Weaken_Resist10-Slow_Resist10-Attack10,Target_Aku1-Curse_Immune1-Defense10
 107,UR,Y,Coppermine,"Coppermine, type κ",Divine Coppermine,,UR,2,Wave_Resist10-Slow_Resist10-Cost_Down10-Defense10-Attack10,Attack_Rate10-Target_Zombie1-Mini_Surge10
 108,EX,Y,Cat Bros,Secret Base,,,,0,,
 109,RR,Y,Madam Bride,Madam King,Madam the Savannah,,,0,,
@@ -34,7 +34,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 132,RR,Y,Kung Fu Cat X,Drunken Master Cat X,Iron Claw X,,,0,,
 133,EX,N,Hikakin,Bikyakin,Mukyakin,,,0,,
 134,UR,Y,Urashima Taro,Guardian Gamereon,King Gamereon,,UR,2,Slow10-Freeze_Resist10-Knockback_Resist10-Defense10-Attack10,Cost_Down10-Curse10-Slow_Immune1
-135,UR,Y,The Grateful Crane,Super Galaxy Cosmo,Ultima Galaxy Cosmo,,UR,1,Colossus_Slayer1-Curse10-Curse_Immune1-Defense10-Attack10,
+135,UR,Y,The Grateful Crane,Super Galaxy Cosmo,Ultima Galaxy Cosmo,Supernova Cosmo,UR,1,Colossus_Slayer1-Curse10-Curse_Immune1-Defense10-Attack10,
 136,UR,Y,Momotaro,The Peach Angels,The Peach Devils,,UR,2,Weaken10-Freeze10-Slow_Resist10-Defense10-Attack10,Mini_Wave10-Wave_Immune1-Knockback10
 137,UR,Y,Kasa Jizo,Jizo's Moving Castle,Jizo's Mega-Castle,,UR,1,Curse_Immune1-Toxic_Immune1-Surge_Resist10-Defense10-Attack10,
 138,UR,Y,Princess Kaguya,The Death Moon,The Chaos Moon,Ultra Kaguya,UR,1,Knockback10-Slow10-Slow_Resist10-Defense10-Attack10,

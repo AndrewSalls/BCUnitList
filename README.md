@@ -1,7 +1,9 @@
 # BCUnitList
+
 A site for tracking the units and upgrades obtained in the mobile game The Battle Cats (Mainly targets the EN version, but includes units from other versions of the game).
 
 ## Features
+
 - View a list of units in the game
   - Customize the values of the units (level, talents, ORB, etc.)
 - View a specific unit
@@ -16,25 +18,29 @@ A site for tracking the units and upgrades obtained in the mobile game The Battl
 Check it out at [https://andrewsalls.github.io/BCUnitList/](https://andrewsalls.github.io/BCUnitList/)
 
 ## Disclaimer
+
 All data and images from The Battle Cats, as well as the name, brand, and any other related content, belong to PONOS Corporation. I do not make any claim of ownership for anything contained in the /assets/ folder, or any other material originally created by PONOS in the repository.
 
 ## Sources/Further Credits
-https://battlecats.miraheze.org/wiki/Battle_Cats_Wiki
 
-https://thanksfeanor.pythonanywhere.com/xpcurves
+<https://battlecats.miraheze.org/wiki/Battle_Cats_Wiki>
 
-https://mygamatoto.com
+<https://thanksfeanor.pythonanywhere.com/xpcurves>
 
-https://github.com/battlecatsinfo/battlecatsinfo.github.io
+<https://mygamatoto.com>
 
-https://github.com/battlecatsultimate/BCU-java-PC (BCU)
+<https://github.com/battlecatsinfo/battlecatsinfo.github.io>
+
+<https://github.com/battlecatsultimate/BCU-java-PC> (BCU)
 
 ## Planned (Near) Future Features
+
 - Sharing & viewing loadouts, and creating loadouts with customized unit levels/upgrades (for sharing strategies)
 - Importing and exporting categories
 - Being able to open a save without overwriting your data (for viewing other people's saves)
 
 ## Potential (Slightly less) Future Features
+
 - Unit stats/abilities & ability to search/filter by abilities
 - tool to convert loadout into an image to make it easier to read/share
 - Mobile/vertical orientation support

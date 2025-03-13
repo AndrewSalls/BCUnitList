@@ -9,7 +9,7 @@ export default function createRow(entry) {
 
     const idBox = createIDBox(entry.id);
     const [nameBox, nameUpdate] = createNameBox([entry.normal_form, entry.evolved_form, entry.true_form, entry.ultra_form], entry.current_form);
-    const [iconBox, iconReset, iconMax] = createIconBox(entry.id, entry.current_form, entry.max_form, nameUpdate);
+    const [iconBox, iconReset, iconMax] = createIconBox(entry.id, entry.current_form, entry.max_form, entry.disable_icon, nameUpdate);
     const [levelBox, levelReset, levelMax, plusLevelReset, plusLevelMax] = createLevelBox(entry.level_cap, entry.level, entry.plus_level);
     const [talentBox, talentReset, talentMax, ultraTalentReset, ultraTalentMax] = createTalentBox(entry.talents, entry.ultra_talents);
     const [orbBox, orbReset] = createOrbBox(entry.orb, entry.orb.length);
@@ -39,7 +39,7 @@ export function createIDBox(id) {
     return rowID;
 }
 
-export function createIconBox(id, currentForm, maxForm, nameCallback) {
+export function createIconBox(id, currentForm, maxForm, iconDisabled, nameCallback) {
     const rowImage = document.createElement("td");
     rowImage.classList.add("row-image");
     rowImage.dataset.form = currentForm;
@@ -47,7 +47,11 @@ export function createIconBox(id, currentForm, maxForm, nameCallback) {
 
     const rowIMG = document.createElement("img");
     rowIMG.classList.add("unit-icon");
-    rowIMG.src = `./assets/img/unit_icon/${id}_${currentForm}.png`;
+    if(iconDisabled) {
+        rowIMG.src = "./assets/img/unit_icon/unknown.png";
+    } else {
+        rowIMG.src = `./assets/img/unit_icon/${id}_${currentForm}.png`;
+    }
     rowIMG.onerror = () => { rowIMG.onerror = null; rowIMG.src = "./assets/img/unit_icon/unknown.png"; }
     rowImage.appendChild(rowIMG);
 

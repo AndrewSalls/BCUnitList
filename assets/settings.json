@@ -1,8 +1,8 @@
 {
-    "version": "1.3.4",
-    "gameVersion": "14.1.1",
-    "unitCount": 780,
-    "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775],
+    "version": "1.3.5",
+    "gameVersion": "14.2.0",
+    "unitCount": 786,
+    "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782],
     "treasures": {
         "eoc": [7, 4, 5, 7, 3, 3, 3, 7, 6, 1, 2],
         "eocNames": ["Energy Drink", "Giant Safe", "Relativity Clock", "Philosopher's Stone", "Smart Material Wall", "Super Register", "Legendary Cat Shield", "Legendary Cat Sword", "Energy Core", "Turbo Machine", "Management Bible"],

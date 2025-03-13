@@ -45,7 +45,9 @@ export async function getUnitData(categories, settings) {
                         current_form: 0, // 0 - 3 are NF, EF, TF, UF
                         hidden: false
                     };
-
+                    if(settings.skipImages.includes(entry.ID)) {
+                        unitData.disable_icon = true;
+                    }
                     
                     if(window.localStorage.getItem(entry.ID)) {
                         const decompressed = JSON.parse(window.atob(window.localStorage.getItem(entry.ID)));
