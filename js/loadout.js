@@ -1,5 +1,6 @@
 import makeDraggable, { sortIcons } from "./helper/make-draggable.js";
 import makeSearchable, { initializeDatasetLimited } from "./helper/make-searchable.js";
+import { convertToImageAndDownload, encodeLink } from "./helper/share-loadout.js";
 
 const MAX_LOADOUT_NAME_LENGTH = 64;
 let unlockedCannons = [];
@@ -47,6 +48,17 @@ async function loadLoadouts() {
     });
 }
 
+function createLoadoutObject(container) {
+    return {
+        title: container.querySelector(".loadout-name").value.trim(),
+        units: [...container.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.id)),
+        forms: [...container.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.form)),
+        base: [parseInt(container.querySelector(".base-cannon").dataset.type),
+            parseInt(container.querySelector(".base-style").dataset.type),
+            parseInt(container.querySelector(".base-foundation").dataset.type)]
+    };
+}
+
 function createLoadout(loadoutData = null) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-wrapper");
@@ -59,6 +71,7 @@ function createLoadout(loadoutData = null) {
     options.classList.add("loadout-options");
 
     const nameOption = document.createElement("input");
+    nameOption.classList.add("loadout-name");
     nameOption.type = "text";
     nameOption.placeholder = "Enter loadout name...";
     nameOption.value = loadoutData?.title ?? "";
@@ -81,10 +94,21 @@ function createLoadout(loadoutData = null) {
 
     const shareOption = document.createElement("button");
     shareOption.type = "button";
-    shareOption.classList.add("share-loadout");
-    shareOption.textContent = "Share Loadout";
+    shareOption.classList.add("share-loadout-img");
+    shareOption.textContent = "Share Image";
+    shareOption.onclick = () => wrapper.classList.contains("save") && convertToImageAndDownload(createLoadoutObject(wrapper));
 
-    rightOptionWrapper.append(deleteOption, shareOption);
+    const shareOption2 = document.createElement("button");
+    shareOption2.type = "button";
+    shareOption2.classList.add("share-loadout-link");
+    shareOption2.textContent = "Share Link";
+    shareOption2.onclick = () => {
+        const link = encodeLink(createLoadoutObject(wrapper));
+        navigator.clipboard.writeText(link);
+        // TODO: Add message saying copied to clipboard
+    };
+
+    rightOptionWrapper.append(deleteOption, shareOption, shareOption2);
 
     options.append(nameOption, rightOptionWrapper);
 
@@ -99,14 +123,7 @@ function createLoadout(loadoutData = null) {
             wrapper.classList.add("save");
             makeRequest(REQUEST_TYPES.MODIFY_LOADOUT, {
                 position: position,
-                loadout: {
-                    title: nameOption.value.trim(),
-                    units: loadoutUnits,
-                    forms: [...wrapper.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.form)),
-                    base: [parseInt(wrapper.querySelector(".base-cannon").dataset.type),
-                        parseInt(wrapper.querySelector(".base-style").dataset.type),
-                        parseInt(wrapper.querySelector(".base-foundation").dataset.type)]
-                }
+                loadout: createLoadoutObject(wrapper)
             });
         } else if(wrapper.classList.contains("save")) {
             makeRequest(REQUEST_TYPES.DELETE_LOADOUT, position);

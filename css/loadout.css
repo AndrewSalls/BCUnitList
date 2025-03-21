@@ -118,7 +118,7 @@ h3 {
  }
 
  #display-loadout-wrapper {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 0;
     padding: 1vw;
