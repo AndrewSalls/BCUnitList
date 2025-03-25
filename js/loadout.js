@@ -24,7 +24,9 @@ function initializeContent() {
 
     const editToggle = document.querySelector("#toggle-display-mode");
     editToggle.onclick = () => {
-        document.querySelectorAll(".loadout-name").forEach(n => n.disabled = document.body.classList.toggle("disabled-editing-mode"));
+        const state = document.body.classList.toggle("disabled-editing-mode")
+        document.querySelectorAll(".loadout-name").forEach(n => n.disabled = state);
+        window.localStorage.setItem("tdm", state ? "1" : "0");
     }
     // TODO
     const createGeneric = document.querySelector("#open-display-loadout");
@@ -52,6 +54,9 @@ async function loadLoadouts() {
         const wrapper = document.querySelector("#loadout-container");
         for(const loadout of res) {
             wrapper.appendChild(createLoadout(loadout));
+        }
+        if(window.localStorage.getItem("tdm") === "1") {
+            document.querySelector("#toggle-display-mode").click();
         }
     });
 }
