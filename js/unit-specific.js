@@ -44,7 +44,8 @@ function initialize() {
 function loadSpecific(id) {
     const container = document.querySelector("#loading-content");
 
-    makeRequest(REQUEST_TYPES.GET_ID_DATA, id, true).then(entry => {
+    makeRequest(REQUEST_TYPES.GET_ID_DATA, id, true).then(async entry => {
+        const settings = await makeRequest(REQUEST_TYPES.GET_SETTINGS, null);
         window.localStorage.setItem("su", id);
 
         const wrapper = document.querySelector("#unit-border");
@@ -54,7 +55,7 @@ function loadSpecific(id) {
         wrapper.querySelector("#id-wrapper").replaceChildren(idBox);
         const [nameBox, nameUpdate] = RowComponents.createNameBox([entry.normal_form, entry.evolved_form, entry.true_form, entry.ultra_form], entry.current_form);
         wrapper.querySelector("#name-wrapper").replaceChildren(nameBox);
-        const [iconBox, _1, _2] = RowComponents.createIconBox(entry.id, entry.current_form, entry.max_form, nameUpdate);
+        const [iconBox, _1, _2] = RowComponents.createIconBox(entry.id, entry.current_form, entry.max_form, settings.skipImages.includes(id), nameUpdate);
         wrapper.querySelector("#icon-wrapper").replaceChildren(iconBox);
         const [levelBox, _3, _4, _5, _6] = RowComponents.createLevelBox(entry.level_cap, entry.level, entry.plus_level);
         wrapper.querySelector("#level-wrapper").replaceChildren(levelBox);
