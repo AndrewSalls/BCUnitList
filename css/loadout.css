@@ -124,7 +124,7 @@ h3 {
     padding: 1vw;
  }
 
- #display-loadout-wrapper > div:first-child {
+ #display-loadout-wrapper > div:not(:last-child) {
     margin-bottom: 1vh;
  }
 

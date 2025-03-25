@@ -1,6 +1,6 @@
 import makeDraggable, { sortIcons } from "./helper/make-draggable.js";
 import makeSearchable, { initializeDatasetLimited } from "./helper/make-searchable.js";
-import { convertToImageAndDownload, encodeLink } from "./helper/share-loadout.js";
+import { encodeLink } from "./helper/share-loadout.js";
 
 const MAX_LOADOUT_NAME_LENGTH = 64;
 let unlockedCannons = [];
@@ -94,21 +94,15 @@ function createLoadout(loadoutData = null) {
 
     const shareOption = document.createElement("button");
     shareOption.type = "button";
-    shareOption.classList.add("share-loadout-img");
-    shareOption.textContent = "Share Image";
-    shareOption.onclick = () => wrapper.classList.contains("save") && convertToImageAndDownload(createLoadoutObject(wrapper));
-
-    const shareOption2 = document.createElement("button");
-    shareOption2.type = "button";
-    shareOption2.classList.add("share-loadout-link");
-    shareOption2.textContent = "Share Link";
-    shareOption2.onclick = () => {
+    shareOption.classList.add("share-loadout-link");
+    shareOption.textContent = "Share";
+    shareOption.onclick = () => {
         const link = encodeLink(createLoadoutObject(wrapper));
         navigator.clipboard.writeText(link);
         // TODO: Add message saying copied to clipboard
     };
 
-    rightOptionWrapper.append(deleteOption, shareOption, shareOption2);
+    rightOptionWrapper.append(deleteOption, shareOption);
 
     options.append(nameOption, rightOptionWrapper);
 
