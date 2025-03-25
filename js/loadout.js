@@ -21,6 +21,11 @@ function initializeContent() {
     addButton.onclick = () => {
         addTo.appendChild(createLoadout(null));
     };
+
+    // TODO
+    const editToggle = document.querySelector("#toggle-display-mode");
+    const createGeneric = document.querySelector("#open-display-loadout");
+    const viewShared = document.querySelector("#query-display-loadout");
 }
 
 async function loadLoadouts() {
@@ -95,11 +100,12 @@ function createLoadout(loadoutData = null) {
     const shareOption = document.createElement("button");
     shareOption.type = "button";
     shareOption.classList.add("share-loadout-link");
-    shareOption.textContent = "Share";
+    shareOption.textContent = "Copy Share Code";
     shareOption.onclick = () => {
-        const link = encodeLink(createLoadoutObject(wrapper));
-        navigator.clipboard.writeText(link);
-        // TODO: Add message saying copied to clipboard
+        encodeLink(createLoadoutObject(wrapper)).then(link => {
+            navigator.clipboard.writeText(link);
+            // TODO: Add message saying copied to clipboard
+        });
     };
 
     rightOptionWrapper.append(deleteOption, shareOption);
