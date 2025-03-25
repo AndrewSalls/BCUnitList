@@ -7,6 +7,9 @@ let hoverTarget = null;
 let targetClone = null;
 
 window.addEventListener("mousemove", ev => {
+    if(window.document.body.classList.contains("disabled-editing-mode")) {
+        return;
+    }
     if(mouseDownPos && Math.sqrt(Math.pow(ev.clientX - mouseDownPos.x, 2) + Math.pow(ev.clientY - mouseDownPos.y, 2)) > MIN_DRAG_DISTANCE && !targetClone) {
         target.style.pointerEvents = "none";
         targetClone = document.createElement("div");
@@ -62,12 +65,18 @@ export default function makeDraggable(loadoutIconList, loadoutChangeCallback = n
 
     units.forEach(unit => {
         unit.addEventListener("mousedown", ev => {
+            if(window.document.body.classList.contains("disabled-editing-mode")) {
+                return;
+            }
             const bBox = unit.getBoundingClientRect();
             mouseDownPos = { localX: ev.pageX - bBox.left, localY: ev.pageY - bBox.top, x: ev.clientX, y: ev.clientY };
             target = unit;
             targetCallback = loadoutChangeCallback;
         });
         unit.addEventListener("mouseenter", () => {
+            if(window.document.body.classList.contains("disabled-editing-mode")) {
+                return;
+            }
             if(target && target !== unit && target.parentElement === unit.parentElement) {
                 hoverTarget = unit;
                 unit.classList.add("dragover");

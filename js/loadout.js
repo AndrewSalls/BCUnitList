@@ -22,8 +22,11 @@ function initializeContent() {
         addTo.appendChild(createLoadout(null));
     };
 
-    // TODO
     const editToggle = document.querySelector("#toggle-display-mode");
+    editToggle.onclick = () => {
+        document.querySelectorAll(".loadout-name").forEach(n => n.disabled = document.body.classList.toggle("disabled-editing-mode"));
+    }
+    // TODO
     const createGeneric = document.querySelector("#open-display-loadout");
     const viewShared = document.querySelector("#query-display-loadout");
 }
@@ -165,6 +168,9 @@ function appendChip(id, form, parent, saveCallback) {
     img.classList.add("unit-icon");
     img.src = "./assets/img/empty_unit.png";
     img.onclick = () => {
+        if(window.document.body.classList.contains("disabled-editing-mode")) {
+            return;
+        }
         if(wrapper.classList.contains("set-unit")) {
             let form = parseInt(wrapper.dataset.form) + 1;
             if(form > parseInt(wrapper.dataset.maxForm)) {

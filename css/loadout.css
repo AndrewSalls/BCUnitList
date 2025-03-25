@@ -150,3 +150,10 @@ h3 {
     stroke: var(--text);
     fill: var(--text);
  }
+
+ .disabled-editing-mode :is(.left-arrow, .right-arrow, .remove-unit, #add-loadout, .unset-search, .delete-loadout, .share-loadout-link) {
+    display: none;
+ }
+ .disabled-editing-mode .loadout-wrapper * {
+    cursor: default;
+ }
