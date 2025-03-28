@@ -27,8 +27,8 @@ window.addEventListener("mousemove", ev => {
         window.document.body.appendChild(targetClone);
     }
     if(targetClone) {
-        targetClone.style.left = `${ev.clientX - mouseDownPos.localX}px`;
-        targetClone.style.top = `${ev.clientY - mouseDownPos.localY}px`;
+        targetClone.style.left = `${ev.pageX - mouseDownPos.localX}px`;
+        targetClone.style.top = `${ev.pageY - mouseDownPos.localY}px`;
     }
 });
 
@@ -69,7 +69,9 @@ export default function makeDraggable(loadoutIconList, loadoutChangeCallback = n
                 return;
             }
             const bBox = unit.getBoundingClientRect();
-            mouseDownPos = { localX: ev.pageX - bBox.left, localY: ev.pageY - bBox.top, x: ev.clientX, y: ev.clientY };
+            mouseDownPos = { localX: ev.clientX - bBox.left, localY: ev.clientY - bBox.top, x: ev.pageX, y: ev.pageY };
+            console.log(bBox);
+            console.log(ev);
             target = unit;
             targetCallback = loadoutChangeCallback;
         });
