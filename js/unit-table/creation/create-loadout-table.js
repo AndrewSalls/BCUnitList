@@ -1,5 +1,5 @@
 import makeSearchable from "../../helper/make-searchable.js";
-import makeDraggable from "../../helper/make-draggable.js";
+import makeDraggable, { sortIcons } from "../../helper/make-draggable.js";
 
 const MAX_LOADOUT_NAME_LENGTH = 64;
 

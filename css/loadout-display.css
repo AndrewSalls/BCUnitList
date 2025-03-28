@@ -22,3 +22,29 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+#unit-data-box {
+    margin-bottom: 5vh;
+}
+
+#base-box {
+    width: 60%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-left: auto;
+    margin-right: auto;
+}
+#base-box input {
+    width: 5ch;
+    margin-left: 0.5vw;
+    text-align: center;
+    -moz-appearance: textfield;
+    appearance: none;
+}
+#base-box input[type='number']::-webkit-outer-spin-button,
+#base-box input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

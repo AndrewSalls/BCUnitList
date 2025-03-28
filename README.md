@@ -33,6 +33,6 @@ All data and images from The Battle Cats, as well as the name, brand, and any ot
 
 <https://github.com/battlecatsultimate/BCU-java-PC> (BCU)
 
-## Planned (Near) Future Features
+## Planned Features
 
-- Mobile/vertical orientation support
+- Mobile/vertical orientation support, better support in general for a variety of browsers and screen sizes

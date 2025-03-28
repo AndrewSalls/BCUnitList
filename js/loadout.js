@@ -89,10 +89,10 @@ function createLoadout(loadoutData = null) {
     deleteOption.classList.add("active");
     deleteOption.textContent = "Delete Loadout";
     deleteOption.onclick = () => {
-        if(wrapper.classList.contains("save")) {
-            makeRequest(REQUEST_TYPES.DELETE_LOADOUT, Array.prototype.indexOf.call(document.querySelectorAll(".loadout-wrapper"), wrapper));
+        if(minimalLoadout.classList.contains("save")) {
+            makeRequest(REQUEST_TYPES.DELETE_LOADOUT, Array.prototype.indexOf.call(document.querySelectorAll(".loadout-wrapper"), minimalLoadout));
         }
-        wrapper.remove();
+        minimalLoadout.remove();
     }
 
     const shareOption = document.createElement("button");
@@ -100,7 +100,7 @@ function createLoadout(loadoutData = null) {
     shareOption.classList.add("share-loadout-link");
     shareOption.textContent = "Copy Share Code";
     shareOption.onclick = () => {
-        encodeLink(createLoadoutObject(wrapper)).then(link => {
+        encodeLink(createLoadoutObject(minimalLoadout)).then(link => {
             navigator.clipboard.writeText(link);
             // TODO: Add message saying copied to clipboard
         });
