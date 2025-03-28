@@ -48,7 +48,7 @@ function loadButton(buttonID, storageKey) {
 }
 
 function finishSetup() {
-    initializeCategoryCreator(displayMessage);
+    initializeCategoryCreator((msg, isErr) => makeRequest(REQUEST_TYPES.SEND_ALERT, { message: msg, isError: isErr }));
 
     const selection = document.querySelector("#category-selection");
     selection.classList.add("hidden");
@@ -78,15 +78,6 @@ function openWarningModal(warningText, warningAction, confirmCallback, showFileS
     document.body.style.top = -1 * topPos + "px";
 }
 
-function displayMessage(message, isError) {
-    const saveText = document.querySelector("#save-change-text");
-    saveText.classList.add("hidden");
-    saveText.textContent = message;
-    saveText.classList.toggle("error-msg", isError);
-    saveText.clientHeight;
-    saveText.classList.remove("hidden");
-}
-
 function initializeSaveOptions() {
     document.querySelector("#load-file-save").onclick = () => openWarningModal("Loading a save file", "overwrite", () => {
         const file = document.querySelector("#file-selected").files[0];
@@ -96,19 +87,24 @@ function initializeSaveOptions() {
             parser.readAsText(file);
 
             parser.onload = () => {
-                const undata = JSON.parse(window.atob(parser.result));
-                for(const key of Object.keys(undata)) {
-                    window.localStorage.setItem(key, undata[key]);
-                }
+                try {
+                    const undata = JSON.parse(window.atob(parser.result));
+                    for(const key of Object.keys(undata)) {
+                        window.localStorage.setItem(key, undata[key]);
+                    }
 
-                displayMessage("File loaded!", false);
-                window.top.location.reload();
+                    makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "File loaded!", isError: false });
+                    window.top.location.reload();
+                } catch(e) {
+                    console.error(e);
+                    makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Unable to read file!", isError: true });
+                }
             };
             parser.onerror = () => {
-                displayMessage("Unable to read file!", true);
+                makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Unable to read file!", isError: true });
             }
         } else {
-            displayMessage("No file selected to load!", true);
+            makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "No file selected to load!", isError: true });
         }
     }, true);
 
@@ -120,10 +116,10 @@ function initializeSaveOptions() {
                     window.localStorage.setItem(key, undata[key]);
                 }
 
-                displayMessage("Save Pasted!", false);
+                makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Save Pasted!", isError: false });
                 window.top.location.reload();
             } catch(e) {
-                displayMessage("Unable to parse clipboard text...", true);
+                makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Unable to parse clipboard text...", isError: true });
             }
         });
     });
@@ -140,13 +136,13 @@ function initializeSaveOptions() {
         link.click();
         link.remove();
         URL.revokeObjectURL(url);
-        displayMessage("Downloading save...", false);
+        makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Downloading save...", isError: false });
     };
 
     document.querySelector("#write-clipboard-save").onclick = () => {
         const data = window.btoa(JSON.stringify({...window.localStorage}));
         navigator.clipboard.writeText(data);
-        displayMessage("Copied Save!", false);
+        makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Copied Save!", isError: false });
     };
 
     document.querySelector("#delete-save").onclick = () => openWarningModal("Deleting your save file", "erase", () => {
@@ -155,6 +151,7 @@ function initializeSaveOptions() {
             window.localStorage.removeItem(key);
         }
 
-        displayMessage("Save deleted! Close the tab or refresh the page.", false);
+        window.localStorage.setItem("delete_flag", "1");
+        makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Save deleted!", isError: false });
     });
 }

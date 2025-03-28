@@ -102,7 +102,7 @@ function createLoadout(loadoutData = null) {
     shareOption.onclick = () => {
         encodeLink(createLoadoutObject(minimalLoadout)).then(link => {
             navigator.clipboard.writeText(link);
-            // TODO: Add message saying copied to clipboard
+            makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Loadout data copied to clipboard!", isError: false });
         });
     };
 

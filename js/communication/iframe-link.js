@@ -26,7 +26,9 @@ const REQUEST_TYPES = {
 
     GET_ALL_LOADOUT: "get_all_loadouts",
     MODIFY_LOADOUT: "mutate_loadout_position",
-    DELETE_LOADOUT: "delete_loadout"
+    DELETE_LOADOUT: "delete_loadout",
+
+    SEND_ALERT: "send_alert"
 }
 
 const MAX_POST_ID = 2 << 12;
@@ -45,6 +47,10 @@ window.onmessage = ev => {
             callbacks.delete(res.m_id);
         };
 
+        if(window.localStorage.getItem("delete_flag") === "1") {
+            window.localStorage.removeItem("delete_flag");
+            port.postMessage({ context: "REBOOT" });
+        }
         window.dispatchEvent(new CustomEvent("portLoaded"));
     }
 };

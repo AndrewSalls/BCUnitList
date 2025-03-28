@@ -154,6 +154,13 @@ function handleMessage(port, unitData, res) {
             loadoutManager.remove(res.content);
             port.postMessage({ m_id: res.m_id, data: loadouts.splice(res.content, 1) });
             break;
+        case "send_alert":
+            displayMessage(res.content.message, res.content.isError);
+            port.postMessage({ m_id: res.m_id });
+            break;
+        case "REBOOT":
+            initializeData();
+            break;
         default:
             console.error(`Unexpected context: ${res.context}`);
             break;
@@ -244,4 +251,13 @@ function getUnfiltedCategories(ignoreFilters) {
     }
 
     return clone;
+}
+
+function displayMessage(message, isError) {
+    const saveText = document.querySelector("#save-change-text");
+    saveText.classList.add("hidden");
+    saveText.textContent = message;
+    saveText.classList.toggle("error-msg", isError);
+    saveText.clientHeight; // forces redraw
+    saveText.classList.remove("hidden");
 }

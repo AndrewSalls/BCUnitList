@@ -45,8 +45,14 @@ function initializeContent() {
             c.querySelector(".unset-search").classList.remove("hidden");
         });
     };
+    const codeEnterButton = document.querySelector("#import-loadout");
     const shareCodeInput = document.querySelector("#code-input");
-    document.querySelector("#import-loadout").onclick = () => {
+    shareCodeInput.addEventListener("keyup", ev => {
+        if(ev.key === "Enter") {
+            codeEnterButton.click();
+        }
+    })
+    codeEnterButton.onclick = () => {
         const loadoutCode = shareCodeInput.value;
         shareCodeInput.value = "";
 
@@ -108,7 +114,7 @@ function initializeContent() {
             }
         } catch(e) {
             console.error(e);
-            // TODO: Display error message: "Error in loadout code. Verify that you correctly pasted the code and try again..."
+            makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Invalid loadout data!", isError: true });
         }
     };
     
@@ -155,7 +161,7 @@ function initializeContent() {
         
         const link = encodeDirectLink(output);
         navigator.clipboard.writeText(link);
-        // TODO: Add message saying copied to clipboard
+        makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Loadout data copied to clipboard!", isError: false });
     };
 }
 

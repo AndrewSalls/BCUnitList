@@ -1,3 +1,8 @@
+:root {
+    --msg-text: #FFFFFF;
+    --msg-error: #ac000077;
+}
+
 body {
     grid-template-rows: 60px 1fr;
 }
@@ -44,4 +49,35 @@ body {
 #version-info h5 {
     margin: 0;
     padding: 0;
+}
+
+#save-change-text {
+    background-color: var(--modal-fade);
+    color: var(--msg-text);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    min-width: 20vw;
+    padding: 1vh 1vw;
+    border-radius: 0 10000px 0 0;
+}
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+#save-change-text:not(.hidden) {
+    animation: fadeout 6s linear;
+    animation-fill-mode: forwards;
+}
+
+#save-change-text.error-msg {
+    background-color: var(--msg-error);
 }
