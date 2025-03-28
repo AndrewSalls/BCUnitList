@@ -4,10 +4,23 @@
     <link rel="stylesheet" href="./css/common.css">
     <link rel="stylesheet" href="./css/custom-category.css">
     <link rel="stylesheet" href="./css/loadout.css">
+    <link rel="stylesheet" href="./css/loadout-display.css">
+    <link rel="stylesheet" href="./css/unit-table.css">
+    <link rel="stylesheet" href="./css/unit-upgrade.css">
+    <link rel="stylesheet" href="./css/orb-modal.css">
     <script src="./js/communication/iframe-link.js"></script>
+    <script type="module" src="./js/loadout-display.js"></script>
 </head>
 <body>
-    <div id="loadout-box"></div>
-    <div id="unit-data-box"></div>
+    <div id="loadout-content">
+        <div id="option-box">
+            <button type="button">Start from Scratch</button>
+            <button type="button">Import Code</button>
+            <input type="text" placeholder = "Enter a loadout share code...">
+            <button type="button">Copy Code</button>
+        </div>
+        <div id="loadout-box"></div>
+        <div id="unit-data-box"></div>
+    </div>
 </body>
 </html>

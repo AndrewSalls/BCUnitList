@@ -2,7 +2,7 @@ import createRow from "./create-unit-row.js";
 import { getValuesFromRow, observeRowChange } from "../../helper/link-row.js";
 import attachUnitTableColumnSort from "../sort-units.js";
 
-export default function createSearchableTable(titleText, unitData, loadingBar) {
+export default function createSearchableTable(titleText, unitData, loadingBar = null) {
     const wrapper = document.createElement("div");
     const title = document.createElement("h2");
     title.textContent = titleText;
@@ -48,7 +48,7 @@ export default function createSearchableTable(titleText, unitData, loadingBar) {
             observeRowChange(row, () => makeRequest(REQUEST_TYPES.UPDATE_ID, getValuesFromRow(row)));
         }
 
-        loadingBar.rincrement();
+        loadingBar?.rincrement();
     }
 
     attachUnitTableColumnSort(table);

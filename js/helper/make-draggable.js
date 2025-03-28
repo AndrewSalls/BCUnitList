@@ -65,7 +65,7 @@ export default function makeDraggable(loadoutIconList, loadoutChangeCallback = n
 
     units.forEach(unit => {
         unit.addEventListener("mousedown", ev => {
-            if(window.document.body.classList.contains("disabled-editing-mode")) {
+            if(window.document.body.classList.contains("disabled-editing-mode") || !unit.classList.contains("set-unit")) {
                 return;
             }
             const bBox = unit.getBoundingClientRect();

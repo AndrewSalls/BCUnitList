@@ -31,7 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const catBase = nav.querySelector("#cat-base-button");
         catBase.onclick = _ => { if(!catBase.classList.contains("current")) { setPage(catBase); loadTo("cat-base"); }};
         const loadout = nav.querySelector("#loadout-button");
-        loadout.onclick = _ => { if(!loadout.classList.contains("current")) { setPage(loadout); loadTo("loadout"); }};
+        loadout.onclick = _ => {
+            if(!loadout.classList.contains("current")) {
+                setPage(loadout);
+                loadTo("loadout");
+            } else if(document.querySelector("#content-page").contentWindow.location.href.includes("loadout-display.html")) { // sub-page returns to main page
+                loadTo("loadout");
+            }
+        };
         const settingsPage = nav.querySelector("#settings-button");
         settingsPage.onclick = _ => { if(!settingsPage.classList.contains("current")) { setPage(settingsPage); loadTo("settings"); }};
 
