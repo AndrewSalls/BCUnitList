@@ -35,10 +35,10 @@ function initialize() {
     initializeDataset(searchSuggestions, true);
 
     let target = window.localStorage.getItem("su");
-    if(!target || typeof target !== "number") {
-        target = 0;
+    if(!target || Number.isNaN(target)) {
+        target = "0";
     }
-    loadSpecific(target);
+    loadSpecific(parseInt(target));
 }
 
 function loadSpecific(id) {
@@ -78,65 +78,76 @@ function loadSpecific(id) {
         const [favoriteBox, _12] = RowComponents.createFavoriteBox(entry.favorited);
         wrapper.querySelector("#favorite-wrapper").replaceChildren(favoriteBox);
 
+        document.querySelector("#ut-uf-checkbox").classList.toggle("hidden", entry.rarity !== "UR");
         document.querySelector("#rarity-wrapper").textContent = parseKebabCase(RARITY_MAP[entry.rarity]);
+        document.querySelector("#catseye-wrapper").classList.toggle("hidden", entry.rarity === "N");
+        if(entry.rarity !== "N") {
+            document.querySelector("#catseye-img").src = `./assets/img/evo_mats/${RARITY_MAP[entry.rarity].replace("-", "_")}_catseye.png`;
+        }
+        document.querySelector("#dark-wrapper").classList.toggle("hidden", entry.rarity !== "UR");
 
         makeRequest(REQUEST_TYPES.GET_ID_COST, id).then(cost => {
-            const wrapper = document.querySelector("#unit-border");
-            document.querySelector("#ut-uf-checkbox").classList.toggle("hidden", entry.rarity !== "UR");
-            document.querySelector("#ut-uf-input").checked = true;
-    
-            setupCostValue("xp-evo", cost.formXP, cost.ultra.formXP);
-            setupCostValue("xp-30", cost.lvl30XP, cost.ultra.lvl30XP);
-            setupCostValue("xp-max", cost.lvlMaxXP, cost.ultra.lvlMaxXP);
-            setupCostValue("np", cost.maxNP, cost.ultra.maxNP);
-            document.querySelector("#catseye-wrapper").classList.toggle("hidden", entry.rarity === "N");
-            if(entry.rarity !== "N") {
-                setupCostValue("catseye", cost[`catseye_${entry.rarity}`], cost.ultra[`catseye_${entry.rarity}`]);
-                document.querySelector("#catseye-img").src = `./assets/img/evo_mats/${RARITY_MAP[entry.rarity].replace("-", "_")}_catseye.png`;
-            }
-            document.querySelector("#dark-wrapper").classList.toggle("hidden", entry.rarity !== "UR");
-            if(entry.rarity === "UR") {
-                setupCostValue("dark-catseye", cost.catseye_dark, cost.ultra.catseye_dark);
-            }
-    
-            setupCostValue("green-fruit", cost.green_fruit, cost.ultra.green_fruit);
-            setupCostValue("purple-fruit", cost.purple_fruit, cost.ultra.purple_fruit);
-            setupCostValue("red-fruit", cost.red_fruit, cost.ultra.red_fruit);
-            setupCostValue("blue-fruit", cost.blue_fruit, cost.ultra.blue_fruit);
-            setupCostValue("yellow-fruit", cost.yellow_fruit, cost.ultra.yellow_fruit);
-            setupCostValue("epic-fruit", cost.epic_fruit, cost.ultra.epic_fruit);
-            setupCostValue("elder-fruit", cost.elder_fruit, cost.ultra.elder_fruit);
-            setupCostValue("aku-fruit", cost.aku_fruit, cost.ultra.aku_fruit);
-            setupCostValue("gold-fruit", cost.gold_fruit, cost.ultra.gold_fruit);
-    
-            setupCostValue("green-seed", cost.green_seed, cost.ultra.green_seed);
-            setupCostValue("purple-seed", cost.purple_seed, cost.ultra.purple_seed);
-            setupCostValue("red-seed", cost.red_seed, cost.ultra.red_seed);
-            setupCostValue("blue-seed", cost.blue_seed, cost.ultra.blue_seed);
-            setupCostValue("yellow-seed", cost.yellow_seed, cost.ultra.yellow_seed);
-            setupCostValue("epic-seed", cost.epic_seed, cost.ultra.epic_seed);
-            setupCostValue("elder-seed", cost.elder_seed, cost.ultra.elder_seed);
-            setupCostValue("aku-seed", cost.aku_seed, cost.ultra.aku_seed);
-            setupCostValue("gold-seed", cost.gold_seed, cost.ultra.gold_seed);
-            
-            setupCostValue("green-gem", cost.green_gem, cost.ultra.green_gem);
-            setupCostValue("purple-gem", cost.purple_gem, cost.ultra.purple_gem);
-            setupCostValue("red-gem", cost.red_gem, cost.ultra.red_gem);
-            setupCostValue("blue-gem", cost.blue_gem, cost.ultra.blue_gem);
-            setupCostValue("yellow-gem", cost.yellow_gem, cost.ultra.yellow_gem);
-    
-            setupCostValue("green-stone", cost.green_stone, cost.ultra.green_stone);
-            setupCostValue("purple-stone", cost.purple_stone, cost.ultra.purple_stone);
-            setupCostValue("red-stone", cost.red_stone, cost.ultra.red_stone);
-            setupCostValue("blue-stone", cost.blue_stone, cost.ultra.blue_stone);
-            setupCostValue("yellow-stone", cost.yellow_stone, cost.ultra.yellow_stone);
-            setupCostValue("epic-stone", cost.epic_stone, cost.ultra.epic_stone);
+            setSpecificCost(cost, entry.rarity);
 
-            observeRowChange(wrapper, () => makeRequest(REQUEST_TYPES.UPDATE_ID, getValuesFromRow(wrapper), true));
+            const wrapper = document.querySelector("#unit-border");
+            document.querySelector("#ut-uf-input").checked = true;
+
+            observeRowChange(wrapper, () => {
+                (async () => {
+                    await makeRequest(REQUEST_TYPES.UPDATE_ID, getValuesFromRow(wrapper), true);
+                    setSpecificCost(await makeRequest(REQUEST_TYPES.GET_ID_COST, id), entry.rarity);
+                })();
+            });
 
             container.classList.remove("hidden");
         });
     });
+}
+
+function setSpecificCost(cost, rarity) {
+    setupCostValue("xp-evo", cost.formXP, cost.ultra.formXP);
+    setupCostValue("xp-30", cost.lvl30XP, cost.ultra.lvl30XP);
+    setupCostValue("xp-max", cost.lvlMaxXP, cost.ultra.lvlMaxXP);
+    setupCostValue("np", cost.maxNP, cost.ultra.maxNP);
+    if(rarity !== "N") {
+        setupCostValue("catseye", cost[`catseye_${rarity}`], cost.ultra[`catseye_${rarity}`]);
+    }
+    if(rarity === "UR") {
+        setupCostValue("dark-catseye", cost.catseye_dark, cost.ultra.catseye_dark);
+    }
+
+    setupCostValue("green-fruit", cost.green_fruit, cost.ultra.green_fruit);
+    setupCostValue("purple-fruit", cost.purple_fruit, cost.ultra.purple_fruit);
+    setupCostValue("red-fruit", cost.red_fruit, cost.ultra.red_fruit);
+    setupCostValue("blue-fruit", cost.blue_fruit, cost.ultra.blue_fruit);
+    setupCostValue("yellow-fruit", cost.yellow_fruit, cost.ultra.yellow_fruit);
+    setupCostValue("epic-fruit", cost.epic_fruit, cost.ultra.epic_fruit);
+    setupCostValue("elder-fruit", cost.elder_fruit, cost.ultra.elder_fruit);
+    setupCostValue("aku-fruit", cost.aku_fruit, cost.ultra.aku_fruit);
+    setupCostValue("gold-fruit", cost.gold_fruit, cost.ultra.gold_fruit);
+
+    setupCostValue("green-seed", cost.green_seed, cost.ultra.green_seed);
+    setupCostValue("purple-seed", cost.purple_seed, cost.ultra.purple_seed);
+    setupCostValue("red-seed", cost.red_seed, cost.ultra.red_seed);
+    setupCostValue("blue-seed", cost.blue_seed, cost.ultra.blue_seed);
+    setupCostValue("yellow-seed", cost.yellow_seed, cost.ultra.yellow_seed);
+    setupCostValue("epic-seed", cost.epic_seed, cost.ultra.epic_seed);
+    setupCostValue("elder-seed", cost.elder_seed, cost.ultra.elder_seed);
+    setupCostValue("aku-seed", cost.aku_seed, cost.ultra.aku_seed);
+    setupCostValue("gold-seed", cost.gold_seed, cost.ultra.gold_seed);
+    
+    setupCostValue("green-gem", cost.green_gem, cost.ultra.green_gem);
+    setupCostValue("purple-gem", cost.purple_gem, cost.ultra.purple_gem);
+    setupCostValue("red-gem", cost.red_gem, cost.ultra.red_gem);
+    setupCostValue("blue-gem", cost.blue_gem, cost.ultra.blue_gem);
+    setupCostValue("yellow-gem", cost.yellow_gem, cost.ultra.yellow_gem);
+
+    setupCostValue("green-stone", cost.green_stone, cost.ultra.green_stone);
+    setupCostValue("purple-stone", cost.purple_stone, cost.ultra.purple_stone);
+    setupCostValue("red-stone", cost.red_stone, cost.ultra.red_stone);
+    setupCostValue("blue-stone", cost.blue_stone, cost.ultra.blue_stone);
+    setupCostValue("yellow-stone", cost.yellow_stone, cost.ultra.yellow_stone);
+    setupCostValue("epic-stone", cost.epic_stone, cost.ultra.epic_stone);
 }
 
 function setupCostValue(target, value, ultraValue = null) {
