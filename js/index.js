@@ -153,7 +153,7 @@ function initializeLocalStorage(settings, categories) {
     
     // Ability Upgrades --------------------------------------------
     if(!window.localStorage.getItem("abo")) {
-        window.localStorage.setItem("abo", "0+0-0+0-0+0-0+0-0+0-0+0-0+0-0+0-0+0");
+        window.localStorage.setItem("abo", "1+0-1+0-1+0-1+0-1+0-1+0-1+0-1+0-1+0-1+0");
     }
     if(!window.localStorage.getItem("cgs")) {
         window.localStorage.setItem("cgs", 0);

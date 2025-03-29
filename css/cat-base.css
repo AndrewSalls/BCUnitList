@@ -193,3 +193,13 @@ input[type='number']::-webkit-inner-spin-button {
     aspect-ratio: 1/1;
     width: 131px;
 }
+
+.upgrade-box {
+    min-height: 180px;
+    height: 100%;
+}
+
+.upgrade-plus-text {
+    margin: 0;
+    padding: 0;
+}

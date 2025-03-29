@@ -8,10 +8,10 @@ export default function createArrowNumberBox(cap, currentValue, changeCallback, 
     labelInput.dataset.lastValue = currentValue;
 
     labelInput.onchange = () => {
-        if(parseInt(labelInput.value) < min) {
-            labelInput.value = min;
-        } else if(parseInt(labelInput.value) > cap) {
-            labelInput.value = cap;
+        if(parseInt(labelInput.value) < parseInt(labelInput.min)) {
+            labelInput.value = parseInt(labelInput.min);
+        } else if(parseInt(labelInput.value) > parseInt(labelInput.max)) {
+            labelInput.value = parseInt(labelInput.max);
         }
 
         changeCallback(parseInt(labelInput.dataset.lastValue), parseInt(labelInput.value));

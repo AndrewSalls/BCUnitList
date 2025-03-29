@@ -26,7 +26,7 @@ If for whatever reason, you need to update the unit data in your own clone of th
 - Place all unit icons in ```img/unit_icon```, using the same naming format as in that folder.
 - If a unit has a unique combination of level cap and + level cap, then give a name to that combination in ```level_cap_stats.csv```, and then reference it in ```units_###.csv```.
 - If a unit has a unique XP leveling curve, then give a name to the XP amounts in ```leveling_stats.csv```, and then reference it in ```unit_costs_###.csv```.
-- Add the unit to any relevant categories in the category folder. You can create a collection of related categories in a new file as long as the file name is in ```types.txt```.
+- Add the unit to any relevant categories in the category folder. You can create a collection of related categories in a new file as long as the file name is in ```types.txt```. Note that small collabs are defined as any collab without a unit obtained from the rare gacha.
 - If a new ability is introduced, place the image in the ```img/ability``` folder, using the same naming format as in that folder. The name must be in that format to be assigned as a talent properly.
 - If a new base type is introduced, place the image(s) in the ```img/foundation``` folder, using the same naming format as in that folder. Make sure to also update ```settings.json``` in order to assign a name to the base type and increment the total type counter.
 - NP costs per level in a talent are determined by a combination of the total NP cost and the max level of the talent via ```talent-np-map.js``` and ```ut-np-map.js``` (both of which are just json files that I didn't want to set up a fetch for). If future units introduce new NP costs per level, use these files to account for them.

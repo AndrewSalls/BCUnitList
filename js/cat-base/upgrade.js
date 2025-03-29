@@ -9,11 +9,17 @@ export default async function loadUpgradeInfo(settings) {
     for(let x = 0; x < settings.abilities.abilityNames.length; x++) {
         wrapper.appendChild(createUpgradeLevelBox(settings.abilities.abilityNames[x], settings.abilities.abilityLevelCap, settings.abilities.abilityPlusLevelCap, res[x + 1], x));
     }
+
+    const rangeUpgrade = wrapper.querySelectorAll(".upgrade-box").item(settings.abilities.rangePosition + 1);
+    rangeUpgrade.querySelector(".upgrade-level").max = settings.abilities.rangeLevelCap;
+    rangeUpgrade.querySelector(".upgrade-plus-text").classList.add("hidden");
+    rangeUpgrade.querySelector(".upgrade-plus-level").classList.add("hidden");
 }
 
 function createCGSBox(isOwned) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("v-align");
+    wrapper.classList.add("upgrade-box");
 
     const title = document.createElement("h4");
     title.textContent = "The Cat God";
@@ -42,6 +48,7 @@ function createCGSBox(isOwned) {
 function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, id) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("v-align");
+    wrapper.classList.add("upgrade-box");
 
     const title = document.createElement("h4");
     title.textContent = name;
@@ -66,7 +73,14 @@ function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, i
     levelInput = levelInputElm;
     plusLevelInput = plusInputElm;
 
-    levelWrapper.append(levelElm, "+", plusLevelElm);
+    levelElm.classList.add("upgrade-level");
+    plusLevelElm.classList.add("upgrade-plus-level");
+
+    const plusSign = document.createElement("p");
+    plusSign.classList.add("upgrade-plus-text");
+    plusSign.textContent = "+";
+
+    levelWrapper.append(levelElm, plusSign, plusLevelElm);
     wrapper.append(title, image, levelWrapper);
     return wrapper;
 }

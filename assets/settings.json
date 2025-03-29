@@ -19,9 +19,12 @@
         "names": ["Default", "Slow Beam", "Iron Wall", "Thunderbolt", "Waterblast", "Holy Blast", "Breakerblast", "Curseblast"]
     },
     "abilities": {
-        "abilityNames": ["Cat Cannon Power", "Cat Cannon Charge", "Worker Cat Rate", "Worker Cat Wallet", "Base Defense", "Research", "Accounting", "Study", "Cat Energy"],
+        "abilityNames": ["Cat Cannon Power", "Cat Cannon Range", "Cat Cannon Charge", "Worker Cat Rate", "Worker Cat Wallet", "Base Defense", "Research", "Accounting", "Study", "Cat Energy"],
         "abilityLevelCap": 20,
         "abilityPlusLevelCap": 10,
+        "rangeLevelCap": 10,
+        "rangePlusLevelCap": 0,
+        "rangePosition": 1,
         "costs": {
             "xpAmt": [
                 [500,1000,1500,2000,2500,3000,3500,4000,4500,500,100,2000,4000,5000,6000,7000,8000,9000, 10000],
