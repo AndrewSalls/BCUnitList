@@ -114,6 +114,9 @@ function createFilterSelection() {
         createModalButton("Evolved Form Units", "evolved-filter", "EF"),
         createModalButton("True Form Units", "true-filter", "TF"),
         createModalButton("Ultra Form Units", "ultra-filter", "UF")
+    ], [
+        createModalButton("Fully Evolved Units", "fully-evolved-filter", "Form MAX"),
+        createModalButton("Not Fully Evolved Units", "not-fully-evolved-filter", "Form Not MAX")
     ]));
 
     filterButtonCollection.appendChild(createModalButtonSuperGroup("Unit Levels", [

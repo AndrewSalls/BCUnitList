@@ -66,7 +66,6 @@ function checkRowIsOwned(row) {
 }
 
 function applyUpdate(update, checkForOwnership, checkForVisibility) {
-    const filterOptions = [...document.querySelectorAll("#table-option-modal #table-filter-options button")];
     targettedTable.querySelectorAll("tbody tr").forEach(r => {
         if((!checkForVisibility || r.checkVisibility()) && (!checkForOwnership || checkRowIsOwned(r))) {
             update(r);
@@ -152,6 +151,8 @@ function initializeFormFilters() {
     registerFilter(filterWrapper.querySelector("#evolved-filter"), filterFunctions.isEvolvedForm);
     registerFilter(filterWrapper.querySelector("#true-filter"), filterFunctions.isTrueForm);
     registerFilter(filterWrapper.querySelector("#ultra-filter"), filterFunctions.isUltraForm);
+    registerFilter(filterWrapper.querySelector("#fully-evolved-filter"), filterFunctions.isFullyEvolved);
+    registerFilter(filterWrapper.querySelector("#not-fully-evolved-filter"), filterFunctions.isNotFullyEvolved);
 }
 
 function initializeLevelFilters() {

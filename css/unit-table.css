@@ -76,7 +76,7 @@ tbody tr {
     overflow: hidden;
 }
 
-tbody tr:nth-child(2n - 1) {
+tbody tr.colored:nth-of-type(2n - 1) {
     background-color: var(--rarity-bg2);
 }
 

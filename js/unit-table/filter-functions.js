@@ -12,6 +12,12 @@ export const isEvolvedForm = r => r.querySelector(".row-image").dataset.form ===
 export const isTrueForm = r => r.querySelector(".row-image").dataset.form === "2";
 export const isUltraForm = r => r.querySelector(".row-image").dataset.form === "3";
 
+export const isFullyEvolved = r => {
+    const formIcon = r.querySelector(".row-image");
+    return formIcon.dataset.form === formIcon.dataset.max_form;
+};
+export const isNotFullyEvolved = r => !isFullyEvolved(r);
+
 /* -------------------------- Level Filter Functions -------------------------- */
 export const isMaxLevel = r => {
     const levelBox = r.querySelector(".max-level.level-select");
