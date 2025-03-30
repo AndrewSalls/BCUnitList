@@ -70,14 +70,13 @@ thead td[class^="sort"] {
     cursor: pointer;
 }
 tbody tr {
-    background-color: var(--rarity-bg);
     height: 60px;
     max-height: 60px;
     overflow: hidden;
 }
 
-tbody tr.colored:nth-of-type(2n - 1) {
-    background-color: var(--rarity-bg2);
+tbody {
+    background-image: repeating-linear-gradient(var(--rarity-bg) 0 60px, var(--rarity-bg2) 60px 120px);
 }
 
 .unit-icon {
