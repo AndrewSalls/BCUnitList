@@ -1,7 +1,9 @@
 import * as sortOrderModule from "../../assets/unit_data/sort_order.js";
 
-const ORB_TIER_RANKING = ["none", "D", "C", "B", "A", "S"];
+const ORB_ORDER = ["none", "D", "C", "B", "A", "S"];
+const RARITY_ORDER = ["N", "EX", "RR", "SR", "UR", "LR"];
 const SORT_ORDER = sortOrderModule.default;
+const SORT_SETTING_ORDER = [gameSortLambda, idSortLambda, nameSortLambda, formSortLambda, levelSortLambda, talentSortLambda, orbSortLambda, favoriteSortLambda]
 
 export default function attachUnitTableColumnSort(table) {
     const thead = table.querySelector("thead");
@@ -18,22 +20,15 @@ export default function attachUnitTableColumnSort(table) {
     const data = table.querySelector("tbody");
 
     attachSort(sortID, idSortLambda, allSort, data);
-    attachSort(sortForm,
-        (a, b) => {
-            const res = parseInt(b.querySelector("td.row-name").dataset.form) - parseInt(a.querySelector("td.row-name").dataset.form);
-            return res !== 0 ? res : idSortLambda(a, b);
-        }, allSort, data);
-    attachSort(sortName, (a, b) => a.querySelector("td.row-name").innerText < b.querySelector("td.row-name").innerText ? -1 : 1, allSort, data);
+    attachSort(sortForm, formSortLambda, allSort, data);
+    attachSort(sortName, nameSortLambda, allSort, data);
     attachSort(sortLevel, levelSortLambda, allSort, data);
     attachSort(sortTalent, talentSortLambda, allSort, data);
     attachSort(sortOrb, orbSortLambda, allSort, data);
-    attachSort(sortFavorite, (a, b) => {
-        const res = parseInt(b.querySelector("td.row-favorite div").dataset.favorited) - parseInt(a.querySelector("td.row-favorite div").dataset.favorited);
-        return res !== 0 ? res : idSortLambda(a, b);
-    }, allSort, data);
+    attachSort(sortFavorite, favoriteSortLambda, allSort, data);
 
     assignRowSortData(table.querySelectorAll("tbody tr"));
-    // TODO: Sort based on settings for what sort type is default
+    sortRows(table.querySelector("tbody"), SORT_SETTING_ORDER[parseInt(window.localStorage.getItem("skey"))], window.localStorage.getItem("sasc") === "Y");
 }
 
 function attachSort(sortTarget, sort, allSort, tbody) {
@@ -70,6 +65,15 @@ export function idSortLambda(a, b) {
     return parseInt(a.querySelector("td.row-id").innerText) - parseInt(b.querySelector("td.row-id").innerText);
 }
 
+export function formSortLambda(a, b) {
+    const res = parseInt(b.querySelector("td.row-name").dataset.form) - parseInt(a.querySelector("td.row-name").dataset.form);
+    return res !== 0 ? res : idSortLambda(a, b);
+}
+
+export function nameSortLambda(a, b) {
+    return a.querySelector("td.row-name").innerText < b.querySelector("td.row-name").innerText ? -1 : 1;
+}
+
 export function levelSortLambda(a, b) {
     const aCell = a.querySelector("td.row-level");
     const bCell = b.querySelector("td.row-level");
@@ -101,8 +105,8 @@ export function orbSortLambda(a, b) {
     const aCell = a.querySelector("td.row-orb");
     const bCell = b.querySelector("td.row-orb");
 
-    const ranksA = [...aCell.querySelectorAll('.orb-selector .orb-rank')].map(v => ORB_TIER_RANKING.indexOf(v.dataset.rank), 0).sort();
-    const ranksB = [...bCell.querySelectorAll('.orb-selector .orb-rank')].map(v => ORB_TIER_RANKING.indexOf(v.dataset.rank), 0).sort();
+    const ranksA = [...aCell.querySelectorAll('.orb-selector .orb-rank')].map(v => ORB_ORDER.indexOf(v.dataset.rank), 0).sort();
+    const ranksB = [...bCell.querySelectorAll('.orb-selector .orb-rank')].map(v => ORB_ORDER.indexOf(v.dataset.rank), 0).sort();
 
     while(ranksA.length > 0 && ranksB.length > 0) {
         const rankAMax = ranksA.pop();
@@ -117,7 +121,11 @@ export function orbSortLambda(a, b) {
     return orbSlotCount !== 0 ? orbSlotCount : idSortLambda(a, b);
 }
 
-const RARITY_ORDER = ["N", "EX", "RR", "SR", "UR", "LR"];
+export function favoriteSortLambda(a, b) {
+    const res = parseInt(b.querySelector("td.row-favorite div").dataset.favorited) - parseInt(a.querySelector("td.row-favorite div").dataset.favorited);
+    return res !== 0 ? res : idSortLambda(a, b);
+}
+
 export function gameSortLambda(a, b) {
     if(a.dataset.rarity !== b.dataset.rarity) {
         return RARITY_ORDER.indexOf(a.dataset.rarity) - RARITY_ORDER.indexOf(b.dataset.rarity);
