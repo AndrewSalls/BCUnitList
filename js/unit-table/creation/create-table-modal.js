@@ -1,3 +1,6 @@
+import { getModalTarget } from "../filter-units.js";
+import { gameSortLambda, sortRows } from "../sort-units.js";
+
 export default function createTableOptionModal() {
     const modal = document.createElement("div");
     modal.id = "table-option-modal";
@@ -85,7 +88,17 @@ function createOptionSelection() {
         createModalButton("Increase all Levels to Maximum", "level-50-all", "Level All to Max"),
         createModalButton("Max Everything but Talent Orbs", "max-all", "Max All")
     );
+    
+    const sortWrapper = document.createElement("div");
+    sortWrapper.id = "table-modal-sort";
 
+    const ingameSortButton = createModalButton("Order units like in-game", "ingame-sort", "In-Game Sort");
+    ingameSortButton.onclick = () => {
+        sortRows(getModalTarget().querySelector("tbody"), gameSortLambda, true);
+    };
+    sortWrapper.append(ingameSortButton);
+
+    optionButtonCollection.appendChild(sortWrapper);
     options.append(twoPaneToggle, optionButtonCollection);
 
     wrapper.append(title, options);

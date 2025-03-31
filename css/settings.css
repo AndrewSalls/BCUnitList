@@ -149,3 +149,11 @@ h4 {
 .section-collapse ~ * {
     display: none !important;
 }
+
+.sort-direction {
+    height: 8px;
+    aspect-ratio: 1/1;
+}
+.descending .sort-direction {
+    transform: rotate(180deg);
+}

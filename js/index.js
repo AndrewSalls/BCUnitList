@@ -95,77 +95,63 @@ function loadTo(src, skipHistory = false) {
     }
 }
 
+function setIfUnset(key, defaultValue) {
+    if(window.localStorage.getItem(key) === null) {
+        window.localStorage.setItem(key, defaultValue);
+    }
+}
+
 function initializeLocalStorage(settings, categories) {
     // Site Settings --------------------------------------------
     for(const key of Object.keys(DEFAULT_SETTINGS)) {
-        if(window.localStorage.getItem(key) === null) {
-            window.localStorage.setItem(key, DEFAULT_SETTINGS[key]);
-        }
+        setIfUnset(key, DEFAULT_SETTINGS[key]);
     }
+
+    // Site unit sort settings --------------------------------------------
+    setIfUnset("skey", "0");
+    setIfUnset("sasc", "Y");
     
     // Categories --------------------------------------------
     for(const superCategory of Object.keys(categories).sort()) {
         const superKey = `gk-${superCategory}`;
-        if(!window.localStorage.getItem(superKey)) {
-            window.localStorage.setItem(superKey, "1");
-        }
+        setIfUnset(superKey, "1");
 
         for(const subCategory of Object.keys(categories[superCategory]).sort()) {
             const key = `${superCategory}-${subCategory}`;
-            if(!window.localStorage.getItem(key)) {
-                window.localStorage.setItem(key, "1");
-            }
+            setIfUnset(key, "1");
         }
     }
-    if(!window.localStorage.getItem("gk-custom")) {
-        window.localStorage.setItem("gk-custom", "1");
-    }
+    setIfUnset("gk-custom", "1");
 
     // Treasures --------------------------------------------
     for(let p = 1; p <= 3; p++) {
         for(let x = 0; x < settings.treasures.eoc.length; x++) {
-            if(!window.localStorage.getItem(`eoc_${p}_${x + 1}`)) {
-                window.localStorage.setItem(`eoc_${p}_${x + 1}`, "0-0-0");
-            }
+            setIfUnset(`eoc_${p}_${x + 1}`, "0-0-0");
         }
     }
     for(let p = 1; p <= 3; p++) {
         for(let x = 0; x < settings.treasures.itf.length; x++) {
-            if(!window.localStorage.getItem(`itf_${p}_${x + 1}`)) {
-                window.localStorage.setItem(`itf_${p}_${x + 1}`, "0-0-0");
-            }
+            setIfUnset(`itf_${p}_${x + 1}`, "0-0-0");
         }
     }
     for(let p = 1; p <= 3; p++) {
         for(let x = 0; x < settings.treasures.cotc.length; x++) {
-            if(!window.localStorage.getItem(`cotc_${p}_${x + 1}`)) {
-                window.localStorage.setItem(`cotc_${p}_${x + 1}`, "0-0-0");
-            }
+            setIfUnset(`cotc_${p}_${x + 1}`, "0-0-0");
         }
     }
     
     // Base Development --------------------------------------------
     for(let b = 1; b <= settings.ototo.count; b++) {
-        if(!window.localStorage.getItem(`oo_${b}`)) {
-            window.localStorage.setItem(`oo_${b}`, "0-0-0");
-        }
+        setIfUnset(`oo_${b}`, "0-0-0");
     }
     
     // Ability Upgrades --------------------------------------------
-    if(!window.localStorage.getItem("abo")) {
-        window.localStorage.setItem("abo", "1+0-1+0-1+0-1+0-1+0-1+0-1+0-1+0-1+0-1+0");
-    }
-    if(!window.localStorage.getItem("cgs")) {
-        window.localStorage.setItem("cgs", 0);
-    }
+    setIfUnset("abo", "1+0-".repeat(settings.abilities.abilityNames.length).substring(0, settings.abilities.abilityNames.length * 4 - 1));
+    setIfUnset("cgs", "0");
 
     // Other Cat Base --------------------------------------------
-    if(!window.localStorage.getItem("akl")) {
-        window.localStorage.setItem("akl", "0");
-    }
-    if(!window.localStorage.getItem("akb")) {
-        window.localStorage.setItem("akb", "0");
-    }
+    setIfUnset("akl", "0");
+    setIfUnset("akb", "0");
 
     // Save Metadata --------------------------------------------
     window.localStorage.setItem("lg", settings.gameVersion);

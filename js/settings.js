@@ -16,6 +16,16 @@ document.addEventListener("DOMContentLoaded", () => {
     loadButton("#history-filter", "s6");
     loadButton("#single-category-filter", "s7");
 
+    loadSortButtons(["#ingame-sort-option", "#id-sort-option", "#name-sort-option", "#form-sort-option", "#level-sort-option", "#talent-sort-option", "#orb-sort-option", "#talent-sort-option", "#orb-sort-option", "#favorite-sort-option"]);
+    const ascendingToggle = document.querySelector("#toggle-ascending");
+    const ascendingToggleText = ascendingToggle.querySelector("span");
+    ascendingToggle.onclick = () => {
+        window.localStorage.setItem("sasc", ascendingToggle.classList.toggle("descending") ? "N" : "Y");
+        ascendingToggleText.textContent = window.localStorage.getItem("sasc") === "Y" ? "Ascending" : "Descending";
+    };
+    ascendingToggle.classList.toggle("descending", window.localStorage.getItem("sasc") === "N");
+
+
     document.querySelector("#cancel-overwrite").onclick = () => {
         document.querySelector("#warning-modal").classList.add("hidden");
         document.body.classList.remove("unscrollable");
@@ -40,11 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadButton(buttonID, storageKey) {
-    const showEmpty = document.querySelector(buttonID);
-    showEmpty.addEventListener("click", () => {
-        window.localStorage.setItem(storageKey, showEmpty.classList.toggle("active") ? "0" : "1");
+    const target = document.querySelector(buttonID);
+    target.addEventListener("click", () => {
+        window.localStorage.setItem(storageKey, target.classList.toggle("active") ? "0" : "1");
     });
-    showEmpty.classList.toggle("active", window.localStorage.getItem(storageKey) === "0");
+    target.classList.toggle("active", window.localStorage.getItem(storageKey) === "0");
 }
 
 function finishSetup() {
@@ -154,4 +164,18 @@ function initializeSaveOptions() {
         window.localStorage.setItem("delete_flag", "1");
         makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Save deleted!", isError: false });
     });
+}
+
+function loadSortButtons(orderedIDs) {
+    const targets = orderedIDs.map(id => document.querySelector(id));
+    for(let x = 0; x < targets.length; x++) {
+        targets[x].classList.add("active");
+        targets[x].addEventListener("click", () => {
+            window.localStorage.setItem("skey", x);
+            targets.forEach(t => t.classList.add("active"));
+            targets[x].classList.remove("active");
+        });
+    }
+
+    targets[parseInt(window.localStorage.getItem("skey"))].classList.remove("active");
 }

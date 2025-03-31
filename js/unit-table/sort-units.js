@@ -117,7 +117,12 @@ export function orbSortLambda(a, b) {
     return orbSlotCount !== 0 ? orbSlotCount : idSortLambda(a, b);
 }
 
+const RARITY_ORDER = ["N", "EX", "RR", "SR", "UR", "LR"];
 export function gameSortLambda(a, b) {
+    if(a.dataset.rarity !== b.dataset.rarity) {
+        return RARITY_ORDER.indexOf(a.dataset.rarity) - RARITY_ORDER.indexOf(b.dataset.rarity);
+    }
+
     const aMajor = parseInt(a.dataset.major_order);
     const aMinor = parseInt(a.dataset.minor_order);
     const bMajor = parseInt(b.dataset.major_order);
