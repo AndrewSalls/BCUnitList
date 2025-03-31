@@ -73,6 +73,7 @@ function createOptionSelection() {
     twoPaneToggle.append(panel1, panel2);
 
     const optionButtonCollection = document.createElement("div");
+    optionButtonCollection.id = "table-modal-modifer-options";
     optionButtonCollection.classList.add("h-align");
 
     optionButtonCollection.append(
@@ -172,6 +173,7 @@ function createFilterSelection() {
 
 function createModalButton(title, id, text) {
     const button = document.createElement("button");
+    button.classList.add("table-option-button");
     button.type = "button";
     button.textContent = text;
     button.id = id;

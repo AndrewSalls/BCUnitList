@@ -47,6 +47,10 @@ export function attachTableOptionsAndFilters(table) {
     table.parentNode.insertBefore(tableButtonDiv, table);
 }
 
+export function getModalTarget() {
+    return targettedTable;
+}
+
 function updateRowCallback(table, row, filterOptions) {
     row.dataset.filteredCount = 0;
 

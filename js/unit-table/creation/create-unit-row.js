@@ -5,6 +5,7 @@ export default function createRow(entry) {
     row.dataset.is_collab = entry.collab;
     row.dataset.in_en = entry.in_EN;
     row.dataset.is_unobtainable = entry.unobtainable;
+    row.dataset.rarity = entry.rarity;
     row.classList.toggle("hidden", entry.hidden);
 
     const idBox = createIDBox(entry.id);

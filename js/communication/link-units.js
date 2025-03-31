@@ -2,6 +2,7 @@ import { parseAllCategories, recordCustomCategory } from "../category/category-p
 import getCostsFor, { isInitialized, initializeLeveling } from "../helper/find-costs.js";
 import LoadoutManager from "../helper/loadout-storage-manager.js";
 import { getUnitData, parseLoadouts, parseUpgrades } from "../helper/parse-file.js";
+import * as settingsInitial from "../../assets/settings.js";
 
 let unitData = [];
 let upgradeData = [];
@@ -13,7 +14,7 @@ let loadoutManager = new LoadoutManager();
 
 export default async function initializeData() {
     return new Promise(async (res, _) => {
-        settings = await fetch("./assets/settings.json").then(res => res.json());
+        settings = settingsInitial.default;
         const { upData, upUR } = parseUpgrades(settings);
         upgradeData = upData;
         categories = await parseAllCategories();

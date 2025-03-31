@@ -1,10 +1,10 @@
-#table-option-modal button:not(:last-child) {
+#table-option-modal button:not(:last-of-type) {
     border-right: 1px solid var(--content-border);
 }
-#table-option-modal button:not(:first-child) {
+#table-option-modal button:not(:first-of-type) {
     border-left: none;
 }
-#table-option-modal button:not(:last-child).active {
+#table-option-modal button:not(:last-of-type).active {
     border-right: 1px solid var(--warning-border);
 }
 
@@ -46,11 +46,14 @@
     font-size: 12pt;
 }
 
-.table-filter-group button:first-child, #table-update-options button:first-child {
+.table-filter-group button:first-of-type, #table-update-options button:first-of-type {
     border-radius: 5px 0 0 5px;
 }
-.table-filter-group button:last-child, #table-update-options button:last-child {
+.table-filter-group button:last-of-type, #table-update-options button:last-of-type {
     border-radius: 0 5px 5px 0;
+}
+.table-filter-group button:only-of-type, #table-update-options button:only-of-type {
+    border-radius: 5px 5px 5px 5px;
 }
 
 .filter-hidden {
@@ -59,4 +62,8 @@
 
 #table-option-modal label, #table-option-modal input {
     cursor: pointer;
+}
+
+#table-modal-sort {
+    margin-left: 2vw;
 }

@@ -3,14 +3,30 @@ import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
 import createTableOptionModal from "./unit-table/creation/create-table-modal.js";
 import createSearchableTable from "./unit-table/creation/create-unit-table.js";
-import { attachTableOptionsAndFilters, initializeTableModal } from "./unit-table/filter-units.js";
+import { attachTableOptionsAndFilters, getModalTarget, initializeTableModal } from "./unit-table/filter-units.js";
 import makeSearchable, { initializeDataset } from "./helper/make-searchable.js";
+import { sortRows, gameSortLambda } from "./unit-table/sort-units.js";
 
 window.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(createOrbMenu());
     initializeOrbSelection();
     document.body.appendChild(createTableOptionModal());
     initializeTableModal();
+
+    const sortWrapper = document.createElement("div");
+    sortWrapper.id = "table-modal-sort";
+
+    const ingameSortButton = document.createElement("button");
+    ingameSortButton.type = "button";
+    ingameSortButton.textContent = "In-Game Sort";
+    ingameSortButton.id = "ingame-sort";
+    ingameSortButton.title = "Order units like in-game";
+    sortWrapper.append(ingameSortButton);
+
+    document.querySelector("#table-modal-modifer-options").appendChild(sortWrapper);
+    ingameSortButton.onclick = () => {
+        sortRows(getModalTarget().querySelector("tbody"), gameSortLambda, true);
+    };
 
     window.addEventListener("portLoaded", loadUnitTables);
     if(checkPort()) {
@@ -22,9 +38,7 @@ async function loadUnitTables() {
     const settings = await makeRequest(REQUEST_TYPES.GET_SETTINGS, null).then(r => r);
     const unitCount = settings.unitCount;
 
-    const loadingBar = createLoadingBar(8, () => {
-        document.querySelectorAll("section .sort-id").forEach(s => s.click());
-    });
+    const loadingBar = createLoadingBar(8, () => {});
 
     const searchSuggestions = document.createElement("datalist");
     searchSuggestions.id = "unit-search-suggestions";
@@ -84,6 +98,7 @@ async function loadUnitTables() {
             return table;
         })
     ];
+
     Promise.all(tableAppending).then(tables => {
         document.querySelector("#loading-content").append(...tables);
         tables.forEach(t => attachTableOptionsAndFilters(t.querySelector("table")));
