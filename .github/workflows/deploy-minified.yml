@@ -29,7 +29,7 @@ jobs:
         run: |
           npm install -g html-minifier terser clean-css-cli
 
-      - name: Minify Files into Dist Directory
+      - name: Minify Files and Copy Other Assets
         run: |
           mkdir -p dist
           
@@ -51,6 +51,12 @@ jobs:
             terser --compress --mangle -o "dist/{}" -- "{}"
           ' \;
 
+          echo "Copying all non-JS, non-CSS, non-HTML files..."
+          find . -type f ! \( -name "*.js" -o -name "*.css" -o -name "*.html" \) -exec sh -c '
+            mkdir -p "dist/$(dirname "{}")" &&
+            cp "{}" "dist/{}"
+          ' \;
+
       - name: Deploy to GitHub Pages Branch
         run: |
           git config --global user.name "github-actions[bot]"
@@ -63,8 +69,8 @@ jobs:
             git checkout pages
           fi
 
-          # Remove old files, then copy minified files
-          git rm -rf . 2>/dev/null || true  # Ignore errors if nothing to remove
+          # Remove old files, then copy minified files & assets
+          git rm -rf . 2>/dev/null || true
           cp -r dist/* .
           rm -rf dist  # Cleanup
 
