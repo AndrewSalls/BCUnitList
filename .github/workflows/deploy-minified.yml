@@ -5,6 +5,9 @@ on:
     branches:
       - 'main'
 
+permissions:
+  contents: write
+
 jobs:
   checkout-minify-push:
     runs-on: ubuntu-latest
@@ -36,11 +39,12 @@ jobs:
       # Commit changes if files were modified
       - name: Commit and Push changes
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          # Set Git config for GitHub Actions
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Check for changes
-          git diff --exit-code || git commit -am "Automated minify of ${{ github.sha }}"
+          # Check if there are changes and commit them
+          git add .
+          git diff --cached --quiet || git commit -m "Automated minify of ${{ github.sha }}"
           
-          # Push changes to `pages` branch
           git push --force -u origin main:pages
