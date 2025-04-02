@@ -220,9 +220,9 @@ async function updateFromData(data) {
         data.orb.every(o => !o) &&
         !data.hidden && !data.favorited && window.localStorage.getItem(data.id)) {
             window.localStorage.removeItem(data.id);
+    } else {
+        window.localStorage.setItem(data.id, window.btoa(JSON.stringify(data)));
     }
-
-    window.localStorage.setItem(data.id, window.btoa(JSON.stringify(data)));
 }
 
 function getUnfiltedCategories(ignoreFilters) {

@@ -70,8 +70,6 @@ export default function makeDraggable(loadoutIconList, loadoutChangeCallback = n
             }
             const bBox = unit.getBoundingClientRect();
             mouseDownPos = { localX: ev.clientX - bBox.left, localY: ev.clientY - bBox.top, x: ev.pageX, y: ev.pageY };
-            console.log(bBox);
-            console.log(ev);
             target = unit;
             targetCallback = loadoutChangeCallback;
         });
