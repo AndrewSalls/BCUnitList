@@ -55,6 +55,9 @@ jobs:
           git rm -rf .
           cp -r dist/* .
 
+          # Clean up the dist folder
+          rm -rf dist
+
           # Ensure .nojekyll exists to allow underscore-prefixed files
           touch .nojekyll
 
