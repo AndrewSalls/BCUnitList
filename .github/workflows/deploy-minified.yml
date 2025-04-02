@@ -56,14 +56,18 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Create a worktree for the 'pages' branch
-          git fetch origin pages || git branch pages
-          git worktree add pages pages
+          # Ensure pages branch exists, or create it
+          if ! git ls-remote --exit-code --heads origin pages; then
+            git checkout --orphan pages
+          else
+            git checkout pages
+          fi
 
-          # Copy minified files to pages branch
-          rsync -av --delete dist/ pages/
+          # Remove old files, then copy minified files
+          git rm -rf . 2>/dev/null || true  # Ignore errors if nothing to remove
+          cp -r dist/* .
+          rm -rf dist  # Cleanup
 
-          cd pages
           touch .nojekyll  # Ensure GitHub Pages processes files properly
 
           if [[ -n $(git status --porcelain) ]]; then
@@ -73,6 +77,3 @@ jobs:
           else
             echo "No changes to commit"
           fi
-
-          cd ..
-          git worktree remove pages --force
