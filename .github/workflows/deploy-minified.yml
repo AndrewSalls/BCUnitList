@@ -27,12 +27,16 @@ jobs:
           find . -name "*.css" -exec cleancss -o {} {} \;
           find . -name "*.js" -exec terser --compress --mangle -o {} -- {} \;
 
-      - name: Push to Pages Branch
+      - name: Force Overwrite Pages Branch
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan pages
-          git reset --hard main  # Ensures files persist
-          git add .
-          git commit -m "Deploy minified site"
+          
+          git checkout pages || git checkout --orphan pages
+          git rm -rf .
+          git checkout main -- .
+          touch .nojekyll
+          git add --all
+
+          git commit -m "Deploy minified site" || echo "No changes to commit"
           git push -f origin pages
