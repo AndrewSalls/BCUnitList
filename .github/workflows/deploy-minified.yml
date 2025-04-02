@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: write  # Grants push access
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -15,11 +15,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure all branches are available
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Install Dependencies
-        run: |
-          npm install -g html-minifier terser clean-css-cli
+        run: npm ci
+
+      - name: Install Minifiers
+        run: npm install -g html-minifier terser clean-css-cli
 
       - name: Minify Files into Dist Directory
         run: |
@@ -43,24 +50,11 @@ jobs:
             terser --compress --mangle -o "dist/{}" -- "{}"
           ' \;
 
-      - name: Push Minified Files to Pages Branch
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Switch to pages branch, or create it if missing
-          git checkout pages || git checkout --orphan pages
-
-          # Remove old files, then copy minified files
-          git rm -rf .
-          cp -r dist/* .
-
-          # Clean up the dist folder
-          rm -rf dist
-
-          # Ensure .nojekyll exists to allow underscore-prefixed files
-          touch .nojekyll
-
-          git add --all
-          git commit -m "Deploy minified site" || echo "No changes to commit"
-          git push -f origin pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: pages
+          keep_files: false
+          force_orphan: true
