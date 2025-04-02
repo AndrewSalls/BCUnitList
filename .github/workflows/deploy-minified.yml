@@ -6,18 +6,26 @@ on:
       - main
 
 permissions:
-  contents: write  # Grants push access
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure all branches are available
+          fetch-depth: 0
 
-      - name: Install Dependencies
+      - name: Cache npm Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - name: Install Minification Tools
         run: |
           npm install -g html-minifier terser clean-css-cli
 
@@ -25,42 +33,46 @@ jobs:
         run: |
           mkdir -p dist
           
-          # Minify HTML
-          find . -name "*.html" -exec sh -c '
+          echo "Minifying HTML..."
+          find . -name "*.html" -type f -exec sh -c '
             mkdir -p "dist/$(dirname "{}")" &&
             html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o "dist/{}" "{}"
           ' \;
 
-          # Minify CSS
-          find . -name "*.css" -exec sh -c '
+          echo "Minifying CSS..."
+          find . -name "*.css" -type f -exec sh -c '
             mkdir -p "dist/$(dirname "{}")" &&
             cleancss -o "dist/{}" "{}"
           ' \;
 
-          # Minify JavaScript
-          find . -name "*.js" -exec sh -c '
+          echo "Minifying JavaScript..."
+          find . -name "*.js" -type f -exec sh -c '
             mkdir -p "dist/$(dirname "{}")" &&
             terser --compress --mangle -o "dist/{}" -- "{}"
           ' \;
 
-      - name: Push Minified Files to Pages Branch
+      - name: Deploy to GitHub Pages Branch
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Switch to pages branch, or create it if missing
-          git checkout pages || git checkout --orphan pages
+          # Create a worktree for the 'pages' branch
+          git fetch origin pages || git branch pages
+          git worktree add pages pages
 
-          # Remove old files, then copy minified files
-          git rm -rf .
-          cp -r dist/* .
+          # Copy minified files to pages branch
+          rsync -av --delete dist/ pages/
 
-          # Clean up the dist folder
-          rm -rf dist
+          cd pages
+          touch .nojekyll  # Ensure GitHub Pages processes files properly
 
-          # Ensure .nojekyll exists to allow underscore-prefixed files
-          touch .nojekyll
+          if [[ -n $(git status --porcelain) ]]; then
+            git add --all
+            git commit -m "Deploy minified site"
+            git push origin pages
+          else
+            echo "No changes to commit"
+          fi
 
-          git add --all
-          git commit -m "Deploy minified site" || echo "No changes to commit"
-          git push -f origin pages
+          cd ..
+          git worktree remove pages --force
