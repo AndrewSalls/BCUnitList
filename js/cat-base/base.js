@@ -6,7 +6,7 @@ export default function loadCannonInfo(settings) {
     defaultCannon.querySelector("label[data-input-type='0']").classList.add("hidden");
     defaultCannon.querySelector("label[data-input-type='1']").classList.add("hidden");
     wrapper.appendChild(defaultCannon);
-    for(let x = 2; x <= settings.ototo.count; x++) {
+    for(let x = 2; x <= settings.ototo.names.length; x++) {
         wrapper.appendChild(createBaseStyling(settings.ototo.names[x - 1], settings.ototo.cannon, settings.ototo.base, settings.ototo.style, x));
     }
 }

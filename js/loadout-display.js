@@ -205,7 +205,7 @@ async function loadLoadouts() {
     baseLeveling.append(cannon, style, foundation);
 
     const unlockedCannons = [];
-    for(let x = 0; x < settings.ototo.count; x++) {
+    for(let x = 0; x < settings.ototo.names.length; x++) {
         unlockedCannons[x] = { cannon: true, style: true, foundation: true };
     }
 

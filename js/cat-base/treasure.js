@@ -1,68 +1,32 @@
 export default function loadTreasureInfo(settings) {
     const treasureDiv = document.querySelector("#treasure-selector");
 
-    for(let c = 1; c <= 3; c++) {
-        const wrapper = document.createElement("div");
-        wrapper.classList.add("treasure-chapter");
-        wrapper.classList.add("v-align");
-
-        const title = document.createElement("h4");
-        title.textContent = `Empire of Cats ${c}`;
-        title.onclick = () => selectorWrapper.classList.toggle("hidden");
-
-        const selectorWrapper = document.createElement("div");
-        selectorWrapper.classList.add("treasure-wrapper");
-        selectorWrapper.classList.add("h-align");
-
-        for(let x = 0; x < settings.treasures.eoc.length; x++) {
-            selectorWrapper.appendChild(createTreasureSelector("eoc", x + 1, settings.treasures.eoc[x], c));
+    for(const chapterAbrv of Object.keys(settings.chapters)) {
+        for(let x = 0; x < settings.chapters[chapterAbrv].numberChapters; x++) {
+            treasureDiv.appendChild(createChapterBox(settings.chapters[chapterAbrv].name, chapterAbrv, x, settings.chapters[chapterAbrv].treasurePartCount));
         }
+    }
+}
 
-        wrapper.append(title, selectorWrapper);
-        treasureDiv.appendChild(wrapper);
+function createChapterBox(chapterName, chapterAbrv, chapterNum, treasurePartArray) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("treasure-chapter");
+    wrapper.classList.add("v-align");
+
+    const title = document.createElement("h4");
+    title.textContent = `${chapterName} ${chapterNum + 1}`;
+    title.onclick = () => selectorWrapper.classList.toggle("hidden");
+
+    const selectorWrapper = document.createElement("div");
+    selectorWrapper.classList.add("treasure-wrapper");
+    selectorWrapper.classList.add("h-align");
+
+    for(let x = 0; x < treasurePartArray.length; x++) {
+        selectorWrapper.appendChild(createTreasureSelector(chapterAbrv, x + 1, treasurePartArray[x], chapterNum));
     }
 
-    for(let c = 1; c <= 3; c++) {
-        const wrapper = document.createElement("div");
-        wrapper.classList.add("treasure-chapter");
-        wrapper.classList.add("v-align");
-
-        const title = document.createElement("h4");
-        title.textContent = `Into the Future ${c}`;
-        title.onclick = () => selectorWrapper.classList.toggle("hidden");
-
-        const selectorWrapper = document.createElement("div");
-        selectorWrapper.classList.add("treasure-wrapper");
-        selectorWrapper.classList.add("h-align");
-
-        for(let x = 0; x < settings.treasures.itf.length; x++) {
-            selectorWrapper.appendChild(createTreasureSelector("itf", x + 1, settings.treasures.itf[x], c));
-        }
-
-        wrapper.append(title, selectorWrapper);
-        treasureDiv.appendChild(wrapper);
-    }
-
-    for(let c = 1; c <= 3; c++) {
-        const wrapper = document.createElement("div");
-        wrapper.classList.add("treasure-chapter");
-        wrapper.classList.add("v-align");
-
-        const title = document.createElement("h4");
-        title.textContent = `Cats of the Cosmos ${c}`;
-        title.onclick = () => selectorWrapper.classList.toggle("hidden");
-
-        const selectorWrapper = document.createElement("div");
-        selectorWrapper.classList.add("treasure-wrapper");
-        selectorWrapper.classList.add("h-align");
-
-        for(let x = 0; x < settings.treasures.cotc.length; x++) {
-            selectorWrapper.appendChild(createTreasureSelector("cotc", x + 1, settings.treasures.cotc[x], c));
-        }
-
-        wrapper.append(title, selectorWrapper);
-        treasureDiv.appendChild(wrapper);
-    }
+    wrapper.append(title, selectorWrapper);
+    return wrapper;
 }
 
 function createTreasureSelector(location, id, treasureCount, chapterNum) {

@@ -35,7 +35,7 @@ function initializeContent() {
 async function loadLoadouts() {
     const settings = await makeRequest(REQUEST_TYPES.GET_SETTINGS, null).then(r => r);
 
-    const cannonTypeCount = settings.ototo.count;
+    const cannonTypeCount = settings.ototo.names.length;
     for(let x = 2; x <= cannonTypeCount; x++) {
         const cannonValues = window.localStorage.getItem(`oo_${x}`).split("-");
         unlockedCannons[x - 1] = { cannon: parseInt(cannonValues[0]) > 0, style: parseInt(cannonValues[1]) > 0, foundation: parseInt(cannonValues[2]) > 0 }

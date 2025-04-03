@@ -124,24 +124,16 @@ function initializeLocalStorage(settings, categories) {
     setIfUnset("gk-custom", "1");
 
     // Treasures --------------------------------------------
-    for(let p = 1; p <= 3; p++) {
-        for(let x = 0; x < settings.treasures.eoc.length; x++) {
-            setIfUnset(`eoc_${p}_${x + 1}`, "0-0-0");
-        }
-    }
-    for(let p = 1; p <= 3; p++) {
-        for(let x = 0; x < settings.treasures.itf.length; x++) {
-            setIfUnset(`itf_${p}_${x + 1}`, "0-0-0");
-        }
-    }
-    for(let p = 1; p <= 3; p++) {
-        for(let x = 0; x < settings.treasures.cotc.length; x++) {
-            setIfUnset(`cotc_${p}_${x + 1}`, "0-0-0");
+    for(const chapterAbrv of Object.keys(settings.chapters)) {
+        for(let x = 0; x < settings.chapters[chapterAbrv].numberChapters; x++) {
+            for(let y = 0; y < settings.chapters[chapterAbrv].treasurePartCount.length; y++) {
+                setIfUnset(`${chapterAbrv}_${x}_${y + 1}`, "0-0-0");
+            }
         }
     }
     
     // Base Development --------------------------------------------
-    for(let b = 1; b <= settings.ototo.count; b++) {
+    for(let b = 1; b <= settings.ototo.names.length; b++) {
         setIfUnset(`oo_${b}`, "0-0-0");
     }
     

@@ -3,13 +3,25 @@ export default {
     "gameVersion": "14.2.0",
     "unitCount": 786,
     "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782],
-    "treasures": {
-        "eoc": [7, 4, 5, 7, 3, 3, 3, 7, 6, 1, 2],
-        "eocNames": ["Energy Drink", "Giant Safe", "Relativity Clock", "Philosopher's Stone", "Smart Material Wall", "Super Register", "Legendary Cat Shield", "Legendary Cat Sword", "Energy Core", "Turbo Machine", "Management Bible"],
-        "itf": [8, 8, 3, 1, 5, 4, 4, 4, 4, 5, 2],
-        "itfNames": ["Aqua Crystal", "Plasma Crystal", "Ancient Tablet", "Mysterious Force", "Cosmic Energy", "Void Fruit", "Blood Fruit", "Sky Fruit", "Heaven's Fruit", "Time Machine", "Future Tech"],
-        "cotc": [5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 3],
-        "cotcNames": ["Stellar Garnet", "Phoebe Beryl", "Lunar Citrine", "Ganymede Topaz", "Callisto Amethyst", "Titanium Fruit", "Antimatter Fruit", "Enigma Fruit", "Dark Matter", "Neutrino", "Mystery Mask"]
+    "chapters": {
+        "eoc": {
+            "name": "Empire of Cats",
+            "treasureNames": ["Energy Drink", "Giant Safe", "Relativity Clock", "Philosopher's Stone", "Smart Material Wall", "Super Register", "Legendary Cat Shield", "Legendary Cat Sword", "Energy Core", "Turbo Machine", "Management Bible"],
+            "treasurePartCount": [7, 4, 5, 7, 3, 3, 3, 7, 6, 1, 2],
+            "numberChapters": 3
+        },
+        "itf": {
+            "name": "Into the Future",
+            "treasureNames": ["Aqua Crystal", "Plasma Crystal", "Ancient Tablet", "Mysterious Force", "Cosmic Energy", "Void Fruit", "Blood Fruit", "Sky Fruit", "Heaven's Fruit", "Time Machine", "Future Tech"],
+            "treasurePartCount": [8, 8, 3, 1, 5, 4, 4, 4, 4, 5, 2],
+            "numberChapters": 3
+        },
+        "cotc": {
+            "name": "Cats of the Cosmos",
+            "treasureNames": ["Stellar Garnet", "Phoebe Beryl", "Lunar Citrine", "Ganymede Topaz", "Callisto Amethyst", "Titanium Fruit", "Antimatter Fruit", "Enigma Fruit", "Dark Matter", "Neutrino", "Mystery Mask"],
+            "treasurePartCount": [5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 3],
+            "numberChapters": 3
+        },
     },
     "ototo": {
         "cannon": 30,
