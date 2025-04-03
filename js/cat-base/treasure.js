@@ -1,5 +1,3 @@
-const TREASURE_SLIDER_ORDER = { bronze: 0, silver: 1, gold: 2 };
-
 export default function loadTreasureInfo(settings) {
     const treasureDiv = document.querySelector("#treasure-selector");
 
@@ -24,7 +22,7 @@ function createChapterBox(chapterName, chapterAbrv, chapterNum, treasurePartArra
     selectorWrapper.classList.add("h-align");
 
     for(let x = 0; x < treasurePartArray.length; x++) {
-        selectorWrapper.appendChild(createTreasureSelector(chapterAbrv, x + 1, treasurePartArray[x], chapterNum));
+        selectorWrapper.appendChild(createTreasureSelector(chapterAbrv, x, treasurePartArray[x], chapterNum));
     }
 
     wrapper.append(title, selectorWrapper);
@@ -44,19 +42,18 @@ function createTreasureSelector(location, id, treasureCount, chapterNum) {
     treasureSliderBox.classList.add("treasure-slider-box");
     treasureSliderBox.dataset.sum = 0;
 
-    const localStorageKey = `${location}_${chapterNum}_${id}`;
-    const parsedTreasures = window.localStorage.getItem(localStorageKey).split("-");
+    const localStorageKey = `${location}_${chapterNum}`;
     treasureSliderBox.append(
-        createTreasureSlider("bronze", treasureCount, parsedTreasures[0], localStorageKey),
-        createTreasureSlider("silver", treasureCount, parsedTreasures[1], localStorageKey),
-        createTreasureSlider("gold", treasureCount, parsedTreasures[2], localStorageKey)
+        createTreasureSlider("bronze", treasureCount, 3 * id, localStorageKey),
+        createTreasureSlider("silver", treasureCount, 3 * id + 1, localStorageKey),
+        createTreasureSlider("gold", treasureCount, 3 * id + 2, localStorageKey)
     );
 
     wrapper.append(wrapperIMG, treasureSliderBox);
     return wrapper;
 }
 
-function createTreasureSlider(treasureType, max, initialValue, localStorageKey) {
+function createTreasureSlider(treasureType, max, index, localStorageKey) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("slider-wrapper");
     wrapper.classList.add("v-align");
@@ -64,16 +61,18 @@ function createTreasureSlider(treasureType, max, initialValue, localStorageKey) 
     const medalIMG = document.createElement("img");
     medalIMG.src = `./assets/img/treasure/${treasureType}.png`;
     
+    const treasureValue = window.localStorage.getItem(localStorageKey).split("-")[index];
+
     const slider = document.createElement("input");
     slider.classList.add(`slider-${treasureType}`);
     slider.type = "range";
     slider.min = 0;
     slider.max = max;
     slider.step = 1;
-    slider.value = initialValue;
+    slider.value = treasureValue;
 
     const sliderCount = document.createElement("p");
-    sliderCount.textContent = initialValue;
+    sliderCount.textContent = treasureValue;
 
     slider.addEventListener("input", _ => {
         const sum = parseInt(slider.parentElement.parentElement.dataset.sum);
@@ -95,7 +94,7 @@ function createTreasureSlider(treasureType, max, initialValue, localStorageKey) 
         sliderCount.textContent = slider.value;
 
         const parsedTreasures = window.localStorage.getItem(localStorageKey).split("-");
-        parsedTreasures[TREASURE_SLIDER_ORDER[treasureType]] = slider.value;
+        parsedTreasures[index] = slider.value;
         window.localStorage.setItem(localStorageKey, parsedTreasures.join("-"));
     });
 

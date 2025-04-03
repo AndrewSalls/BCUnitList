@@ -127,9 +127,7 @@ function initializeLocalStorage(settings, categories) {
     // Treasures --------------------------------------------
     for(const chapterAbrv of Object.keys(settings.chapters)) {
         for(let x = 0; x < settings.chapters[chapterAbrv].numberChapters; x++) {
-            for(let y = 0; y < settings.chapters[chapterAbrv].treasurePartCount.length; y++) {
-                setIfUnset(`${chapterAbrv}_${x}_${y + 1}`, "0-0-0");
-            }
+            setIfUnset(`${chapterAbrv}_${x}`, "-0-0-0".repeat(settings.chapters[chapterAbrv].treasurePartCount.length).substring(1));
         }
     }
     
