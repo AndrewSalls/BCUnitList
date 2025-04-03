@@ -106,21 +106,27 @@ export function appendChip(id, form, parent, saveCallback = null) {
     unitSearchInput.type = "text";
     unitSearchInput.placeholder = "Search...";
 
-    makeSearchable(unitSearchInput, searchID => {
-        const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${searchID}"]`);
-        formNameOptions.forEach(o => o.classList.add("global-hidden"));
+    makeRequest(REQUEST_TYPES.GET_SETTINGS, null).then(settings => {
+        makeSearchable(unitSearchInput, (searchID, searchForm) => {
+            const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${searchID}"]`);
+            formNameOptions.forEach(o => o.classList.add("global-hidden"));
 
-        wrapper.classList.add("set-unit");
-        wrapper.dataset.form = formNameOptions.length - 1;
-        wrapper.dataset.id = searchID;
-        wrapper.dataset.maxForm = formNameOptions.length - 1;
-        img.src = `./assets/img/unit_icon/${searchID}_${formNameOptions.length - 1}.png`;
-        pId.textContent = searchID;
-        pId.classList.remove("hidden");
-        removeButton.classList.remove("hidden");
-        unitSearchInput.classList.add("hidden");
-        sortIcons(parent);
-        saveCallback && saveCallback();
+            wrapper.classList.add("set-unit");
+            wrapper.dataset.form = searchForm;
+            wrapper.dataset.id = searchID;
+            wrapper.dataset.maxForm = formNameOptions.length - 1;
+            if(settings.skipImages.includes(searchID)) {
+                img.src = "./assets/img/unit_icon/unknown.png";
+            } else {
+                img.src = `./assets/img/unit_icon/${searchID}_${searchForm}.png`;
+            }
+            pId.textContent = searchID;
+            pId.classList.remove("hidden");
+            removeButton.classList.remove("hidden");
+            unitSearchInput.classList.add("hidden");
+            sortIcons(parent);
+            saveCallback && saveCallback();
+        });
     });
 
     if(id !== null && form !== null) {

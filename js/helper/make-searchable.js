@@ -27,12 +27,14 @@ export default function makeSearchable(input, findCallback) {
     input.addEventListener("focus", displayDropdown);
     input.addEventListener("blur", _ev => {
         suggestionDropdown.classList.add("invisible");
+        suggestionDropdown.top = "-10000000px";
+        suggestionDropdown.left = "-10000000px";
     });
     input.addEventListener("suggest", v => {
         input.value = "";
         input.blur();
         suggestionDropdown.querySelectorAll(".hidden").forEach(s => s.classList.remove("hidden"));
-        findCallback(v.detail);
+        findCallback(v.detail.id, v.detail.form);
     });
     input.addEventListener("keydown", ev => {
         if(ev.key === "ArrowUp") {
@@ -82,25 +84,29 @@ export default function makeSearchable(input, findCallback) {
     input.addEventListener("keyup", ev => {
         if(ev.key === "Enter") {
             let id = -1;
+            let form = -1;
 
             const hovered = suggestionDropdown.querySelector(".suggestion-hovered")
             if(hovered) {
                 id = parseInt(hovered.dataset.target);
+                form = parseInt(hovered.dataset.form);
             } else if(!isNaN(input.value)) {
                 id = parseInt(input.value);
                 if(id < 0 || id > parseInt(suggestionDropdown.dataset.max_count) || !suggestionDropdown.querySelector(`div[data-target="${id}"]`)) {
                     return;
                 }
+                form = parseInt([...suggestionDropdown.querySelectorAll(`div[data-target="${id}"]`)].reduce((a, b) => parseInt(b.dataset.form) - parseInt(a.dataset.form)).dataset.form);
             } else {
                 const idEntry = suggestionDropdown.querySelector(`div[data-content="${input.value.trim().toLowerCase()}"]`);
                 if(idEntry) {
                     id = parseInt(idEntry.dataset.target);
+                    form = parseInt(idEntry.dataset.form);
                 } else {
                     return;
                 }
             }
         
-            findCallback(id);
+            findCallback(id, form);
             input.value = "";
             input.blur();
             suggestionDropdown.querySelectorAll(".hidden").forEach(s => s.classList.remove("hidden"));
@@ -171,7 +177,7 @@ function  createSearchOption(text, id, form, datalist) {
 
     option.addEventListener("mouseenter", () => suggestionOption_onEnter(option, datalist));
     option.addEventListener("mouseleave", () => option.classList.remove("suggestion-hovered"));
-    option.addEventListener("mousedown", () => targettedInput?.dispatchEvent(new CustomEvent("suggest", { detail: id })));
+    option.addEventListener("mousedown", () => targettedInput?.dispatchEvent(new CustomEvent("suggest", { detail: { id: id, form: form } })));
 
     return option;
 }
