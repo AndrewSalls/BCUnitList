@@ -1,3 +1,5 @@
+const TREASURE_SLIDER_ORDER = { bronze: 0, silver: 1, gold: 2 };
+
 export default function loadTreasureInfo(settings) {
     const treasureDiv = document.querySelector("#treasure-selector");
 
@@ -54,7 +56,6 @@ function createTreasureSelector(location, id, treasureCount, chapterNum) {
     return wrapper;
 }
 
-const TYPE_MAP = { bronze: 0, silver: 1, gold: 2 };
 function createTreasureSlider(treasureType, max, initialValue, localStorageKey) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("slider-wrapper");
@@ -94,7 +95,7 @@ function createTreasureSlider(treasureType, max, initialValue, localStorageKey) 
         sliderCount.textContent = slider.value;
 
         const parsedTreasures = window.localStorage.getItem(localStorageKey).split("-");
-        parsedTreasures[TYPE_MAP[treasureType]] = slider.value;
+        parsedTreasures[TREASURE_SLIDER_ORDER[treasureType]] = slider.value;
         window.localStorage.setItem(localStorageKey, parsedTreasures.join("-"));
     });
 

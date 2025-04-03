@@ -15,7 +15,7 @@ export function initializeOrbSelection() {
             resultOrbColor.src = trait.querySelector("img").src;
             resultOrbColor.dataset.trait = trait.dataset.trait;
 
-            if(resultOrbColor.dataset.trait !== "none" && resultOrbType.dataset.type !== "none" && resultOrbRank.dataset.rank !== "none") {
+            if(resultOrbColor.dataset.trait && resultOrbType.dataset.type && resultOrbRank.dataset.rank) {
                 attachOrb.disabled = false;
             }
         };
@@ -31,7 +31,7 @@ export function initializeOrbSelection() {
             resultOrbType.classList.remove("invisible");
             resultOrbType.dataset.type = type.dataset.type;
 
-            if(resultOrbColor.dataset.trait !== "none" && resultOrbType.dataset.type !== "none" && resultOrbRank.dataset.rank !== "none") {
+            if(resultOrbColor.dataset.trait && resultOrbType.dataset.type && resultOrbRank.dataset.rank) {
                 attachOrb.disabled = false;
             }
         };
@@ -47,7 +47,7 @@ export function initializeOrbSelection() {
             resultOrbRank.classList.remove("invisible");
             resultOrbRank.dataset.rank = rank.dataset.rank;
 
-            if(resultOrbColor.dataset.trait !== "none" && resultOrbType.dataset.type !== "none" && resultOrbRank.dataset.rank !== "none") {
+            if(resultOrbColor.dataset.trait && resultOrbType.dataset.type && resultOrbRank.dataset.rank) {
                 attachOrb.disabled = false;
             }
         };
@@ -88,8 +88,8 @@ export function openOrbSelectionModal(target) {
     const rank = target.querySelector(".orb-rank");
 
     resultColor.src = color.src;
-    if(color.dataset.trait === "none") {
-        resultColor.dataset.trait = "none";
+    if(!color.dataset.trait) {
+        resultColor.dataset.trait = "";
         document.querySelector("#trait-selection").querySelector(".orb-selected")?.classList.remove("orb-selected");
     } else {
         resultColor.dataset.trait = color.dataset.trait;
@@ -99,7 +99,7 @@ export function openOrbSelectionModal(target) {
     if(type.classList.contains("invisible")) {
         resultType.src = "";
         resultType.classList.add("invisible");
-        resultType.dataset.type = "none";
+        resultType.dataset.type = "";
         document.querySelector("#type-selection").querySelector(".orb-selected")?.classList.remove("orb-selected");
     } else {
         resultType.src = type.src;
@@ -111,7 +111,7 @@ export function openOrbSelectionModal(target) {
     if(rank.classList.contains("invisible")) {
         resultRank.src = "";
         resultRank.classList.add("invisible");
-        resultRank.dataset.rank = "none";
+        resultRank.dataset.rank = "";
         document.querySelector("#rank-selection").querySelector(".orb-selected")?.classList.remove("orb-selected");
     } else {
         resultRank.src = rank.src;
@@ -120,7 +120,7 @@ export function openOrbSelectionModal(target) {
         document.querySelector("#rank-selection").querySelector(`img[data-rank="${rank.dataset.rank}"]`).click();
     }
 
-    if(resultColor.dataset.trait !== "none" && resultType.dataset.type !== "none" && resultRank.dataset.rank !== "none") {
+    if(resultColor.dataset.trait && resultType.dataset.type && resultRank.dataset.rank) {
         attachOrb.disabled = false;
     } else {
         attachOrb.disabled = true;
@@ -128,12 +128,12 @@ export function openOrbSelectionModal(target) {
 
     modal.querySelector("#remove-orb").onclick = () => {
         color.src = "./assets/img/orb/empty-orb.png";
-        color.dataset.trait = "none";
+        color.dataset.trait = "";
         type.src = "";
-        type.dataset.type = "none";
+        type.dataset.type = "";
         type.classList.add("invisible");
         rank.src = "";
-        rank.dataset.rank = "none";
+        rank.dataset.rank = "";
         rank.classList.add("invisible");
         target.dispatchEvent(new Event("change"));
         modal.classList.add("hidden");

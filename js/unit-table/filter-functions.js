@@ -16,7 +16,6 @@ export const isFullyEvolved = r => {
     const formIcon = r.querySelector(".row-image");
     return formIcon.dataset.form === formIcon.dataset.max_form;
 };
-export const isNotFullyEvolved = r => !isFullyEvolved(r);
 
 /* -------------------------- Level Filter Functions -------------------------- */
 export const isMaxLevel = r => {
@@ -52,24 +51,6 @@ export const isTalentable = r => r.querySelectorAll(".regular-talent").length > 
 export const isUltraTalentable = r => r.querySelectorAll(".ultra-talent").length > 0;
 /* -------------------------- Orb Filter Functions -------------------------- */
 
-export const isRedOrb = r => r.querySelectorAll(".orb-color[data-trait='Red']").length > 0;
-export const isFloatingOrb = r => r.querySelectorAll(".orb-color[data-trait='Floating']").length > 0;
-export const isBlackOrb = r => r.querySelectorAll(".orb-color[data-trait='Black']").length > 0;
-export const isMetalOrb = r => r.querySelectorAll(".orb-color[data-trait='Metal']").length > 0;
-export const isAngelOrb = r => r.querySelectorAll(".orb-color[data-trait='Angel']").length > 0;
-export const isAlienOrb = r => r.querySelectorAll(".orb-color[data-trait='Alien']").length > 0;
-export const isZombieOrb = r => r.querySelectorAll(".orb-color[data-trait='Zombie']").length > 0;
-export const isRelicOrb = r => r.querySelectorAll(".orb-color[data-trait='Relic']").length > 0;
-export const isAkuOrb = r => r.querySelectorAll(".orb-color[data-trait='Aku']").length > 0;
-
-export const isAttackOrb = r => r.querySelectorAll(".orb-type[data-type='Attack']").length > 0;
-export const isDefenseOrb = r => r.querySelectorAll(".orb-type[data-type='Defense']").length > 0;
-export const isMassiveDamageOrb = r => r.querySelectorAll(".orb-type[data-type='Massive Damage']").length > 0;
-export const isResistantOrb = r => r.querySelectorAll(".orb-type[data-type='Resistant']").length > 0;
-export const isToughOrb = r => r.querySelectorAll(".orb-type[data-type='Tough']").length > 0;
-
-export const isDRankOrb = r => r.querySelectorAll(".orb-rank[data-rank='D']").length > 0;
-export const isCRankOrb = r => r.querySelectorAll(".orb-rank[data-rank='C']").length > 0;
-export const isBRankOrb = r => r.querySelectorAll(".orb-rank[data-rank='B']").length > 0;
-export const isARankOrb = r => r.querySelectorAll(".orb-rank[data-rank='A']").length > 0;
-export const isSRankOrb = r => r.querySelectorAll(".orb-rank[data-rank='S']").length > 0;
+export const isOrbTrait = (r, x) => r.querySelectorAll(`.orb-color[data-trait='${x}']`).length > 0;
+export const isOrbType = (r, x) => r.querySelectorAll(`.orb-type[data-type='${x}']`).length > 0;
+export const isOrbRank = (r, x) => r.querySelectorAll(`.orb-rank[data-rank='${x}']`).length > 0;

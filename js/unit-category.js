@@ -281,16 +281,16 @@ function copyUpdatedValues(values, toUpdate) {
         const type = orbs[x].querySelector(".orb-type");
         const rank = orbs[x].querySelector(".orb-rank");
 
-        if(values.orb[x] === null) {
-            trait.dataset.trait = "none";
+        if(!values.orb[x]) {
+            trait.dataset.trait = "";
             trait.src = "./assets/img/orb/empty-orb.png";
 
             type.classList.add("invisible");
-            type.dataset.type = "none";
+            type.dataset.type = "";
             type.src = "";
 
             rank.classList.add("invisible");
-            rank.dataset.rank = "none";
+            rank.dataset.rank = "";
             rank.src = "";
 
             continue;

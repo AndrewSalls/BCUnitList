@@ -1,7 +1,7 @@
 import createArrowNumberBox from "./cat-base/arrow-box.js";
 import { getValuesFromRow } from "./helper/link-row.js";
 import { initializeDataset } from "./helper/make-searchable.js";
-import { decodeLink, encodeDirectLink } from "./helper/share-loadout.js";
+import { decodeLink, encodeDirectLink } from "./helper/encoder.js";
 import { createMinimalLoadout } from "./unit-table/creation/create-loadout-table.js";
 import createRow from "./unit-table/creation/create-unit-row.js";
 import createSearchableTable from "./unit-table/creation/create-unit-table.js";

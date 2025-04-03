@@ -1,5 +1,5 @@
 import { initializeDatasetLimited } from "./helper/make-searchable.js";
-import { encodeLink } from "./helper/share-loadout.js";
+import { encodeLink } from "./helper/encoder.js";
 import { createMinimalLoadout } from "./unit-table/creation/create-loadout-table.js";
 
 let unlockedCannons = [];

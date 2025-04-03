@@ -1,5 +1,7 @@
 import { observeRowChange } from "../helper/link-row.js";
 import * as filterFunctions from "./filter-functions.js";
+import * as orbData from "../../../assets/orb-map.js";
+const ORB_DATA = orbData.default;
 
 let topPos = 0;
 export function initializeTableModal() {
@@ -156,7 +158,7 @@ function initializeFormFilters() {
     registerFilter(filterWrapper.querySelector("#true-filter"), filterFunctions.isTrueForm);
     registerFilter(filterWrapper.querySelector("#ultra-filter"), filterFunctions.isUltraForm);
     registerFilter(filterWrapper.querySelector("#fully-evolved-filter"), filterFunctions.isFullyEvolved);
-    registerFilter(filterWrapper.querySelector("#not-fully-evolved-filter"), filterFunctions.isNotFullyEvolved);
+    registerFilter(filterWrapper.querySelector("#not-fully-evolved-filter"), r => !filterFunctions.isFullyEvolved(r));
 }
 
 function initializeLevelFilters() {
@@ -192,33 +194,23 @@ function initializeOrbFilters() {
 function initializeOrbTraitFilters() {
     const filterWrapper = document.querySelector("#table-filter-options");
 
-    registerFilter(filterWrapper.querySelector("#red-filter"), filterFunctions.isRedOrb);
-    registerFilter(filterWrapper.querySelector("#floating-filter"), filterFunctions.isFloatingOrb);
-    registerFilter(filterWrapper.querySelector("#black-filter"), filterFunctions.isBlackOrb);
-    registerFilter(filterWrapper.querySelector("#metal-filter"), filterFunctions.isMetalOrb);
-    registerFilter(filterWrapper.querySelector("#angel-filter"), filterFunctions.isAngelOrb);
-    registerFilter(filterWrapper.querySelector("#alien-filter"), filterFunctions.isAlienOrb);
-    registerFilter(filterWrapper.querySelector("#zombie-filter"), filterFunctions.isZombieOrb);
-    registerFilter(filterWrapper.querySelector("#relic-filter"), filterFunctions.isRelicOrb);
-    registerFilter(filterWrapper.querySelector("#aku-filter"), filterFunctions.isAkuOrb);
+    for(let x = 0; x < ORB_DATA.traits.length; x++) {
+        registerFilter(filterWrapper.querySelector(`#trait-${x}-filter`), r => filterFunctions.isOrbTrait(r, x));
+    }
 }
 
 function initializeOrbTypeFilters() {
     const filterWrapper = document.querySelector("#table-filter-options");
 
-    registerFilter(filterWrapper.querySelector("#attack-filter"), filterFunctions.isAttackOrb);
-    registerFilter(filterWrapper.querySelector("#defense-filter"), filterFunctions.isDefenseOrb);
-    registerFilter(filterWrapper.querySelector("#massive-filter"), filterFunctions.isMassiveDamageOrb);
-    registerFilter(filterWrapper.querySelector("#resist-filter"), filterFunctions.isResistantOrb);
-    registerFilter(filterWrapper.querySelector("#tough-filter"), filterFunctions.isToughOrb);
+    for(let x = 0; x < ORB_DATA.types.length; x++) {
+        registerFilter(filterWrapper.querySelector(`#type-${x}-filter`), r => filterFunctions.isOrbType(r, x));
+    }
 }
 
 function initializeOrbRankFilters() {
     const filterWrapper = document.querySelector("#table-filter-options");
 
-    registerFilter(filterWrapper.querySelector("#d-rank-filter"), filterFunctions.isDRankOrb);
-    registerFilter(filterWrapper.querySelector("#c-rank-filter"), filterFunctions.isCRankOrb);
-    registerFilter(filterWrapper.querySelector("#b-rank-filter"), filterFunctions.isBRankOrb);
-    registerFilter(filterWrapper.querySelector("#a-rank-filter"), filterFunctions.isARankOrb);
-    registerFilter(filterWrapper.querySelector("#s-rank-filter"), filterFunctions.isSRankOrb);
+    for(let x = 0; x < ORB_DATA.ranks.length; x++) {
+        registerFilter(filterWrapper.querySelector(`#rank-${x}-filter`), r => filterFunctions.isOrbRank(r, x));
+    }
 }

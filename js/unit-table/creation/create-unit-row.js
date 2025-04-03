@@ -163,9 +163,9 @@ export function createOrbBox(existingOrbs, orbAmount) {
     }
 
     return [rowOrb, orbAmount > 0 ? () => {
-        horizontalAlign.querySelectorAll(".orb-color").forEach(oc => { oc.dataset.trait = "none"; oc.src = "./assets/img/orb/empty-orb.png"; });
-        horizontalAlign.querySelectorAll(".orb-type").forEach(ot => { ot.dataset.type = "none"; ot.src = ""; ot.classList.add("invisible"); });
-        horizontalAlign.querySelectorAll(".orb-rank").forEach(or => { or.dataset.rank = "none"; or.src = ""; or.classList.add("invisible"); });
+        horizontalAlign.querySelectorAll(".orb-color").forEach(oc => { oc.dataset.trait = ""; oc.src = "./assets/img/orb/empty-orb.png"; });
+        horizontalAlign.querySelectorAll(".orb-type").forEach(ot => { ot.dataset.type = ""; ot.src = ""; ot.classList.add("invisible"); });
+        horizontalAlign.querySelectorAll(".orb-rank").forEach(or => { or.dataset.rank = ""; or.src = ""; or.classList.add("invisible"); });
     } : null];
 }
 

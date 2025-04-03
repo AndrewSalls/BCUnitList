@@ -1,3 +1,6 @@
+import * as orbData from "../../../assets/orb-map.js";
+const ORB_DATA = orbData.default;
+
 export default function createOrbMenu() {
     const modalBG = document.createElement("div");
     modalBG.id = "orb-selection-modal";
@@ -63,31 +66,23 @@ export default function createOrbMenu() {
 function createTraitSelectionSubmenu() {
     const wrapper = document.createElement("div");
     wrapper.id = "trait-selection";
-    wrapper.append(
-        createTraitSelector("red", "Red"),
-        createTraitSelector("floating", "Floating"),
-        createTraitSelector("black", "Black"),
-        createTraitSelector("metal", "Metal"),
-        createTraitSelector("angel", "Angel"),
-        createTraitSelector("alien", "Alien"),
-        createTraitSelector("zombie", "Zombie"),
-        createTraitSelector("relic", "Relic"),
-        createTraitSelector("aku", "Aku")
-    );
+    for(let x = 0; x < ORB_DATA.traits.length; x++) {
+        wrapper.appendChild(createTraitSelector(x, ORB_DATA.traits[x]));
+    }
 
     return wrapper;
 }
 
-function createTraitSelector(traitData, traitTitle) {
+function createTraitSelector(traitID, traitTitle) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("image-selector");
-    wrapper.dataset.trait = traitData;
+    wrapper.dataset.trait = traitID;
 
     const title = document.createElement("h4");
     title.textContent = traitTitle;
 
     const traitImg = document.createElement("img");
-    traitImg.src = `./assets/img/orb/${traitData}.png`;
+    traitImg.src = `./assets/img/orb/trait/${traitID}.png`;
     traitImg.title = traitTitle;
 
     wrapper.append(title, traitImg);
@@ -97,27 +92,23 @@ function createTraitSelector(traitData, traitTitle) {
 function createTypeSelectionSubmenu() {
     const wrapper = document.createElement("div");
     wrapper.id = "type-selection";
-    wrapper.append(
-        createTypeSelector("atk", "Attack"),
-        createTypeSelector("def", "Defense"),
-        createTypeSelector("massive", "Massive Damage"),
-        createTypeSelector("resistant", "Resistant"),
-        createTypeSelector("tough", "Tough Vs.")
-    );
+    for(let x = 0; x < ORB_DATA.types.length; x++) {
+        wrapper.appendChild(createTypeSelector(x, ORB_DATA.types[x]));
+    }
 
     return wrapper;
 }
 
-function createTypeSelector(typeData, typeTitle) {
+function createTypeSelector(typeID, typeTitle) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("image-selector");
-    wrapper.dataset.type = typeData;
+    wrapper.dataset.type = typeID;
 
     const title = document.createElement("h4");
     title.textContent = typeTitle;
 
     const typeImg = document.createElement("img");
-    typeImg.src = `./assets/img/orb/${typeData}.png`;
+    typeImg.src = `./assets/img/orb/type/${typeID}.png`;
     typeImg.title = typeTitle;
 
     wrapper.append(title, typeImg);
@@ -127,22 +118,18 @@ function createTypeSelector(typeData, typeTitle) {
 function createRankSelectionSubmenu() {
     const wrapper = document.createElement("div");
     wrapper.id = "rank-selection";
-    wrapper.append(
-        createRankSelector("d", "D"),
-        createRankSelector("c", "C"),
-        createRankSelector("b", "B"),
-        createRankSelector("a", "A"),
-        createRankSelector("s", "S")
-    );
+    for(let x = 0; x < ORB_DATA.ranks.length; x++) {
+        wrapper.appendChild(createRankSelector(x, ORB_DATA.ranks[x]));
+    }
 
     return wrapper;
 }
 
-function createRankSelector(imgData, imgTitle) {
+function createRankSelector(imgID, imgTitle) {
     const img = document.createElement("img");
 
-    img.src = `./assets/img/orb/${imgData}.png`;
-    img.dataset.rank = imgData;
+    img.src = `./assets/img/orb/rank/${imgID}.png`;
+    img.dataset.rank = imgID;
     img.title = imgTitle;
 
     return img;

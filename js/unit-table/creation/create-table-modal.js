@@ -1,5 +1,7 @@
 import { getModalTarget } from "../filter-units.js";
 import { gameSortLambda, sortRows } from "../sort-units.js";
+import * as orbData from "../../../assets/orb-map.js";
+const ORB_DATA = orbData.default;
 
 export default function createTableOptionModal() {
     const modal = document.createElement("div");
@@ -156,29 +158,11 @@ function createFilterSelection() {
         createModalButton("Cannot Have any Ultra Talents", "utless-filter", "Can't Have UTs")
     ]));
 
-    filterButtonCollection.appendChild(createModalButtonSuperGroup("Talent Orbs", [
-        createModalButton("Has Anti-Red Orb Equipped", "red-filter", "Red"),
-        createModalButton("Has Anti-Floating Orb Equipped", "floating-filter", "Floating"),
-        createModalButton("Has Anti-Black Orb Equipped", "black-filter", "Black"),
-        createModalButton("Has Anti-Metal Orb Equipped", "metal-filter", "Metal"),
-        createModalButton("Has Anti-Angel Orb Equipped", "angel-filter", "Angel"),
-        createModalButton("Has Anti-Alien Orb Equipped", "alien-filter", "Alien"),
-        createModalButton("Has Anti-Zombie Orb Equipped", "zombie-filter", "Zombie"),
-        createModalButton("Has Anti-Relic Orb Equipped", "relic-filter", "Relic"),
-        createModalButton("Has Anti-Aku Orb Equipped", "aku-filter", "Aku")
-    ], [
-        createModalButton("Has Attack Orb Equipped", "attack-filter", "Attack"),
-        createModalButton("Has Defense Orb Equipped", "defense-filter", "Defense"),
-        createModalButton("Has Massive Damage Orb Equipped", "massive-filter", "Massive Damage"),
-        createModalButton("Has Resistant Orb Equipped", "resist-filter", "Resistant"),
-        createModalButton("Has Tough Orb Equipped", "tough-filter", "Tough")
-    ], [
-        createModalButton("Has D Rank Orb Equipped", "d-rank-filter", "D"),
-        createModalButton("Has C Rank Orb Equipped", "c-rank-filter", "C"),
-        createModalButton("Has B Rank Orb Equipped", "b-rank-filter", "B"),
-        createModalButton("Has A Rank Orb Equipped", "a-rank-filter", "A"),
-        createModalButton("Has S Rank Orb Equipped", "s-rank-filter", "S")
-    ]));
+    const traitModals = ORB_DATA.traits.map((t, i) => createModalButton(`Has Anti-${t} Orb Equipped`, `trait-${i}-filter`, t));
+    const typeModals = ORB_DATA.types.map((t, i) => createModalButton(`Has ${t} Orb Equipped`, `type-${i}-filter`, t));
+    const rankModals = ORB_DATA.ranks.map((r, i) => createModalButton(`Has ${r} Rank Orb Equipped`, `rank-${i}-filter`, r));
+
+    filterButtonCollection.appendChild(createModalButtonSuperGroup("Talent Orbs", traitModals, typeModals, rankModals));
 
     wrapper.append(label, filterButtonCollection);
     return wrapper;

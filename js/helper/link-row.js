@@ -38,7 +38,7 @@ export function getValuesFromRow(row) {
     const orbs = [...row.querySelectorAll(".orb-selector")];
     if(orbs.length > 0) {
         output.orb = orbs.map(o => {
-            if(o.querySelector(".orb-color").dataset.trait === "none") {
+            if(!o.querySelector(".orb-color").dataset.trait) {
                 return null;
             }
 

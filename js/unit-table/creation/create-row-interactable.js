@@ -127,17 +127,17 @@ export function createOrbInteractable(orbData) {
 
     if(orbData) {
         orbColor.dataset.trait = orbData.trait;
-        orbColor.src = `./assets/img/orb/${orbData.trait}.png`;
+        orbColor.src = `./assets/img/orb/trait/${orbData.trait}.png`;
         orbType.dataset.type = orbData.type;
-        orbType.src = `./assets/img/orb/${orbData.type}.png`;
+        orbType.src = `./assets/img/orb/type/${orbData.type}.png`;
         orbRank.dataset.rank = orbData.rank;
-        orbRank.src = `./assets/img/orb/${orbData.rank}.png`;
+        orbRank.src = `./assets/img/orb/rank/${orbData.rank}.png`;
     } else {
-        orbColor.dataset.trait = "none";
+        orbColor.dataset.trait = "";
         orbColor.src = "./assets/img/orb/empty-orb.png";
-        orbType.dataset.type = "none";
+        orbType.dataset.type = "";
         orbType.classList.add("invisible");
-        orbRank.dataset.rank = "none";
+        orbRank.dataset.rank = "";
         orbRank.classList.add("invisible");
     }
 
