@@ -107,11 +107,16 @@ function createTypeSelector(typeID, typeTitle) {
     const title = document.createElement("h4");
     title.textContent = typeTitle;
 
+    const typeImgWrapper = document.createElement("div");
+    typeImgWrapper.classList.add("type-shrinkwrap");
+
     const typeImg = document.createElement("img");
     typeImg.src = `./assets/img/orb/type/${typeID}.png`;
     typeImg.title = typeTitle;
 
-    wrapper.append(title, typeImg);
+    typeImgWrapper.appendChild(typeImg);
+
+    wrapper.append(title, typeImgWrapper);
     return wrapper;
 }
 
@@ -126,11 +131,19 @@ function createRankSelectionSubmenu() {
 }
 
 function createRankSelector(imgID, imgTitle) {
+    const superWrapper = document.createElement("div");
+    superWrapper.classList.add("rank-shrinkwrap");
+
+    const wrapper = document.createElement("div");
+
     const img = document.createElement("img");
 
     img.src = `./assets/img/orb/rank/${imgID}.png`;
     img.dataset.rank = imgID;
     img.title = imgTitle;
 
-    return img;
+    wrapper.appendChild(img);
+    superWrapper.appendChild(wrapper);
+
+    return superWrapper;
 }
