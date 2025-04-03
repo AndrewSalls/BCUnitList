@@ -14,6 +14,7 @@ const REQUEST_TYPES = {
     GET_NAMES: "get_names",
     GET_OWNED_FORM_NAMES: "get_owned_names",
     GET_CATEGORY_NAMES: "get_category_names",
+    GET_CATEGORY_ORDER: "get_category_orders",
     GET_SETTINGS: "get_settings",
 
     MODIFY_CUSTOM_CATEGORY: "modify_custom_category",

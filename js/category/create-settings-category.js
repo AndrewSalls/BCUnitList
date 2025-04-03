@@ -1,25 +1,25 @@
 import { parseSnakeCase } from "./category-parser.js";
 
-export function createSubCategoryButton(superCategoryName, subCategoryName) {
-    const key = `${superCategoryName}-${subCategoryName}`;
+export function createSubCategoryButton(superCategoryName, subCategoryName, localStoragePosition) {
+    const key = `gk-${superCategoryName}`;
 
     const subButton = document.createElement("button");
     subButton.type = "button";
     subButton.classList.add("filter-button");
     subButton.textContent = subCategoryName;
 
-    if(!window.localStorage.getItem(key)) {
-        window.localStorage.setItem(key, "1");
-    }
-    subButton.classList.toggle("active", window.localStorage.getItem(key) === "0");
+    subButton.classList.toggle("active", window.localStorage.getItem(key).charAt(localStoragePosition) === "0");
     subButton.addEventListener("click", () => {
-        window.localStorage.setItem(key, subButton.classList.toggle("active") ? "0" : "1");
+        let previous = window.localStorage.getItem(key);
+        previous = previous.substring(0, localStoragePosition) + (previous.charAt(localStoragePosition) === "0" ? "1" : "0") + previous.substring(localStoragePosition + 1);
+        window.localStorage.setItem(key, previous);
+        subButton.classList.toggle("active");
     });
 
     return subButton;
 }
 
-export function createSuperCategoryButton(superCategoryName, categoryData) {
+export function createSuperCategoryButton(superCategoryName, categoryData, categoryOrder) {
     const superKey = `gk-${superCategoryName}`;
     
     const wrapper = document.createElement("div");
@@ -32,12 +32,12 @@ export function createSuperCategoryButton(superCategoryName, categoryData) {
     superButton.classList.add("super-category-button");
     superButton.textContent = parseSnakeCase(superCategoryName);
 
-    if(!window.localStorage.getItem(superKey)) {
-        window.localStorage.setItem(superKey, "1");
-    }
-    superButton.classList.toggle("active", window.localStorage.getItem(superKey) === "0");
+    superButton.classList.toggle("active", window.localStorage.getItem(superKey).charAt(0) === "0");
     superButton.addEventListener("click", () => {
-        window.localStorage.setItem(superKey, superButton.classList.toggle("active") ? "0" : "1");
+        let previous = window.localStorage.getItem(superKey);
+        previous = (previous.charAt(0) === "0" ? "1" : "0") + previous.substring(1);
+        window.localStorage.setItem(superKey, previous);
+        superButton.classList.toggle("active");
     });
 
     const subWrapper = document.createElement("div");
@@ -45,7 +45,7 @@ export function createSuperCategoryButton(superCategoryName, categoryData) {
     subWrapper.classList.add("sub-category-wrapper");
 
     for(const subCategory of Object.keys(categoryData[superCategoryName]).sort()) {
-        subWrapper.appendChild(createSubCategoryButton(superCategoryName, subCategory));
+        subWrapper.appendChild(createSubCategoryButton(superCategoryName, subCategory, categoryOrder.indexOf(subCategory) + 1));
     }
 
     wrapper.append(superButton, subWrapper);

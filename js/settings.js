@@ -62,12 +62,15 @@ function finishSetup() {
 
     const selection = document.querySelector("#category-selection");
     selection.classList.add("hidden");
-    makeRequest(REQUEST_TYPES.GET_CATEGORY_NAMES, null, true).then(names => {
+    (async () => {
+        const names = await makeRequest(REQUEST_TYPES.GET_CATEGORY_NAMES, null, true);
+        const nameOrder = await makeRequest(REQUEST_TYPES.GET_CATEGORY_ORDER, null, true);
+
         for(const superCategory of Object.keys(names).sort()) {
-            selection.appendChild(createSuperCategoryButton(superCategory, names));
+            selection.appendChild(createSuperCategoryButton(superCategory, names, nameOrder[superCategory]));
         }
         selection.classList.remove("hidden");
-    });
+    })();
 }
 
 function openWarningModal(warningText, warningAction, confirmCallback, showFileSelector = false) {

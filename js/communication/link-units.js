@@ -7,6 +7,7 @@ import * as settingsInitial from "../../assets/settings.js";
 let unitData = [];
 let upgradeData = [];
 let categories = {};
+let categoryOrders = {};
 let loadouts = [];
 let settings = {};
 
@@ -18,6 +19,9 @@ export default async function initializeData() {
         const { upData, upUR } = parseUpgrades(settings);
         upgradeData = upData;
         categories = await parseAllCategories();
+        for(const superCategory of Object.keys(categories)) {
+            categoryOrders[superCategory] = Object.keys(categories[superCategory]).sort((ka, kb) => categories[superCategory][ka][0] - categories[superCategory][kb][0]);
+        }
         const { units, ur } = await getUnitData(categories, settings);
         loadouts = parseLoadouts();
         unitData = units;
@@ -84,7 +88,10 @@ function handleMessage(port, unitData, res) {
             port.postMessage({ m_id: res.m_id, data: unitData.filter(u => u.level > 0 && !testGlobalFilters(u, res.ignore_fiters)).map(d => [d.id, d.normal_form, d.evolved_form, d.true_form, d.ultra_form].slice(0, d.current_form + 2)) });
             break;
         case "get_category_names":
-            port.postMessage({ m_id: res.m_id, data: getUnfiltedCategories(res.ignore_filters) });
+            port.postMessage({ m_id: res.m_id, data: getFilteredCategories(res.ignore_filters) });
+            break;
+        case "get_category_orders":
+            port.postMessage({ m_id: res.m_id, data: categoryOrders });
             break;
         case "get_settings":
             port.postMessage({ m_id: res.m_id, data: settings });
@@ -225,7 +232,7 @@ async function updateFromData(data) {
     }
 }
 
-function getUnfiltedCategories(ignoreFilters) {
+function getFilteredCategories(ignoreFilters) {
     if(ignoreFilters) {
         return categories;
     }
@@ -233,13 +240,14 @@ function getUnfiltedCategories(ignoreFilters) {
     const clone = {};
     
     for(const superKey of Object.keys(categories).sort()) {
-        if(window.localStorage.getItem(`gk-${superKey}`) === "0") {
+        const categoryStatus = window.localStorage.getItem(`gk-${superKey}`);
+        if(categoryStatus.charAt(0) === "0") {
             continue;
         }
 
         const cloneSub = {};
-        for(const subKey of Object.keys(categories[superKey]).sort()) {
-            if(window.localStorage.getItem(`${superKey}-${subKey}`) === "0") {
+        for(const subKey of Object.keys(categories[superKey])) {
+            if(categoryStatus.charAt(categoryOrders[superKey].indexOf(subKey) + 1) === "0") {
                 continue;
             }
 

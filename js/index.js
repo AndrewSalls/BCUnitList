@@ -112,13 +112,14 @@ function initializeLocalStorage(settings, categories) {
     setIfUnset("sasc", "Y");
     
     // Categories --------------------------------------------
-    for(const superCategory of Object.keys(categories).sort()) {
+    for(const superCategory of Object.keys(categories)) {
         const superKey = `gk-${superCategory}`;
-        setIfUnset(superKey, "1");
+        const subLength = Object.keys(categories[superCategory]).length + 1;
+        setIfUnset(superKey, "1".repeat(subLength));
 
-        for(const subCategory of Object.keys(categories[superCategory]).sort()) {
-            const key = `${superCategory}-${subCategory}`;
-            setIfUnset(key, "1");
+        const value = window.localStorage.getItem(superKey);
+        if(value.length < subLength) {
+            window.localStorage.setItem(superKey, value.padEnd(subLength, "1"));
         }
     }
     setIfUnset("gk-custom", "1");
