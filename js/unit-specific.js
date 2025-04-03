@@ -1,5 +1,5 @@
 import { getValuesFromRow, observeRowChange } from "./helper/link-row.js";
-import makeSearchable, { initializeDataset } from "./helper/make-searchable.js";
+import makeSearchable, { createSearchDropdown, initializeDataset } from "./helper/make-searchable.js";
 import * as RowComponents from "./unit-table/creation/create-unit-row.js";
 import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
@@ -25,14 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initialize() {
-    const searchSuggestions = document.createElement("datalist");
-    searchSuggestions.id = "search-options";
-    document.body.appendChild(searchSuggestions);
-
-    makeSearchable(document.querySelector("#search-box"), searchSuggestions, id => {
+    const datalist = createSearchDropdown();
+    document.body.appendChild(datalist);
+    makeSearchable(document.querySelector("#search-box"), id => {
         loadSpecific(id);
     });
-    initializeDataset(searchSuggestions, true);
+    initializeDataset(datalist, true);
 
     let target = window.localStorage.getItem("su");
     if(!target || Number.isNaN(target)) {
@@ -49,7 +47,7 @@ function loadSpecific(id) {
         window.localStorage.setItem("su", id);
 
         const wrapper = document.querySelector("#unit-border");
-        wrapper.classList.add(RARITY_MAP[entry.rarity] + "-color");
+        wrapper.className = RARITY_MAP[entry.rarity] + "-color";
 
         const idBox = RowComponents.createIDBox(entry.id);
         wrapper.querySelector("#id-wrapper").replaceChildren(idBox);

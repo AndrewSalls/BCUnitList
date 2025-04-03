@@ -84,15 +84,13 @@ export function appendChip(id, form, parent, saveCallback = null) {
     removeButton.textContent = "X";
     removeButton.classList.add("hidden");
 
-    const datalist = document.querySelector("#unit-search-suggestions");
-
     removeButton.onclick = () => {
+        const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${wrapper.dataset.id}"]`);
+        formNameOptions.forEach(o => o.classList.remove("global-hidden"));
+
         wrapper.classList.remove("set-unit");
         delete wrapper.dataset.id;
         delete wrapper.dataset.maxForm;
-        
-        const formNameOptions = datalist.querySelectorAll(`option[data-target="${pId.textContent}"]`);
-        formNameOptions.forEach(o => o.disabled = false);
 
         img.src = "./assets/img/empty_unit.png";
         pId.textContent = "";
@@ -105,13 +103,12 @@ export function appendChip(id, form, parent, saveCallback = null) {
 
     const unitSearchInput = document.createElement("input");
     unitSearchInput.classList.add("unset-search");
-    unitSearchInput.type = "search";
+    unitSearchInput.type = "text";
     unitSearchInput.placeholder = "Search...";
-    unitSearchInput.setAttribute("list", "unit-search-suggestions");
 
-    makeSearchable(unitSearchInput, datalist, searchID => {
-        const formNameOptions = datalist.querySelectorAll(`option[data-target="${searchID}"]`);
-        formNameOptions.forEach(o => o.disabled = true);
+    makeSearchable(unitSearchInput, searchID => {
+        const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${searchID}"]`);
+        formNameOptions.forEach(o => o.classList.add("global-hidden"));
 
         wrapper.classList.add("set-unit");
         wrapper.dataset.form = formNameOptions.length - 1;
@@ -136,8 +133,8 @@ export function appendChip(id, form, parent, saveCallback = null) {
         pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");
         unitSearchInput.classList.add("hidden");
-        const formNameOptions = datalist.querySelectorAll(`option[data-target="${id}"]`);
-        formNameOptions.forEach(o => o.disabled = true);
+        const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${id}"]`);
+        formNameOptions.forEach(o => o.classList.add("global-hidden"));
     }
 
     wrapper.append(img, pId, removeButton, unitSearchInput);

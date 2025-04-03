@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="./css/common.css">
     <link rel="stylesheet" href="./css/settings.css">
     <link rel="stylesheet" href="./css/custom-category.css">
+    <link rel="stylesheet" href="./css/suggestion-dropdown.css">
     <script src="./js/communication/iframe-link.js"></script>
     <script src="./js/settings.js" type="module"></script>
 </head>
@@ -34,8 +35,7 @@
                     <label for="category-name">Enter custom category name:</label>
                     <input type="text" id="category-name" placeholder="Enter name here..." maxlength="64">
                 </div>
-                <input type="search" id="add-unit" placeholder="Search for ID/Name..." list="add-unit-options">
-                <datalist id="add-unit-options"></datalist>
+                <input type="text" id="add-unit" placeholder="Search for ID/Name...">
                 <div id="category-units" class="h-align h-spacer"></div>
                 <div class="h-align h-spacer">
                     <button type="button" id="cancel-category-creation" class="filter-button active">Cancel</button>

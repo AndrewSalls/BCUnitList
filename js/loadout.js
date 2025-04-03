@@ -1,4 +1,4 @@
-import { initializeDatasetLimited } from "./helper/make-searchable.js";
+import { createSearchDropdown, initializeDatasetLimited } from "./helper/make-searchable.js";
 import { encodeLink } from "./helper/encoder.js";
 import { createMinimalLoadout } from "./unit-table/creation/create-loadout-table.js";
 
@@ -42,12 +42,9 @@ async function loadLoadouts() {
     }
     unlockedCannons[0] = { cannon: true, style: true, foundation: true }; // default base always available
 
-    const unitCount = settings.unitCount;
-    const searchSuggestions = document.createElement("datalist");
-    searchSuggestions.id = "unit-search-suggestions";
-    searchSuggestions.dataset.max_count = unitCount;
-    document.body.appendChild(searchSuggestions);
-    await initializeDatasetLimited(searchSuggestions, true);
+    const datalist = createSearchDropdown();
+    document.body.appendChild(datalist);
+    await initializeDatasetLimited(datalist, true);
 
     makeRequest(REQUEST_TYPES.GET_ALL_LOADOUT, null).then(res => {
         const wrapper = document.querySelector("#loadout-container");

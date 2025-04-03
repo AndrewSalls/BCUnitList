@@ -1,6 +1,6 @@
 import createArrowNumberBox from "./cat-base/arrow-box.js";
 import { getValuesFromRow } from "./helper/link-row.js";
-import { initializeDataset } from "./helper/make-searchable.js";
+import { createSearchDropdown, initializeDataset } from "./helper/make-searchable.js";
 import { decodeLink, encodeDirectLink } from "./helper/encoder.js";
 import { createMinimalLoadout } from "./unit-table/creation/create-loadout-table.js";
 import createRow from "./unit-table/creation/create-unit-row.js";
@@ -209,12 +209,9 @@ async function loadLoadouts() {
         unlockedCannons[x] = { cannon: true, style: true, foundation: true };
     }
 
-    const unitCount = settings.unitCount;
-    const searchSuggestions = document.createElement("datalist");
-    searchSuggestions.id = "unit-search-suggestions";
-    searchSuggestions.dataset.max_count = unitCount;
-    document.body.appendChild(searchSuggestions);
-    initializeDataset(searchSuggestions, true);
+    const datalist = createSearchDropdown();
+    document.body.appendChild(datalist);
+    initializeDataset(datalist, true);
 
     const emptyLoadout = createMinimalLoadout(null, unlockedCannons, syncLoadoutAndTable);
     document.querySelector("#loadout-box").appendChild(emptyLoadout);

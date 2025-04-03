@@ -4,7 +4,7 @@ import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
 import createTableOptionModal from "./unit-table/creation/create-table-modal.js";
 import createSearchableTable from "./unit-table/creation/create-unit-table.js";
 import { attachTableOptionsAndFilters, initializeTableModal } from "./unit-table/filter-units.js";
-import makeSearchable, { initializeDataset } from "./helper/make-searchable.js";
+import makeSearchable, { createSearchDropdown, initializeDataset } from "./helper/make-searchable.js";
 
 window.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(createOrbMenu());
@@ -18,24 +18,18 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-async function loadUnitTables() {
-    const settings = await makeRequest(REQUEST_TYPES.GET_SETTINGS, null).then(r => r);
-    const unitCount = settings.unitCount;
-
+function loadUnitTables() {
     const loadingBar = createLoadingBar(8, () => {});
 
-    const searchSuggestions = document.createElement("datalist");
-    searchSuggestions.id = "unit-search-suggestions";
-    searchSuggestions.dataset.max_count = unitCount;
-    document.body.appendChild(searchSuggestions);
-
-    makeSearchable(document.querySelector("#unit-search"), searchSuggestions, targettedID => {
+    const datalist = createSearchDropdown();
+    document.body.appendChild(datalist);
+    makeSearchable(document.querySelector("#unit-search"), targettedID => {
         const target = [...document.querySelectorAll(".row-id")].find(r => r.textContent === `${targettedID}`)?.parentElement;
         if(target && !target.classList.contains("hidden") && !target.classList.contains("filter-hidden")) {
             window.scrollTo({ left: 0, top: window.scrollY + target.getBoundingClientRect().top, behavior: "smooth" });
         }
     });
-    initializeDataset(searchSuggestions).then(_ => loadingBar.increment());
+    initializeDataset(datalist).then(_ => loadingBar.increment());
 
     const tableAppending = [
         makeRequest(REQUEST_TYPES.GET_RARITY_DATA, "N").then(units => {
@@ -86,7 +80,7 @@ async function loadUnitTables() {
     Promise.all(tableAppending).then(tables => {
         document.querySelector("#loading-content").append(...tables);
         tables.forEach(t => attachTableOptionsAndFilters(t.querySelector("table")));
-        initializeQuickNav(searchSuggestions);
+        initializeQuickNav();
         loadingBar.increment();
     });
 }
