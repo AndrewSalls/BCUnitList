@@ -61,7 +61,7 @@ export function initializeCategoryCreator(completionMessager) {
                 removeCustomCategory(targetedKey).then(_ => {
                     delete custom[targetedKey];
                     targetedKey = null;
-                    document.querySelector("#create-category-creation").textContent = "Create Category";
+                    opener.textContent = "Create Category";
                     completionMessager("Category removed...", false);
                 });
             }
@@ -88,7 +88,7 @@ export function initializeCategoryCreator(completionMessager) {
             const categoryValues = [...chipList.querySelectorAll(".unit-id")].map(c => parseInt(c.textContent));
             addCustomCategory(trimName, categoryValues).then(_ => {
                 custom[trimName] = categoryValues;
-                targetedKey = trimName;
+                targetedKey = null;
                 
                 antiWrapper.classList.remove("hidden");
                 wrapper.classList.add("hidden");
@@ -152,29 +152,12 @@ async function addCustomCategory(categoryName, categoryIDs) {
         await removeCustomCategory(targetedKey);
     }
 
-    const customDiv = document.querySelector("#gk-custom .sub-category-wrapper");
-    if(customDiv) {
-        const inserting = createSubCategoryButton("custom", categoryName);
-
-        let inserted = false;
-        for (const child of customDiv.children) {
-            if (child.textContent.toLocaleLowerCase().localeCompare(categoryName.toLocaleLowerCase()) > 0) {
-                child.insertAdjacentElement("beforebegin", inserting);
-                inserted = true;
-                break;
-            }
-        }
-        if (!inserted) {
-            customDiv.appendChild(inserting);
-        }
-    } else {
-        const data = {};
-        data[categoryName] = categoryIDs;
-
+    let customDiv = document.querySelector("#gk-custom .sub-category-wrapper");
+    if(!customDiv) { // If custom category needs to be added to global category selection
         const insertingInto = document.querySelector("#category-selection");
-        const inserting = createSuperCategoryButton("custom", { "custom": data });
+        const inserting = createSuperCategoryButton("custom", { "custom": {} }, []);
 
-        let inserted = false;
+        let inserted = false; // insert custom category in alphabetical order
         for (const child of insertingInto.children) {
             if (child.id.localeCompare(inserting.id) > 0) {
                 child.insertAdjacentElement("beforebegin", inserting);
@@ -187,12 +170,29 @@ async function addCustomCategory(categoryName, categoryIDs) {
         }
     }
 
+    customDiv = document.querySelector("#gk-custom .sub-category-wrapper");
+    
+    window.localStorage.setItem(`gk-custom-${categoryName}`, "1");
+    const inserting = createSubCategoryButton(`custom-${categoryName}`, categoryName, 0);
+
+    let inserted = false;
+    for (const child of customDiv.children) {
+        if (child.textContent.toLocaleLowerCase().localeCompare(categoryName.toLocaleLowerCase()) > 0) {
+            child.insertAdjacentElement("beforebegin", inserting);
+            inserted = true;
+            break;
+        }
+    }
+    if (!inserted) {
+        customDiv.appendChild(inserting);
+    }
+
     document.querySelector("#created-category-list").appendChild(createCategorySelectionButton(categoryName));
     await makeRequest(REQUEST_TYPES.MODIFY_CUSTOM_CATEGORY, { target: categoryName, updates: categoryIDs });
 }
 
 async function removeCustomCategory(categoryName) {
-    window.localStorage.removeItem(`custom-${categoryName}`);
+    window.localStorage.removeItem(`gk-custom-${categoryName}`);
 
     const customWrapper = document.querySelector("#gk-custom");
     const customButtons = [...customWrapper.querySelector(".sub-category-wrapper").children];
