@@ -1,66 +1,50 @@
-name: Deploy Minified Site
+name: purge-and-minify
 
 on:
   push:
     branches:
-      - main
+      - 'main'
 
 permissions:
-  contents: write  # Grants push access
+  contents: write
 
 jobs:
-  build-and-deploy:
+  checkout-minify-push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+
+      # Set up Node.js environment
+      - uses: actions/setup-node@v3
         with:
-          fetch-depth: 0  # Ensure all branches are available
+          node-version: '16'
 
-      - name: Install Dependencies
+      # Cache node_modules
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      # Install CLI tools
+      - run: npm install -g terser csso-cli html-minifier
+
+      # Use CLI tools to minify, overwriting existing files
+      - run: for i in $(find . -type f -name "*.js"); do terser $i --compress -o $i; done
+      - run: for i in $(find . -type f -name "*.css"); do csso $i -o $i; done
+      - run: for i in $(find . -type f -name "*.html"); do html-minifier --collapse-whitespace --remove-comments $i -o $i; done
+      
+      # Commit changes if files were modified
+      - name: Commit and Push changes
         run: |
-          npm install -g html-minifier terser clean-css-cli
-
-      - name: Minify Files into Dist Directory
-        run: |
-          mkdir -p dist
-          
-          # Minify HTML
-          find . -name "*.html" -exec sh -c '
-            mkdir -p "dist/$(dirname "{}")" &&
-            html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true -o "dist/{}" "{}"
-          ' \;
-
-          # Minify CSS
-          find . -name "*.css" -exec sh -c '
-            mkdir -p "dist/$(dirname "{}")" &&
-            cleancss -o "dist/{}" "{}"
-          ' \;
-
-          # Minify JavaScript
-          find . -name "*.js" -exec sh -c '
-            mkdir -p "dist/$(dirname "{}")" &&
-            terser --compress --mangle -o "dist/{}" -- "{}"
-          ' \;
-
-      - name: Push Minified Files to Pages Branch
-        run: |
+          # Set Git config for GitHub Actions
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Switch to pages branch, or create it if missing
-          git checkout pages || git checkout --orphan pages
-
-          # Remove old files, then copy minified files
-          git rm -rf .
-          cp -r dist/* .
-
-          # Clean up the dist folder
-          rm -rf dist
-
-          # Ensure .nojekyll exists to allow underscore-prefixed files
-          touch .nojekyll
-
-          git add --all
-          git commit -m "Deploy minified site" || echo "No changes to commit"
-          git push -f origin pages
+          
+          # Check if there are changes and commit them
+          git add .
+          git diff --cached --quiet || git commit -m "Automated minify of ${{ github.sha }}"
+          
+          git push --force -u origin main:pages
