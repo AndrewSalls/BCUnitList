@@ -1,5 +1,4 @@
 import createArrowNumberBox from "./cat-base/arrow-box.js";
-import { getValuesFromRow } from "./helper/link-row.js";
 import { createSearchDropdown, initializeDataset } from "./helper/make-searchable.js";
 import { decodeLink, encodeDirectLink } from "./helper/encoder.js";
 import { createMinimalLoadout } from "./unit-table/creation/create-loadout-table.js";
@@ -7,6 +6,7 @@ import createRow from "./unit-table/creation/create-unit-row.js";
 import createSearchableTable from "./unit-table/creation/create-unit-table.js";
 import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
+import { getValuesFromRow } from "./helper/link-row.js";
 
 let idFormMap = new Map();
 
@@ -93,12 +93,15 @@ function initializeContent() {
                     u.level = decoded.units[x].level;
                     u.plus_level = decoded.units[x].plus_level;
                     for(let y = 0; y < u.talents.length; y++) {
-                        u.talents[y] = decoded.units[x].talents[y];
+                        u.talents[y].value = decoded.units[x].talents[y] ?? 0;
                     }
                     for(let y = 0; y < u.ultra_talents.length; y++) {
-                        u.ultra_talents[y] = decoded.units[x].ultra_talents[y];
+                        u.ultra_talents[y].value = decoded.units[x].ultra_talents[y] ?? 0;
                     }
-                    u.orb = decoded.units[x].orb;
+                    for(let y = 0; y < u.orb.length; y++) {
+                        u.orb[y] = decoded.units[x].orb[y] ?? null;
+                    }
+
                     const newRow = createRow(u);
                     newRow.querySelector(".hide-option").remove();
                     newRow.querySelector(".unit-icon").addEventListener("click", () => {
@@ -120,7 +123,7 @@ function initializeContent() {
     
     const container = document.querySelector("#loadout-box");
     document.querySelector("#copy-loadout").onclick = async () => {
-        const unitData = [...document.querySelectorAll("#unit-data-box tbody tr")];
+        let unitData = [...document.querySelectorAll("#unit-data-box tbody tr")];
         const output = {
             title: container.querySelector(".loadout-name").value.trim(),
             units: [...container.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.id)),
@@ -135,29 +138,9 @@ function initializeContent() {
         output.baseLevels[1] = document.querySelector("#loadout-style input").value;
         output.baseLevels[2] = document.querySelector("#loadout-foundation input").value;
 
-        const lockData = await makeRequest(REQUEST_TYPES.GET_MULTIPLE_DATA, output.units);
-        output.units = output.units.map((id, i) => {
-            const row = unitData.find(u => u.querySelector(".row-id").textContent === `${id}`);
-            const values = getValuesFromRow(row);
-
-            lockData[i].talents.map((t, idx) => {
-                t.value = values.talents[idx];
-                return t;
-            });
-            lockData[i].ultra_talents.map((t, idx) => {
-                t.value = values.ultra_talents[idx];
-                return t;
-            });
-            return {
-                id: id,
-                current_form: values.current_form,
-                level: values.level,
-                plus_level: values.plus_level,
-                orb: values.orb,
-                talents: lockData[i].talents,
-                ultra_talents: lockData[i].ultra_talents
-            };
-        });
+        unitData = unitData.map(r => getValuesFromRow(r));
+        unitData.forEach((d, i) => d.current_form = output.forms[i]);
+        output.units = unitData;
         
         const link = encodeDirectLink(output);
         navigator.clipboard.writeText(link);

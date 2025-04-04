@@ -1,3 +1,5 @@
+import { decodeUnit } from "./encoder.js";
+
 async function getLevelCaps() {
     return fetch("./assets/unit_data/level_cap_stats.csv").then(r => r.text()).then(t => Papa.parse(t, { header: true, dynamicTyping: true, skipEmptyLines: true }).data).catch(e => console.error(e));
 }
@@ -50,7 +52,7 @@ export async function getUnitData(categories, settings) {
                     }
                     
                     if(window.localStorage.getItem(entry.ID)) {
-                        const decompressed = JSON.parse(window.atob(window.localStorage.getItem(entry.ID)));
+                        const decompressed = decodeUnit(window.localStorage.getItem(entry.ID));
                         unitData.current_form = decompressed.current_form;
                         unitData.favorited = decompressed.favorited;
                         unitData.hidden = decompressed.hidden;

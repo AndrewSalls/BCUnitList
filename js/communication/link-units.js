@@ -3,6 +3,7 @@ import getCostsFor, { isInitialized, initializeLeveling } from "../helper/find-c
 import LoadoutManager from "../helper/loadout-storage-manager.js";
 import { getUnitData, parseLoadouts, parseUpgrades } from "../helper/parse-file.js";
 import * as settingsInitial from "../../assets/settings.js";
+import { encodeUnit } from "../helper/encoder.js";
 
 let unitData = [];
 let upgradeData = [];
@@ -228,7 +229,7 @@ async function updateFromData(data) {
         !data.hidden && !data.favorited && window.localStorage.getItem(data.id)) {
             window.localStorage.removeItem(data.id);
     } else {
-        window.localStorage.setItem(data.id, window.btoa(JSON.stringify(data)));
+        window.localStorage.setItem(data.id, encodeUnit(data));
     }
 }
 
