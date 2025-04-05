@@ -1,16 +1,39 @@
+//@ts-check
 import createArrowNumberBox from "./arrow-box.js";
 
+/**
+ * @readonly
+ * @enum {number}
+ */
+const BASE_PARTS = {
+    CANNON: 0,
+    STYLE: 1,
+    FOUNDATION: 2
+}
+
+/**
+ * @param {Object} settings A settings object created from assets/settings.js
+ */
 export default function loadCannonInfo(settings) {
     const wrapper = document.querySelector("#cat-base-selector");
     const defaultCannon = createBaseStyling(settings.ototo.names[0], settings.ototo.cannon, settings.ototo.base, settings.ototo.style, 1);
-    defaultCannon.querySelector("label[data-input-type='0']").classList.add("hidden");
-    defaultCannon.querySelector("label[data-input-type='1']").classList.add("hidden");
-    wrapper.appendChild(defaultCannon);
+    defaultCannon.querySelector("label[data-input-type='0']")?.classList.add("hidden");
+    defaultCannon.querySelector("label[data-input-type='1']")?.classList.add("hidden");
+    wrapper?.appendChild(defaultCannon);
     for(let x = 2; x <= settings.ototo.names.length; x++) {
-        wrapper.appendChild(createBaseStyling(settings.ototo.names[x - 1], settings.ototo.cannon, settings.ototo.base, settings.ototo.style, x));
+        wrapper?.appendChild(createBaseStyling(settings.ototo.names[x - 1], settings.ototo.cannon, settings.ototo.base, settings.ototo.style, x));
     }
 }
 
+/**
+ * Create an input for each component of a base for a given base type.
+ * @param {string} name The name of the base type.
+ * @param {number} cannonCap The level cap on the base type's cannon.
+ * @param {number} baseCap The level cap on the base type's foundation.
+ * @param {number} styleCap The level cap on the base type's style.
+ * @param {number} id The "ID" corresponding to the position of the base type in the list of base types in the settings object.
+ * @returns {HTMLDivElement} An element that controls all of the inputs for a specific base type.
+ */
 function createBaseStyling(name, cannonCap, baseCap, styleCap, id) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("cannon-info");
@@ -28,29 +51,30 @@ function createBaseStyling(name, cannonCap, baseCap, styleCap, id) {
     const cannonImage = document.createElement("img");
     cannonImage.classList.add("cannon-image");
     cannonImage.src = `./assets/img/foundation/base_${id}.png`;
-    cannonImage.style.zIndex = 1;
+    cannonImage.style.zIndex = "1";
 
     const styleImage = document.createElement("img");
     styleImage.classList.add("style-image");
     styleImage.src = `./assets/img/foundation/base_${id}_style.png`;
-    styleImage.style.zIndex = 2;
+    styleImage.style.zIndex = "2";
 
     const foundationImage = document.createElement("img");
     foundationImage.classList.add("foundation-image");
     foundationImage.src = `./assets/img/foundation/base_${id}_foundation.png`;
-    foundationImage.style.zIndex = 0;
+    foundationImage.style.zIndex = "0";
 
     imageWrapper.append(cannonImage, styleImage, foundationImage);
 
     const valueWrapper = document.createElement("div");
     valueWrapper.classList.add("base-values");
 
+    //@ts-ignore All localStorage values are automatically initialized if not set.
     const currentValues = window.localStorage.getItem(`oo_${id}`).split("-");
 
     valueWrapper.append(
-        createBaseValueInput(cannonCap, parseInt(currentValues[0]), 0, id),
-        createBaseValueInput(styleCap, parseInt(currentValues[1]), 1, id),
-        createBaseValueInput(baseCap, parseInt(currentValues[2]), 2, id)
+        createBaseValueInput(cannonCap, parseInt(currentValues[0]), BASE_PARTS.CANNON, id),
+        createBaseValueInput(styleCap, parseInt(currentValues[1]), BASE_PARTS.STYLE, id),
+        createBaseValueInput(baseCap, parseInt(currentValues[2]), BASE_PARTS.FOUNDATION, id)
     );
     componentWrapper.append(imageWrapper, valueWrapper);
     wrapper.append(title, componentWrapper);
@@ -58,10 +82,18 @@ function createBaseStyling(name, cannonCap, baseCap, styleCap, id) {
     return wrapper;
 }
 
+/**
+ * Creates an element for inputting a cannon, style, or foundation level.
+ * @param {number} cap The maximum value of the input.
+ * @param {number} currentValue The initial value of the input.
+ * @param {BASE_PARTS} type What part of the base this input is for.
+ * @param {number} id An "ID" corresponding to the index of the base type this input is for in the list of base types contained in the settings.
+ * @returns {HTMLLabelElement} A label element that labels the base value input.
+ */
 function createBaseValueInput(cap, currentValue, type, id) {
     const valueLabel = document.createElement("label");
     valueLabel.classList.add("h-align");
-    valueLabel.dataset.inputType = type;
+    valueLabel.dataset.inputType = `${type}`;
 
     const labelText = document.createElement("p");
     switch(type) {
@@ -80,6 +112,7 @@ function createBaseValueInput(cap, currentValue, type, id) {
     }
     
     const [labelInput, inputElm] = createArrowNumberBox(cap, currentValue, () => {
+        //@ts-ignore All localStorage values are automatically initialized if not set.
         const currentValues = window.localStorage.getItem(`oo_${id}`).split("-");
         currentValues[type] = inputElm.value;
         window.localStorage.setItem(`oo_${id}`, currentValues.join("-"));

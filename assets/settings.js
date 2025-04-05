@@ -1,5 +1,5 @@
 export default {
-    "version": "1.5",
+    "version": "1.6",
     "gameVersion": "14.2.0",
     "unitCount": 786,
     "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782],
