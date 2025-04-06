@@ -70,6 +70,7 @@ window.addEventListener("mouseup", () => {
 /**
  * Makes the unit chips in a loadout's wrapper element draggable.
  * @param {HTMLDivElement} loadoutIconList The wrapper containing the unit chips.
+ * @param {(() => void)|null} [loadoutChangeCallback = null] A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
  */
 export default function makeDraggable(loadoutIconList, loadoutChangeCallback = null) {
     const units = loadoutIconList.querySelectorAll(".chip");

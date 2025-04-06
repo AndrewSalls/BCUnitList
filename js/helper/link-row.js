@@ -1,12 +1,7 @@
 // No ts-check because this whole file relies on the row having elements, and it would be silly to add guards against all of the data in the row not being created.
 
 /**
- * @typedef {import("./parse-file").UNIT_RECORD} UNIT_RECORD
- * @typedef {import("./encoder").ORB} ORB
- */
-
-/**
- * @param {{ querySelector: (arg0: string) => { (): any; new (): any; addEventListener: { (arg0: string, arg1: any): void; new (): any; }; }; querySelectorAll: (arg0: string) => any[]; addEventListener: (arg0: string, arg1: any) => void; }} row
+ * @param {HTMLTableRowElement} row
  * @param {any} observerCallback
  */
 export function observeRowChange(row, observerCallback) {
@@ -22,7 +17,7 @@ export function observeRowChange(row, observerCallback) {
 /**
  * Obtains a unit's values from that unit's row in a unit table.
  * @param {HTMLDivElement} row The row to get values from.
- * @returns {UNIT_RECORD} The unit's data.
+ * @returns {import("./parse-file").UNIT_RECORD} The unit's data.
  */
 export function getValuesFromRow(row) {
     const output = {
@@ -32,7 +27,7 @@ export function getValuesFromRow(row) {
         plus_level: 0,
         talents: /** @type {number[]} */ ([]),
         ultra_talents: /** @type {number[]} */ ([]),
-        orb: /** @type {ORB[]} */ ([]),
+        orb: /** @type {import("./parse-file").ORB[]} */ ([]),
         favorited: row.querySelector(".row-favorite .fav-wrapper").getAttribute("data-favorited") === "1",
         hidden: row.classList.contains("hidden")
     };

@@ -1,7 +1,14 @@
+//@ts-check
 import createRow from "./create-unit-row.js";
 import { getValuesFromRow, observeRowChange } from "../../helper/link-row.js";
 import attachUnitTableColumnSort from "../sort-units.js";
 
+/**
+ * Creates a unit table.
+ * @param {string} titleText The name of the table.
+ * @param {import("../../helper/parse-file.js").UNIT_RECORD[]} unitData The units to add to the table.
+ * @param {import("../../helper/loading.js").LOADING_BAR|null} loadingBar A loading bar to update the page as the table loads, or null if the page does not need a loading bar.
+ */
 export default function createSearchableTable(titleText, unitData, loadingBar = null) {
     const wrapper = document.createElement("div");
     const title = document.createElement("h2");
@@ -55,6 +62,12 @@ export default function createSearchableTable(titleText, unitData, loadingBar = 
     return wrapper;
 }
 
+/**
+ * Creates a column header for the table.
+ * @param {string} className The name of the class to assign to this column head.
+ * @param {string | null} textContent The text to display in the column head.
+ * @returns {HTMLTableCellElement} The created column header.
+ */
 function createColumnHead(className, textContent) {
     const col = document.createElement("td");
     col.classList.add(className);

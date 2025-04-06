@@ -1,6 +1,11 @@
+//@ts-check
 import * as orbData from "../../../assets/orb-map.js";
 const ORB_DATA = orbData.default;
 
+/**
+ * Creates a modal for selecting the components of an orb.
+ * @returns {HTMLDivElement} The created orb modal.
+ */
 export default function createOrbMenu() {
     const modalBG = document.createElement("div");
     modalBG.id = "orb-selection-modal";
@@ -63,6 +68,10 @@ export default function createOrbMenu() {
     return modalBG;
 }
 
+/**
+ * Creates an element for selecting from all orb traits.
+ * @returns {HTMLDivElement} The created element.
+ */
 function createTraitSelectionSubmenu() {
     const wrapper = document.createElement("div");
     wrapper.id = "trait-selection";
@@ -73,10 +82,16 @@ function createTraitSelectionSubmenu() {
     return wrapper;
 }
 
+/**
+ * Creates an element for selecting an orb trait.
+ * @param {number} traitID The ID of the trait based on its order in assets/orb-map.js
+ * @param {string} traitTitle The string representation of the trait in assets/orb-map.js
+ * @returns {HTMLDivElement} The created element.
+ */
 function createTraitSelector(traitID, traitTitle) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("image-selector");
-    wrapper.dataset.trait = traitID;
+    wrapper.dataset.trait = `${traitID}`;
 
     const title = document.createElement("h4");
     title.textContent = traitTitle;
@@ -89,6 +104,10 @@ function createTraitSelector(traitID, traitTitle) {
     return wrapper;
 }
 
+/**
+ * Creates an element for choosing from all orb types.
+ * @returns {HTMLDivElement} The created element.
+ */
 function createTypeSelectionSubmenu() {
     const wrapper = document.createElement("div");
     wrapper.id = "type-selection";
@@ -99,10 +118,16 @@ function createTypeSelectionSubmenu() {
     return wrapper;
 }
 
+/**
+ * Creates an element for selecting an orb type.
+ * @param {number} typeID The ID of the type based on its order in assets/orb-map.js
+ * @param {string} typeTitle The string representation of the type in assets/orb-map.js
+ * @returns {HTMLDivElement} The created element.
+ */
 function createTypeSelector(typeID, typeTitle) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("image-selector");
-    wrapper.dataset.type = typeID;
+    wrapper.dataset.type = `${typeID}`;
 
     const title = document.createElement("h4");
     title.textContent = typeTitle;
@@ -120,6 +145,10 @@ function createTypeSelector(typeID, typeTitle) {
     return wrapper;
 }
 
+/**
+ * Creates an element for selecting any orb rank.
+ * @returns {HTMLDivElement} An element containing each rank.
+ */
 function createRankSelectionSubmenu() {
     const wrapper = document.createElement("div");
     wrapper.id = "rank-selection";
@@ -130,6 +159,12 @@ function createRankSelectionSubmenu() {
     return wrapper;
 }
 
+/**
+ * Creates an element for selecting an orb rank.
+ * @param {number} imgID The ID of the rank based on its order in assets/orb-map.js
+ * @param {string} imgTitle The string representation of the rank in assets/orb-map.js
+ * @returns {HTMLDivElement} An element representing a single rank.
+ */
 function createRankSelector(imgID, imgTitle) {
     const superWrapper = document.createElement("div");
     superWrapper.classList.add("rank-shrinkwrap");
@@ -139,7 +174,7 @@ function createRankSelector(imgID, imgTitle) {
     const img = document.createElement("img");
 
     img.src = `./assets/img/orb/rank/${imgID}.png`;
-    img.dataset.rank = imgID;
+    img.dataset.rank = `${imgID}`;
     img.title = imgTitle;
 
     wrapper.appendChild(img);

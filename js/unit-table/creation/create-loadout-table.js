@@ -1,9 +1,18 @@
+//@ts-check
 import makeSearchable from "../../helper/make-searchable.js";
 import makeDraggable, { sortIcons } from "../../helper/make-draggable.js";
+import { FORM } from "../../helper/parse-file.js";
 
 const MAX_LOADOUT_NAME_LENGTH = 64;
 
-export function createMinimalLoadout(loadoutData = null, cannonData = [], saveCallback = null) {
+/**
+ * Creates an element used to create a loadout.
+ * @param {import("../../helper/loadout-storage-manager.js").LOADOUT|null} loadoutData Loadout data to initialize the loadout to, or null if the loadout should start blank.
+ * @param {{ cannon: boolean, style: boolean, foundation: boolean }[]} unlockedCannons Whether each cannon part for each cannon type has been unlocked.
+ * @param {(() => void)|null} [saveCallback = null] A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
+ * @returns {HTMLDivElement} The created element.
+ */
+export function createMinimalLoadout(loadoutData = null, unlockedCannons = [], saveCallback = null) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-wrapper");
     wrapper.classList.add("v-align");
@@ -27,18 +36,25 @@ export function createMinimalLoadout(loadoutData = null, cannonData = [], saveCa
     contentWrapper.classList.add("loadout-contents");
     contentWrapper.classList.add("h-align");
 
-    contentWrapper.append(createUnitInput(loadoutData?.units, loadoutData?.forms, saveCallback), createCannonInput(loadoutData?.base, cannonData, saveCallback));
+    contentWrapper.append(createUnitInput(loadoutData && loadoutData.units, loadoutData && loadoutData.forms, saveCallback), createCannonInput(loadoutData && loadoutData.baseLevels, unlockedCannons, saveCallback));
     wrapper.append(options, contentWrapper);
 
     return wrapper;
 }
 
+/**
+ * Creates a set of 10 slots to select units in a loadout.
+ * @param {number[]|null} units A list of up to 10 unique unit IDs, or null if all slots are empty.
+ * @param {FORM[]|null} forms A list of up to 10 unit forms, the same length as {@link units}, or null if all slots are empty.
+ * @param {(() => void)|null} [saveCallback = null] A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
+ * @returns {HTMLDivElement} The created loadout unit selector.
+ */
 export function createUnitInput(units, forms, saveCallback = null) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-unit-wrapper");
 
     let x = 0;
-    if(units) {
+    if(units && forms) {
         for(x = 0; x < 10 && x < units.length; x++) {
             appendChip(units[x], forms[x], wrapper, saveCallback);
         }
@@ -53,6 +69,13 @@ export function createUnitInput(units, forms, saveCallback = null) {
     return wrapper;
 }
 
+/**
+ * Appends a unit chip to the provided parent loadout element.
+ * @param {number|null} id The ID of the unit to append, or null if the slot is empty.
+ * @param {FORM|null} form The form of the unit to append to be used, or null if the slot is empty.
+ * @param {HTMLDivElement} parent The parent element to append the chip to.
+ * @param {(() => void)|null} [saveCallback = null] A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
+ */
 export function appendChip(id, form, parent, saveCallback = null) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("chip");
@@ -65,12 +88,14 @@ export function appendChip(id, form, parent, saveCallback = null) {
             return;
         }
         if(wrapper.classList.contains("set-unit")) {
+            //@ts-ignore
             let form = parseInt(wrapper.dataset.form) + 1;
+            //@ts-ignore
             if(form > parseInt(wrapper.dataset.maxForm)) {
                 form = 0;
             }
 
-            wrapper.dataset.form = form;
+            wrapper.dataset.form = `${form}`;
             img.src = `./assets/img/unit_icon/${wrapper.dataset.id}_${form}.png`;
             saveCallback && saveCallback();
         }
@@ -112,15 +137,15 @@ export function appendChip(id, form, parent, saveCallback = null) {
             formNameOptions.forEach(o => o.classList.add("global-hidden"));
 
             wrapper.classList.add("set-unit");
-            wrapper.dataset.form = searchForm;
-            wrapper.dataset.id = searchID;
-            wrapper.dataset.maxForm = formNameOptions.length - 1;
+            wrapper.dataset.form = `${searchForm}`;
+            wrapper.dataset.id = `${searchID}`;
+            wrapper.dataset.maxForm = `${formNameOptions.length - 1}`;
             if(settings.skipImages.includes(searchID)) {
                 img.src = "./assets/img/unit_icon/unknown.png";
             } else {
                 img.src = `./assets/img/unit_icon/${searchID}_${searchForm}.png`;
             }
-            pId.textContent = searchID;
+            pId.textContent = `${searchID}`;
             pId.classList.remove("hidden");
             removeButton.classList.remove("hidden");
             unitSearchInput.classList.add("hidden");
@@ -131,11 +156,11 @@ export function appendChip(id, form, parent, saveCallback = null) {
 
     if(id !== null && form !== null) {
         wrapper.classList.add("set-unit");
-        wrapper.dataset.form = form;
-        wrapper.dataset.id = id;
-        wrapper.dataset.maxForm = document.querySelectorAll(`#unit-search-suggestions option[data-target="${id}"]`).length - 1;
+        wrapper.dataset.form = `${form}`;
+        wrapper.dataset.id = `${id}`;
+        wrapper.dataset.maxForm = `${document.querySelectorAll(`#unit-search-suggestions option[data-target="${id}"]`).length - 1}`;
         img.src = `./assets/img/unit_icon/${id}_${form}.png`;
-        pId.textContent = id;
+        pId.textContent = `${id}`;
         pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");
         unitSearchInput.classList.add("hidden");
@@ -147,6 +172,13 @@ export function appendChip(id, form, parent, saveCallback = null) {
     parent.appendChild(wrapper);
 }
 
+/**
+ * Creates a base part input.
+ * @param {[number, number, number]|null} cannonData The IDs for each part to initialize with, or null if there is no pre-existing cannon data.
+ * @param {{ cannon: boolean, style: boolean, foundation: boolean }[]} unlockedCannons Whether each cannon part for each cannon type has been unlocked.
+ * @param {(() => void)|null} [saveCallback = null] A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
+ * @returns {HTMLDivElement} An element containing the inputs for all parts of a cat base.
+ */
 export function createCannonInput(cannonData, unlockedCannons, saveCallback = null) {
     cannonData = cannonData ?? [1, 1, 1];
     const wrapper = document.createElement("div");
@@ -158,17 +190,17 @@ export function createCannonInput(cannonData, unlockedCannons, saveCallback = nu
 
     const cannonImage = document.createElement("img");
     cannonImage.classList.add("base-cannon");
-    cannonImage.dataset.type = cannonData[0];
+    cannonImage.dataset.type = `${cannonData[0]}`;
     cannonImage.src = `./assets/img/foundation/base_${cannonData[0] ?? 1}.png`;
 
     const styleImage = document.createElement("img");
     styleImage.classList.add("base-style");
-    styleImage.dataset.type = cannonData[1];
+    styleImage.dataset.type = `${cannonData[1]}`;
     styleImage.src = `./assets/img/foundation/base_${cannonData[1] ?? 1}_style.png`;
 
     const foundationImage = document.createElement("img");
     foundationImage.classList.add("base-foundation");
-    foundationImage.dataset.type = cannonData[2];
+    foundationImage.dataset.type = `${cannonData[2]}`;
     foundationImage.src = `./assets/img/foundation/base_${cannonData[2] ?? 1}_foundation.png`;
 
     const leftArrowWrapper = document.createElement("div");
@@ -195,6 +227,15 @@ export function createCannonInput(cannonData, unlockedCannons, saveCallback = nu
     return wrapper;
 }
 
+/**
+ * Creates an arrow control for part of a base.
+ * @param {boolean} isLeft Whether the arrow points left or right.
+ * @param {string} arrowFor Which part type the control is for, also doubling as the file name extension to distinguish the part from other parts of the same base type.
+ * @param {HTMLImageElement} target The element controlling and displaying what base type is active for this part type.
+ * @param {{ cannon: boolean, style: boolean, foundation: boolean }[]} unlockedCannons Whether each cannon part for each cannon type has been unlocked.
+ * @param {(() => void)|null} [saveCallback = null] A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
+ * @returns {HTMLDivElement} An arrow control.
+ */
 export function createBaseArrow(isLeft, arrowFor, target, unlockedCannons, saveCallback = null) {
     const wrapper = document.createElement("div");
     wrapper.classList.add(`${arrowFor}-arrow`)
@@ -207,7 +248,9 @@ export function createBaseArrow(isLeft, arrowFor, target, unlockedCannons, saveC
     }
 
     const changeAmt = isLeft ? -1 : 1;
+    //@ts-ignore Created directly above this
     wrapper.querySelector("svg").onclick = () => {
+        //@ts-ignore
         const currIndex = parseInt(target.dataset.type) - 1;
         
         let inc = currIndex;
@@ -216,7 +259,7 @@ export function createBaseArrow(isLeft, arrowFor, target, unlockedCannons, saveC
         } while(!unlockedCannons[inc][arrowFor] && inc !== currIndex);
 
         inc = inc + 1;
-        target.dataset.type = inc;
+        target.dataset.type = `${inc}`;
 
         let extra = "";
         if(arrowFor === "style" || arrowFor === "foundation"){

@@ -54,6 +54,7 @@ export const FORM = {
  * @property {boolean} in_EN
  * @property {boolean} collab
  * @property {boolean} unobtainable
+ * @property {boolean} disable_icon
  * @property {string | null} normal_form
  * @property {string | null} evolved_form
  * @property {string | null} true_form

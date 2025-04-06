@@ -114,7 +114,7 @@ function createLoadoutObject(container) {
         title: container.querySelector(".loadout-name").value.trim(),
         units: [...container.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.id)),
         forms: [...container.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.form)),
-        base: [parseInt(container.querySelector(".base-cannon").dataset.type),
+        baseLevels: [parseInt(container.querySelector(".base-cannon").dataset.type),
             parseInt(container.querySelector(".base-style").dataset.type),
             parseInt(container.querySelector(".base-foundation").dataset.type)]
     };

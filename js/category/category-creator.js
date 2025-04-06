@@ -21,7 +21,7 @@ export function initializeCategoryCreator(completionMessager) {
 
     const datalist = createSearchDropdown();
     document.body.appendChild(datalist);
-    makeSearchable(document.querySelector("#add-unit"), (/** @type {number} */ id) => {
+    makeSearchable(/** @type {HTMLInputElement} */ (document.querySelector("#add-unit")), /** @type {number} */ (id) => {
         if(!selectedUnits.has(id)) {
             selectedUnits.add(id);
             const chip = createChip(id);

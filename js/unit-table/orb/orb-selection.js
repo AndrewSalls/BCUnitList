@@ -1,3 +1,8 @@
+// No ts-check because it does not work well with querySelectors
+
+/**
+ * Initializes the orb selection modal.
+ */
 export function initializeOrbSelection() {
     const attachOrb = document.querySelector("#attach-orb");
 
@@ -58,6 +63,9 @@ export function initializeOrbSelection() {
 
 let topPos = 0;
 
+/**
+ * Initializes the cancel button inside the orb selection modal.
+ */
 function initializeOrbCancel() {
     const modal = document.querySelector("#orb-selection-modal");
     const orbCancel = document.querySelector("#orb-selection-cancel");
@@ -69,6 +77,10 @@ function initializeOrbCancel() {
     };
 }
 
+/**
+ * Opens the orb selection modal for the specified row.
+ * @param {HTMLDivElement} target The orb interactable for which an orb selection modal is opened.
+ */
 export function openOrbSelectionModal(target) {
     const modal = document.querySelector("#orb-selection-modal");
     const attachOrb = document.querySelector("#attach-orb");

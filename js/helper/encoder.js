@@ -1,16 +1,8 @@
 //@ts-check
 
 /**
- * @typedef {import('./parse-file.js').ORB} ORB
- * @typedef {import('./parse-file.js').LOADOUT_UNIT_DATA} LOADOUT_UNIT_DATA
- * @typedef {import('./parse-file.js').UNIT_RECORD} TABLE_UNIT_DATA
- * @typedef {import('./loadout-storage-manager.js').LOADOUT} LOADOUT
- * @typedef {import('./loadout-storage-manager.js').FULL_LOADOUT} FULL_LOADOUT
- */
-
-/**
  * Encodes a loadout containing unit IDs as a string, taking the full unit data from the user's stored values for those units.
- * @param {LOADOUT} loadoutData The loadout data.
+ * @param {import("./loadout-storage-manager").LOADOUT} loadoutData The loadout data.
  * @returns {Promise<string>} The encoded loadout.
  */
 export async function encodeLink(loadoutData) {
@@ -29,7 +21,7 @@ export async function encodeLink(loadoutData) {
 
 /**
  * Encodes a loadout containing unit values as a string.
- * @param {FULL_LOADOUT} loadoutData The loadout data, including full unit data instead of just IDs.
+ * @param {import("./loadout-storage-manager").FULL_LOADOUT} loadoutData The loadout data, including full unit data instead of just IDs.
  * @returns {string} The encoded loadout.
  */
 export function encodeDirectLink(loadoutData) {
@@ -41,7 +33,7 @@ export function encodeDirectLink(loadoutData) {
 /**
  * Converts a loadout's string encoding to it's JSON encoding.
  * @param {string} dataString The string encoding.
- * @returns {FULL_LOADOUT} A JSON encoding of a loadout.
+ * @returns {import("./loadout-storage-manager").FULL_LOADOUT} A JSON encoding of a loadout.
  */
 export function decodeLink(dataString) {
     const loadoutObj = JSON.parse(window.atob(dataString));
@@ -52,7 +44,7 @@ export function decodeLink(dataString) {
 
 /**
  * Convert's a unit's full JSON encoding to the unit's string encoding, including all properties that can be changed by users.
- * @param {TABLE_UNIT_DATA} unitData JSON containing all modifiable unit data.
+ * @param {import("./parse-file").UNIT_RECORD} unitData JSON containing all modifiable unit data.
  * @returns {string} The string encoding.
  */
 export function encodeUnitEntry(unitData) {
@@ -70,7 +62,7 @@ export function encodeUnitEntry(unitData) {
 
 /**
  * Converts a unit's JSON encoding to the unit's string encoding.
- * @param {LOADOUT_UNIT_DATA} unitData The JSON encoding.
+ * @param {import("./parse-file").LOADOUT_UNIT_DATA} unitData The JSON encoding.
  * @returns {string} The string encoding.
  */
 export function encodeUnit(unitData) {
@@ -91,8 +83,8 @@ export function encodeUnit(unitData) {
     if(unitData.ultra_talents.some((/** @type {number} */ t) => t > 0)) {
         output += `U${unitData.ultra_talents.join("-")}`;
     }
-    if(unitData.orb.some((/** @type {ORB} */ o) => o !== null)) {
-        output += `O${unitData.orb.map((/** @type {ORB} */ o) => encodeOrb(o)).join("&")}`
+    if(unitData.orb.some((/** @type {import("./parse-file").ORB} */ o) => o !== null)) {
+        output += `O${unitData.orb.map((/** @type {import("./parse-file").ORB} */ o) => encodeOrb(o)).join("&")}`
     }
 
     return output;
@@ -101,7 +93,7 @@ export function encodeUnit(unitData) {
 /**
  * Converts a unit's string encoding to the unit's JSON encoding.
  * @param {string} unitStr The string encoding.
- * @returns {TABLE_UNIT_DATA} A unit's JSON encoding.
+ * @returns {import("./parse-file").UNIT_RECORD} A unit's JSON encoding.
  */
 export function decodeUnit(unitStr) {
     let output = {
@@ -111,7 +103,7 @@ export function decodeUnit(unitStr) {
         plus_level: 0,
         talents: /** @type {number[]} */ ([]),
         ultra_talents: /** @type {number[]} */ ([]),
-        orb: /** @type {ORB[]} */ ([]),
+        orb: /** @type {import("./parse-file").ORB[]} */ ([]),
         favorited: false,
         hidden: false
     };
@@ -179,7 +171,7 @@ function getSegment(unitStr, startPos) {
 
 /**
  * Converts an orb's JSON encoding to a string encoding.
- * @param {ORB} orb An object encoding the orb, or null if the orb has not been set.
+ * @param {import("./parse-file").ORB} orb An object encoding the orb, or null if the orb has not been set.
  * @returns {string} An orb's string encoding.
  */
 export function encodeOrb(orb) {
@@ -193,7 +185,7 @@ export function encodeOrb(orb) {
 /**
  * Converts an orb's string encoding to a JSON encoding.
  * @param {string} orbStr An orb's string encoding.
- * @returns {ORB} An object encoding the orb, or null if the orb has not been set.
+ * @returns {import("./parse-file").ORB} An object encoding the orb, or null if the orb has not been set.
  */
 export function decodeOrb(orbStr) {
     if(orbStr === "X") {

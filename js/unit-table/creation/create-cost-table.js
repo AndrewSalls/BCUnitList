@@ -1,3 +1,10 @@
+//@ts-check
+/**
+ * Creates a cost table based on the provided data.
+ * @param {Object} costData The cost data to use for the table.
+ * @param {string} name The name of the table.
+ * @returns {HTMLDivElement} The created table.
+ */
 export default function createTableFromData(costData, name) {
     const hasUbers = costData.hasUber;
 
@@ -116,6 +123,15 @@ export default function createTableFromData(costData, name) {
     return wrapper;
 }
 
+/**
+ * Creates an element representing an evolution material.
+ * @param {string} img The image path as a string.
+ * @param {string} title The title of the image.
+ * @param {string} imgClass A class to assign to the image.
+ * @param {number} baseAmt The base amount of this evolution material needed to max all units.
+ * @param {number} ultraShift The amount of this evolution material needed only for things that require dark catseyes.
+ * @returns {HTMLDivElement} The created element.
+ */
 function createEvoBox(img, title, imgClass, baseAmt, ultraShift, hasToggle = false) {
     const evoWrapper = document.createElement("div");
     evoWrapper.classList.add("evo-mat-wrapper");
@@ -145,6 +161,16 @@ function createEvoBox(img, title, imgClass, baseAmt, ultraShift, hasToggle = fal
     return evoWrapper;
 }
 
+/**
+ * Creates an element representing an evolution material whose image has text appended.
+ * @param {string} img The image path as a string.
+ * @param {string} title The title of the image.
+ * @param {string} imgClass A class to assign to the image.
+ * @param {string} imgSubtext The text to append to the image.
+ * @param {number} baseAmt The base amount of this evolution material needed to max all units.
+ * @param {number} ultraShift The amount of this evolution material needed only for things that require dark catseyes.
+ * @returns {HTMLDivElement} The created element.
+ */
 function createLabelledImageEvoBox(img, title, imgClass, imgSubtext, baseAmt, ultraShift, hasToggle = false) {
     const evoWrapper = document.createElement("div");
     evoWrapper.classList.add("evo-mat-wrapper");
@@ -179,6 +205,11 @@ function createLabelledImageEvoBox(img, title, imgClass, imgSubtext, baseAmt, ul
     return evoWrapper;
 }
 
+/**
+ * Creates an ability cost table.
+ * @param {number} xpAmt The amount of XP needed to fully upgrade all abilities.
+ * @return {HTMLDivElement} A cost table modified to only contain the total XP tracker.
+ */
 export function createAbilityTableFromData(xpAmt) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("evo-table");

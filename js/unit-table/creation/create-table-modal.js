@@ -1,8 +1,13 @@
+//@ts-check
 import { getModalTarget } from "../filter-units.js";
 import { gameSortLambda, sortRows } from "../sort-units.js";
 import * as orbData from "../../../assets/orb-map.js";
 const ORB_DATA = orbData.default;
 
+/**
+ * Creates a table modal, used to mass-update, filter, and sort unit tables.
+ * @returns {HTMLDivElement} The table option and filter modal.
+ */
 export default function createTableOptionModal() {
     const modal = document.createElement("div");
     modal.id = "table-option-modal";
@@ -35,6 +40,10 @@ export default function createTableOptionModal() {
     return modal;
 }
 
+/**
+ * Creates a container with all options that can be applied to the entire table, including sorts.
+ * @returns {HTMLDivElement} A container for all table options and sorts.
+ */
 function createOptionSelection() {
     const wrapper = document.createElement("div");
 
@@ -96,7 +105,7 @@ function createOptionSelection() {
 
     const ingameSortButton = createModalButton("Order units like in-game", "ingame-sort", "In-Game Sort");
     ingameSortButton.onclick = () => {
-        sortRows(getModalTarget().querySelector("tbody"), gameSortLambda, true);
+        sortRows(/** @type {HTMLTableSectionElement} */ (getModalTarget().querySelector("tbody")), gameSortLambda, true);
     };
     sortWrapper.append(ingameSortButton);
 
@@ -107,6 +116,10 @@ function createOptionSelection() {
     return wrapper;
 }
 
+/**
+ * Creates all filters for the modal.
+ * @returns {HTMLDivElement} A container for all filter buttons.
+ */
 function createFilterSelection() {
     const wrapper = document.createElement("div");
 
@@ -168,6 +181,13 @@ function createFilterSelection() {
     return wrapper;
 }
 
+/**
+ * Creates a filter button.
+ * @param {string} title The button description.
+ * @param {string} id An ID to assign to the button.
+ * @param {string} text The text displayed on the button.
+ * @returns {HTMLButtonElement} The created button.
+ */
 function createModalButton(title, id, text) {
     const button = document.createElement("button");
     button.classList.add("table-option-button");
@@ -179,6 +199,12 @@ function createModalButton(title, id, text) {
     return button;
 }
 
+/**
+ * Creates a container for multiple groups of filter buttons, ideally themed around a specific quality of a unit.
+ * @param {string} title The title of the container.
+ * @param {HTMLButtonElement[][]} buttonGroups A list of button groups.
+ * @returns {HTMLDivElement} The container and buttons contained within.
+ */
 function createModalButtonSuperGroup(title, ...buttonGroups) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("table-filter-group");

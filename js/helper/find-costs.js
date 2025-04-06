@@ -4,10 +4,6 @@ import UT_NP_MAP from "../../assets/ut-np-map.js";
 import ORB_MAP from "../../assets/orb-map.js";
 import { RARITY } from "./parse-file.js";
 
-/**
- * @typedef {import("./parse-file.js").UNIT_DATA} UNIT_DATA
- */
-
 let levelingCost;
 let pause = false;
 
@@ -35,7 +31,7 @@ export async function initializeLeveling() {
 
 /**
  * Obtains the costs needed to upgrade a list of units.
- * @param {UNIT_DATA[]} unitList The list of units.
+ * @param {import("./parse-file.js").UNIT_DATA[]} unitList The list of units.
  * @returns {Promise<Object>} The materials needed to upgrade the units.
  */
 export default async function getCostsFor(unitList) {    

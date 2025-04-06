@@ -16,9 +16,10 @@ export function createSubCategoryButton(superCategoryName, subCategoryName, loca
     subButton.classList.add("filter-button");
     subButton.textContent = subCategoryName;
 
+    //@ts-ignore
     subButton.classList.toggle("active", window.localStorage.getItem(key).charAt(localStoragePosition) === "0");
     subButton.addEventListener("click", () => {
-        let previous = window.localStorage.getItem(key);
+        let previous = /** @type {string} */ (window.localStorage.getItem(key));
         previous = previous.substring(0, localStoragePosition) + (previous.charAt(localStoragePosition) === "0" ? "1" : "0") + previous.substring(localStoragePosition + 1);
         window.localStorage.setItem(key, previous);
         subButton.classList.toggle("active");
@@ -47,9 +48,10 @@ export function createSuperCategoryButton(superCategoryName, categoryData, categ
     superButton.classList.add("super-category-button");
     superButton.textContent = parseSnakeCase(superCategoryName);
 
+    //@ts-ignore
     superButton.classList.toggle("active", window.localStorage.getItem(superKey).charAt(0) === "0");
     superButton.addEventListener("click", () => {
-        let previous = window.localStorage.getItem(superKey);
+        let previous = /** @type {string} */ (window.localStorage.getItem(superKey));
         previous = (previous.charAt(0) === "0" ? "1" : "0") + previous.substring(1);
         window.localStorage.setItem(superKey, previous);
         superButton.classList.toggle("active");
