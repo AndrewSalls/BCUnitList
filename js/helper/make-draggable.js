@@ -1,3 +1,4 @@
+//@ts-check
 const MIN_DRAG_DISTANCE = 5; // 5 px offset before dragging instead of changing form
 
 let mouseDownPos = null;
@@ -6,6 +7,9 @@ let targetCallback = null;
 let hoverTarget = null;
 let targetClone = null;
 
+/**
+ * Moves a dragged unit chip to the current mouse location.
+ */
 window.addEventListener("mousemove", ev => {
     if(window.document.body.classList.contains("disabled-editing-mode")) {
         return;
@@ -32,6 +36,9 @@ window.addEventListener("mousemove", ev => {
     }
 });
 
+/**
+ * Checks for a unit chip being dragged, and if it is released above another unit chip from the same loadout, shifts the second unit chip out of the way.
+ */
 window.addEventListener("mouseup", () => {
     // Swap if target and hoverTarget exist
     if(target && hoverTarget) {
@@ -60,11 +67,16 @@ window.addEventListener("mouseup", () => {
     targetClone = null;
 });
 
+/**
+ * Makes the unit chips in a loadout's wrapper element draggable.
+ * @param {HTMLDivElement} loadoutIconList The wrapper containing the unit chips.
+ */
 export default function makeDraggable(loadoutIconList, loadoutChangeCallback = null) {
     const units = loadoutIconList.querySelectorAll(".chip");
 
-    units.forEach(unit => {
-        unit.addEventListener("mousedown", ev => {
+    //@ts-ignore .chip is always a div
+    units.forEach((/** @type {HTMLDivElement} */ unit) => {
+        unit.addEventListener("mousedown", (/** @type {MouseEvent} */ ev) => {
             if(window.document.body.classList.contains("disabled-editing-mode") || !unit.classList.contains("set-unit")) {
                 return;
             }
@@ -89,8 +101,12 @@ export default function makeDraggable(loadoutIconList, loadoutChangeCallback = n
     });
 }
 
+/**
+ * Sorts unit chips within a single loadout.
+ * @param {HTMLDivElement} listWrapper The element containing the icons to be sorted.
+ */
 export function sortIcons(listWrapper) {
-    listWrapper.querySelectorAll(".chip").forEach(unit => {
+    listWrapper.querySelectorAll(".chip").forEach((/** @type {Element} */ unit) => {
         if(!unit.classList.contains("set-unit")) {
             listWrapper.appendChild(unit); // shifts unset units to end
         }

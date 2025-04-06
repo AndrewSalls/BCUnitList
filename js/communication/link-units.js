@@ -189,9 +189,9 @@ function testGlobalFilters(unit, ignore) {
         return false;
     }
 
-    let shouldBeHidden = (window.localStorage.getItem("f1") === "0") && unit.unobtainable === "Y";
-    shouldBeHidden ||= (window.localStorage.getItem("f2") === "0") && unit.collab === "Y";
-    shouldBeHidden ||= (window.localStorage.getItem("f3") === "0") && unit.in_EN === "N";
+    let shouldBeHidden = (window.localStorage.getItem("f1") === "0") && unit.unobtainable;
+    shouldBeHidden ||= (window.localStorage.getItem("f2") === "0") && unit.collab;
+    shouldBeHidden ||= (window.localStorage.getItem("f3") === "0") && !unit.in_EN;
     shouldBeHidden ||= (window.localStorage.getItem("f4") === "0") && unit.level === 0;
     shouldBeHidden ||= (window.localStorage.getItem("f5") === "0") && !unit.favorited;
 

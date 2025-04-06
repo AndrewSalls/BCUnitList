@@ -1,5 +1,75 @@
 import { decodeUnit } from "./encoder.js";
 
+/**
+ * @readonly
+ * @enum {string}
+ */
+export const RARITY = {
+    NORMAL: "N",
+    SPECIAL: "EX",
+    RARE: "RR",
+    SUPER_RARE: "SR",
+    UBER_RARE: "UR",
+    LEGEND_RARE: "LR"
+}
+
+/**
+ * @readonly
+ * @enum {number}
+ */
+export const FORM = {
+    NORMAL: 0,
+    EVOLVED: 1,
+    TRUE: 2,
+    ULTRA: 3
+}
+
+/**
+ * @typedef {{Type: string; MaxLevel: number; MaxPlusLevel: number; }} LEVEL_CAP
+ * @typedef {{ name: string; cap: number; value: number; }} TALENT
+ * @typedef {{trait: number, type: number, rank: number}|null} ORB
+ * 
+ * @typedef LOADOUT_UNIT_DATA
+ * @property {FORM} current_form
+ * @property {number} level
+ * @property {number} plus_level
+ * @property {number[]} talents
+ * @property {number[]} ultra_talents
+ * @property {ORB[]} orb
+ * 
+ * @typedef UNIT_RECORD
+ * @property {number} id
+ * @property {FORM} current_form
+ * @property {number} level
+ * @property {number} plus_level
+ * @property {number[]} talents
+ * @property {number[]} ultra_talents
+ * @property {ORB[]} orb
+ * @property {boolean} favorited
+ * @property {boolean} hidden
+ * 
+ * @typedef UNIT_DATA
+ * @property {number} id
+ * @property {RARITY} rarity
+ * @property {boolean} in_EN
+ * @property {boolean} collab
+ * @property {boolean} unobtainable
+ * @property {string | null} normal_form
+ * @property {string | null} evolved_form
+ * @property {string | null} true_form
+ * @property {string | null} ultra_form
+ * @property {number} max_form
+ * @property {LEVEL_CAP} level_cap
+ * @property {FORM} current_form
+ * @property {number} level
+ * @property {number} plus_level
+ * @property {TALENT[]} talents
+ * @property {TALENT[]} ultra_talents
+ * @property {ORB[]} orb
+ * @property {boolean} favorited
+ * @property {boolean} hidden
+ */
+
 async function getLevelCaps() {
     return fetch("./assets/unit_data/level_cap_stats.csv").then(r => r.text()).then(t => Papa.parse(t, { header: true, dynamicTyping: true, skipEmptyLines: true }).data).catch(e => console.error(e));
 }
@@ -29,9 +99,9 @@ export async function getUnitData(categories, settings) {
                     const unitData = {
                         id: entry.ID,
                         rarity: entry.Rarity,
-                        in_EN: entry.InEN,
-                        collab: collabUnits.includes(entry.ID) ? "Y" : "N",
-                        unobtainable: unobtainableUnits.includes(entry.ID) ? "Y" : "N",
+                        in_EN: entry.InEN === "Y",
+                        collab: collabUnits.includes(entry.ID),
+                        unobtainable: unobtainableUnits.includes(entry.ID),
                         normal_form: entry.NF,
                         evolved_form: entry.EF,
                         true_form: entry.TF,

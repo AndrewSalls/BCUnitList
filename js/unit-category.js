@@ -213,9 +213,9 @@ function syncRowValues(row, id) {
         });
     } else if(row.querySelector(".fav-icon").parentElement.dataset.favorited === "1") {
         const values = getValuesFromRow(row);
-        values.collab = row.dataset.is_collab;
-        values.unobtainable = row.dataset.is_unobtainable;
-        values.in_EN = row.dataset.in_en;
+        values.collab = row.dataset.is_collab === "Y";
+        values.unobtainable = row.dataset.is_unobtainable === "Y";
+        values.in_EN = row.dataset.in_en === "Y";
 
         const nameBox = row.querySelector(".row-name");
         values.normal_form = nameBox.dataset.normal_name;

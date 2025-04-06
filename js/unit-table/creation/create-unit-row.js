@@ -2,9 +2,9 @@ import { createLevelInteractable, createOrbInteractable, createTalentInteractabl
 
 export default function createRow(entry) {
     const row = document.createElement("tr");
-    row.dataset.is_collab = entry.collab;
-    row.dataset.in_en = entry.in_EN;
-    row.dataset.is_unobtainable = entry.unobtainable;
+    row.dataset.is_collab = entry.collab ? "Y" : "N";
+    row.dataset.in_en = entry.in_EN ? "Y" : "N";
+    row.dataset.is_unobtainable = entry.unobtainable ? "Y" : "N";
     row.dataset.rarity = entry.rarity;
     row.classList.toggle("hidden", entry.hidden);
 
