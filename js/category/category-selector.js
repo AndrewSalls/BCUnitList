@@ -1,7 +1,12 @@
+//@ts-check
+
+/**
+ * Initializes the category selector's UI, allowing it to be raised and lowered. Assumes the category selector has been created and attached to the document.
+ */
 export function allowSelection() {
-    const categorySelector = document.querySelector("#category-selector");
-    const categoryList = categorySelector.querySelector("#category-selector-access");
-    const optionList = categorySelector.querySelector("#category-selector-options");
+    const categorySelector = /** @type {!HTMLDivElement} */ (document.querySelector("#category-selector"));
+    const categoryList = /** @type {!HTMLDivElement} */ (categorySelector.querySelector("#category-selector-access"));
+    const optionList = /** @type {!HTMLDivElement} */ (categorySelector.querySelector("#category-selector-options"));
     categorySelector.classList.add("transitionless");
     categorySelector.style.transform = `translateY(${optionList.clientHeight}px)`;
     categorySelector.offsetHeight;
@@ -17,6 +22,12 @@ export function allowSelection() {
     categorySelector.classList.remove("invisible");
 }
 
+/**
+ * Creates a super-category container.
+ * @param {string} categoryName The name of the super-category.
+ * @param {HTMLButtonElement[]} categoryButtons A list of buttons to place in the created container.
+ * @returns {HTMLDivElement} The super-category container.
+ */
 export function createCategory(categoryName, categoryButtons) {
     const wrapper = document.createElement("div");
     const catTitle = document.createElement("h6");
@@ -31,13 +42,19 @@ export function createCategory(categoryName, categoryButtons) {
     return wrapper;
 }
 
+/**
+ * Appends a category button to the category selector. Assumes that the selector has already been created and appended.
+ * @param {string} buttonText The name to put on the button for the category in the selector.
+ * @param {Element} categoryObject The element that represents the category which is linked to by the selector.
+ * @returns {HTMLButtonElement} The created button.
+ */
 export function createCategoryButton(buttonText, categoryObject) {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = buttonText;
 
     button.onclick = () => {
-        const toggle = document.querySelector("#jump-or-toggle");
+        const toggle = /** @type {!HTMLInputElement} */ (document.querySelector("#jump-or-toggle"));
         if(toggle.checked) {
             // Toggle category
             categoryObject.classList.toggle("hidden");
@@ -51,6 +68,11 @@ export function createCategoryButton(buttonText, categoryObject) {
     return button;
 }
 
+/**
+ * Creates a popup menu that can be used to navigate to categories quickly.
+ * @param {boolean} [includeAbilityCategory = false] Whether the category selector should include abilities as a category that can be selected.
+ * @returns {HTMLDivElement} The created popup menu.
+ */
 export function createCategorySelector(includeAbilityCategory = false) {
     const selector = document.createElement("div");
     selector.id = "category-selector";
@@ -77,7 +99,7 @@ export function createCategorySelector(includeAbilityCategory = false) {
 
     const sliderLabel = document.createElement("label");
     sliderLabel.title = "Either jump to the position of a selected category on the page, or hide/show the selected category";
-    sliderLabel.for = "jump-or-toggle";
+    sliderLabel.htmlFor = "jump-or-toggle";
 
     const leftText = document.createElement("p");
     leftText.textContent = "Jump to Category";
@@ -138,6 +160,7 @@ export function createCategorySelector(includeAbilityCategory = false) {
     defaultButtons[6].classList.add("legend-rare-animation");
     defaultButtons.push(createCategoryButton("Favorited", defaultTables[7]));
     if(includeAbilityCategory) {
+        //@ts-ignore if includeAbilityCategory, then from earlier abilityButton must not be null.
         defaultButtons.splice(1, 0, abilityButton);
     }
 

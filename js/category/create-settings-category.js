@@ -1,5 +1,13 @@
+//@ts-check
 import { parseSnakeCase } from "./category-parser.js";
 
+/**
+ * Creates a button for filtering a sub-category from category displays.
+ * @param {string} superCategoryName The name of the super-category.
+ * @param {string} subCategoryName The name of the sub-category.
+ * @param {number} localStoragePosition The position of this sub-category in the localStorage for all sub-categories of the provided super-category.
+ * @returns {HTMLButtonElement} The created button.
+ */
 export function createSubCategoryButton(superCategoryName, subCategoryName, localStoragePosition) {
     const key = `gk-${superCategoryName}`;
 
@@ -19,6 +27,13 @@ export function createSubCategoryButton(superCategoryName, subCategoryName, loca
     return subButton;
 }
 
+/**
+ * Creates a button for filtering a super-category from category displays.
+ * @param {string} superCategoryName The name of the super-category to create a button for.
+ * @param {Object} categoryData An object containing all super-categories and their sub-categories.
+ * @param {string[]} categoryOrder The order of categories's filter boolean in the localStorage for this super-category.
+ * @returns {HTMLDivElement} An element containing the button for filtering a super-category.
+ */
 export function createSuperCategoryButton(superCategoryName, categoryData, categoryOrder) {
     const superKey = `gk-${superCategoryName}`;
     

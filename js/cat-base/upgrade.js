@@ -28,7 +28,9 @@ export default async function loadUpgradeInfo(settings) {
 }
 
 /**
- * @param {boolean} isOwned
+ * Creates an input for God being unlocked.
+ * @param {boolean} isOwned Whether this upgrade is owned already.
+ * @returns {HTMLDivElement} An element containing an input for God's unlock status.
  */
 function createCGSBox(isOwned) {
     const wrapper = document.createElement("div");
