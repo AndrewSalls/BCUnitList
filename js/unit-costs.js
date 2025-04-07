@@ -2,9 +2,9 @@
 import * as CategorySelector from "./category/category-selector.js";
 import createTableFromData, { createAbilityTableFromData } from "./unit-table/creation/create-cost-table.js";
 import createLoadingBar from "./helper/loading.js";
-import { parseSnakeCase } from "./category/category-parser.js";
+import { parseSnakeCase } from "./helper/parse-string.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
-import { RARITY } from "./helper/parse-file.js";
+import { RARITY } from "./data/unit-data.js";
 
 /**
  * Initializes page elements once page has loaded.
@@ -75,7 +75,7 @@ function loadCosts() {
         loadingBar.increment();
     });
 
-    REQUEST_TYPES.GET_CATEGORY_NAMES().then(categories => {
+    REQUEST_TYPES.GET_CATEGORIES().then(categories => {
         if(window.localStorage.getItem("s7") === "0") {
             attachAllCategoryCostTables(loadingBar, categories);
         } else {
@@ -107,7 +107,7 @@ function loadCosts() {
 
 /**
  * Creates a cost table for every unfiltered category and adds them to the page.
- * @param {{ increment: any; rincrement: any; }} loadingBar A loading bar that hides the page until content has finished loading.
+ * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar that hides the page until content has finished loading.
  * @param {Object} categoryData An object containing all categories.
  */
 function attachAllCategoryCostTables(loadingBar, categoryData) {

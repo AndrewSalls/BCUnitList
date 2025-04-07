@@ -176,7 +176,7 @@ async function addCustomCategory(categoryName, categoryIDs, modifyCategory, remo
     let customDiv = document.querySelector("#gk-custom .sub-category-wrapper");
     if(!customDiv) { // If custom category needs to be added to global category selection
         const insertingInto = /** @type {!HTMLDivElement} */ (document.querySelector("#category-selection"));
-        const inserting = createSuperCategoryButton("custom", { "custom": {} }, []);
+        const inserting = createSuperCategoryButton("custom", []);
 
         let inserted = false; // insert custom category in alphabetical order
         for (const child of insertingInto.children) {

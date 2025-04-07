@@ -1,10 +1,10 @@
 //@ts-check
-import { FORM } from "../../helper/parse-file.js";
+import { FORM } from "../../data/unit-data.js";
 import { createLevelInteractable, createOrbInteractable, createTalentInteractable } from "./create-row-interactable.js";
 
 /**
  * Creates a row in a unit table.
- * @param {import("../../helper/parse-file.js").UNIT_DATA} entry The unit to take values from to initialize the row with.
+ * @param {import("../../data/unit-data.js").UNIT_DATA} entry The unit to take values from to initialize the row with.
  * @returns {HTMLTableRowElement} The created row.
  */
 export default function createRow(entry) {
@@ -116,7 +116,7 @@ export function createNameBox(names, currentForm) {
 
 /**
  * Creates a level column entry.
- * @param {import("../../helper/parse-file.js").LEVEL_CAP} levelCapInfo The level caps to apply to the level and plus level inputs.
+ * @param {import("../../data/unit-data.js").LEVEL_CAP} levelCapInfo The level caps to apply to the level and plus level inputs.
  * @param {number} currentLevel The initial value of the level input.
  * @param {number} currentPlusLevel  The initial value of the plus level input.
  * @returns {[HTMLTableCellElement, () => void, () => void, (() => void)|null, (() => void)|null]} The level column entry, and functions that (in order) reset level, max level, reset plus level, max plus level. If the unit does not have plus levels, those functions are instead null.
@@ -158,8 +158,8 @@ export function createLevelBox(levelCapInfo, currentLevel, currentPlusLevel) {
 
 /**
  * Creates a talent and ultra talent column entrty.
- * @param {import("../../helper/parse-file.js").TALENT[]} normalTalents The normal talents of the unit.
- * @param {import("../../helper/parse-file.js").TALENT[]} ultraTalents The ultra talents of the unit.
+ * @param {import("../../data/unit-data.js").TALENT[]} normalTalents The normal talents of the unit.
+ * @param {import("../../data/unit-data.js").TALENT[]} ultraTalents The ultra talents of the unit.
  * @returns {[HTMLTableCellElement, (() => void)|null, (() => void)|null, (() => void)|null, (() => void)|null]} The column entry, and then functions to (in order) reset normal talents, max normal talents, reset ultra talents, max ultra talents. If the unit lacks talents and/or ultra talents, the respective functions are instead null.
  */
 export function createTalentBox(normalTalents, ultraTalents) {
@@ -194,7 +194,7 @@ export function createTalentBox(normalTalents, ultraTalents) {
 
 /**
  * Creates an orb selection column entry.
- * @param {import("../../helper/parse-file.js").ORB[]} existingOrbs Any existing orbs for the unit, being null if the unit does not have an orb in that slot.
+ * @param {import("../../data/unit-data.js").ORB[]} existingOrbs Any existing orbs for the unit, being null if the unit does not have an orb in that slot.
  * @returns {[HTMLTableCellElement, (() => void)|null]} The column entry and a function to reset the orb(s), or null if the unit does not have any orb slots.
  */
 export function createOrbBox(existingOrbs) {

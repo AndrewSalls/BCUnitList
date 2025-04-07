@@ -79,11 +79,10 @@ function finishSetup() {
     const selection = /** @type {HTMLDivElement} */ (document.querySelector("#category-selection"));
     selection.classList.add("hidden");
     (async () => {
-        const names = await REQUEST_TYPES.GET_CATEGORY_NAMES(true);
-        const nameOrder = await REQUEST_TYPES.GET_CATEGORY_ORDER();
+        const categoryOrder = await REQUEST_TYPES.GET_CATEGORIES_ORDER(true);
 
-        for(const superCategory of Object.keys(names).sort()) {
-            selection.appendChild(createSuperCategoryButton(superCategory, names, nameOrder[superCategory]));
+        for(const superCategory of Object.keys(categoryOrder).sort()) {
+            selection.appendChild(createSuperCategoryButton(superCategory, categoryOrder[superCategory]));
         }
         selection.classList.remove("hidden");
     })();

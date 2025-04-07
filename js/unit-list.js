@@ -6,8 +6,8 @@ import createTableOptionModal from "./unit-table/creation/create-table-modal.js"
 import createSearchableTable from "./unit-table/creation/create-unit-table.js";
 import { attachTableOptionsAndFilters, initializeTableModal } from "./unit-table/filter-units.js";
 import makeSearchable, { createSearchDropdown, initializeDataset } from "./helper/make-searchable.js";
-import { RARITY } from "./helper/parse-file.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
+import { RARITY } from "./data/unit-data.js";
 
 /**
  * Initializes page elements once page has loaded.

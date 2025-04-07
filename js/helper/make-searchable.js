@@ -1,5 +1,5 @@
 //@ts-check
-import { FORM } from "./parse-file.js";
+import FORM from "../data/unit-data.js";
 
 let targettedInput = null;
 

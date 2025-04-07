@@ -73,25 +73,3 @@ export async function parseAllCategories() {
         return parsed;
     }));
 }
-
-/**
- * Converts a string from snake_case to Capital Case (with spaces).
- * @param {string} str A string representing a name.
- * @returns The converted string.
- */
-export function parseSnakeCase(str) {
-    return str.replaceAll(/\_[a-z]/g, m => ` ${m[1].toUpperCase()}`).replace(/^[a-z]/, m => m[0].toUpperCase());    
-}
-
-/**
- * Converts a category from JSON to an encoded string and saves it to localStorage.
- * @param {string} categoryName The name of the category.
- * @param {number[]} categoryValues The list of unit IDs for units in the category.
- */
-export function recordCustomCategory(categoryName, categoryValues) {
-    if(categoryValues.length === 0) {
-        window.localStorage.removeItem(`_cc-${categoryName}`);
-    } else {
-        window.localStorage.setItem(`_cc-${categoryName}`, window.btoa(JSON.stringify({c:categoryName,v:categoryValues})));
-    }
-}

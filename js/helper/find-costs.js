@@ -2,7 +2,7 @@
 import TALENT_NP_MAP from "../../assets/talent-np-map.js";
 import UT_NP_MAP from "../../assets/ut-np-map.js";
 import ORB_MAP from "../../assets/orb-map.js";
-import { RARITY } from "./parse-file.js";
+import { RARITY } from "../data/unit-data.js";
 
 let levelingCost;
 let pause = false;
@@ -11,14 +11,14 @@ let pause = false;
  * Checks that the leveling costs are initialized.
  * @returns {boolean} Whether the leveling costs have been initialized.
  */
-export function isInitialized() {
+function isInitialized() {
     return !!levelingCost;
 }
 
 /**
  * Initializes leveling costs for all units.
  */
-export async function initializeLeveling() {
+async function initializeLeveling() {
     if(!pause && !isInitialized()) {
         pause = true;
         levelingCost = await fetch("./assets/unit_data/leveling_stats.csv")
@@ -31,10 +31,13 @@ export async function initializeLeveling() {
 
 /**
  * Obtains the costs needed to upgrade a list of units.
- * @param {import("./parse-file.js").UNIT_DATA[]} unitList The list of units.
+ * @param {import("../data/unit-data.js").UNIT_DATA[]} unitList The list of units.
  * @returns {Promise<Object>} The materials needed to upgrade the units.
  */
-export default async function getCostsFor(unitList) {    
+export default async function getCostsFor(unitList) {
+    if(!isInitialized()) {
+        await initializeLeveling();
+    }
     unitList.sort((/** @type {{ id: number; }} */ a, /** @type {{ id: number; }} */ b) => a.id - b.id);
 
     const tables = Object.groupBy(unitList, (/** @type {{ id: number; }} */ v) => Math.floor(v.id / 100) * 100);

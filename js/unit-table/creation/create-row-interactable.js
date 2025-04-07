@@ -126,7 +126,7 @@ export function createTalentInteractable(talentName, talentMax, talentLevel, isU
 
 /**
  * Creates an interactive element to set orb data.
- * @param {import("../../helper/parse-file.js").ORB} orbData Initial values for the orb.
+ * @param {import("../../data/unit-data.js").ORB} orbData Initial values for the orb.
  * @returns {HTMLDivElement} The interactable element.
  */
 export function createOrbInteractable(orbData) {

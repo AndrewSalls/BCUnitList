@@ -1,41 +1,43 @@
 //@ts-check
-import { RARITY } from "../helper/parse-file";
+import { RARITY, UNIT_DATA_TYPE } from "../data/unit-data.js";
+import { RESPONSE_TYPES } from "./handle-message.js";
 
 /**
  * @readonly
  */
 export const REQUEST_TYPES = {
-    UPDATE_ID: (/** @type {import("../helper/parse-file").UNIT_RECORD} */ unit, /** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../helper/parse-file").UNIT_DATA>} */ (makeRequest("update_id", unit, ignoreFilters)),
-    GET_ID_DATA: (/** @type {number} */ id, /** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<import("../helper/parse-file").UNIT_DATA>} */ (makeRequest("get_id", id, ignoreFilters)),
-    GET_MULTIPLE_DATA: (/** @type {number[]} */ idList, /** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<import("../helper/parse-file").UNIT_DATA[]>} */ (makeRequest("get_list", idList, ignoreFilters)),
-    GET_RARITY_DATA: (/** @type {RARITY} */ rarity, /** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<import("../helper/parse-file").UNIT_DATA[]>} */ (makeRequest("get_rarity_list", rarity, ignoreFilters)),
-    GET_FAVORITED_DATA: (/** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<import("../helper/parse-file").UNIT_DATA[]>} */ (makeRequest("get_favorited", null, ignoreFilters)),
-    GET_ALL_DATA: (/** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<import("../helper/parse-file").UNIT_DATA[]>} */ (makeRequest("get_all", null, ignoreFilters)),
-    GET_ID_COST: (/** @type {number} */ id, /** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<Object>} */ (makeRequest("get_id_cost", id, ignoreFilters)),
-    GET_MULTIPLE_COST: (/** @type {number[]} */ idList, /** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<Object>} */ (makeRequest("get_cost_list", idList, ignoreFilters)),
-    GET_RARITY_COST: (/** @type {RARITY} */ rarity, /** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<Object>} */ (makeRequest("get_rarity_costs", rarity, ignoreFilters)),
-    GET_FAVORITED_COST: (/** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<Object>} */ (makeRequest("get_favorited_costs", null, ignoreFilters)),
-    GET_ALL_COST: (/** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<Object>} */ (makeRequest("get_all_costs", null, ignoreFilters)),
+    UPDATE_ID: (/** @type {import("../data/unit-data").UNIT_RECORD} */ unit, /** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<number>} */ (makeRequest(RESPONSE_TYPES.UPDATE_UNIT, unit, ignoreFilters)),
+    GET_ID_DATA: (/** @type {number} */ id, /** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../data/unit-data").UNIT_DATA>} */ (makeRequest(RESPONSE_TYPES.GET_UNIT, { target: id, dataType: UNIT_DATA_TYPE.UNIT }, ignoreFilters)),
+    GET_MULTIPLE_DATA: (/** @type {number[]} */ idList, /** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../data/unit-data").UNIT_DATA[]>} */ (makeRequest(RESPONSE_TYPES.GET_UNIT_LIST, { target: idList, dataType: UNIT_DATA_TYPE.UNIT }, ignoreFilters)),
+    GET_RARITY_DATA: (/** @type {RARITY} */ rarity, /** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../data/unit-data").UNIT_DATA[]>} */ (makeRequest(RESPONSE_TYPES.GET_ALL_OF_RARITY, { target: rarity, dataType: UNIT_DATA_TYPE.UNIT }, ignoreFilters)),
+    GET_FAVORITED_DATA: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../data/unit-data").UNIT_DATA[]>} */ (makeRequest(RESPONSE_TYPES.GET_ALL_FAVORITED, UNIT_DATA_TYPE.UNIT, ignoreFilters)),
+    GET_ALL_DATA: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../data/unit-data").UNIT_DATA[]>} */ (makeRequest(RESPONSE_TYPES.GET_ALL, UNIT_DATA_TYPE.UNIT, ignoreFilters)),
+    GET_ID_COST: (/** @type {number} */ id, /** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<Object>} */ (makeRequest(RESPONSE_TYPES.GET_UNIT, { target: id, dataType: UNIT_DATA_TYPE.COST }, ignoreFilters)),
+    GET_MULTIPLE_COST: (/** @type {number[]} */ idList, /** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<Object>} */ (makeRequest(RESPONSE_TYPES.GET_UNIT_LIST, { target: idList, dataType: UNIT_DATA_TYPE.COST }, ignoreFilters)),
+    GET_RARITY_COST: (/** @type {RARITY} */ rarity, /** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<Object>} */ (makeRequest(RESPONSE_TYPES.GET_ALL_OF_RARITY, { target: rarity, dataType: UNIT_DATA_TYPE.COST }, ignoreFilters)),
+    GET_FAVORITED_COST: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<Object>} */ (makeRequest(RESPONSE_TYPES.GET_ALL_FAVORITED, UNIT_DATA_TYPE.COST, ignoreFilters)),
+    GET_ALL_COST: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<Object>} */ (makeRequest(RESPONSE_TYPES.GET_ALL, UNIT_DATA_TYPE.COST, ignoreFilters)),
     
-    GET_NAMES: (/** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<[number, string|null, string|null, string|null, string|null][]>} */ (makeRequest("get_names", null, ignoreFilters)),
-    GET_OWNED_FORM_NAMES: (/** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<[number, string|null, string|null, string|null, string|null][]>} */ (makeRequest("get_owned_names", null, ignoreFilters)),
-    GET_CATEGORY_NAMES: (/** @type {boolean} */ ignoreFilters = false) =>/** @type {Promise<Object>} */ (makeRequest("get_category_names", null, ignoreFilters)),
-    GET_CATEGORY_ORDER: () =>/** @type {Promise<Object>} */ (makeRequest("get_category_orders", null, false)),
-    GET_SETTINGS: () =>/** @type {Promise<Object>} */ (makeRequest("get_settings", null, false)),
+    GET_NAMES: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<[number, string|null, string|null, string|null, string|null][]>} */ (makeRequest(RESPONSE_TYPES.GET_UNIT_NAMES, UNIT_DATA_TYPE.FORM_NAMES, ignoreFilters)),
+    GET_OWNED_FORM_NAMES: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<[number, string|null, string|null, string|null, string|null][]>} */ (makeRequest(RESPONSE_TYPES.GET_UNIT_NAMES, UNIT_DATA_TYPE.OWNED_FORM_NAMES, ignoreFilters)),
+    GET_CATEGORIES: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../data/category-data.js").CATEGORY_MAP>} */ (makeRequest(RESPONSE_TYPES.GET_CATEGORIES, null, ignoreFilters)),
+    GET_CATEGORIES_ORDER: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../data/category-data.js").CATEGORY_ORDER_MAP>} */ (makeRequest(RESPONSE_TYPES.GET_CATEGORIES_ORDER, null, ignoreFilters)),
 
-    MODIFY_CUSTOM_CATEGORY: (/** @type {string} */ categoryName, /** @type {number[]} */ categoryValues) =>/** @type {Promise<Object>} */ (makeRequest("modify_custom_category", { target: categoryName, updates: categoryValues }, false)),
-    REMOVE_CUSTOM_CATEGORY: (/** @type {string} */ categoryName) =>/** @type {Promise<number[]>} */ (makeRequest("remove_custom_category", categoryName, false)),
+    MODIFY_CUSTOM_CATEGORY: (/** @type {string} */ categoryName, /** @type {number[]} */ categoryValues) => /** @type {Promise<null>} */ (makeRequest(RESPONSE_TYPES.MODIFY_CUSTOM_CATEGORY, { category: categoryName, newUnits: categoryValues })),
+    REMOVE_CUSTOM_CATEGORY: (/** @type {string} */ categoryName) => /** @type {Promise<null>} */ (makeRequest(RESPONSE_TYPES.DELETE_CUSTOM_CATEGORY, categoryName)),
 
-    GET_UPGRADE: (/** @type {number} */ index) =>/** @type {Promise<{ plus: number; level: number; }|number>} */ (makeRequest("get_upgrade", index, false)),
-    GET_ALL_UPGRADE: () =>/** @type {Promise<[number, ...{ plus: number; level: number; }[]]>} */ (makeRequest("get_all_upgrades", null, false)),
-    GET_UPGRADE_COST: () =>/** @type {Promise<number>} */ (makeRequest("get_upgrade_costs", null, false)),
-    UPDATE_UPGRADE: (/** @type {number} */ index, /** @type {number} */ level, /** @type {number} */ plusLevel) =>/** @type {Promise<{ plus: number; level: number; }|number>} */ (makeRequest("update_upgrade", { id: index, level: level, plus: plusLevel }, false)),
+    GET_ABILITY: (/** @type {number} */ index) => /** @type {Promise<import("../data/upgrade-data.js").ABILITY_LEVEL>} */ (makeRequest(RESPONSE_TYPES.GET_ABILITY, index)),
+    GET_ALL_ABILITY: () => /** @type {Promise<import("../data/upgrade-data.js").ABILITY_LEVEL[]>} */ (makeRequest(RESPONSE_TYPES.GET_ALL_ABILITY, null)),
+    GET_CGS: () => /** @type {Promise<boolean>} */ (makeRequest(RESPONSE_TYPES.GET_CGS, null)),
+    GET_UPGRADE_COST: () => /** @type {Promise<number>} */ (makeRequest(RESPONSE_TYPES.GET_UPGRADE_COSTS, null)),
+    UPDATE_ABILITY: (/** @type {number} */ index, /** @type {number} */ level, /** @type {number} */ plusLevel) => /** @type {Promise<number>} */ (makeRequest(RESPONSE_TYPES.UPDATE_ABILITY, { id: index, level: level, plus: plusLevel })),
+    UPDATE_CGS: (/** @type {boolean} */ owned) => /** @type {Promise<null>} */ (makeRequest(RESPONSE_TYPES.UPDATE_CGS, owned)),
 
-    GET_ALL_LOADOUT: () =>/** @type {Promise<import("../helper/loadout-storage-manager").LOADOUT[]>} */ (makeRequest("get_all_loadouts", null, false)),
-    MODIFY_LOADOUT: (/** @type {number} */ index, /** @type {import("../helper/loadout-storage-manager").LOADOUT} */ loadout) =>/** @type {Promise<import("../helper/loadout-storage-manager").LOADOUT>} */ (makeRequest("mutate_loadout_position", { position: index, loadout: loadout }, false)),
-    DELETE_LOADOUT: (/** @type {number} */ index) =>/** @type {Promise<import("../helper/loadout-storage-manager").LOADOUT>} */ (makeRequest("delete_loadout", index, false)),
+    GET_ALL_LOADOUT: () => /** @type {Promise<import("../data/loadout-data.js").LOADOUT[]>} */ (makeRequest(RESPONSE_TYPES.GET_LOADOUTS, null)),
+    MODIFY_LOADOUT: (/** @type {number} */ index, /** @type {import("../data/loadout-data.js").LOADOUT} */ loadout) => /** @type {Promise<null>} */ (makeRequest(RESPONSE_TYPES.MODIFY_LOADOUT, { position: index, loadout: loadout })),
+    DELETE_LOADOUT: (/** @type {number} */ index) => /** @type {Promise<null>} */ (makeRequest(RESPONSE_TYPES.DELETE_LOADOUT, index)),
 
-    SEND_ALERT: (/** @type {string} */ message, /** @type {boolean} */ isError) =>/** @type {Promise<null>} */ (makeRequest("send_alert", { message: message, isError: isError }, false)),
+    SEND_ALERT: (/** @type {string} */ message, /** @type {boolean} */ isError) => /** @type {Promise<null>} */ (makeRequest("send_alert", { message: message, isError: isError })),
 }
 
 const MAX_POST_ID = 2 << 12;
@@ -76,7 +78,7 @@ export function checkPort() {
 
 /**
  * Sends a request to the main window.
- * @param {string} requestType The type of request the main window should expect.
+ * @param {RESPONSE_TYPES} requestType The type of request the main window should expect.
  * @param {Object} requestContents The contents of the request.
  * @param {boolean} [ignoreFilters = false] Whether the main window should respect the user's set global filters when responding.
  * @returns {Promise<Object>} A promise for a response from the main window.

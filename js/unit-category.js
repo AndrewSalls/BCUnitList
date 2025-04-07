@@ -8,8 +8,8 @@ import createSearchableTable from "./unit-table/creation/create-unit-table.js";
 import { attachTableOptionsAndFilters, initializeTableModal } from "./unit-table/filter-units.js";
 import { getValuesFromRow, observeRowChange } from "./helper/link-row.js";
 import createRow from "./unit-table/creation/create-unit-row.js";
-import { parseSnakeCase } from "./category/category-parser.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
+import { parseSnakeCase } from "./helper/parse-string.js";
 
 const rowRef = [];
 
@@ -60,7 +60,7 @@ function loadCategories() {
         loadingBar.increment();
     });
 
-    REQUEST_TYPES.GET_CATEGORY_NAMES().then(categories => {
+    REQUEST_TYPES.GET_CATEGORIES().then(categories => {
         if(window.localStorage.getItem("s7") === "0") {
             appendAllCategoryTables(loadingBar, categories);
         } else {
@@ -166,7 +166,7 @@ async function appendCategoryUnitTable(superCategory, categoryName, target, cate
 /**
  * Creates a table from a list of unit data.
  * @param {string} tableName The name of the table.
- * @param {import("./helper/parse-file.js").UNIT_DATA[]} data The data to add to the table.
+ * @param {import("./data/unit-data.js").UNIT_DATA[]} data The data to add to the table.
  * @param {import("./helper/loading.js").LOADING_BAR | null | undefined} loadingBar A loading bar to hide the page until the page elements have loaded.
  * @returns {HTMLDivElement} An element containing the created table.
  */
@@ -290,7 +290,7 @@ function syncRowValues(row, id) {
 
 /**
  * Copies values taken from a category's unit table and pastes them into a provided different unit table to sync.
- * @param {import("./helper/parse-file.js").UNIT_RECORD} values The values to copy into a table.
+ * @param {import("./data/unit-data.js").UNIT_RECORD} values The values to copy into a table.
  * @param {HTMLDivElement} toUpdate The element containing the table to update with new values.
  */
 function copyUpdatedValues(values, toUpdate) {    

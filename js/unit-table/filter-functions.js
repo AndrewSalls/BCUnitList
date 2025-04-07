@@ -55,3 +55,19 @@ export const isUltraTalentable = (/** @type {HTMLTableRowElement} */ r) => r.que
 export const isOrbTrait = (/** @type {HTMLTableRowElement} */ r, /** @type {number} */ x) => r.querySelectorAll(`.orb-color[data-trait='${x}']`).length > 0;
 export const isOrbType = (/** @type {HTMLTableRowElement} */ r, /** @type {number} */ x) => r.querySelectorAll(`.orb-type[data-type='${x}']`).length > 0;
 export const isOrbRank = (/** @type {HTMLTableRowElement} */ r, /** @type {number} */ x) => r.querySelectorAll(`.orb-rank[data-rank='${x}']`).length > 0;
+
+/* -------------------------- Global Filter Checking Function -------------------------- */
+/**
+ * Checks if a unit should be visible based on global filters.
+ * @param {import("../data/unit-data").UNIT_DATA} unit The unit to check.
+ * @returns {boolean} Whether the unit should be hidden.
+ */
+export function isGloballyFiltered(unit) {
+    let shouldBeHidden = (window.localStorage.getItem("f1") === "0") && unit.unobtainable;
+    shouldBeHidden ||= (window.localStorage.getItem("f2") === "0") && unit.collab;
+    shouldBeHidden ||= (window.localStorage.getItem("f3") === "0") && !unit.in_EN;
+    shouldBeHidden ||= (window.localStorage.getItem("f4") === "0") && unit.level === 0;
+    shouldBeHidden ||= (window.localStorage.getItem("f5") === "0") && !unit.favorited;
+
+    return shouldBeHidden;
+}

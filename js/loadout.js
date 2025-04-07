@@ -72,7 +72,7 @@ async function loadLoadouts() {
 
 /**
  * Creates a loadout element.
- * @param {import("./helper/loadout-storage-manager.js").LOADOUT|null} loadoutData A prexisting loadout to create, or null if a new loadout is being created.
+ * @param {import("./data/loadout-data.js").LOADOUT|null} loadoutData A prexisting loadout to create, or null if a new loadout is being created.
  * @returns {HTMLDivElement} The created loadout display.
  */
 function createLoadout(loadoutData, settings) {
@@ -128,7 +128,7 @@ function createLoadout(loadoutData, settings) {
 /**
  * Parses a loadout from a loadout container.
  * @param {HTMLDivElement} container A loadout container.
- * @returns {import("./helper/loadout-storage-manager.js").LOADOUT} A loadout.
+ * @returns {import("./data/loadout-data.js").LOADOUT} A loadout.
  */
 function createLoadoutObject(container) {
     return {

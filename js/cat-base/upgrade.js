@@ -4,7 +4,7 @@ import createArrowNumberBox from "./arrow-box.js";
 /**
  * Loads the Upgrades tab of the cat base.
  * @param {Object} settings An object containing the settings from assets/settings.js .
- * @param {Object} initialUpgrades All upgrade starting values.
+ * @param {[number, ...{ plus: number; level: number; }[]]} initialUpgrades All upgrade starting values.
  * @param {(index: number, level: number, plusLevel: number) => void} upgradeUpdate A function called whenever an upgrade value is changed in the info.
  */
 export default async function loadUpgradeInfo(settings, initialUpgrades, upgradeUpdate) {
@@ -13,7 +13,7 @@ export default async function loadUpgradeInfo(settings, initialUpgrades, upgrade
     wrapper?.appendChild(createCGSBox(initialUpgrades[0] === 1, upgradeUpdate));
 
     for(let x = 0; x < settings.abilities.abilityNames.length; x++) {
-        wrapper?.appendChild(createUpgradeLevelBox(settings.abilities.abilityNames[x], settings.abilities.abilityLevelCap, settings.abilities.abilityPlusLevelCap, initialUpgrades[x + 1], x, upgradeUpdate));
+        wrapper?.appendChild(createUpgradeLevelBox(settings.abilities.abilityNames[x], settings.abilities.abilityLevelCap, settings.abilities.abilityPlusLevelCap, /** @type {{ plus: number; level: number; }} */ (initialUpgrades[x + 1]), x, upgradeUpdate));
     }
 
     const rangeUpgrade = wrapper.querySelectorAll(".upgrade-box").item(settings.abilities.rangePosition + 1);
@@ -28,9 +28,9 @@ export default async function loadUpgradeInfo(settings, initialUpgrades, upgrade
 }
 
 /**
- * Creates an input for God being unlocked.
+ * Creates an input for CGS being unlocked.
  * @param {boolean} isOwned Whether this upgrade is owned already.
- * @returns {HTMLDivElement} An element containing an input for God's unlock status.
+ * @returns {HTMLDivElement} An element containing an input for CGS's unlock status.
  * @param {(index: number, level: number, plusLevel: number) => void} upgradeUpdate A function called whenever an upgrade value is changed in the info.
  */
 function createCGSBox(isOwned, upgradeUpdate) {

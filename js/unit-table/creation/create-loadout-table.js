@@ -1,7 +1,7 @@
 //@ts-check
 import makeSearchable from "../../helper/make-searchable.js";
 import makeDraggable, { sortIcons } from "../../helper/make-draggable.js";
-import { FORM } from "../../helper/parse-file.js";
+import { FORM } from "../../data/unit-data.js";
 
 const MAX_LOADOUT_NAME_LENGTH = 64;
 

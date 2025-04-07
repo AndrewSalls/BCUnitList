@@ -1,81 +1,11 @@
 //@ts-check
+import SETTINGS from "../../assets/settings.js";
+import { FORM } from "../data/unit-data.js";
 import { decodeUnit } from "./encoder.js";
 
 /**
- * @readonly
- * @enum {string}
- */
-export const RARITY = {
-    NORMAL: "N",
-    SPECIAL: "EX",
-    RARE: "RR",
-    SUPER_RARE: "SR",
-    UBER_RARE: "UR",
-    LEGEND_RARE: "LR"
-}
-
-/**
- * @readonly
- * @enum {number}
- */
-export const FORM = {
-    NORMAL: 0,
-    EVOLVED: 1,
-    TRUE: 2,
-    ULTRA: 3
-}
-
-/**
- * @typedef {{Type: string; MaxLevel: number; MaxPlusLevel: number; }} LEVEL_CAP
- * @typedef {{ name: string; cap: number; value: number; }} TALENT
- * @typedef {{ trait: number; type: number; rank: number; }|null} ORB
- * 
- * @typedef LOADOUT_UNIT_DATA
- * @property {number} id
- * @property {FORM} current_form
- * @property {number} level
- * @property {number} plus_level
- * @property {number[]} talents
- * @property {number[]} ultra_talents
- * @property {ORB[]} orb
- * 
- * @typedef UNIT_RECORD
- * @property {number} id
- * @property {FORM} current_form
- * @property {number} level
- * @property {number} plus_level
- * @property {number[]} talents
- * @property {number[]} ultra_talents
- * @property {ORB[]} orb
- * @property {boolean} favorited
- * @property {boolean} hidden
- * 
- * @typedef UNIT_DATA
- * @property {number} id
- * @property {RARITY} rarity
- * @property {boolean} in_EN
- * @property {boolean} collab
- * @property {boolean} unobtainable
- * @property {boolean} disable_icon
- * @property {string | null} normal_form
- * @property {string | null} evolved_form
- * @property {string | null} true_form
- * @property {string | null} ultra_form
- * @property {number} max_form
- * @property {LEVEL_CAP} level_cap
- * @property {FORM} current_form
- * @property {number} level
- * @property {number} plus_level
- * @property {TALENT[]} talents
- * @property {TALENT[]} ultra_talents
- * @property {ORB[]} orb
- * @property {boolean} favorited
- * @property {boolean} hidden
- */
-
-/**
  * Gets all valid level cap objects.
- * @returns {Promise<LEVEL_CAP[]>} A list of level caps.
+ * @returns {Promise<import("../data/unit-data.js").LEVEL_CAP[]>} A list of level caps.
  */
 async function getLevelCaps() {
     //@ts-ignore PapaParse breaks when imported as module
@@ -85,11 +15,10 @@ async function getLevelCaps() {
 /**
  * Gets all unit data.
  * @param {Object} categories All categories, for the purposes of determining if a unit is a collab unit or unobtainable.
- * @param {Object} settings The site settings.
- * @returns {Promise<{units: UNIT_DATA[], ur: number}>} A list of every unit in the game, and the total user rank the current user has due to unit levels.
+ * @returns {Promise<import("../data/unit-data.js").UNIT_DATA[]>} A list of every unit in the game.
  */
-export async function getUnitData(categories, settings) {
-    const unitCount = settings.unitCount;
+export async function getUnitData(categories) {
+    const unitCount = SETTINGS.unitCount;
     const levelingCaps = await getLevelCaps();
     const collabUnits = [...Object.values(categories["collabs"]).flat(), ...Object.values(categories["small_collabs"]).flat()];
     const unobtainableUnits = categories["other"]["Unobtainable"];
@@ -132,9 +61,6 @@ export async function getUnitData(categories, settings) {
                         current_form: FORM.NORMAL,
                         hidden: false
                     };
-                    if(settings.skipImages.includes(entry.ID)) {
-                        unitData.disable_icon = true;
-                    }
                     
                     if(window.localStorage.getItem(entry.ID)) {
                         const decompressed = decodeUnit(window.localStorage.getItem(entry.ID));
@@ -162,10 +88,8 @@ export async function getUnitData(categories, settings) {
             ));
     }
 
-    return {
-        units: (await Promise.all(awaitFinish)).flat(),
-        ur: totalLevel
-    };
+    window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + totalLevel}`);
+    return (await Promise.all(awaitFinish)).flat();
 }
 
 /**
@@ -189,7 +113,7 @@ function findFormNumber(...forms) {
 /**
  * Parses talents from their encoding in the unit data csvs.
  * @param {string} talentString The encoded string.
- * @returns {TALENT[]} A list of parsed talents.
+ * @returns {import("../data/unit-data.js").TALENT[]} A list of parsed talents.
  */
 function parseTalents(talentString) {
     if(!talentString) {
@@ -207,15 +131,14 @@ function parseTalents(talentString) {
 
 /**
  * Parses upgrades from localStorage.
- * @param {Object} settings Site settings.
- * @returns {{upData: [number, ...{ level: number, plus: number}[]], upUR: number}} upData contains a binary value representing whether God is owned, followed by the level and plus level of all abilities. upUR is the amount that the user's user rank should increase by as a result of abilities.
+ * @returns {{cgs: boolean, abilities: { level: number, plus: number }[]}} All upgrades' initial values.
  */
-export function parseUpgrades(settings) {
+export function parseUpgrades() {
     const abilityIconLevels = window.localStorage.getItem("abo");
     let upgradeData, upgradeUR = 0;
 
     if(!abilityIconLevels) {
-        upgradeData = settings.abilities.abilityNames.map((/** @type {any} */ _) => { return {
+        upgradeData = SETTINGS.abilities.abilityNames.map((/** @type {any} */ _) => { return {
             level: 1,
             plus: 0
         }});
@@ -233,7 +156,8 @@ export function parseUpgrades(settings) {
         });
     }
 
-    return { upData: [parseInt(window.localStorage.getItem("cgs") ?? "0"), ...upgradeData], upUR: upgradeUR };
+    window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + upgradeUR}`);
+    return { cgs: window.localStorage.getItem("cgs") === "1", abilities: upgradeData };
 }
 
 /**

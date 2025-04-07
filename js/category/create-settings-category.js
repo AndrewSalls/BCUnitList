@@ -1,5 +1,5 @@
 //@ts-check
-import { parseSnakeCase } from "./category-parser.js";
+import { parseSnakeCase } from "../helper/parse-string.js";
 
 /**
  * Creates a button for filtering a sub-category from category displays.
@@ -31,11 +31,10 @@ export function createSubCategoryButton(superCategoryName, subCategoryName, loca
 /**
  * Creates a button for filtering a super-category from category displays.
  * @param {string} superCategoryName The name of the super-category to create a button for.
- * @param {Object} categoryData An object containing all super-categories and their sub-categories.
- * @param {string[]} categoryOrder The order of categories's filter boolean in the localStorage for this super-category.
+ * @param {string[]} subCategoriesOrder A list of the sub-categories in order. 
  * @returns {HTMLDivElement} An element containing the button for filtering a super-category.
  */
-export function createSuperCategoryButton(superCategoryName, categoryData, categoryOrder) {
+export function createSuperCategoryButton(superCategoryName, subCategoriesOrder) {
     const superKey = `gk-${superCategoryName}`;
     
     const wrapper = document.createElement("div");
@@ -61,8 +60,8 @@ export function createSuperCategoryButton(superCategoryName, categoryData, categ
     subWrapper.classList.add("h-align");
     subWrapper.classList.add("sub-category-wrapper");
 
-    for(const subCategory of Object.keys(categoryData[superCategoryName]).sort()) {
-        subWrapper.appendChild(createSubCategoryButton(superCategoryName, subCategory, categoryOrder.indexOf(subCategory) + 1));
+    for(let x = 0; x < subCategoriesOrder.length; x++) {
+        subWrapper.appendChild(createSubCategoryButton(superCategoryName, subCategoriesOrder[x], x));
     }
 
     wrapper.append(superButton, subWrapper);

@@ -136,7 +136,7 @@ function initializeContent() {
         const output = {
             title: /** @type {HTMLInputElement} */ (container.querySelector(".loadout-name")).value.trim(),
             forms: /** @type {HTMLDivElement[]} */ ([...container.querySelectorAll(".chip.set-unit")]).map(c => parseInt(c.dataset.form ?? "0")),
-            units: /** @type {import("./helper/parse-file.js").UNIT_RECORD[]} */ ([]),
+            units: /** @type {import("./data/unit-data.js").UNIT_RECORD[]} */ ([]),
             baseLevels: /** @type {[number, number, number]} */ ([0, 0, 0])
         };
         

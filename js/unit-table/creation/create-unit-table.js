@@ -6,8 +6,8 @@ import attachUnitTableColumnSort from "../sort-units.js";
 /**
  * Creates a unit table.
  * @param {string} titleText The name of the table.
- * @param {import("../../helper/parse-file.js").UNIT_DATA[]} unitData The units to add to the table.
- * @param {(unit: import("../../helper/parse-file.js").UNIT_RECORD) => void} changeEvent An event that gets called when a row's value changes.
+ * @param {import("../../data/unit-data.js").UNIT_DATA[]} unitData The units to add to the table.
+ * @param {(unit: import("../../data/unit-data.js").UNIT_RECORD) => void} changeEvent An event that gets called when a row's value changes.
  * @param {import("../../helper/loading.js").LOADING_BAR|null} loadingBar A loading bar to update the page as the table loads, or null if the page does not need a loading bar.
  */
 export default function createSearchableTable(titleText, unitData, changeEvent, loadingBar = null) {

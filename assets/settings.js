@@ -1,5 +1,5 @@
-export default {
-    "version": "1.6",
+export default SETTINGS = {
+    "version": "1.7",
     "gameVersion": "14.2.0",
     "unitCount": 786,
     "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782],
@@ -38,6 +38,7 @@ export default {
         "rangePlusLevelCap": 0,
         "rangePosition": 1,
         "costs": {
+            "CGSxpAmt": 2000,
             "xpAmt": [
                 [500,1000,1500,2000,2500,3000,3500,4000,4500,500,100,2000,4000,5000,6000,7000,8000,9000, 10000],
                 [1000,2000,3000,4000,5000,6000,7000,8000,9000,1000,2000,4000,8000,10000,12000,14000,16000,18000, 20000],
@@ -45,5 +46,6 @@ export default {
             ],
             "costTypes": [2, 0, 0, 1, 1, 1, 1, 1, 1, 1]
         }
-    }
+    },
+    "categoryTypes": ["collabs", "event_units", "gacha_non_uber", "gacha_seasonal", "gacha_uber", "other", "seasonal_events", "small_collabs", "story_units"]
 }
