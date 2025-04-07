@@ -3,12 +3,12 @@
 /**
  * Encodes a loadout containing unit IDs as a string, taking the full unit data from the user's stored values for those units.
  * @param {import("./loadout-storage-manager").LOADOUT} loadoutData The loadout data.
+ * @param {import("./parse-file").UNIT_DATA[]} unitData The unit data for the units in the loadout.
  * @returns {Promise<string>} The encoded loadout.
  */
-export async function encodeLink(loadoutData) {
-    const units = await makeRequest(REQUEST_TYPES.GET_MULTIPLE_DATA, loadoutData.units);
-
-    loadoutData.units = units.map((/** @type {any} */ u) => encodeUnitEntry(u));
+export async function encodeLink(loadoutData, unitData) {
+    //@ts-ignore Not creating a whole new object to avoid typecasting
+    loadoutData.units = unitData.map((/** @type {any} */ u) => encodeUnitEntry(u));
     loadoutData.baseLevels = [0, 0, 0];
     for(let x = 0; x < 3; x++) {
         //@ts-ignore All localStorage values are automatically initialized if not set.
@@ -92,7 +92,7 @@ export function encodeUnit(unitData) {
 
 /**
  * Converts a unit's string encoding to the unit's JSON encoding.
- * @param {string} unitStr The string encoding.
+ * @param {string|null} unitStr The string encoding of the unit, or null if the unit has no initial values.
  * @returns {import("./parse-file").UNIT_RECORD} A unit's JSON encoding.
  */
 export function decodeUnit(unitStr) {

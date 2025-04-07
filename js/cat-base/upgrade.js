@@ -3,17 +3,17 @@ import createArrowNumberBox from "./arrow-box.js";
 
 /**
  * Loads the Upgrades tab of the cat base.
- * @param {Object} settings An object containing the settings from assets/settings.js
+ * @param {Object} settings An object containing the settings from assets/settings.js .
+ * @param {Object} initialUpgrades All upgrade starting values.
+ * @param {(index: number, level: number, plusLevel: number) => void} upgradeUpdate A function called whenever an upgrade value is changed in the info.
  */
-export default async function loadUpgradeInfo(settings) {
+export default async function loadUpgradeInfo(settings, initialUpgrades, upgradeUpdate) {
     const wrapper = /** @type {!HTMLDivElement} */ (document.querySelector("#upgrade-selector"));
-    //@ts-ignore makeRequest is required for all iframe pages to load.
-    const res = await makeRequest(REQUEST_TYPES.GET_ALL_UPGRADE, null);
 
-    wrapper?.appendChild(createCGSBox(res[0] === 1));
+    wrapper?.appendChild(createCGSBox(initialUpgrades[0] === 1, upgradeUpdate));
 
     for(let x = 0; x < settings.abilities.abilityNames.length; x++) {
-        wrapper?.appendChild(createUpgradeLevelBox(settings.abilities.abilityNames[x], settings.abilities.abilityLevelCap, settings.abilities.abilityPlusLevelCap, res[x + 1], x));
+        wrapper?.appendChild(createUpgradeLevelBox(settings.abilities.abilityNames[x], settings.abilities.abilityLevelCap, settings.abilities.abilityPlusLevelCap, initialUpgrades[x + 1], x, upgradeUpdate));
     }
 
     const rangeUpgrade = wrapper.querySelectorAll(".upgrade-box").item(settings.abilities.rangePosition + 1);
@@ -31,8 +31,9 @@ export default async function loadUpgradeInfo(settings) {
  * Creates an input for God being unlocked.
  * @param {boolean} isOwned Whether this upgrade is owned already.
  * @returns {HTMLDivElement} An element containing an input for God's unlock status.
+ * @param {(index: number, level: number, plusLevel: number) => void} upgradeUpdate A function called whenever an upgrade value is changed in the info.
  */
-function createCGSBox(isOwned) {
+function createCGSBox(isOwned, upgradeUpdate) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("v-align");
     wrapper.classList.add("upgrade-box");
@@ -54,8 +55,7 @@ function createCGSBox(isOwned) {
     ownedCheckbox.type = "checkbox";
     ownedCheckbox.title = "Have you purchased The Cat God [not to be confused with Cat God (Cool Dude)]";
     ownedCheckbox.checked = isOwned;
-    //@ts-ignore makeRequest is required for all iframe pages to load.
-    ownedCheckbox.onchange = () => makeRequest(REQUEST_TYPES.UPDATE_UPGRADE, { id: 0, level: ownedCheckbox.checked ? 1 : 0 });
+    ownedCheckbox.onchange = () => upgradeUpdate(0, ownedCheckbox.checked ? 1 : 0, 0);
 
     ownedWrapper.append(ownedLabel, ownedCheckbox);
     wrapper.append(title, image, ownedWrapper);
@@ -70,8 +70,9 @@ function createCGSBox(isOwned) {
  * @param {{ plus: number; level: number; }} currentLevelData The initial values for level and plus level inputs.
  * @param {number} id The position of the ability in the various arrays representing the ability in assets/settings.js
  * @returns {HTMLDivElement} An element containing the inputs for a level and plus level.
+ * @param {(index: number, level: number, plusLevel: number) => void} upgradeUpdate A function called whenever an upgrade value is changed in the info.
  */
-function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, id) {
+function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, id, upgradeUpdate) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("v-align");
     wrapper.classList.add("upgrade-box");
@@ -91,14 +92,12 @@ function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, i
     const [plusLevelElm, plusInputElm] = createArrowNumberBox(levelPlusCap, currentLevelData.plus, (oldValue, newValue) => {
         //@ts-ignore
         userRankDisplay.textContent = `${parseInt(userRankDisplay.textContent) + (newValue - oldValue)}`;
-        //@ts-ignore makeRequest is required for all iframe pages to load.
-        makeRequest(REQUEST_TYPES.UPDATE_UPGRADE, { id: id + 1, level: parseInt(levelInput.value), plus: parseInt(plusLevelInput.value) });
+        upgradeUpdate(id + 1, parseInt(levelInput.value), parseInt(plusLevelInput.value));
     });
     const [levelElm, levelInputElm] = createArrowNumberBox(levelCap, currentLevelData.level, (oldValue, newValue) => {
         //@ts-ignore
         userRankDisplay.textContent = `${parseInt(userRankDisplay.textContent) + (newValue - oldValue)}`;
-        //@ts-ignore makeRequest is required for all iframe pages to load.
-        makeRequest(REQUEST_TYPES.UPDATE_UPGRADE, { id: id + 1, level: parseInt(levelInput.value), plus: parseInt(plusLevelInput.value) });
+        upgradeUpdate(id + 1, parseInt(levelInput.value), parseInt(plusLevelInput.value));
     }, 1);
     levelInput = levelInputElm;
     plusLevelInput = plusInputElm;

@@ -1,6 +1,6 @@
+//@ts-check
 import { FORM } from "./parse-file.js";
 
-//@ts-check
 let targettedInput = null;
 
 /**
@@ -9,7 +9,7 @@ let targettedInput = null;
  * @param {(id: number, form: FORM) => void} findCallback A function called when an option is selected from the search.
  */
 export default function makeSearchable(input, findCallback) {
-    const suggestionDropdown = document.querySelector("#search-suggestion-dropdown");
+    const suggestionDropdown = /** @type {HTMLDivElement} */ (document.querySelector("#search-suggestion-dropdown"));
 
     function displayDropdown() {
         targettedInput = input;
@@ -35,16 +35,17 @@ export default function makeSearchable(input, findCallback) {
     input.addEventListener("focus", displayDropdown);
     input.addEventListener("blur", (/** @type {any} */ _ev) => {
         suggestionDropdown.classList.add("invisible");
-        suggestionDropdown.top = "-10000000px";
-        suggestionDropdown.left = "-10000000px";
+        suggestionDropdown.style.top = "-10000000px";
+        suggestionDropdown.style.left = "-10000000px";
     });
-    input.addEventListener("suggest", (/** @type {{ detail: { id: any; form: any; }; }} */ v) => {
+    //@ts-ignore Custom event is event.
+    input.addEventListener("suggest", (/** @type {CustomEvent} */ v) => {
         input.value = "";
         input.blur();
         suggestionDropdown.querySelectorAll(".hidden").forEach(s => s.classList.remove("hidden"));
         findCallback(v.detail.id, v.detail.form);
     });
-    input.addEventListener("keydown", (/** @type {{ key: string; }} */ ev) => {
+    input.addEventListener("keydown", (/** @type {KeyboardEvent} */ ev) => {
         if(ev.key === "ArrowUp") {
             let target = suggestionDropdown.querySelector(".suggestion-hovered");
             if(!target) {
@@ -61,7 +62,7 @@ export default function makeSearchable(input, findCallback) {
                 if(target === suggestionDropdown.children[0]) {
                     target = suggestionDropdown.children[suggestionDropdown.children.length - 1];
                 }
-                target = target.previousElementSibling;
+                target = /** @type {HTMLDivElement} */ (target.previousElementSibling);
             } while(target.classList.contains("hidden"));
 
             target.classList.add("suggestion-hovered");
@@ -82,7 +83,7 @@ export default function makeSearchable(input, findCallback) {
                 if(target === suggestionDropdown.children[suggestionDropdown.children.length - 1]) {
                     target = suggestionDropdown.children[0];
                 }
-                target = target.nextElementSibling;
+                target = /** @type {HTMLDivElement} */ (target.nextElementSibling);
             } while(target.classList.contains("hidden"));
 
             target.classList.add("suggestion-hovered");
@@ -94,21 +95,21 @@ export default function makeSearchable(input, findCallback) {
             let id = -1;
             let form = -1;
 
-            const hovered = suggestionDropdown.querySelector(".suggestion-hovered")
+            const hovered = /** @type {HTMLDivElement} */ (suggestionDropdown.querySelector(".suggestion-hovered"));
             if(hovered) {
-                id = parseInt(hovered.dataset.target);
-                form = parseInt(hovered.dataset.form);
-            } else if(!isNaN(input.value)) {
+                id = parseInt(hovered.dataset.target ?? "0");
+                form = parseInt(hovered.dataset.form ?? "0");
+            } else if(!isNaN(parseInt(input.value))) {
                 id = parseInt(input.value);
-                if(id < 0 || id > parseInt(suggestionDropdown.dataset.max_count) || !suggestionDropdown.querySelector(`div[data-target="${id}"]`)) {
+                if(id < 0 || id > parseInt(suggestionDropdown.dataset.max_count ?? "0") || !suggestionDropdown.querySelector(`div[data-target="${id}"]`)) {
                     return;
                 }
-                form = parseInt([...suggestionDropdown.querySelectorAll(`div[data-target="${id}"]`)].reduce((a, b) => parseInt(b.dataset.form) - parseInt(a.dataset.form)).dataset.form);
+                form = Math.max(.../** @type {HTMLDivElement[]} */ ([...suggestionDropdown.querySelectorAll(`div[data-target="${id}"]`)]).map(d => parseInt(d.dataset.form ?? "0")));
             } else {
-                const idEntry = suggestionDropdown.querySelector(`div[data-content="${input.value.trim().toLowerCase()}"]`);
+                const idEntry = /** @type {HTMLDivElement|undefined} */ (suggestionDropdown.querySelector(`div[data-content="${input.value.trim().toLowerCase()}"]`));
                 if(idEntry) {
-                    id = parseInt(idEntry.dataset.target);
-                    form = parseInt(idEntry.dataset.form);
+                    id = parseInt(idEntry.dataset.target ?? "0");
+                    form = parseInt(idEntry.dataset.form ?? "0");
                 } else {
                     return;
                 }
@@ -121,8 +122,8 @@ export default function makeSearchable(input, findCallback) {
         } else {
             const cleanValue = input.value.trim().toLowerCase();
 
-            for(const child of suggestionDropdown.children) {
-                child.classList.toggle("hidden", !child.dataset.content.includes(cleanValue));
+            for(const child of /** @type {HTMLCollectionOf<HTMLDivElement>} */ (suggestionDropdown.children)) {
+                child.classList.toggle("hidden", !child.dataset.content?.includes(cleanValue));
 
                 if(child.classList.contains("suggestion-hovered") && child.classList.contains("hidden")) {
                     child.classList.remove("suggestion-hovered");
@@ -163,28 +164,14 @@ export function createSearchDropdown() {
 /**
  * Creates a datalist containing all recorded unit forms, regardless of if the user owns the unit and their form.
  * @param {Element} datalist The element that will contain all searchable divs.
+ * @param {[number, string|null, string|null, string|null, string|null][]} names The unit ID and name of each unit form, with the name of the form being null if the unit lacks that form.
  */
-export async function initializeDataset(datalist, finds_all = false) {
-    const names = await makeRequest(REQUEST_TYPES.GET_NAMES, null, finds_all);
-
+export async function initializeDataset(datalist, names) {
     for(let x = 0; x < names.length; x++) {
         appendSearchSuggestions(names[x], datalist);
     }
 
-    [...datalist.children].sort((a, b) => a.textContent.toLowerCase() > b.textContent.toLowerCase() ? 1 : -1).forEach(n => datalist.appendChild(n));
-}
-
-/**
- * Creates a datalist containing all unit forms owned by the user.
- * @param {Element} datalist The element that will contain all searchable divs.
- */
-export async function initializeDatasetLimited(datalist, finds_all = false) {
-    const names = await makeRequest(REQUEST_TYPES.GET_OWNED_FORM_NAMES, null, finds_all);
-
-    for(let x = 0; x < names.length; x++) {
-        appendSearchSuggestions(names[x], datalist);
-    }
-
+    //@ts-ignore textContent is never null
     [...datalist.children].sort((a, b) => a.textContent.toLowerCase() > b.textContent.toLowerCase() ? 1 : -1).forEach(n => datalist.appendChild(n));
 }
 
@@ -211,7 +198,7 @@ function  createSearchOption(text, id, form, datalist) {
     option.textContent = text;
     option.dataset.content = text.toLowerCase();
     option.dataset.target = `${id}`;
-    option.dataset.form = form;
+    option.dataset.form = `${form}`;
 
     option.addEventListener("mouseenter", () => suggestionOption_onEnter(option, datalist));
     option.addEventListener("mouseleave", () => option.classList.remove("suggestion-hovered"));

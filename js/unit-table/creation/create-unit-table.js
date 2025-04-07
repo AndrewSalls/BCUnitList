@@ -6,12 +6,14 @@ import attachUnitTableColumnSort from "../sort-units.js";
 /**
  * Creates a unit table.
  * @param {string} titleText The name of the table.
- * @param {import("../../helper/parse-file.js").UNIT_RECORD[]} unitData The units to add to the table.
+ * @param {import("../../helper/parse-file.js").UNIT_DATA[]} unitData The units to add to the table.
+ * @param {(unit: import("../../helper/parse-file.js").UNIT_RECORD) => void} changeEvent An event that gets called when a row's value changes.
  * @param {import("../../helper/loading.js").LOADING_BAR|null} loadingBar A loading bar to update the page as the table loads, or null if the page does not need a loading bar.
  */
-export default function createSearchableTable(titleText, unitData, loadingBar = null) {
+export default function createSearchableTable(titleText, unitData, changeEvent, loadingBar = null) {
     const wrapper = document.createElement("div");
     const title = document.createElement("h2");
+    title.classList.add("searchable-table-title");
     title.textContent = titleText;
 
     const table = document.createElement("table");
@@ -52,7 +54,7 @@ export default function createSearchableTable(titleText, unitData, loadingBar = 
         if(unit !== null) {
             const row = createRow(unit);
             tbody.appendChild(row);
-            observeRowChange(row, () => makeRequest(REQUEST_TYPES.UPDATE_ID, getValuesFromRow(row)));
+            observeRowChange(row, () => changeEvent(getValuesFromRow(row)));
         }
 
         loadingBar?.rincrement();

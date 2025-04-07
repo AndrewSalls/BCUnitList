@@ -1,3 +1,4 @@
+//@ts-check
 import createArrowNumberBox from "./cat-base/arrow-box.js";
 import { createSearchDropdown, initializeDataset } from "./helper/make-searchable.js";
 import { decodeLink, encodeDirectLink } from "./helper/encoder.js";
@@ -7,47 +8,55 @@ import createSearchableTable from "./unit-table/creation/create-unit-table.js";
 import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
 import { getValuesFromRow } from "./helper/link-row.js";
+import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 
 let idFormMap = new Map();
 
+/**
+ * Initializes page elements once page has loaded.
+ */
 document.addEventListener("DOMContentLoaded", () => {
     initializeContent();
 
     window.addEventListener("portLoaded", loadLoadouts);
     if(checkPort()) {
-        window.dispatchEvent("portLoaded");
+        window.dispatchEvent(new CustomEvent("portLoaded"));
     }
 });
 
+/**
+ * Initializes static content on the page.
+ */
 function initializeContent() {
     document.body.appendChild(createOrbMenu());
     initializeOrbSelection();
 
-    const table = createSearchableTable("Loadout", []);
-    table.querySelector("h2").remove();
-    document.querySelector("#unit-data-box").appendChild(table);
+    const table = createSearchableTable("Loadout", [], _ => {});
+    table.querySelector("h2")?.remove();
+    document.querySelector("#unit-data-box")?.appendChild(table);
 
-    const clearButton = document.querySelector("#reset-loadout");
+    const clearButton = /** @type {HTMLButtonElement} */ (document.querySelector("#reset-loadout"));
     clearButton.onclick = () => {
         idFormMap.clear();
-        document.querySelector("#unit-data-box tbody").replaceChildren();
-        document.querySelectorAll("#loadout-box .chip.set-unit").forEach(c => {
+        document.querySelector("#unit-data-box tbody")?.replaceChildren();
+        /** @type {NodeListOf<HTMLDivElement>} */ (document.querySelectorAll("#loadout-box .chip.set-unit")).forEach(c => {
             c.classList.remove("set-unit");
             delete c.dataset.form;
             delete c.dataset.maxForm;
             delete c.dataset.id;
 
-            c.querySelector(".unit-icon").src = "./assets/img/empty_unit.png";
-            const unitID = c.querySelector(".unit-id");
+            /** @type {HTMLImageElement} */ (c.querySelector(".unit-icon")).src = "./assets/img/unit_icon/unknown.png";
+            const unitID = /** @type {HTMLTableCellElement} */ (c.querySelector(".unit-id"));
             unitID.classList.add("hidden");
             unitID.textContent = "";
-            c.querySelector(".remove-unit").classList.add("hidden");
-            c.querySelector(".unset-search").classList.remove("hidden");
+            c.querySelector(".remove-unit")?.classList.add("hidden");
+            c.querySelector(".unset-search")?.classList.remove("hidden");
         });
     };
-    const codeEnterButton = document.querySelector("#import-loadout");
-    const shareCodeInput = document.querySelector("#code-input");
-    shareCodeInput.addEventListener("keyup", ev => {
+    const codeEnterButton = /** @type {HTMLButtonElement} */ (document.querySelector("#import-loadout"));
+    const shareCodeInput = /** @type {HTMLInputElement} */ (document.querySelector("#code-input"));
+    shareCodeInput?.addEventListener("keyup", ev => {
+        //@ts-ignore
         if(ev.key === "Enter") {
             codeEnterButton.click();
         }
@@ -60,34 +69,34 @@ function initializeContent() {
             const decoded = decodeLink(loadoutCode);
             clearButton.click();
 
-            document.querySelector("#loadout-box .loadout-name").value = decoded.title;
-            document.querySelector("#loadout-cannon input").value = decoded.baseLevels[0];
-            document.querySelector("#loadout-style input").value = decoded.baseLevels[1];
-            document.querySelector("#loadout-foundation input").value = decoded.baseLevels[2];
-            const cannon = document.querySelector("#loadout-box .base-cannon");
-            cannon.dataset.type = decoded.base[0];
-            cannon.src = `./assets/img/foundation/base_${decoded.base[0]}.png`;
-            const style = document.querySelector("#loadout-box .base-style");
-            style.dataset.type = decoded.base[1];
-            style.src = `./assets/img/foundation/base_${decoded.base[1]}_style.png`;
-            const foundation = document.querySelector("#loadout-box .base-foundation");
-            foundation.dataset.type = decoded.base[2];
-            foundation.src = `./assets/img/foundation/base_${decoded.base[2]}_foundation.png`;
+            /** @type {HTMLInputElement} */ (document.querySelector("#loadout-box .loadout-name")).value = decoded.title;
+            /** @type {HTMLInputElement} */ (document.querySelector("#loadout-cannon input")).value = `${decoded.baseLevels[0]}`;
+            /** @type {HTMLInputElement} */ (document.querySelector("#loadout-style input")).value = `${decoded.baseLevels[1]}`;
+            /** @type {HTMLInputElement} */ (document.querySelector("#loadout-foundation input")).value = `${decoded.baseLevels[2]}`;
+            const cannon = /** @type {HTMLImageElement} */ (document.querySelector("#loadout-box .base-cannon"));
+            cannon.dataset.type = `${decoded.baseLevels[0]}`;
+            cannon.src = `./assets/img/foundation/base_${decoded.baseLevels[0]}.png`;
+            const style = /** @type {HTMLImageElement} */ (document.querySelector("#loadout-box .base-style"));
+            style.dataset.type = `${decoded.baseLevels[1]}`;
+            style.src = `./assets/img/foundation/base_${decoded.baseLevels[1]}_style.png`;
+            const foundation = /** @type {HTMLImageElement} */ (document.querySelector("#loadout-box .base-foundation"));
+            foundation.dataset.type = `${decoded.baseLevels[2]}`;
+            foundation.src = `./assets/img/foundation/base_${decoded.baseLevels[2]}_foundation.png`;
 
-            const chips = [...document.querySelectorAll("#loadout-box .chip")];
+            const chips = /** @type {HTMLDivElement[]} */ ([...document.querySelectorAll("#loadout-box .chip")]);
             for(let x = 0; x < decoded.units.length && x < chips.length; x++) {
-                makeRequest(REQUEST_TYPES.GET_ID_DATA, decoded.units[x].id, true).then(u => {
+                REQUEST_TYPES.GET_ID_DATA(decoded.units[x].id, true).then(u => {
                     chips[x].classList.add("set-unit");
-                    chips[x].querySelector(".unit-icon").src = `./assets/img/unit_icon/${decoded.units[x].id}_${decoded.forms[x]}.png`;
-                    chips[x].dataset.form = decoded.forms[x];
-                    chips[x].dataset.id = decoded.units[x].id;
-                    chips[x].dataset.maxForm = u.max_form;
+                    /** @type {HTMLImageElement} */ (chips[x].querySelector(".unit-icon")).src = `./assets/img/unit_icon/${decoded.units[x].id}_${decoded.forms[x]}.png`;
+                    chips[x].dataset.form = `${decoded.forms[x]}`;
+                    chips[x].dataset.id = `${decoded.units[x].id}`;
+                    chips[x].dataset.maxForm = `${u.max_form}`;
     
-                    const unitID = chips[x].querySelector(".unit-id");
+                    const unitID = /** @type {HTMLTableCellElement} */ (chips[x].querySelector(".unit-id"));
                     unitID.classList.remove("hidden");
-                    unitID.textContent = decoded.units[x].id;
-                    chips[x].querySelector(".remove-unit").classList.remove("hidden");
-                    chips[x].querySelector(".unset-search").classList.add("hidden");
+                    unitID.textContent = `${decoded.units[x].id}`;
+                    chips[x].querySelector(".remove-unit")?.classList.remove("hidden");
+                    chips[x].querySelector(".unset-search")?.classList.add("hidden");
 
                     u.current_form = decoded.forms[x];
                     u.level = decoded.units[x].level;
@@ -103,55 +112,59 @@ function initializeContent() {
                     }
 
                     const newRow = createRow(u);
-                    newRow.querySelector(".hide-option").remove();
-                    newRow.querySelector(".unit-icon").addEventListener("click", () => {
-                        const form = parseInt(newRow.querySelector(".row-image").dataset.form);
-                        const chip = document.querySelector(`#loadout-box .chip[data-id='${decoded.units[x].id}']`); // need new selector because chips can be rearranged
-                        chip.dataset.form = form;
-                        chip.querySelector(".unit-icon").src = `./assets/img/unit_icon/${decoded.units[x].id}_${form}.png`;
+                    newRow.querySelector(".hide-option")?.remove();
+                    newRow.querySelector(".unit-icon")?.addEventListener("click", () => {
+                        const form = parseInt(/** @type {HTMLDivElement} */ (newRow.querySelector(".row-image")).dataset.form ?? "0");
+                        const chip = /** @type {HTMLDivElement} */ (document.querySelector(`#loadout-box .chip[data-id='${decoded.units[x].id}']`)); // need new selector because chips can be rearranged
+                        chip.dataset.form = `${form}`;
+                        /** @type {HTMLImageElement} */ (chip.querySelector(".unit-icon")).src = `./assets/img/unit_icon/${decoded.units[x].id}_${form}.png`;
                         idFormMap.set(decoded.units[x].id, form);
                     });
-                    document.querySelector("#unit-data-box tbody").appendChild(newRow);
+                    document.querySelector("#unit-data-box tbody")?.appendChild(newRow);
                     idFormMap.set(decoded.units[x].id, decoded.forms[x]);
                 });
             }
         } catch(e) {
             console.error(e);
-            makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Invalid loadout data!", isError: true });
+            REQUEST_TYPES.SEND_ALERT("Invalid loadout data!", true);
         }
     };
     
-    const container = document.querySelector("#loadout-box");
-    document.querySelector("#copy-loadout").onclick = async () => {
-        let unitData = [...document.querySelectorAll("#unit-data-box tbody tr")];
+    const container = /** @type {HTMLDivElement} */ (document.querySelector("#loadout-box"));
+    /** @type {HTMLButtonElement} */ (document.querySelector("#copy-loadout")).onclick = async () => {
+        const unitRows = /** @type {HTMLTableRowElement[]} */ ([...document.querySelectorAll("#unit-data-box tbody tr")]);
         const output = {
-            title: container.querySelector(".loadout-name").value.trim(),
-            units: [...container.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.id)),
-            forms: [...container.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.form)),
-            base: [parseInt(container.querySelector(".base-cannon").dataset.type),
-                parseInt(container.querySelector(".base-style").dataset.type),
-                parseInt(container.querySelector(".base-foundation").dataset.type)]
+            title: /** @type {HTMLInputElement} */ (container.querySelector(".loadout-name")).value.trim(),
+            forms: /** @type {HTMLDivElement[]} */ ([...container.querySelectorAll(".chip.set-unit")]).map(c => parseInt(c.dataset.form ?? "0")),
+            units: /** @type {import("./helper/parse-file.js").UNIT_RECORD[]} */ ([]),
+            baseLevels: /** @type {[number, number, number]} */ ([0, 0, 0])
         };
         
-        output.baseLevels = [];
-        output.baseLevels[0] = document.querySelector("#loadout-cannon input").value;
-        output.baseLevels[1] = document.querySelector("#loadout-style input").value;
-        output.baseLevels[2] = document.querySelector("#loadout-foundation input").value;
+        output.baseLevels[0] = parseInt(/** @type {HTMLInputElement} */ (document.querySelector("#loadout-cannon input")).value);
+        output.baseLevels[1] = parseInt(/** @type {HTMLInputElement} */ (document.querySelector("#loadout-style input")).value);
+        output.baseLevels[2] = parseInt(/** @type {HTMLInputElement} */ (document.querySelector("#loadout-foundation input")).value);
 
-        unitData = unitData.map(r => getValuesFromRow(r));
+        const unitData = unitRows.map(r => getValuesFromRow(r));
         unitData.forEach((d, i) => d.current_form = output.forms[i]);
         output.units = unitData;
         
         const link = encodeDirectLink(output);
         navigator.clipboard.writeText(link);
-        makeRequest(REQUEST_TYPES.SEND_ALERT, { message: "Loadout data copied to clipboard!", isError: false });
+        REQUEST_TYPES.SEND_ALERT("Loadout data copied to clipboard!", false);
     };
 }
 
+/**
+ * Creates an input for a base part as part of a loadout.
+ * @param {number} value The initial value of the base part. 
+ * @param {number} cap The maximum value of the base part.
+ * @param {number} type The index of the base part in settings.ototo
+ * @returns {HTMLLabelElement} A label containing the input. 
+ */
 function createBaseLevelInput(value, cap, type) {
     const valueLabel = document.createElement("label");
     valueLabel.classList.add("h-align");
-    valueLabel.dataset.inputType = type;
+    valueLabel.dataset.inputType = `${type}`;
 
     const labelText = document.createElement("p");
     switch(type) {
@@ -169,14 +182,17 @@ function createBaseLevelInput(value, cap, type) {
             break;
     }
     
-    const [labelInput, inputElm] = createArrowNumberBox(cap, value, () => {});
+    const [labelInput, _inputElm] = createArrowNumberBox(cap, value, () => {});
 
     valueLabel.append(labelText, labelInput);
     return valueLabel;
 }
 
+/**
+ * Loads loadouts onto the page.
+ */
 async function loadLoadouts() {
-    const settings = await makeRequest(REQUEST_TYPES.GET_SETTINGS, null).then(r => r);
+    const settings = await REQUEST_TYPES.GET_SETTINGS();
 
     const baseLeveling = document.querySelector("#base-box");
     const cannon = createBaseLevelInput(settings.ototo.cannon, settings.ototo.cannon, 0);
@@ -185,7 +201,7 @@ async function loadLoadouts() {
     style.id = "loadout-style";
     const foundation = createBaseLevelInput(settings.ototo.base, settings.ototo.base, 2);
     foundation.id = "loadout-foundation";
-    baseLeveling.append(cannon, style, foundation);
+    baseLeveling?.append(cannon, style, foundation);
 
     const unlockedCannons = [];
     for(let x = 0; x < settings.ototo.names.length; x++) {
@@ -194,15 +210,18 @@ async function loadLoadouts() {
 
     const datalist = createSearchDropdown();
     document.body.appendChild(datalist);
-    initializeDataset(datalist, true);
+    initializeDataset(datalist, await REQUEST_TYPES.GET_NAMES(true));
 
-    const emptyLoadout = createMinimalLoadout(null, unlockedCannons, syncLoadoutAndTable);
-    document.querySelector("#loadout-box").appendChild(emptyLoadout);
+    const emptyLoadout = createMinimalLoadout(null, unlockedCannons, syncLoadoutAndTable, settings);
+    document.querySelector("#loadout-box")?.appendChild(emptyLoadout);
 }
 
+/**
+ * Configures the loadout to sync its values with the unit table also on the page, and vice versa.
+ */
 function syncLoadoutAndTable() {
-    const loadoutUnits = [...document.querySelector("#loadout-box").querySelectorAll(".chip.set-unit")].map(c => {
-        return { id: parseInt(c.dataset.id), form: parseInt(c.dataset.form) };
+    const loadoutUnits = /** @type {HTMLDivElement[]} */ ([...document.querySelectorAll("#loadout-box .chip.set-unit")]).map(c => {
+        return { id: parseInt(c.dataset.id ?? "0"), form: parseInt(c.dataset.form ?? "0") };
     });
 
     if(loadoutUnits.length < idFormMap.size) {
@@ -210,7 +229,7 @@ function syncLoadoutAndTable() {
         for(const unit of idFormMap.keys()) {
             if(!loadoutUnits.find(u => u.id === unit)) {
                 idFormMap.delete(unit);
-                [...document.querySelectorAll("#unit-data-box .row-id")].find(r => r.textContent === `${unit}`).parentElement.remove();
+                /** @type {HTMLTableRowElement[]} */ ([...document.querySelectorAll("#unit-data-box .row-id")]).find(r => r.textContent === `${unit}`)?.parentElement?.remove();
             }
         }
     } else if(loadoutUnits.length > idFormMap.size) {
@@ -218,18 +237,18 @@ function syncLoadoutAndTable() {
         for(const unit of loadoutUnits) {
             if(!idFormMap.has(unit.id)) {
                 idFormMap.set(unit.id, unit.form);
-                makeRequest(REQUEST_TYPES.GET_ID_DATA, unit.id, true).then(u => {
+                REQUEST_TYPES.GET_ID_DATA(unit.id, true).then(u => {
                     u.current_form = unit.form;
                     const newRow = createRow(u);
-                    newRow.querySelector(".hide-option").remove();
-                    newRow.querySelector(".unit-icon").addEventListener("click", () => {
-                        const form = parseInt(newRow.querySelector(".row-image").dataset.form);
-                        const chip = document.querySelector(`#loadout-box .chip[data-id='${unit.id}']`);
-                        chip.dataset.form = form;
-                        chip.querySelector(".unit-icon").src = `./assets/img/unit_icon/${unit.id}_${form}.png`;
+                    newRow.querySelector(".hide-option")?.remove();
+                    newRow.querySelector(".unit-icon")?.addEventListener("click", () => {
+                        const form = parseInt(/** @type {HTMLDivElement} */ (newRow.querySelector(".row-image")).dataset.form  ?? "0");
+                        const chip = /** @type {HTMLDivElement} */ (document.querySelector(`#loadout-box .chip[data-id='${unit.id}']`));
+                        chip.dataset.form = `${form}`;
+                        /** @type {HTMLImageElement} */ (chip.querySelector(".unit-icon")).src = `./assets/img/unit_icon/${unit.id}_${form}.png`;
                         idFormMap.set(unit.id, form);
                     });
-                    document.querySelector("#unit-data-box tbody").appendChild(newRow);
+                    document.querySelector("#unit-data-box tbody")?.appendChild(newRow);
                 });
             }
         }
@@ -238,15 +257,16 @@ function syncLoadoutAndTable() {
         for(const unit of loadoutUnits) {
             if(idFormMap.get(unit.id) !== unit.form) {
                 const targetID = [...document.querySelectorAll("#unit-data-box .row-id")].find(r => r.textContent === `${unit.id}`);
-                const targetRowIcon = targetID.parentElement.querySelector(".row-image");
-                const targetRowImage = targetRowIcon.querySelector(".unit-icon");
+                //@ts-ignore
+                const targetRowIcon = /** @type {HTMLDivElement} */ (targetID.parentElement.querySelector(".row-image"));
+                const targetRowImage = /** @type {HTMLImageElement} */ (targetRowIcon.querySelector(".unit-icon"));
 
-                const start = parseInt(targetRowIcon.dataset.form); // to prevent infinite loops in case of poorly formatted codes
+                const start = parseInt(targetRowIcon.dataset.form ?? "0"); // to prevent infinite loops in case of poorly formatted codes
                 do {
                     targetRowImage.click();
-                } while(parseInt(targetRowIcon.dataset.form) !== unit.form && parseInt(targetRowIcon.dataset.form) !== start);
+                } while(parseInt(targetRowIcon.dataset.form ?? "0") !== unit.form && parseInt(targetRowIcon.dataset.form ?? "0") !== start);
 
-                idFormMap.set(unit.id, parseInt(targetRowIcon.dataset.form));
+                idFormMap.set(unit.id, parseInt(targetRowIcon.dataset.form ?? "0"));
             }
         }
     }

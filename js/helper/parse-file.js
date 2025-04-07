@@ -1,3 +1,4 @@
+//@ts-check
 import { decodeUnit } from "./encoder.js";
 
 /**
@@ -27,9 +28,10 @@ export const FORM = {
 /**
  * @typedef {{Type: string; MaxLevel: number; MaxPlusLevel: number; }} LEVEL_CAP
  * @typedef {{ name: string; cap: number; value: number; }} TALENT
- * @typedef {{trait: number, type: number, rank: number}|null} ORB
+ * @typedef {{ trait: number; type: number; rank: number; }|null} ORB
  * 
  * @typedef LOADOUT_UNIT_DATA
+ * @property {number} id
  * @property {FORM} current_form
  * @property {number} level
  * @property {number} plus_level
@@ -71,10 +73,21 @@ export const FORM = {
  * @property {boolean} hidden
  */
 
+/**
+ * Gets all valid level cap objects.
+ * @returns {Promise<LEVEL_CAP[]>} A list of level caps.
+ */
 async function getLevelCaps() {
+    //@ts-ignore PapaParse breaks when imported as module
     return fetch("./assets/unit_data/level_cap_stats.csv").then(r => r.text()).then(t => Papa.parse(t, { header: true, dynamicTyping: true, skipEmptyLines: true }).data).catch(e => console.error(e));
 }
 
+/**
+ * Gets all unit data.
+ * @param {Object} categories All categories, for the purposes of determining if a unit is a collab unit or unobtainable.
+ * @param {Object} settings The site settings.
+ * @returns {Promise<{units: UNIT_DATA[], ur: number}>} A list of every unit in the game, and the total user rank the current user has due to unit levels.
+ */
 export async function getUnitData(categories, settings) {
     const unitCount = settings.unitCount;
     const levelingCaps = await getLevelCaps();
@@ -86,15 +99,16 @@ export async function getUnitData(categories, settings) {
     for(let x = 0; x <= Math.floor(unitCount / 100); x++) {
         awaitFinish.push(fetch(`./assets/unit_data/units_${x * 100}.csv`)
             .then(r => r.text())
+            //@ts-ignore PapaParse breaks when imported as module
             .then(t => Papa.parse(t, {
                 header: true,
                 dynamicTyping: true,
                 skipEmptyLines: true
             }).data)
-            .then(entries => entries.map(entry => {
-                    let levelType = levelingCaps.find(t => t.Type === entry.LevelCapFormat);
+            .then(entries => entries.map((/** @type {Object} */ entry) => {
+                    let levelType = levelingCaps.find((/** @type {{ Type: any; }} */ t) => t.Type === entry.LevelCapFormat);
                     if(!levelType) {
-                        levelType = levelingCaps.find(t => t.Type === "Default");
+                        levelType = levelingCaps.find((/** @type {{ Type: string; }} */ t) => t.Type === "Default");
                     }
 
                     const unitData = {
@@ -107,7 +121,7 @@ export async function getUnitData(categories, settings) {
                         evolved_form: entry.EF,
                         true_form: entry.TF,
                         ultra_form: entry.UF,
-                        max_form: (-1 + !!(entry.NF) + !!(entry.EF) + !!(entry.TF) + !!(entry.UF)), // -1, adds 1 for each form with a valid string name (there is no unit without any form, so min value is 0)
+                        max_form: findFormNumber(entry.NF, entry.EF, entry.TF, entry.UF),
                         level_cap: levelType,
                         talents: parseTalents(entry.Talents),
                         ultra_talents: parseTalents(entry.UltraTalents),
@@ -115,7 +129,7 @@ export async function getUnitData(categories, settings) {
                         favorited: false,
                         level: 0,
                         plus_level: 0,
-                        current_form: 0, // 0 - 3 are NF, EF, TF, UF
+                        current_form: FORM.NORMAL,
                         hidden: false
                     };
                     if(settings.skipImages.includes(entry.ID)) {
@@ -154,6 +168,29 @@ export async function getUnitData(categories, settings) {
     };
 }
 
+/**
+ * Finds the number of forms a unit has.
+ * @param {(string|null)[]} forms A list of form names, null if the unit lacks that form. 
+ * @returns {number} The number of forms before the unit lacks a form.
+ */
+function findFormNumber(...forms) {
+    let counter = -1;
+    for(const formName of forms) {
+        if(formName) {
+            counter++;
+        } else {
+            return counter;
+        }
+    }
+
+    return counter;
+}
+
+/**
+ * Parses talents from their encoding in the unit data csvs.
+ * @param {string} talentString The encoded string.
+ * @returns {TALENT[]} A list of parsed talents.
+ */
 function parseTalents(talentString) {
     if(!talentString) {
         return [];
@@ -161,19 +198,24 @@ function parseTalents(talentString) {
 
     const talents = talentString.split("-");
 
-    return talents.map(e => { return {
+    return talents.map((/** @type {string} */ e) => { return {
         name: e.replace(/[0-9]+/i, ""),
-        cap: e.replace(/[^0-9]+/i, ""),
+        cap: parseInt(e.replace(/[^0-9]+/i, "")),
         value: 0
     }});
 }
 
+/**
+ * Parses upgrades from localStorage.
+ * @param {Object} settings Site settings.
+ * @returns {{upData: [number, ...{ level: number, plus: number}[]], upUR: number}} upData contains a binary value representing whether God is owned, followed by the level and plus level of all abilities. upUR is the amount that the user's user rank should increase by as a result of abilities.
+ */
 export function parseUpgrades(settings) {
     const abilityIconLevels = window.localStorage.getItem("abo");
     let upgradeData, upgradeUR = 0;
 
     if(!abilityIconLevels) {
-        upgradeData = settings.abilities.abilityNames.map(_ => { return {
+        upgradeData = settings.abilities.abilityNames.map((/** @type {any} */ _) => { return {
             level: 1,
             plus: 0
         }});
@@ -194,6 +236,10 @@ export function parseUpgrades(settings) {
     return { upData: [parseInt(window.localStorage.getItem("cgs") ?? "0"), ...upgradeData], upUR: upgradeUR };
 }
 
+/**
+ * Parses loadouts from localStorage.
+ * @returns {import("./loadout-storage-manager.js").LOADOUT[]} Parsed loadouts.
+ */
 export function parseLoadouts() {
     const llp = window.localStorage.getItem("llp");
     if(llp) {

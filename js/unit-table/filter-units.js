@@ -28,7 +28,7 @@ export function initializeTableModal() {
 let targettedTable = null;
 /**
  * Creates a button for opening a table modal targetting the provided table.
- * @param {HTMLTableElement} table The table to target.
+ * @param {HTMLDivElement} table An element containing the targetted table.
  */
 export function attachTableOptionsAndFilters(table) {
     const tableButtonDiv = document.createElement("div");
@@ -67,7 +67,7 @@ export function getModalTarget() {
 
 /**
  * Updates the visibility of a row based on the filters active on the table.
- * @param {HTMLTableElement} table The table the row is a part of.
+ * @param {HTMLDivElement} table The element containing the targetted table.
  * @param {HTMLTableRowElement} row The row being updated.
  * @param {HTMLButtonElement[]} filterOptions A list of buttons registered with {@link registerFilter} to handle filtering rows.
  */

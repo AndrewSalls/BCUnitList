@@ -9,9 +9,13 @@ let targetedKey = null;
 
 /**
  * Initializes the category creator with any custom categories already created in localStorage.
+ * @param {(isFiltered: boolean) => Object} getCategories A function that gets an object containing all categories and super-categories.
+ * @param {(category: string, IDs: number[]) => void} modifyCategory A function that creates or modifies a custom category to contain the provided unit IDs.
+ * @param {(category: string) => void} removeCategory A function that deletes a custom category.
+ * @param {[number, string|null, string|null, string|null, string|null][]} names The unit ID and name of each unit form, with the name of the form being null if the unit lacks that form.
  * @param {(msg: string, isError: boolean) => void} completionMessager A callback used to alert the user about errors in their custom category, or to confirm a successful category operation.
  */
-export function initializeCategoryCreator(completionMessager) {
+export function initializeCategoryCreator(getCategories, modifyCategory, removeCategory, names, completionMessager) {
     const wrapper = /** @type {!HTMLDivElement} */ (document.querySelector("#category-creator"));
     const antiWrapper = /** @type {!HTMLDivElement} */ (document.querySelector("#category-creator-menu"));
     const chipList = /** @type {!HTMLDivElement} */ (document.querySelector("#category-units"));
@@ -41,7 +45,7 @@ export function initializeCategoryCreator(completionMessager) {
             }
         }
     });
-    initializeDataset(datalist, true);
+    initializeDataset(datalist, names);
 
     cancelButton.onclick = () => {
         antiWrapper.classList.remove("hidden");
@@ -49,8 +53,7 @@ export function initializeCategoryCreator(completionMessager) {
         completionMessager("Cancelled category creation.", false);
     };
 
-    //@ts-ignore makeRequest is required for all iframe pages to load.
-    makeRequest(REQUEST_TYPES.GET_CATEGORY_NAMES, null, true).then((/** @type {{ custom: {}; }} */ categories) => {
+    getCategories(true).then((/** @type {Object} */ categories) => {
         const custom = categories.custom ?? {};
 
         const opener = /** @type {!HTMLButtonElement} */ (document.querySelector("#open-creator"));
@@ -65,7 +68,7 @@ export function initializeCategoryCreator(completionMessager) {
         };
         remover.onclick = () => {
             if(targetedKey) {
-                removeCustomCategory(targetedKey).then(_ => {
+                removeCustomCategory(targetedKey, removeCategory).then(_ => {
                     delete custom[targetedKey];
                     targetedKey = null;
                     opener.textContent = "Create Category";
@@ -86,7 +89,7 @@ export function initializeCategoryCreator(completionMessager) {
                 completionMessager("A custom category with that name already exists!", true);
             } else {
                 const categoryValues = [...chipList.querySelectorAll(".unit-id")].map(c => parseInt(/** @type {!string} */ (c.textContent)));
-                addCustomCategory(trimName, categoryValues).then(_ => {
+                addCustomCategory(trimName, categoryValues, modifyCategory, removeCategory).then(_ => {
                     custom[trimName] = categoryValues;
                     targetedKey = null;
                     
@@ -162,10 +165,12 @@ function createChip(id) {
  * Adds a custom category to the creator list, the global filter list, and to localStorage.
  * @param {string} categoryName The name to give the custom category, which must be unique from all other custom categories.
  * @param {number[]} categoryIDs A list of unit IDs to add to the category.
+ * @param {(category: string, IDs: number[]) => void} modifyCategory A function that creates or modifies a custom category to contain the provided unit IDs.
+ * @param {(category: string) => void} removeCategory A function that deletes a custom category.
  */
-async function addCustomCategory(categoryName, categoryIDs) {
+async function addCustomCategory(categoryName, categoryIDs, modifyCategory, removeCategory) {
     if(targetedKey && targetedKey !== categoryName) {
-        await removeCustomCategory(targetedKey);
+        await removeCustomCategory(targetedKey, removeCategory);
     }
 
     let customDiv = document.querySelector("#gk-custom .sub-category-wrapper");
@@ -204,15 +209,15 @@ async function addCustomCategory(categoryName, categoryIDs) {
     }
 
     document.querySelector("#created-category-list")?.appendChild(createCategorySelectionButton(categoryName));
-    //@ts-ignore makeRequest is required for all iframe pages to load.
-    await makeRequest(REQUEST_TYPES.MODIFY_CUSTOM_CATEGORY, { target: categoryName, updates: categoryIDs });
+    modifyCategory(categoryName, categoryIDs);
 }
 
 /**
  * Removes a custom category from the global category selection menu and localStorage.
  * @param {string} categoryName The name of the custom category to remove.
+ * @param {(category: string) => void} removeCategory A function that deletes a custom category.
  */
-async function removeCustomCategory(categoryName) {
+async function removeCustomCategory(categoryName, removeCategory) {
     window.localStorage.removeItem(`gk-custom-${categoryName}`);
 
     const customWrapper = document.querySelector("#gk-custom");
@@ -233,8 +238,7 @@ async function removeCustomCategory(categoryName) {
     if(customList) {
         [...customList].find(c => c.textContent === categoryName)?.remove();
     }
-    //@ts-ignore makeRequest is required for all iframe pages to load.
-    await makeRequest(REQUEST_TYPES.REMOVE_CUSTOM_CATEGORY, categoryName);
+    await removeCategory(categoryName);
 }
 
 /**

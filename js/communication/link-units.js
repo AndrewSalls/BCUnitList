@@ -107,7 +107,7 @@ function handleMessage(port, unitData, res) {
             port.postMessage({ m_id: res.m_id, data: categories["custom"] });
             break;
         case "remove_custom_category":
-            const removing = categories["custom"][res.content];
+            const removing = structuredClone(categories["custom"][res.content]);
             delete categories["custom"][res.content];
 
             if(Object.keys(categories["custom"]).length === 0) {
@@ -123,19 +123,6 @@ function handleMessage(port, unitData, res) {
         case "get_all_upgrades":
             port.postMessage({ m_id: res.m_id, data: upgradeData });
             break;
-        case "update_upgrade":
-            if(res.content.id === 0) { // cgs
-                upgradeData[0] = res.content.level;
-                window.localStorage.setItem("cgs", res.content.level);
-            } else { // ability upgrade
-                settings.userRank += (res.content.level - upgradeData[res.content.id].level);
-                upgradeData[res.content.id].level = res.content.level;
-                settings.userRank += (res.content.plus - upgradeData[res.content.id].plus);
-                upgradeData[res.content.id].plus = res.content.plus;
-                window.localStorage.setItem("abo", new Array(upgradeData.length - 1).fill(0).map((_, i) => `${upgradeData[i + 1].level}+${upgradeData[i + 1].plus}`).join("-"));
-            }
-            port.postMessage({ m_id: res.m_id, data: upgradeData[res.content.id] });
-            break;
         case "get_upgrade_costs":
             const xpAmt = upgradeData.reduce((sum, curr, i) => {
                 if(i === 0) {
@@ -150,6 +137,19 @@ function handleMessage(port, unitData, res) {
                 }
             }, 0);
             port.postMessage({ m_id: res.m_id, data: xpAmt });
+            break;
+        case "update_upgrade":
+            if(res.content.id === 0) { // cgs
+                upgradeData[0] = res.content.level;
+                window.localStorage.setItem("cgs", res.content.level);
+            } else { // ability upgrade
+                settings.userRank += (res.content.level - upgradeData[res.content.id].level);
+                upgradeData[res.content.id].level = res.content.level;
+                settings.userRank += (res.content.plus - upgradeData[res.content.id].plus);
+                upgradeData[res.content.id].plus = res.content.plus;
+                window.localStorage.setItem("abo", new Array(upgradeData.length - 1).fill(0).map((_, i) => `${upgradeData[i + 1].level}+${upgradeData[i + 1].plus}`).join("-"));
+            }
+            port.postMessage({ m_id: res.m_id, data: upgradeData[res.content.id] });
             break;
         case "get_all_loadouts":
             port.postMessage({ m_id: res.m_id, data: loadouts });

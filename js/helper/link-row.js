@@ -1,22 +1,23 @@
 // No ts-check because this whole file relies on the row having elements, and it would be silly to add guards against all of the data in the row not being created.
 
 /**
- * @param {HTMLTableRowElement} row
- * @param {any} observerCallback
+ * Register delegate to call when a row changes any value.
+ * @param {HTMLDivElement} row An element containing a unit row.
+ * @param {() => void} observerCallback A function to call when observing a change in the row's values.
  */
 export function observeRowChange(row, observerCallback) {
     row.querySelector(".unit-icon").addEventListener("click", observerCallback);
-    row.querySelectorAll(".level-select").forEach((/** @type {{ addEventListener: (arg0: string, arg1: any) => any; }} */ l) => l.addEventListener("change", observerCallback));
-    row.querySelectorAll(".talent-box .talent-level").forEach((/** @type {{ addEventListener: (arg0: string, arg1: any) => any; }} */ t) => t.addEventListener("change", observerCallback));
-    row.querySelectorAll(".orb-selector").forEach((/** @type {{ addEventListener: (arg0: string, arg1: any) => any; }} */ o) => o.addEventListener("change", observerCallback));
+    row.querySelectorAll(".level-select").forEach((/** @type {Element} */ l) => l.addEventListener("change", observerCallback));
+    row.querySelectorAll(".talent-box .talent-level").forEach((/** @type {Element} */ t) => t.addEventListener("change", observerCallback));
+    row.querySelectorAll(".orb-selector").forEach((/** @type {Element} */ o) => o.addEventListener("change", observerCallback));
     row.querySelector(".fav-icon").addEventListener("click", observerCallback);
-    row.querySelectorAll(".row-option .option-button").forEach((/** @type {{ addEventListener: (arg0: string, arg1: any) => any; }} */ o) => o.addEventListener("click", observerCallback));
+    row.querySelectorAll(".row-option .option-button").forEach((/** @type {Element} */ o) => o.addEventListener("click", observerCallback));
     row.addEventListener("generic-update", observerCallback);
 }
 
 /**
  * Obtains a unit's values from that unit's row in a unit table.
- * @param {HTMLDivElement} row The row to get values from.
+ * @param {HTMLDivElement} row The element containing the row to get values from.
  * @returns {import("./parse-file").UNIT_RECORD} The unit's data.
  */
 export function getValuesFromRow(row) {
