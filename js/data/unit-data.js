@@ -1,5 +1,5 @@
 //@ts-check
-import { encodeUnit } from "../helper/encoder.js";
+import { encodeUnitEntry } from "../helper/encoder.js";
 import getCostsFor from "../helper/find-costs.js";
 import { isGloballyFiltered } from "../unit-table/filter-functions.js";
 
@@ -101,7 +101,7 @@ export default class UnitData {
      * @param {number} id The unit's ID.
      * @param {UNIT_DATA_TYPE} dataType What type of data is being obtained.
      * @param {boolean} checkIfFiltered If true and the unit is hidden by a global filter, returns null.
-     * @returns {Object} The requested data for the unit, minus any data for filtered units.
+     * @returns {any} The requested data for the unit, minus any data for filtered units.
      */
     getUnitData(id, dataType, checkIfFiltered) {
         return this.getUnitListData([id], dataType, checkIfFiltered);
@@ -112,7 +112,7 @@ export default class UnitData {
      * @param {number[]} unitIDs A list of unit IDs to get.
      * @param {UNIT_DATA_TYPE} dataType What type of data is being obtained.
      * @param {boolean} checkIfFiltered If true and the unit is hidden by a global filter, returns null.
-     * @returns {Object} The requested data for the unit, minus any data for filtered units.
+     * @returns {any} The requested data for the unit, minus any data for filtered units.
      */
     getUnitListData(unitIDs, dataType, checkIfFiltered) {
         const output = [];
@@ -131,7 +131,7 @@ export default class UnitData {
      * @param {((unit: UNIT_DATA) => boolean)|null} filterFunction A function to filter the returned units, separate from the global filter check. Use null if no filter is desired.
      * @param {UNIT_DATA_TYPE} dataType What type of data is being obtained.
      * @param {boolean} checkIfFiltered If true and the unit is hidden by a global filter, returns null.
-     * @returns {Object} The requested data for the unit, minus any data for filtered units.
+     * @returns {any} The requested data for the unit, minus any data for filtered units.
      */
     getAllUnitData(filterFunction, dataType, checkIfFiltered) {
         if(filterFunction) {
@@ -177,7 +177,7 @@ export default class UnitData {
             !data.hidden && !data.favorited && window.localStorage.getItem(`${data.id}`)) {
                 window.localStorage.removeItem(`${data.id}`);
         } else {
-            window.localStorage.setItem(`${data.id}`, encodeUnit(data));
+            window.localStorage.setItem(`${data.id}`, encodeUnitEntry(data));
         }
 
         return userRankDelta;
@@ -187,7 +187,7 @@ export default class UnitData {
      * Gets a requested data attribute for all provided units.
      * @param {UNIT_DATA[]} units The units to get the requested data type for.
      * @param {UNIT_DATA_TYPE} dataType The type of data to get per unit.
-     * @returns {Object} The converted data.
+     * @returns {any} The converted data.
      */
     #getDataType(units, dataType) {
         switch(dataType) {

@@ -160,8 +160,7 @@ export function createCategorySelector(includeAbilityCategory = false) {
     defaultButtons[6].classList.add("legend-rare-animation");
     defaultButtons.push(createCategoryButton("Favorited", defaultTables[7]));
     if(includeAbilityCategory) {
-        //@ts-ignore if includeAbilityCategory, then from earlier abilityButton must not be null.
-        defaultButtons.splice(1, 0, abilityButton);
+        defaultButtons.splice(1, 0, /** @type {HTMLButtonElement} */ (abilityButton));
     }
 
     row.append(...defaultButtons);

@@ -1,4 +1,6 @@
 //@ts-check
+import SETTINGS from "../../assets/settings";
+
 /**
  * @readonly
  * @enum {string}
@@ -11,14 +13,13 @@ const TREASURE_RANK = {
 
 /**
  * Loads the Treasures tab of the cat base.
- * @param {Object} settings An object containing the settings from assets/settings.js
  */
-export default function loadTreasureInfo(settings) {
+export default function loadTreasureInfo() {
     const treasureDiv = document.querySelector("#treasure-selector");
 
-    for(const chapterAbrv of Object.keys(settings.chapters)) {
-        for(let x = 0; x < settings.chapters[chapterAbrv].numberChapters; x++) {
-            treasureDiv?.appendChild(createChapterBox(settings.chapters[chapterAbrv].name, chapterAbrv, x, settings.chapters[chapterAbrv].treasurePartCount));
+    for(const chapterAbrv of Object.keys(SETTINGS.chapters)) {
+        for(let x = 0; x < SETTINGS.chapters[chapterAbrv].numberChapters; x++) {
+            treasureDiv?.appendChild(createChapterBox(SETTINGS.chapters[chapterAbrv].name, chapterAbrv, x, SETTINGS.chapters[chapterAbrv].treasurePartCount));
         }
     }
 }
@@ -101,8 +102,7 @@ function createTreasureSlider(sliderParent, treasureType, max, index, localStora
     const medalIMG = document.createElement("img");
     medalIMG.src = `./assets/img/treasure/${treasureType}.png`;
     
-    //@ts-ignore All localStorage values are automatically initialized if not set.
-    const treasureValue = window.localStorage.getItem(localStorageKey).split("-")[index];
+    const treasureValue = window.localStorage.getItem(localStorageKey)?.split("-")[index] ?? "0";
 
     const slider = document.createElement("input");
     slider.classList.add(`slider-${treasureType}`);
@@ -116,10 +116,8 @@ function createTreasureSlider(sliderParent, treasureType, max, index, localStora
     sliderCount.textContent = treasureValue;
 
     slider.addEventListener("input", _ => {
-        //@ts-ignore
-        const sum = parseInt(sliderParent.dataset.sum);
-        //@ts-ignore
-        const oldValue = parseInt(sliderCount.textContent);
+        const sum = parseInt(sliderParent.dataset.sum ?? "0");
+        const oldValue = parseInt(sliderCount.textContent ?? "0");
         const newValue = parseInt(slider.value);
 
         if(sum + (newValue - oldValue) > max) {
@@ -136,10 +134,11 @@ function createTreasureSlider(sliderParent, treasureType, max, index, localStora
     slider.addEventListener("change", () => {
         sliderCount.textContent = slider.value;
 
-        //@ts-ignore All localStorage values are automatically initialized if not set.
-        const parsedTreasures = window.localStorage.getItem(localStorageKey).split("-");
-        parsedTreasures[index] = slider.value;
-        window.localStorage.setItem(localStorageKey, parsedTreasures.join("-"));
+        const parsedTreasures = window.localStorage.getItem(localStorageKey)?.split("-");
+        if(parsedTreasures) {
+            parsedTreasures[index] = slider.value;
+            window.localStorage.setItem(localStorageKey, parsedTreasures.join("-"));
+        }
     });
 
     wrapper.append(medalIMG, slider, sliderCount);

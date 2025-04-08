@@ -5,6 +5,7 @@ import makeSearchable, { createSearchDropdown, initializeDataset } from "./helpe
 import * as RowComponents from "./unit-table/creation/create-unit-row.js";
 import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
+import SETTINGS from "../assets/settings.js";
 
 /**
  * @readonly
@@ -63,8 +64,12 @@ function initialize() {
 function loadSpecific(id) {
     const container = document.querySelector("#loading-content");
 
-    REQUEST_TYPES.GET_ID_DATA(id, true).then(async entry => {
-        const settings = await REQUEST_TYPES.GET_SETTINGS();
+    REQUEST_TYPES.GET_ID_DATA(id, true).then((/** @type {import("./data/unit-data.js").UNIT_DATA|null} */ entry) => {
+        if(!entry) {
+            console.error(`Missing unit data: ${id}`);
+            return;
+        }
+
         window.localStorage.setItem("su", `${id}`);
 
         const wrapper = /** @type {HTMLDivElement} */ (document.querySelector("#unit-border"));
@@ -74,7 +79,7 @@ function loadSpecific(id) {
         wrapper.querySelector("#id-wrapper")?.replaceChildren(idBox);
         const [nameBox, nameUpdate] = RowComponents.createNameBox([entry.normal_form, entry.evolved_form, entry.true_form, entry.ultra_form], entry.current_form);
         wrapper.querySelector("#name-wrapper")?.replaceChildren(nameBox);
-        const [iconBox, _1, _2] = RowComponents.createIconBox(entry.id, entry.current_form, entry.max_form, settings.skipImages.includes(id), nameUpdate);
+        const [iconBox, _1, _2] = RowComponents.createIconBox(entry.id, entry.current_form, entry.max_form, SETTINGS.skipImages.includes(id), nameUpdate);
         wrapper.querySelector("#icon-wrapper")?.replaceChildren(iconBox);
         const [levelBox, _3, _4, _5, _6] = RowComponents.createLevelBox(entry.level_cap, entry.level, entry.plus_level);
         wrapper.querySelector("#level-wrapper")?.replaceChildren(levelBox);
@@ -113,8 +118,9 @@ function loadSpecific(id) {
 
             observeRowChange(borderWrapper, () => {
                 (async () => {
-                    await REQUEST_TYPES.UPDATE_ID(getValuesFromRow(borderWrapper));
-                    setSpecificCost(REQUEST_TYPES.GET_ID_COST(id), entry.rarity);
+                    const userRankDelta = await REQUEST_TYPES.UPDATE_ID(getValuesFromRow(borderWrapper));
+                    window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + userRankDelta}`);
+                    setSpecificCost(await REQUEST_TYPES.GET_ID_COST(id), entry.rarity);
                 })();
             });
 
@@ -125,7 +131,7 @@ function loadSpecific(id) {
 
 /**
  * Updates the quantities of all cost materials.
- * @param {Object} cost All of the costs needed.
+ * @param {import("./helper/find-costs.js").MATERIAL_COSTS} cost All of the costs needed.
  * @param {string} rarity A string representing the rarity of the unit, for displaying the correct type of non-dark catseye.
  */
 function setSpecificCost(cost, rarity) {

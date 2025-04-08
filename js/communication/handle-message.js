@@ -36,7 +36,7 @@ export const RESPONSE_TYPES = {
 }
 
 /**
- * @type {Map<string, (dataManager: UserData, content: Object, ignore_filters: boolean) => (Object|null)>}
+ * @type {Map<string, (dataManager: UserData, content: any, ignore_filters: boolean) => (any|null)>}
  */
 const MESSAGE_RESPONSE = new Map();
 

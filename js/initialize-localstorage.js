@@ -1,4 +1,5 @@
 //@ts-check
+import SETTINGS from "../assets/settings";
 
 /**
  * @readonly
@@ -21,10 +22,9 @@ function setIfUnset(key, defaultValue) {
 
 /**
  * Initializes all important localStorage values, for any unset values.
- * @param {Object} settings An object containing all site settings. 
- * @param {Object} categories An object containing all categories. 
+ * @param {import("./data/category-data").CATEGORY_MAP} categories An object containing all categories. 
  */
-export default function initializeLocalStorage(settings, categories) {
+export default function initializeLocalStorage(categories) {
     // Site Settings --------------------------------------------
     for(const key of Object.keys(DEFAULT_SETTINGS)) {
         setIfUnset(key, DEFAULT_SETTINGS[key]);
@@ -48,19 +48,19 @@ export default function initializeLocalStorage(settings, categories) {
     setIfUnset("gk-custom", "1");
 
     // Treasures --------------------------------------------
-    for(const chapterAbrv of Object.keys(settings.chapters)) {
-        for(let x = 0; x < settings.chapters[chapterAbrv].numberChapters; x++) {
-            setIfUnset(`${chapterAbrv}_${x}`, "-0-0-0".repeat(settings.chapters[chapterAbrv].treasurePartCount.length).substring(1));
+    for(const chapterAbrv of Object.keys(SETTINGS.chapters)) {
+        for(let x = 0; x < SETTINGS.chapters[chapterAbrv].numberChapters; x++) {
+            setIfUnset(`${chapterAbrv}_${x}`, "-0-0-0".repeat(SETTINGS.chapters[chapterAbrv].treasurePartCount.length).substring(1));
         }
     }
     
     // Base Development --------------------------------------------
-    for(let b = 1; b <= settings.ototo.names.length; b++) {
+    for(let b = 1; b <= SETTINGS.ototo.names.length; b++) {
         setIfUnset(`oo_${b}`, "0-0-0");
     }
     
     // Ability Upgrades --------------------------------------------
-    setIfUnset("abo", "1+0-".repeat(settings.abilities.abilityNames.length).substring(0, settings.abilities.abilityNames.length * 4 - 1));
+    setIfUnset("abo", "1+0-".repeat(SETTINGS.abilities.abilityNames.length).substring(0, SETTINGS.abilities.abilityNames.length * 4 - 1));
     setIfUnset("cgs", "0");
 
     // Other Cat Base --------------------------------------------
@@ -68,6 +68,6 @@ export default function initializeLocalStorage(settings, categories) {
     setIfUnset("akb", "0");
 
     // Save Metadata --------------------------------------------
-    window.localStorage.setItem("lg", settings.gameVersion);
-    window.localStorage.setItem("ls", settings.version);
+    window.localStorage.setItem("lg", SETTINGS.gameVersion);
+    window.localStorage.setItem("ls", SETTINGS.version);
 }

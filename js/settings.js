@@ -217,6 +217,5 @@ function loadSortButtons(orderedIDs) {
         });
     }
     
-    //@ts-ignore All localStorage values are automatically initialized if not set.
-    targets[parseInt(window.localStorage.getItem("skey"))]?.classList.remove("active");
+    targets[parseInt(window.localStorage.getItem("skey") ?? "0")]?.classList.remove("active");
 }

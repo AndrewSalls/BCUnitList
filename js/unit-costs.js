@@ -99,16 +99,16 @@ function loadCosts() {
                 }
                 categorySearchBuiltin?.appendChild(CategorySelector.createCategory(parseSnakeCase(key), subButtons));
             }
-
-            loadingBar.increment();
         }
+
+        loadingBar.increment();
     });
 }
 
 /**
  * Creates a cost table for every unfiltered category and adds them to the page.
  * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar that hides the page until content has finished loading.
- * @param {Object} categoryData An object containing all categories.
+ * @param {import("./data/category-data.js").CATEGORY_MAP} categoryData An object containing all categories.
  */
 function attachAllCategoryCostTables(loadingBar, categoryData) {
     const categoryGrouping = document.querySelector("#category-grouping");
@@ -148,8 +148,6 @@ function attachAllCategoryCostTables(loadingBar, categoryData) {
         categorySearchBuiltin?.appendChild(CategorySelector.createCategory(superName, subButtons));
         categoryGrouping?.appendChild(superCategory);
     }
-
-    loadingBar.increment();
 }
 
 /**
@@ -157,7 +155,7 @@ function attachAllCategoryCostTables(loadingBar, categoryData) {
  * @param {string} superCategory The name of the category's super-category.
  * @param {string} categoryName The name of the category.
  * @param {Element} target An element to append the cost table to.
- * @param {Object} categoryData An object containing all of the category data.
+ * @param {import("./data/category-data.js").CATEGORY_MAP} categoryData An object containing all of the category data.
  */
 function attachCategoryCostTable(superCategory, categoryName, target, categoryData) {
     REQUEST_TYPES.GET_MULTIPLE_COST(categoryData[superCategory][categoryName]).then(data => {

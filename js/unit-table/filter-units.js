@@ -144,7 +144,7 @@ function updateRowFilter(row, isUndoing) {
 function registerFilter(button, callback) {
     button.onclick = () => applyFilter(callback, !button.classList.toggle("active"));
     button.addEventListener("filter-row", (/** @type {Event} */ ev) => {
-        const detail = (/** @type {CustomEvent} */ (ev)).detail;
+        const detail = /** @type {CustomEvent} */ (ev).detail;
         if(callback(detail)) {
             updateRowFilter(detail, false);
         }

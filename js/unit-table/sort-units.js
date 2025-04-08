@@ -33,8 +33,7 @@ export default function attachUnitTableColumnSort(table) {
     attachSort(sortFavorite, favoriteSortLambda, allSort, data);
 
     assignRowSortData(data.querySelectorAll("tr"));
-    //@ts-ignore All localStorage values are automatically initialized if not set.
-    sortRows(data, SORT_SETTING_ORDER[parseInt(window.localStorage.getItem("skey"))], window.localStorage.getItem("sasc") === "Y");
+    sortRows(data, SORT_SETTING_ORDER[parseInt(window.localStorage.getItem("skey") ?? "0")], window.localStorage.getItem("sasc") === "Y");
 }
 
 /**
@@ -95,8 +94,7 @@ export function idSortLambda(a, b) {
  * @param {HTMLTableRowElement} b
  */
 export function formSortLambda(a, b) {
-    //@ts-ignore
-    const res = parseInt(b.querySelector("td.row-name").dataset.form) - parseInt(a.querySelector("td.row-name").dataset.form);
+    const res = parseInt(/** @type {HTMLTableCellElement} */ (b.querySelector("td.row-name")).dataset.form ?? "0") - parseInt(/** @type {HTMLTableCellElement} */ (a.querySelector("td.row-name")).dataset.form ?? "0");
     return res !== 0 ? res : idSortLambda(a, b);
 }
 
@@ -139,8 +137,7 @@ export function talentSortLambda(a, b) {
     const cappedCount = bCell.querySelectorAll(".maxed-talent").length - aCell.querySelectorAll(".maxed-talent").length;
     if(cappedCount !== 0) return cappedCount;
 
-    //@ts-ignore
-    const talentSum = [...bCell.querySelectorAll(".talent-box p")].reduce((sum, v) => sum + parseInt(v.innerText), 0) - [...aCell.querySelectorAll(".talent-box p")].reduce((sum, v) => sum + parseInt(v.innerText), 0);
+    const talentSum = [...bCell.querySelectorAll(".talent-box p")].reduce((sum, v) => sum + parseInt(v.textContent ?? "0"), 0) - [...aCell.querySelectorAll(".talent-box p")].reduce((sum, v) => sum + parseInt(v.textContent ?? "0"), 0);
     if(talentSum !== 0) return talentSum;
 
     const talentCount = bCell.querySelectorAll(".talent-box").length - aCell.querySelectorAll(".talent-box").length;
@@ -156,16 +153,13 @@ export function orbSortLambda(a, b) {
     const aCell = /** @type {!HTMLDivElement} */ (a.querySelector("td.row-orb"));
     const bCell = /** @type {!HTMLDivElement} */ (b.querySelector("td.row-orb"));
 
-    //@ts-ignore
-    const ranksA = [...aCell.querySelectorAll('.orb-selector .orb-rank')].map(v => ORB_ORDER.indexOf(v.dataset.rank), 0).sort();
-    //@ts-ignore
-    const ranksB = [...bCell.querySelectorAll('.orb-selector .orb-rank')].map(v => ORB_ORDER.indexOf(v.dataset.rank), 0).sort();
+    const ranksA = /** @type {HTMLImageElement[]} */ ([...aCell.querySelectorAll('.orb-selector .orb-rank')]).map(v => ORB_ORDER.indexOf(v.dataset.rank ?? ""), 0).sort();
+    const ranksB = /** @type {HTMLImageElement[]} */ ([...bCell.querySelectorAll('.orb-selector .orb-rank')]).map(v => ORB_ORDER.indexOf(v.dataset.rank ?? ""), 0).sort();
 
     while(ranksA.length > 0 && ranksB.length > 0) {
-        const rankAMax = ranksA.pop();
-        const rankBMax = ranksB.pop();
+        const rankAMax = /** @type {number} */ (ranksA.pop());
+        const rankBMax = /** @type {number} */ (ranksB.pop());
 
-        //@ts-ignore Cannot be undefined because while loop
         if(rankBMax - rankAMax !== 0) return rankBMax - rankAMax;
     }
 
@@ -181,8 +175,7 @@ export function orbSortLambda(a, b) {
  * @param {HTMLTableRowElement} b
  */
 export function favoriteSortLambda(a, b) {
-    //@ts-ignore
-    const res = parseInt(b.querySelector("td.row-favorite div").dataset.favorited) - parseInt(a.querySelector("td.row-favorite div").dataset.favorited);
+    const res = parseInt(/** @type {HTMLDivElement} */ (b.querySelector("td.row-favorite div")).dataset.favorited ?? "N") - parseInt(/** @type {HTMLDivElement} */ (a.querySelector("td.row-favorite div")).dataset.favorited ?? "N");
     return res !== 0 ? res : idSortLambda(a, b);
 }
 
@@ -193,18 +186,13 @@ export function favoriteSortLambda(a, b) {
  */
 export function gameSortLambda(a, b) {
     if(a.dataset.rarity !== b.dataset.rarity) {
-        //@ts-ignore
-        return RARITY_ORDER.indexOf(a.dataset.rarity) - RARITY_ORDER.indexOf(b.dataset.rarity);
+        return RARITY_ORDER.indexOf(a.dataset.rarity ?? "") - RARITY_ORDER.indexOf(b.dataset.rarity ?? "");
     }
 
-    //@ts-ignore
-    const aMajor = parseInt(a.dataset.major_order);
-    //@ts-ignore
-    const aMinor = parseInt(a.dataset.minor_order);
-    //@ts-ignore
-    const bMajor = parseInt(b.dataset.major_order);
-    //@ts-ignore
-    const bMinor = parseInt(b.dataset.minor_order);
+    const aMajor = parseInt(a.dataset.major_order ?? "-1");
+    const aMinor = parseInt(a.dataset.minor_order ?? "-1");
+    const bMajor = parseInt(b.dataset.major_order ?? "-1");
+    const bMinor = parseInt(b.dataset.minor_order ?? "-1");
 
     if(aMajor === -1 || aMinor === -1) {
         if(bMajor === -1 || bMinor === -1) {
@@ -228,8 +216,7 @@ export function gameSortLambda(a, b) {
  */
 function assignRowSortData(rows) {
     rows.forEach((/** @type {HTMLElement} */ r) => {
-        //@ts-ignore
-        const id = parseInt(r.querySelector("td.row-id").innerText);
+        const id = parseInt(r.querySelector("td.row-id")?.textContent ?? "0");
         for(const [name, arr] of Object.entries(SORT_ORDER[r.dataset.rarity].categories)) {
             for(let x = 0; x < arr.length; x++) {
                 if(arr[x] === id) {

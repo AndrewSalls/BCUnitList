@@ -73,10 +73,9 @@ window.addEventListener("mouseup", () => {
  * @param {(() => void)|null} [loadoutChangeCallback = null] A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
  */
 export default function makeDraggable(loadoutIconList, loadoutChangeCallback = null) {
-    const units = loadoutIconList.querySelectorAll(".chip");
+    const units = /** @type {NodeListOf<HTMLDivElement>} */ (loadoutIconList.querySelectorAll(".chip"));
 
-    //@ts-ignore .chip is always a div
-    units.forEach((/** @type {HTMLDivElement} */ unit) => {
+    units.forEach(unit => {
         unit.addEventListener("mousedown", (/** @type {MouseEvent} */ ev) => {
             if(window.document.body.classList.contains("disabled-editing-mode") || !unit.classList.contains("set-unit")) {
                 return;

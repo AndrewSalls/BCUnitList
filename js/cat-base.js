@@ -5,6 +5,7 @@ import loadTreasureInfo from "./cat-base/treasure.js";
 import loadUpgradeInfo from "./cat-base/upgrade.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 import createLoadingBar from "./helper/loading.js";
+import SETTINGS from "../assets/settings.js";
 
 /**
  * Initializes page elements once page has loaded.
@@ -57,22 +58,23 @@ function initializeNavButton(button, target) {
  * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar to hide page content until all data has been inputted.
  */
 function loadBaseSettings(loadingBar) {
-    REQUEST_TYPES.GET_SETTINGS().then(settings => {
-        /** @type {HTMLSpanElement} */ (document.querySelector("#user-rank")).textContent = settings.userRank;
+    /** @type {HTMLSpanElement} */ (document.querySelector("#user-rank")).textContent = window.localStorage.getItem("ur");
+    loadingBar.increment();
+    loadTreasureInfo(SETTINGS);
+    loadingBar.increment();
+    loadCannonInfo(SETTINGS);
+    loadingBar.increment();
+    (async () => {
+        await loadUpgradeInfo(SETTINGS,
+            {cgs: await REQUEST_TYPES.GET_CGS(), abilities: await REQUEST_TYPES.GET_ALL_UPGRADE()},
+            REQUEST_TYPES.UPDATE_CGS,
+            async (index, level, plus) => window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + await REQUEST_TYPES.UPDATE_ABILITY(index, level, plus)}`));
         loadingBar.increment();
-        loadTreasureInfo(settings);
-        loadingBar.increment();
-        loadCannonInfo(settings);
-        loadingBar.increment();
-        (async () => {
-            await loadUpgradeInfo(settings, await REQUEST_TYPES.GET_ALL_UPGRADE(), REQUEST_TYPES.UPDATE_UPGRADE);
-            loadingBar.increment();
-        })();
-        loadOtherInfo();
-        loadingBar.increment();
-        loadTabButtons();
-        loadingBar.increment();
-    });
+    })();
+    loadOtherInfo();
+    loadingBar.increment();
+    loadTabButtons();
+    loadingBar.increment();
 }
 
 /**

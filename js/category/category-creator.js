@@ -9,7 +9,7 @@ let targetedKey = null;
 
 /**
  * Initializes the category creator with any custom categories already created in localStorage.
- * @param {(isFiltered: boolean) => Object} getCategories A function that gets an object containing all categories and super-categories.
+ * @param {(isFiltered: boolean) => Promise<import("../data/category-data.js").CATEGORY_MAP>} getCategories A function that gets an object containing all categories and super-categories.
  * @param {(category: string, IDs: number[]) => void} modifyCategory A function that creates or modifies a custom category to contain the provided unit IDs.
  * @param {(category: string) => void} removeCategory A function that deletes a custom category.
  * @param {[number, string|null, string|null, string|null, string|null][]} names The unit ID and name of each unit form, with the name of the form being null if the unit lacks that form.
@@ -53,8 +53,8 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
         completionMessager("Cancelled category creation.", false);
     };
 
-    getCategories(true).then((/** @type {Object} */ categories) => {
-        const custom = categories.custom ?? {};
+    getCategories(true).then(categories => {
+        const custom = categories["custom"] ?? {};
 
         const opener = /** @type {!HTMLButtonElement} */ (document.querySelector("#open-creator"));
         const remover = /** @type {!HTMLButtonElement} */ (document.querySelector("#delete-category"));
@@ -88,7 +88,7 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
             } else if(trimName in Object.keys(custom)) {
                 completionMessager("A custom category with that name already exists!", true);
             } else {
-                const categoryValues = [...chipList.querySelectorAll(".unit-id")].map(c => parseInt(/** @type {!string} */ (c.textContent)));
+                const categoryValues = [...chipList.querySelectorAll(".unit-id")].map(c => parseInt(c.textContent ?? "0"));
                 addCustomCategory(trimName, categoryValues, modifyCategory, removeCategory).then(_ => {
                     custom[trimName] = categoryValues;
                     targetedKey = null;

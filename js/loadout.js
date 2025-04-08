@@ -3,6 +3,7 @@ import { createSearchDropdown, initializeDataset } from "./helper/make-searchabl
 import { encodeLink } from "./helper/encoder.js";
 import { createMinimalLoadout } from "./unit-table/creation/create-loadout-table.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
+import SETTINGS from "../assets/settings.js";
 
 let unlockedCannons = [];
 
@@ -25,9 +26,8 @@ function initializeContent() {
     const addButton = /** @type {HTMLButtonElement} */ (document.querySelector("#add-loadout"));
     const addTo = /** @type {HTMLDivElement} */ (document.querySelector("#loadout-container"));
 
-    addButton.onclick = async () => {
-        const settings = await REQUEST_TYPES.GET_SETTINGS();
-        addTo.appendChild(createLoadout(null, settings));
+    addButton.onclick = () => {
+        addTo.appendChild(createLoadout(null, SETTINGS));
     };
 
     const editToggle = /** @type {HTMLButtonElement} */ (document.querySelector("#toggle-display-mode"));
@@ -45,12 +45,9 @@ function initializeContent() {
  * Loads content that relies on connecting to the main window.
  */
 async function loadLoadouts() {
-    const settings = await REQUEST_TYPES.GET_SETTINGS();
-
-    const cannonTypeCount = settings.ototo.names.length;
+    const cannonTypeCount = SETTINGS.ototo.names.length;
     for(let x = 2; x <= cannonTypeCount; x++) {
-        //@ts-ignore All localStorage values are automatically initialized if not set.
-        const cannonValues = window.localStorage.getItem(`oo_${x}`).split("-");
+        const cannonValues = window.localStorage.getItem(`oo_${x}`)?.split("-") ?? ["0", "0", "0"];
         unlockedCannons[x - 1] = { cannon: parseInt(cannonValues[0]) > 0, style: parseInt(cannonValues[1]) > 0, foundation: parseInt(cannonValues[2]) > 0 }
     }
     unlockedCannons[0] = { cannon: true, style: true, foundation: true }; // default base always available
@@ -59,15 +56,15 @@ async function loadLoadouts() {
     document.body.appendChild(datalist);
     await initializeDataset(datalist, await REQUEST_TYPES.GET_OWNED_FORM_NAMES(true));
 
-    REQUEST_TYPES.GET_ALL_LOADOUT().then(res => {
-        const wrapper = document.querySelector("#loadout-container");
-        for(const loadout of res) {
-            wrapper?.appendChild(createLoadout(loadout, settings));
-        }
-        if(window.localStorage.getItem("tdm") === "1") {
-            /** @type {HTMLButtonElement} */ (document.querySelector("#toggle-display-mode")).click();
-        }
-    });
+    const res = await REQUEST_TYPES.GET_ALL_LOADOUT();
+    const wrapper = document.querySelector("#loadout-container");
+    for(const loadout of res) {
+        wrapper?.appendChild(createLoadout(loadout, SETTINGS));
+    }
+    
+    if(window.localStorage.getItem("tdm") === "1") {
+        /** @type {HTMLButtonElement} */ (document.querySelector("#toggle-display-mode")).click();
+    }
 }
 
 /**

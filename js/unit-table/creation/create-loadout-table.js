@@ -2,18 +2,18 @@
 import makeSearchable from "../../helper/make-searchable.js";
 import makeDraggable, { sortIcons } from "../../helper/make-draggable.js";
 import { FORM } from "../../data/unit-data.js";
+import SETTINGS from "../../../assets/settings.js";
 
 const MAX_LOADOUT_NAME_LENGTH = 64;
 
 /**
  * Creates an element used to create a loadout.
- * @param {import("../../helper/loadout-storage-manager.js").LOADOUT|null} loadoutData Loadout data to initialize the loadout to, or null if the loadout should start blank.
+ * @param {import("../../data/loadout-data.js").LOADOUT|null} loadoutData Loadout data to initialize the loadout to, or null if the loadout should start blank.
  * @param {{ cannon: boolean, style: boolean, foundation: boolean }[]} unlockedCannons Whether each cannon part for each cannon type has been unlocked.
  * @param {(() => void)|null} saveCallback A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
- * @param {Object} settings An object containing the site settings.
  * @returns {HTMLDivElement} The created element.
  */
-export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback, settings) {
+export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-wrapper");
     wrapper.classList.add("v-align");
@@ -37,7 +37,7 @@ export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback,
     contentWrapper.classList.add("loadout-contents");
     contentWrapper.classList.add("h-align");
 
-    contentWrapper.append(createUnitInput(loadoutData && loadoutData.units, loadoutData && loadoutData.forms, saveCallback, settings), createCannonInput(loadoutData && loadoutData.baseLevels, unlockedCannons, saveCallback));
+    contentWrapper.append(createUnitInput(loadoutData && loadoutData.units, loadoutData && loadoutData.forms, saveCallback), createCannonInput(loadoutData && loadoutData.baseLevels, unlockedCannons, saveCallback));
     wrapper.append(options, contentWrapper);
 
     return wrapper;
@@ -48,21 +48,20 @@ export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback,
  * @param {number[]|null} units A list of up to 10 unique unit IDs, or null if all slots are empty.
  * @param {FORM[]|null} forms A list of up to 10 unit forms, the same length as {@link units}, or null if all slots are empty.
  * @param {(() => void)|null} saveCallback A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
- * @param {Object} settings An object containing the site settings.
  * @returns {HTMLDivElement} The created loadout unit selector.
  */
-export function createUnitInput(units, forms, saveCallback, settings) {
+export function createUnitInput(units, forms, saveCallback) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-unit-wrapper");
 
     let x = 0;
     if(units && forms) {
         for(x = 0; x < 10 && x < units.length; x++) {
-            appendChip(units[x], forms[x], wrapper, saveCallback, settings);
+            appendChip(units[x], forms[x], wrapper, saveCallback);
         }
     }
     while(x < 10) {
-        appendChip(null, null, wrapper, saveCallback, settings);
+        appendChip(null, null, wrapper, saveCallback);
         x++
     }
 
@@ -77,9 +76,8 @@ export function createUnitInput(units, forms, saveCallback, settings) {
  * @param {FORM|null} form The form of the unit to append to be used, or null if the slot is empty.
  * @param {HTMLDivElement} parent The parent element to append the chip to.
  * @param {(() => void)|null} saveCallback A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
- * @param {Object} settings An object containing the site settings.
  */
-export function appendChip(id, form, parent, saveCallback, settings) {
+export function appendChip(id, form, parent, saveCallback) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("chip");
 
@@ -91,10 +89,8 @@ export function appendChip(id, form, parent, saveCallback, settings) {
             return;
         }
         if(wrapper.classList.contains("set-unit")) {
-            //@ts-ignore
-            let form = parseInt(wrapper.dataset.form) + 1;
-            //@ts-ignore
-            if(form > parseInt(wrapper.dataset.maxForm)) {
+            let form = parseInt(wrapper.dataset.form ?? "0") + 1;
+            if(form > parseInt(wrapper.dataset.maxForm ?? "0")) {
                 form = 0;
             }
 
@@ -142,7 +138,7 @@ export function appendChip(id, form, parent, saveCallback, settings) {
         wrapper.dataset.form = `${searchForm}`;
         wrapper.dataset.id = `${searchID}`;
         wrapper.dataset.maxForm = `${formNameOptions.length - 1}`;
-        if(!settings.skipImages.includes(searchID)) {
+        if(!SETTINGS.skipImages.includes(searchID)) {
             img.src = `./assets/img/unit_icon/${searchID}_${searchForm}.png`;
         }
         pId.textContent = `${searchID}`;
@@ -247,10 +243,8 @@ export function createBaseArrow(isLeft, arrowFor, target, unlockedCannons, saveC
     }
 
     const changeAmt = isLeft ? -1 : 1;
-    //@ts-ignore Created directly above this
-    wrapper.querySelector("svg").onclick = () => {
-        //@ts-ignore
-        const currIndex = parseInt(target.dataset.type) - 1;
+    /** @type {SVGElement} */ (wrapper.querySelector("svg")).onclick = () => {
+        const currIndex = parseInt(target.dataset.type ?? "1") - 1;
         
         let inc = currIndex;
         do {

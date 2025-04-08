@@ -1,23 +1,23 @@
-// No ts-check because it does not work well with querySelectors
+//@ts-check
 
 /**
  * Initializes the orb selection modal.
  */
 export function initializeOrbSelection() {
-    const attachOrb = document.querySelector("#attach-orb");
+    const attachOrb = /** @type {HTMLButtonElement} */ (document.querySelector("#attach-orb"));
 
-    const resultOrb = document.querySelector("#orb-result");
-    const resultOrbColor = resultOrb.querySelector(".orb-color");
-    const resultOrbType = resultOrb.querySelector(".orb-type");
-    const resultOrbRank = resultOrb.querySelector(".orb-rank");
+    const resultOrb = /** @type {HTMLDivElement} */ (document.querySelector("#orb-result"));
+    const resultOrbColor = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-color"));
+    const resultOrbType = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-type"));
+    const resultOrbRank = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-rank"));
 
-    const traitBox = document.querySelector("#trait-selection");
-    const traitOptions = traitBox.querySelectorAll(".image-selector");
+    const traitBox = /** @type {HTMLDivElement} */ (document.querySelector("#trait-selection"));
+    const traitOptions = /** @type {NodeListOf<HTMLDivElement>} */ (traitBox.querySelectorAll(".image-selector"));
     for(const trait of traitOptions) {
         trait.onclick = () => {
             traitOptions.forEach(v => v.classList.remove("orb-selected"));
             trait.classList.add("orb-selected");
-            resultOrbColor.src = trait.querySelector("img").src;
+            resultOrbColor.src = trait.querySelector("img")?.src ?? "";
             resultOrbColor.dataset.trait = trait.dataset.trait;
 
             if(resultOrbColor.dataset.trait && resultOrbType.dataset.type && resultOrbRank.dataset.rank) {
@@ -26,13 +26,13 @@ export function initializeOrbSelection() {
         };
     }
 
-    const typeBox = document.querySelector("#type-selection");
-    const typeOptions = typeBox.querySelectorAll(".image-selector");
+    const typeBox = /** @type {HTMLDivElement} */ (document.querySelector("#type-selection"));
+    const typeOptions = /** @type {NodeListOf<HTMLDivElement>} */ (typeBox.querySelectorAll(".image-selector"));
     for(const type of typeOptions) {
         type.onclick = () => {
             typeOptions.forEach(v => v.classList.remove("orb-selected"));
             type.classList.add("orb-selected");
-            resultOrbType.src = type.querySelector("img").src;
+            resultOrbType.src = type.querySelector("img")?.src ?? "";
             resultOrbType.classList.remove("invisible");
             resultOrbType.dataset.type = type.dataset.type;
 
@@ -42,13 +42,13 @@ export function initializeOrbSelection() {
         };
     }
 
-    const rankBox = document.querySelector("#rank-selection");
-    const rankOptions = rankBox.querySelectorAll("img");
+    const rankBox = /** @type {HTMLDivElement} */ (document.querySelector("#rank-selection"));
+    const rankOptions = /** @type {NodeListOf<HTMLDivElement>} */ (rankBox.querySelectorAll(".rank-shrinkwrap"));
     for(const rank of rankOptions) {
         rank.onclick = () => {
             rankOptions.forEach(v => v.classList.remove("orb-selected"));
             rank.classList.add("orb-selected");
-            resultOrbRank.src = rank.src;
+            resultOrbRank.src = rank.querySelector("img")?.src ?? "";
             resultOrbRank.classList.remove("invisible");
             resultOrbRank.dataset.rank = rank.dataset.rank;
 
@@ -67,8 +67,8 @@ let topPos = 0;
  * Initializes the cancel button inside the orb selection modal.
  */
 function initializeOrbCancel() {
-    const modal = document.querySelector("#orb-selection-modal");
-    const orbCancel = document.querySelector("#orb-selection-cancel");
+    const modal = /** @type {HTMLDivElement} */ (document.querySelector("#orb-selection-modal"));
+    const orbCancel = /** @type {HTMLDivElement} */ (document.querySelector("#orb-selection-cancel"));
 
     orbCancel.onclick = () => {
         modal.classList.add("hidden");
@@ -82,54 +82,54 @@ function initializeOrbCancel() {
  * @param {HTMLDivElement} target The orb interactable for which an orb selection modal is opened.
  */
 export function openOrbSelectionModal(target) {
-    const modal = document.querySelector("#orb-selection-modal");
-    const attachOrb = document.querySelector("#attach-orb");
+    const modal = /** @type {HTMLDivElement} */ (document.querySelector("#orb-selection-modal"));
+    const attachOrb = /** @type {HTMLButtonElement} */ (document.querySelector("#attach-orb"));
     modal.classList.remove("hidden");
 
     topPos = document.documentElement.scrollTop;
     document.body.classList.add("unscrollable");
     document.body.style.top = -1 * topPos + "px";
 
-    const resultOrb = document.querySelector("#orb-result");
-    const resultColor = resultOrb.querySelector(".orb-color");
-    const resultType = resultOrb.querySelector(".orb-type");
-    const resultRank = resultOrb.querySelector(".orb-rank");
+    const resultOrb = /** @type {HTMLDivElement} */ (document.querySelector("#orb-result"));
+    const resultColor = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-color"));
+    const resultType = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-type"));
+    const resultRank = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-rank"));
 
-    const color = target.querySelector(".orb-color");
-    const type = target.querySelector(".orb-type");
-    const rank = target.querySelector(".orb-rank");
+    const color = /** @type {HTMLImageElement} */ (target.querySelector(".orb-color"));
+    const type = /** @type {HTMLImageElement} */ (target.querySelector(".orb-type"));
+    const rank = /** @type {HTMLImageElement} */ (target.querySelector(".orb-rank"));
 
     resultColor.src = color.src;
     if(!color.dataset.trait) {
         resultColor.dataset.trait = "";
-        document.querySelector("#trait-selection").querySelector(".orb-selected")?.classList.remove("orb-selected");
+        document.querySelector("#trait-selection")?.querySelector(".orb-selected")?.classList.remove("orb-selected");
     } else {
         resultColor.dataset.trait = color.dataset.trait;
-        document.querySelector("#trait-selection").querySelector(`.image-selector[data-trait="${color.dataset.trait}"]`).click();
+        /** @type {HTMLDivElement} */ (document.querySelector("#trait-selection")?.querySelector(`.image-selector[data-trait="${color.dataset.trait}"]`)).click();
     }
 
     if(type.classList.contains("invisible")) {
         resultType.src = "";
         resultType.classList.add("invisible");
         resultType.dataset.type = "";
-        document.querySelector("#type-selection").querySelector(".orb-selected")?.classList.remove("orb-selected");
+        document.querySelector("#type-selection")?.querySelector(".orb-selected")?.classList.remove("orb-selected");
     } else {
         resultType.src = type.src;
         resultType.classList.remove("invisible");
         resultType.dataset.type = type.dataset.type;
-        document.querySelector("#type-selection").querySelector(`.image-selector[data-type="${type.dataset.type}"]`).click();
+        /** @type {HTMLDivElement} */ (document.querySelector("#type-selection")?.querySelector(`.image-selector[data-type="${type.dataset.type}"]`)).click();
     }
 
     if(rank.classList.contains("invisible")) {
         resultRank.src = "";
         resultRank.classList.add("invisible");
         resultRank.dataset.rank = "";
-        document.querySelector("#rank-selection").querySelector(".orb-selected")?.classList.remove("orb-selected");
+        document.querySelector("#rank-selection")?.querySelector(".orb-selected")?.classList.remove("orb-selected");
     } else {
         resultRank.src = rank.src;
         resultRank.classList.remove("invisible");
         resultRank.dataset.rank = rank.dataset.rank;
-        document.querySelector("#rank-selection").querySelector(`img[data-rank="${rank.dataset.rank}"]`).click();
+        /** @type {HTMLDivElement} */ (document.querySelector("#rank-selection")?.querySelector(`img[data-rank="${rank.dataset.rank}"]`)?.parentElement).click();
     }
 
     if(resultColor.dataset.trait && resultType.dataset.type && resultRank.dataset.rank) {
@@ -138,7 +138,7 @@ export function openOrbSelectionModal(target) {
         attachOrb.disabled = true;
     }
 
-    modal.querySelector("#remove-orb").onclick = () => {
+    /** @type {HTMLButtonElement} */ (modal.querySelector("#remove-orb")).onclick = () => {
         color.src = "./assets/img/orb/empty-orb.png";
         color.dataset.trait = "";
         type.src = "";
@@ -153,7 +153,7 @@ export function openOrbSelectionModal(target) {
         document.documentElement.scrollTop = topPos;
     };
 
-    modal.querySelector("#attach-orb").onclick = () => {
+    /** @type {HTMLButtonElement} */ (modal.querySelector("#attach-orb")).onclick = () => {
         color.src = resultColor.src;
         color.dataset.trait = resultColor.dataset.trait;
         type.src = resultType.src;

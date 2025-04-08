@@ -42,9 +42,11 @@ export function registerFrame(frame) {
 function handleMessage(port, res) {
     if(res.data.context === RESPONSE_TYPES.REFRESH_DATA) {
         initializeUserData(dataManager.sendMessage);
-    } else if(MESSAGE_RESPONSE.has(res.data.context)) {
-        //@ts-ignore Just checked that the map has the target function
-        port.postMessage({ m_id: res.data.m_id, data: MESSAGE_RESPONSE.get(res.data.context)(dataManager, res.data.content, res.data.ignore_filters) });
+    }
+
+    const responseFunc = MESSAGE_RESPONSE.get(res.data.context);
+    if(responseFunc) {
+        port.postMessage({ m_id: res.data.m_id, data: responseFunc(dataManager, res.data.content, res.data.ignore_filters) });
     } else {
         console.error(`Unexpected context: "${res.data.context}", unable to finish communication`);
     }

@@ -73,8 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         window.addEventListener("popstate", (/** @type {PopStateEvent} */ e) => {
-            //@ts-ignore Parser cannot detect e.target.location
-            const targetPage = new URLSearchParams(e.target.location.search.slice(1)).get("page") ?? "home";
+            const targetPage = new URLSearchParams(/** @type {Window} */ (e.target).location.search.slice(1)).get("page") ?? "home";
             setPage(loadHistory(targetPage));
             loadTo(targetPage, true);
         });

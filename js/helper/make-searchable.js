@@ -1,5 +1,5 @@
 //@ts-check
-import FORM from "../data/unit-data.js";
+import { FORM } from "../data/unit-data.js";
 
 let targettedInput = null;
 
@@ -38,12 +38,11 @@ export default function makeSearchable(input, findCallback) {
         suggestionDropdown.style.top = "-10000000px";
         suggestionDropdown.style.left = "-10000000px";
     });
-    //@ts-ignore Custom event is event.
-    input.addEventListener("suggest", (/** @type {CustomEvent} */ v) => {
+    input.addEventListener("suggest", (/** @type {Event} */ v) => {
         input.value = "";
         input.blur();
         suggestionDropdown.querySelectorAll(".hidden").forEach(s => s.classList.remove("hidden"));
-        findCallback(v.detail.id, v.detail.form);
+        findCallback(/** @type {CustomEvent} */ (v).detail.id, /** @type {CustomEvent} */ (v).detail.form);
     });
     input.addEventListener("keydown", (/** @type {KeyboardEvent} */ ev) => {
         if(ev.key === "ArrowUp") {
@@ -171,8 +170,7 @@ export async function initializeDataset(datalist, names) {
         appendSearchSuggestions(names[x], datalist);
     }
 
-    //@ts-ignore textContent is never null
-    [...datalist.children].sort((a, b) => a.textContent.toLowerCase() > b.textContent.toLowerCase() ? 1 : -1).forEach(n => datalist.appendChild(n));
+    [...datalist.children].sort((a, b) => ((a.textContent?.toLowerCase() ?? "") > (b.textContent?.toLowerCase() ?? "")) ? 1 : -1).forEach(n => datalist.appendChild(n));
 }
 
 /**

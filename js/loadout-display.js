@@ -9,6 +9,7 @@ import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
 import { getValuesFromRow } from "./helper/link-row.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
+import SETTINGS from "../assets/settings.js";
 
 let idFormMap = new Map();
 
@@ -31,7 +32,7 @@ function initializeContent() {
     document.body.appendChild(createOrbMenu());
     initializeOrbSelection();
 
-    const table = createSearchableTable("Loadout", [], _ => {});
+    const table = createSearchableTable("Loadout", []);
     table.querySelector("h2")?.remove();
     document.querySelector("#unit-data-box")?.appendChild(table);
 
@@ -56,7 +57,6 @@ function initializeContent() {
     const codeEnterButton = /** @type {HTMLButtonElement} */ (document.querySelector("#import-loadout"));
     const shareCodeInput = /** @type {HTMLInputElement} */ (document.querySelector("#code-input"));
     shareCodeInput?.addEventListener("keyup", ev => {
-        //@ts-ignore
         if(ev.key === "Enter") {
             codeEnterButton.click();
         }
@@ -85,7 +85,12 @@ function initializeContent() {
 
             const chips = /** @type {HTMLDivElement[]} */ ([...document.querySelectorAll("#loadout-box .chip")]);
             for(let x = 0; x < decoded.units.length && x < chips.length; x++) {
-                REQUEST_TYPES.GET_ID_DATA(decoded.units[x].id, true).then(u => {
+                REQUEST_TYPES.GET_ID_DATA(decoded.units[x].id, true).then((/** @type {import("./data/unit-data.js").UNIT_DATA|null} */ u) => {
+                    if(!u) {
+                        console.error(`Missing unit data: ${decoded.units[x].id}`);
+                        return;
+                    }
+
                     chips[x].classList.add("set-unit");
                     /** @type {HTMLImageElement} */ (chips[x].querySelector(".unit-icon")).src = `./assets/img/unit_icon/${decoded.units[x].id}_${decoded.forms[x]}.png`;
                     chips[x].dataset.form = `${decoded.forms[x]}`;
@@ -192,19 +197,17 @@ function createBaseLevelInput(value, cap, type) {
  * Loads loadouts onto the page.
  */
 async function loadLoadouts() {
-    const settings = await REQUEST_TYPES.GET_SETTINGS();
-
     const baseLeveling = document.querySelector("#base-box");
-    const cannon = createBaseLevelInput(settings.ototo.cannon, settings.ototo.cannon, 0);
+    const cannon = createBaseLevelInput(SETTINGS.ototo.cannon, SETTINGS.ototo.cannon, 0);
     cannon.id = "loadout-cannon";
-    const style = createBaseLevelInput(settings.ototo.style, settings.ototo.style, 1);
+    const style = createBaseLevelInput(SETTINGS.ototo.style, SETTINGS.ototo.style, 1);
     style.id = "loadout-style";
-    const foundation = createBaseLevelInput(settings.ototo.base, settings.ototo.base, 2);
+    const foundation = createBaseLevelInput(SETTINGS.ototo.base, SETTINGS.ototo.base, 2);
     foundation.id = "loadout-foundation";
     baseLeveling?.append(cannon, style, foundation);
 
     const unlockedCannons = [];
-    for(let x = 0; x < settings.ototo.names.length; x++) {
+    for(let x = 0; x < SETTINGS.ototo.names.length; x++) {
         unlockedCannons[x] = { cannon: true, style: true, foundation: true };
     }
 
@@ -212,7 +215,7 @@ async function loadLoadouts() {
     document.body.appendChild(datalist);
     initializeDataset(datalist, await REQUEST_TYPES.GET_NAMES(true));
 
-    const emptyLoadout = createMinimalLoadout(null, unlockedCannons, syncLoadoutAndTable, settings);
+    const emptyLoadout = createMinimalLoadout(null, unlockedCannons, syncLoadoutAndTable, SETTINGS);
     document.querySelector("#loadout-box")?.appendChild(emptyLoadout);
 }
 
@@ -237,7 +240,13 @@ function syncLoadoutAndTable() {
         for(const unit of loadoutUnits) {
             if(!idFormMap.has(unit.id)) {
                 idFormMap.set(unit.id, unit.form);
-                REQUEST_TYPES.GET_ID_DATA(unit.id, true).then(u => {
+                
+                REQUEST_TYPES.GET_ID_DATA(unit.id, true).then((/** @type {import("./data/unit-data.js").UNIT_DATA|null} */ u) => {
+                    if(!u) {
+                        console.error(`Missing unit data: ${unit.id}`);
+                        return;
+                    }
+
                     u.current_form = unit.form;
                     const newRow = createRow(u);
                     newRow.querySelector(".hide-option")?.remove();
@@ -257,8 +266,7 @@ function syncLoadoutAndTable() {
         for(const unit of loadoutUnits) {
             if(idFormMap.get(unit.id) !== unit.form) {
                 const targetID = [...document.querySelectorAll("#unit-data-box .row-id")].find(r => r.textContent === `${unit.id}`);
-                //@ts-ignore
-                const targetRowIcon = /** @type {HTMLDivElement} */ (targetID.parentElement.querySelector(".row-image"));
+                const targetRowIcon = /** @type {HTMLDivElement} */ (targetID?.parentElement?.querySelector(".row-image"));
                 const targetRowImage = /** @type {HTMLImageElement} */ (targetRowIcon.querySelector(".unit-icon"));
 
                 const start = parseInt(targetRowIcon.dataset.form ?? "0"); // to prevent infinite loops in case of poorly formatted codes

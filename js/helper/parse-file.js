@@ -1,4 +1,5 @@
 //@ts-check
+import * as Papa from "../papaparse5.5.2.min.js";
 import SETTINGS from "../../assets/settings.js";
 import { FORM } from "../data/unit-data.js";
 import { decodeUnit } from "./encoder.js";
@@ -8,13 +9,12 @@ import { decodeUnit } from "./encoder.js";
  * @returns {Promise<import("../data/unit-data.js").LEVEL_CAP[]>} A list of level caps.
  */
 async function getLevelCaps() {
-    //@ts-ignore PapaParse breaks when imported as module
     return fetch("./assets/unit_data/level_cap_stats.csv").then(r => r.text()).then(t => Papa.parse(t, { header: true, dynamicTyping: true, skipEmptyLines: true }).data).catch(e => console.error(e));
 }
 
 /**
  * Gets all unit data.
- * @param {Object} categories All categories, for the purposes of determining if a unit is a collab unit or unobtainable.
+ * @param {import("../data/category-data.js").CATEGORY_MAP} categories All categories, for the purposes of determining if a unit is a collab unit or unobtainable.
  * @returns {Promise<import("../data/unit-data.js").UNIT_DATA[]>} A list of every unit in the game.
  */
 export async function getUnitData(categories) {
@@ -28,7 +28,6 @@ export async function getUnitData(categories) {
     for(let x = 0; x <= Math.floor(unitCount / 100); x++) {
         awaitFinish.push(fetch(`./assets/unit_data/units_${x * 100}.csv`)
             .then(r => r.text())
-            //@ts-ignore PapaParse breaks when imported as module
             .then(t => Papa.parse(t, {
                 header: true,
                 dynamicTyping: true,
@@ -162,7 +161,7 @@ export function parseUpgrades() {
 
 /**
  * Parses loadouts from localStorage.
- * @returns {import("./loadout-storage-manager.js").LOADOUT[]} Parsed loadouts.
+ * @returns {import("../data/loadout-data.js").LOADOUT[]} Parsed loadouts.
  */
 export function parseLoadouts() {
     const llp = window.localStorage.getItem("llp");

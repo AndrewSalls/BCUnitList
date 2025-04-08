@@ -7,33 +7,33 @@
  * @returns {Promise<string>} The encoded loadout.
  */
 export async function encodeLink(loadoutData, unitData) {
-    //@ts-ignore Not creating a whole new object to avoid typecasting
-    loadoutData.units = unitData.map((/** @type {any} */ u) => encodeUnitEntry(u));
-    loadoutData.baseLevels = [0, 0, 0];
-    for(let x = 0; x < 3; x++) {
-        //@ts-ignore All localStorage values are automatically initialized if not set.
-        loadoutData.baseLevels[x] = window.localStorage.getItem(`oo_${loadoutData.base[x]}`).split("-")[x];
-    }
-    
-    const doubleCompressed = window.btoa(JSON.stringify(loadoutData));
-    return doubleCompressed;
+    return encodeDirectLink({
+        title: loadoutData.title,
+        units: /** @type {import("../data/unit-data").LOADOUT_UNIT_DATA[]} */ (/** @type {unknown} */ (unitData)),
+        forms: loadoutData.forms,
+        baseLevels: loadoutData.baseLevels
+    });
 }
 
 /**
  * Encodes a loadout containing unit values as a string.
- * @param {import("../data/loadout-data").LOADOUT} loadoutData The loadout data, including full unit data instead of just IDs.
+ * @param {import("../data/loadout-data").FULL_LOADOUT} loadoutData The loadout data, including full unit data instead of just IDs.
  * @returns {string} The encoded loadout.
  */
 export function encodeDirectLink(loadoutData) {
-    //@ts-ignore Not creating a whole new object to avoid typecasting
-    loadoutData.units = loadoutData.units.map((/** @type {LOADOUT_UNIT_DATA} */ u) => encodeUnitEntry(u));
-    return window.btoa(JSON.stringify(loadoutData));
+    const encodedUnits = loadoutData.units.map((/** @type {import("../data/unit-data").LOADOUT_UNIT_DATA} */ u) => encodeUnit(u));
+    return window.btoa(JSON.stringify({
+        title: loadoutData.title,
+        units: encodedUnits,
+        forms: loadoutData.forms,
+        baseLevels: loadoutData.baseLevels
+    }));
 }
 
 /**
  * Converts a loadout's string encoding to it's JSON encoding.
  * @param {string} dataString The string encoding.
- * @returns {import("../data/loadout-data").LOADOUT} A JSON encoding of a loadout.
+ * @returns {import("../data/loadout-data").FULL_LOADOUT} A JSON encoding of a loadout.
  */
 export function decodeLink(dataString) {
     const loadoutObj = JSON.parse(window.atob(dataString));

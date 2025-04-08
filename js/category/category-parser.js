@@ -7,7 +7,7 @@
 /**
  * Parses all categories in a specific file.
  * @param {string} file The name of the file to parse.
- * @returns {Promise<Object>} An object containing the category names as keys, and the unit IDs in each category as values.
+ * @returns {Promise<{[category: string]: number[]}>} An object containing the category names as keys, and the unit IDs in each category as values.
  */
 export async function parseCategoryFile(file) {
     return fetch(`./assets/unit_data/category/${file}.json`)
@@ -44,13 +44,12 @@ async function flattenCategory(arr) {
         }
     }
 
-    //@ts-ignore Parser can't handle this garbage
-    return arr.flat();
+    return /** @type {(number|number[])[]} */ (arr).flat();
 }
 
 /**
  * Parses all categories from assets based on the file names listed in ./category/types.txt , and from the custom category stored in localStorage, converting them to JSON.
- * @returns {Promise<Object>} An object containing all categories, with keys being the super-categories, and objects being the parsed categories.
+ * @returns {Promise<import("../data/category-data").CATEGORY_MAP>} An object containing all categories, with keys being the super-categories, and objects being the parsed categories.
  */
 export async function parseAllCategories() {
     return fetch("./assets/unit_data/category/types.txt")

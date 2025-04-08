@@ -1,4 +1,5 @@
 //@ts-check
+import * as Papa from "../papaparse5.5.2.min.js";
 import TALENT_NP_MAP from "../../assets/talent-np-map.js";
 import UT_NP_MAP from "../../assets/ut-np-map.js";
 import ORB_MAP from "../../assets/orb-map.js";
@@ -6,6 +7,17 @@ import { RARITY } from "../data/unit-data.js";
 
 let levelingCost;
 let pause = false;
+
+/**
+ * @typedef MATERIAL_COSTS
+ * @property {number} formXP, @property {number} lvl30XP @property {number} lvlMaxXP @property {number} maxNP @property {number} sOrb
+ * @property {number} catseye_EX @property {number} catseye_RR @property {number} catseye_SR @property {number} catseye_UR @property {number} catseye_LR @property {number} catseye_dark
+ * @property {number} green_fruit @property {number} purple_fruit @property {number} red_fruit @property {number} blue_fruit @property {number} yellow_fruit @property {number} epic_fruit @property {number} elder_fruit @property {number} aku_fruit @property {number} gold_fruit
+ * @property {number} green_seed @property {number} purple_seed @property {number} red_seed @property {number} blue_seed @property {number} yellow_seed @property {number} epic_seed @property {number} elder_seed @property {number} aku_seed @property {number} gold_seed
+ * @property {number} green_gem @property {number} purple_gem @property {number} red_gem @property {number} blue_gem @property {number} yellow_gem
+ * @property {number} green_stone @property {number} purple_stone @property {number} red_stone @property {number} blue_stone @property {number} yellow_stone @property {number} epic_stone
+ * @property {{[material: string]: number}} ultra @property {boolean} has_units @property {boolean} has_ubers
+ */
 
 /**
  * Checks that the leveling costs are initialized.
@@ -23,7 +35,6 @@ async function initializeLeveling() {
         pause = true;
         levelingCost = await fetch("./assets/unit_data/leveling_stats.csv")
             .then(r => r.text())
-            //@ts-ignore PapaParse breaks when imported as module
             .then(t => Papa.parse(t, { header: true, dynamicTyping: true, skipEmptyLines: true }).data)
             .catch(e => console.error(e));
     }
@@ -32,7 +43,7 @@ async function initializeLeveling() {
 /**
  * Obtains the costs needed to upgrade a list of units.
  * @param {import("../data/unit-data.js").UNIT_DATA[]} unitList The list of units.
- * @returns {Promise<Object>} The materials needed to upgrade the units.
+ * @returns {Promise<MATERIAL_COSTS>} The materials needed to upgrade the units.
  */
 export default async function getCostsFor(unitList) {
     if(!isInitialized()) {
@@ -48,13 +59,15 @@ export default async function getCostsFor(unitList) {
         green_fruit: 0, purple_fruit: 0, red_fruit: 0, blue_fruit: 0, yellow_fruit: 0, epic_fruit: 0, elder_fruit: 0, aku_fruit: 0, gold_fruit: 0,
         green_seed: 0, purple_seed: 0, red_seed: 0, blue_seed: 0, yellow_seed: 0, epic_seed: 0, elder_seed: 0, aku_seed: 0, gold_seed: 0,
         green_gem: 0, purple_gem: 0, red_gem: 0, blue_gem: 0, yellow_gem: 0,
-        green_stone: 0, purple_stone: 0, red_stone: 0, blue_stone: 0, yellow_stone: 0, epic_stone: 0
+        green_stone: 0, purple_stone: 0, red_stone: 0, blue_stone: 0, yellow_stone: 0, epic_stone: 0,
+        ultra: {}, has_units: false, has_ubers: false
     };
-    const tableUltraValues = {...tableAllValues};
+    const {has_units: _1, has_ubers: _2, ultra: _3, ...tableUltraValues} = tableAllValues;
     
     if(unitList.length === 0) {
         tableAllValues.ultra = tableUltraValues;
         tableAllValues.has_units = false;
+        tableAllValues.has_ubers = false;
         return tableAllValues;
     }
 
@@ -62,7 +75,6 @@ export default async function getCostsFor(unitList) {
         const numKey = parseInt(key);
         promises.push(fetch(`./assets/unit_data/unit_costs_${numKey}.csv`)
             .then(r => r.text())
-            //@ts-ignore PapaParse breaks when imported as a module
             .then(t => Papa.parse(t, {
                 header: true,
                 dynamicTyping: true,
@@ -163,7 +175,7 @@ export default async function getCostsFor(unitList) {
     
     tableAllValues.ultra = tableUltraValues;
     tableAllValues.has_units = true;
-    tableAllValues.hasUber = unitList.some((/** @type {{ rarity: string; }} */ u) => u.rarity === "UR");
+    tableAllValues.has_ubers = unitList.some((/** @type {{ rarity: string; }} */ u) => u.rarity === "UR");
     return tableAllValues;
 }
 

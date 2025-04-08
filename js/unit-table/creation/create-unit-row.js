@@ -1,6 +1,7 @@
 //@ts-check
 import { FORM } from "../../data/unit-data.js";
 import { createLevelInteractable, createOrbInteractable, createTalentInteractable } from "./create-row-interactable.js";
+import SETTINGS from "../../../assets/settings.js";
 
 /**
  * Creates a row in a unit table.
@@ -17,7 +18,7 @@ export default function createRow(entry) {
 
     const idBox = createIDBox(entry.id);
     const [nameBox, nameUpdate] = createNameBox([entry.normal_form, entry.evolved_form, entry.true_form, entry.ultra_form], entry.current_form);
-    const [iconBox, iconReset, iconMax] = createIconBox(entry.id, entry.current_form, entry.max_form, entry.disable_icon, nameUpdate);
+    const [iconBox, iconReset, iconMax] = createIconBox(entry.id, entry.current_form, entry.max_form, SETTINGS.skipImages.includes(entry.id), nameUpdate);
     const [levelBox, levelReset, levelMax, plusLevelReset, plusLevelMax] = createLevelBox(entry.level_cap, entry.level, entry.plus_level);
     const [talentBox, talentReset, talentMax, ultraTalentReset, ultraTalentMax] = createTalentBox(entry.talents, entry.ultra_talents);
     const [orbBox, orbReset] = createOrbBox(entry.orb);
@@ -81,8 +82,7 @@ export function createIconBox(id, currentForm, maxForm, iconDisabled, nameCallba
         if(rowImage.dataset.form === `${maxForm}`) {
             rowImage.dataset.form = "0";
         } else {
-            //@ts-ignore
-            rowImage.dataset.form = `${parseInt(rowImage.dataset.form) + 1}`;
+            rowImage.dataset.form = `${parseInt(rowImage.dataset.form ?? "-1") + 1}`;
         }
 
         if(!rowIMG.classList.contains("hidden")) {
@@ -182,14 +182,10 @@ export function createTalentBox(normalTalents, ultraTalents) {
 
     rowTalents.appendChild(horizontalAlign);
     return [rowTalents,
-        //@ts-ignore
-        normalTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".regular-talent p")).forEach(p => { p.innerText = "0"; p.onchange(); }) : null,
-        //@ts-ignore
-        normalTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".regular-talent p")).forEach(p => { p.innerText = `${p.parentElement?.dataset.max}`; p.onchange(); }) : null,
-        //@ts-ignore
-        ultraTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".ultra-talent p")).forEach(p => { p.innerText = "0"; p.onchange(); }) : null,
-        //@ts-ignore
-        ultraTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".ultra-talent p")).forEach(p => { p.innerText = `${p.parentElement?.dataset.max}`; p.onchange(); }) : null];
+        normalTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".regular-talent p")).forEach(p => { p.innerText = "0"; p.onchange && p.onchange(new Event("change")); }) : null,
+        normalTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".regular-talent p")).forEach(p => { p.innerText = `${p.parentElement?.dataset.max}`; p.onchange && p.onchange(new Event("change")); }) : null,
+        ultraTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".ultra-talent p")).forEach(p => { p.innerText = "0"; p.onchange && p.onchange(new Event("change")); }) : null,
+        ultraTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".ultra-talent p")).forEach(p => { p.innerText = `${p.parentElement?.dataset.max}`; p.onchange && p.onchange(new Event("change")); }) : null];
 }
 
 /**
@@ -254,7 +250,7 @@ export function createFavoriteBox(isFavorited) {
 
 /**
  * Creates the options column entry for the row.
- * @param {{ reset: Object; max: Object; hide: Object; }} optionCallbacks Functions that describe what actions can be performed to the row, based on what columns are filled in.
+ * @param {{ reset: { [key: string]: (() => void)|null }; max: { [key: string]: (() => void)|null }; hide: () => void; }} optionCallbacks Functions that describe what actions can be performed to the row, based on what columns are filled in.
  * @returns {HTMLTableCellElement} The created options entry.
  */
 export function createOptionsBox(optionCallbacks) {
@@ -268,9 +264,11 @@ export function createOptionsBox(optionCallbacks) {
     const reset = createOptionButton("R", "Reset Unit", "reset-option", () => Object.values(optionCallbacks.reset).forEach(f => f !== null && f()));
     rowOptionAlign.appendChild(reset);
 
-    const maxLevel = createOptionButton("L", "Max Regular Level", "level-option", optionCallbacks.max.level);
-    rowOptionAlign.appendChild(maxLevel);
-    includedInMax.push(maxLevel);
+    if(optionCallbacks.max.level) {
+        const maxLevel = createOptionButton("L", "Max Regular Level", "level-option", optionCallbacks.max.level);
+        rowOptionAlign.appendChild(maxLevel);
+        includedInMax.push(maxLevel);
+    }
 
     if(optionCallbacks.max.plusLevel) {
         const maxPlusLevel = createOptionButton("+", "Max + Level", "plus-level-option", optionCallbacks.max.plusLevel);

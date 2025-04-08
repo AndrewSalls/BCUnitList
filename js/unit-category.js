@@ -6,12 +6,10 @@ import createTableOptionModal from "./unit-table/creation/create-table-modal.js"
 import * as CategorySelector from "./category/category-selector.js";
 import createSearchableTable from "./unit-table/creation/create-unit-table.js";
 import { attachTableOptionsAndFilters, initializeTableModal } from "./unit-table/filter-units.js";
-import { getValuesFromRow, observeRowChange } from "./helper/link-row.js";
-import createRow from "./unit-table/creation/create-unit-row.js";
+import { observeRowChange } from "./helper/link-row.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 import { parseSnakeCase } from "./helper/parse-string.js";
-
-const rowRef = [];
+import { registerSyncedRow, syncRowValues } from "./unit-table/sync-tables.js";
 
 /**
  * Initializes page elements once page has loaded.
@@ -93,7 +91,7 @@ function loadCategories() {
 /**
  * Creates a table for every non-filtered category.
  * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar that hides the screen until all tables are loaded.
- * @param {Object} categoryData An object whose keys are super-categories, and values are objects where { key is category, and values are lists of unit ids in that category }.
+ * @param {import("./data/category-data.js").CATEGORY_MAP} categoryData Every super-category, sub-category, and the units in each sub-category.
  */
 function appendAllCategoryTables(loadingBar, categoryData) {
     const categoryGrouping = document.querySelector("#builtin-section");
@@ -148,7 +146,7 @@ function appendAllCategoryTables(loadingBar, categoryData) {
  * @param {string} superCategory The name of the super-category the category is a part of.
  * @param {string} categoryName The name of the category.
  * @param {Element} target The element to append the table to.
- * @param {Object} categoryData All category data.
+ * @param {import("./data/category-data.js").CATEGORY_MAP} categoryData All category data.
  * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar used to hide the page until all elements are loaded.
  */
 async function appendCategoryUnitTable(superCategory, categoryName, target, categoryData, loadingBar) {
@@ -177,12 +175,7 @@ function createTableFromData(tableName, data, loadingBar) {
 
     for(const row of body.querySelectorAll("tr")) {
         const id = parseInt(row.querySelector(".row-id")?.textContent ?? "0");
-        if(rowRef[id]) {
-            rowRef[id].push(row);
-        } else {
-            rowRef[id] = [row];
-        }
-
+        registerSyncedRow(row, id);
         observeRowChange(row, () => syncRowValues(row, id));
     }
 
@@ -213,142 +206,4 @@ function createTableFromData(tableName, data, loadingBar) {
 
     table.querySelector("thead tr")?.insertAdjacentElement("beforebegin", tableTitle);
     return table;
-}
-
-/**
- * Updates all rows representing a unit with the same id as the provided row to have the same values.
- * @param {HTMLTableRowElement} row The row to copy values from.
- * @param {number} id The ID of the unit that is being updated in all referencing rows.
- */
-function syncRowValues(row, id) {
-    if(rowRef[id].length > 1) {
-        if(row.querySelector(".fav-icon")?.parentElement?.dataset.favorited === "0") {
-            const remain = [], removed = [];
-            for(const entry of rowRef[id]) {
-                if(entry.parentElement.parentElement.parentElement.classList.contains("favorited-table-marker")) {
-                    removed.push(entry);
-                } else {
-                    remain.push(entry);
-                }
-            }
-
-            for(const favTableElm of removed) {
-                favTableElm.parentElement.removeChild(favTableElm);
-            }
-            rowRef[id] = remain;
-        }
-
-        const values = getValuesFromRow(row);
-        rowRef[id].forEach((/** @type {any} */ r) => {
-            if(r !== row) {
-                copyUpdatedValues(values, r);
-            }
-        });
-    } else if(row.querySelector(".fav-icon")?.parentElement?.dataset.favorited === "1") {
-        //@ts-ignore Parsing awkwardness since values cannot start uninitialized.
-        const values = /** @type {import("./helper/parse-file.js").UNIT_DATA} */ (/** @type {unknown} */ (getValuesFromRow(row)));
-        values.collab = row.dataset.is_collab === "Y";
-        values.unobtainable = row.dataset.is_unobtainable === "Y";
-        values.in_EN = row.dataset.in_en === "Y";
-
-        const nameBox = /** @type {HTMLTableCellElement} */ (row.querySelector(".row-name"));
-        values.normal_form = nameBox.dataset.normal_name ?? null;
-        values.evolved_form = nameBox.dataset.evolved_name ?? null;
-        values.true_form = nameBox.dataset.true_name ?? null;
-        values.ultra_form = nameBox.dataset.ultra_name ?? null;
-        values.max_form = parseInt(/** @type {HTMLTableCellElement} */ (row.querySelector(".row-image")).dataset.max_form ?? "0");
-
-        values.level_cap = {
-            Type: "INTERNAL",
-            MaxLevel: parseInt(/** @type {HTMLInputElement} */ (row.querySelector(".row-level .max-level")).max),
-            MaxPlusLevel: parseInt(/** @type {HTMLInputElement} */ (row.querySelector(".row-level .max-plus-level")).max ?? 0)
-        };
-
-        //@ts-ignore Parsing awkwardness since values is actually a UUNIT_RECORD, which stores talents as number[]
-        values.talents = /** @type {NodeListOf<HTMLDivElement>} */ ([...row.querySelectorAll(".regular-talent")]).map((/** @type {HTMLDivElement} */ t, /** @type {number} */ i) => {
-            return {
-                name: t.querySelector("img")?.src.replace(/.+\//, "").replace(".png", ""),
-                cap: t.dataset.max,
-                value: values.talents[i]
-            };
-        });
-        //@ts-ignore Parsing awkwardness since values is actually a UUNIT_RECORD, which stores talents as number[]
-        values.ultra_talents = /** @type {NodeListOf<HTMLDivElement>} */ ([...row.querySelectorAll(".ultra-talent")]).map((/** @type {HTMLDivElement} */ t, /** @type {number} */ i) => {
-            return {
-                name: t.querySelector("img")?.src.replace(/.+\//, "").replace(".png", ""),
-                cap: t.dataset.max,
-                value: values.ultra_talents[i]
-            };
-        });
-        
-        const newRow = createRow(values);
-        document.querySelector("#favorited-table tbody")?.appendChild(newRow);
-        observeRowChange(newRow, () => syncRowValues(newRow, id));
-        rowRef[id].push(newRow);
-    }
-};
-
-/**
- * Copies values taken from a category's unit table and pastes them into a provided different unit table to sync.
- * @param {import("./data/unit-data.js").UNIT_RECORD} values The values to copy into a table.
- * @param {HTMLDivElement} toUpdate The element containing the table to update with new values.
- */
-function copyUpdatedValues(values, toUpdate) {    
-    /** @type {HTMLDivElement} */ (toUpdate.querySelector(".row-image")).dataset.form = `${values.current_form}`;
-    const image = /** @type {HTMLImageElement} */ (toUpdate.querySelector(".unit-icon"));
-    image.src = image.src.replace(/[0-9]+(?=\.png)/, `${values.current_form}`);
-    
-    const nameDiv = /** @type {HTMLTableCellElement} */ (toUpdate.querySelector(".row-name"));
-    nameDiv.textContent = [nameDiv.dataset.normal_name, nameDiv.dataset.evolved_name, nameDiv.dataset.true_name, nameDiv.dataset.ultra_name][values.current_form] ?? null;
-
-    /** @type {HTMLInputElement} */ (toUpdate.querySelector(".max-level")).value = `${values.level}`;
-    const pluslevel = /** @type {HTMLInputElement} */ (toUpdate.querySelector(".max-plus-level"));
-    if(pluslevel) {
-        pluslevel.value = `${values.plus_level}`;
-    }
-
-    const talents = /** @type {NodeListOf<HTMLDivElement>} */ (toUpdate.querySelectorAll(".regular-talent"));
-    for(let x = 0; x < talents.length; x++) {
-        /** @type {HTMLParagraphElement} */ (talents[x].querySelector(".talent-level")).textContent = `${values.talents[x]}`;
-        talents[x].classList.toggle("maxed-talent", `${values.talents[x]}` === talents[x].dataset.max);
-    }
-    const ultraTalents = /** @type {NodeListOf<HTMLDivElement>} */ (toUpdate.querySelectorAll(".ultra-talent"));
-    for(let x = 0; x < ultraTalents.length; x++) {
-        /** @type {HTMLParagraphElement} */ (ultraTalents[x].querySelector(".talent-level")).textContent = `${values.ultra_talents[x]}`;
-        ultraTalents[x].classList.toggle("maxed-talent", `${values.ultra_talents[x]}` === ultraTalents[x].dataset.max);
-    }
-
-    const orbs = toUpdate.querySelectorAll(".orb-selector");
-    for(let x = 0; x < orbs.length; x++) {
-        const trait = /** @type {HTMLImageElement} */ (orbs[x].querySelector(".orb-color"));
-        const type = /** @type {HTMLImageElement} */ (orbs[x].querySelector(".orb-type"));
-        const rank = /** @type {HTMLImageElement} */ (orbs[x].querySelector(".orb-rank"));
-
-        if(!values.orb[x]) {
-            trait.dataset.trait = "";
-            trait.src = "./assets/img/orb/empty-orb.png";
-
-            type.classList.add("invisible");
-            type.dataset.type = "";
-            type.src = "";
-
-            rank.classList.add("invisible");
-            rank.dataset.rank = "";
-            rank.src = "";
-        } else {
-            trait.dataset.trait = `${values.orb[x]?.trait}`;
-            trait.src = `./assets/img/orb/${values.orb[x]?.trait}.png`;
-    
-            type.dataset.type = `${values.orb[x]?.type}`;
-            type.src = `./assets/img/orb/${values.orb[x]?.type}.png`;
-            type.classList.remove("invisible");
-    
-            rank.dataset.rank = `${values.orb[x]?.rank}`;
-            rank.src = `./assets/img/orb/${values.orb[x]?.rank}.png`;
-            rank.classList.remove("invisible");
-        }
-    }
-
-    /** @type {HTMLDivElement} */ (toUpdate.querySelector(".fav-wrapper")).dataset.favorited = values.favorited ? "1" : "0";
-    /** @type {HTMLImageElement} */ (toUpdate.querySelector(".fav-icon")).src = `./assets/img/fav-${values.favorited ? "full" : "empty"}.png`;
 }

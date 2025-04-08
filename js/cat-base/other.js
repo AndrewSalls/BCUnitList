@@ -1,4 +1,5 @@
 //@ts-check
+
 /**
  * Initializes other tab of cat base menu.
  */
@@ -30,13 +31,11 @@ export default function loadOtherInfo() {
         }
     };
 
-    //@ts-ignore
-    document.querySelector("#seal-up-arrow").onclick = () => {
+    /** @type {SVGElement} */ (document.querySelector("#seal-up-arrow")).onclick = () => {
         sealLevel.value = `${parseInt(sealLevel.value) + 1}`;
         sealLevel.dispatchEvent(new Event("change"));
     };
-    //@ts-ignore
-    document.querySelector("#seal-down-arrow").onclick = () => {
+    /** @type {SVGElement} */ (document.querySelector("#seal-down-arrow")).onclick = () => {
         sealLevel.value = `${parseInt(sealLevel.value) - 1}`;
         sealLevel.dispatchEvent(new Event("change"));
     };

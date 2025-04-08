@@ -1,4 +1,5 @@
 //@ts-check
+
 /**
  * Creates a number input, with arrows above and below if the corresponding setting is enabled in localStorage.
  * @param {number} cap The maximum value of the number input.
@@ -23,8 +24,7 @@ export default function createArrowNumberBox(cap, currentValue, changeCallback, 
             labelInput.value = labelInput.max;
         }
 
-        //@ts-ignore lastValue should always be a string representing a number
-        changeCallback(parseInt(labelInput.dataset.lastValue), parseInt(labelInput.value));
+        changeCallback(parseInt(labelInput.dataset.lastValue ?? "0"), parseInt(labelInput.value));
         labelInput.dataset.lastValue = labelInput.value;
     }
 

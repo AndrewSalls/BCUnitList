@@ -1,12 +1,13 @@
 //@ts-check
+
 /**
  * Creates a cost table based on the provided data.
- * @param {Object} costData The cost data to use for the table.
+ * @param {import("../../helper/find-costs").MATERIAL_COSTS} costData The cost data to use for the table.
  * @param {string} name The name of the table.
  * @returns {HTMLDivElement} The created table.
  */
 export default function createTableFromData(costData, name) {
-    const hasUbers = costData.hasUber;
+    const hasUbers = costData.has_ubers;
 
     const wrapper = document.createElement("div");
     wrapper.classList.add("evo-table");
@@ -130,6 +131,7 @@ export default function createTableFromData(costData, name) {
  * @param {string} imgClass A class to assign to the image.
  * @param {number} baseAmt The base amount of this evolution material needed to max all units.
  * @param {number} ultraShift The amount of this evolution material needed only for things that require dark catseyes.
+ * @param {boolean} [hasToggle = false] Whether the created element should support changing value based on the dark catseye toggle.
  * @returns {HTMLDivElement} The created element.
  */
 function createEvoBox(img, title, imgClass, baseAmt, ultraShift, hasToggle = false) {
@@ -169,6 +171,7 @@ function createEvoBox(img, title, imgClass, baseAmt, ultraShift, hasToggle = fal
  * @param {string} imgSubtext The text to append to the image.
  * @param {number} baseAmt The base amount of this evolution material needed to max all units.
  * @param {number} ultraShift The amount of this evolution material needed only for things that require dark catseyes.
+ * @param {boolean} [hasToggle = false] Whether the created element should support changing value based on the dark catseye toggle.
  * @returns {HTMLDivElement} The created element.
  */
 function createLabelledImageEvoBox(img, title, imgClass, imgSubtext, baseAmt, ultraShift, hasToggle = false) {

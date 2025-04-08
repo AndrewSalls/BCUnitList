@@ -1,5 +1,6 @@
 //@ts-check
 import createArrowNumberBox from "./arrow-box.js";
+import SETTINGS from "../../assets/settings.js";
 
 /**
  * @readonly
@@ -12,16 +13,16 @@ const BASE_PARTS = {
 }
 
 /**
- * @param {Object} settings A settings object created from assets/settings.js
+ * Creates elements to enter the levels of each base part for each base type.
  */
-export default function loadCannonInfo(settings) {
+export default function loadCannonInfo() {
     const wrapper = document.querySelector("#cat-base-selector");
-    const defaultCannon = createBaseStyling(settings.ototo.names[0], settings.ototo.cannon, settings.ototo.base, settings.ototo.style, 1);
+    const defaultCannon = createBaseStyling(SETTINGS.ototo.names[0], SETTINGS.ototo.cannon, SETTINGS.ototo.base, SETTINGS.ototo.style, 1);
     defaultCannon.querySelector("label[data-input-type='0']")?.classList.add("hidden");
     defaultCannon.querySelector("label[data-input-type='1']")?.classList.add("hidden");
     wrapper?.appendChild(defaultCannon);
-    for(let x = 2; x <= settings.ototo.names.length; x++) {
-        wrapper?.appendChild(createBaseStyling(settings.ototo.names[x - 1], settings.ototo.cannon, settings.ototo.base, settings.ototo.style, x));
+    for(let x = 2; x <= SETTINGS.ototo.names.length; x++) {
+        wrapper?.appendChild(createBaseStyling(SETTINGS.ototo.names[x - 1], SETTINGS.ototo.cannon, SETTINGS.ototo.base, SETTINGS.ototo.style, x));
     }
 }
 
@@ -68,8 +69,7 @@ function createBaseStyling(name, cannonCap, baseCap, styleCap, id) {
     const valueWrapper = document.createElement("div");
     valueWrapper.classList.add("base-values");
 
-    //@ts-ignore All localStorage values are automatically initialized if not set.
-    const currentValues = window.localStorage.getItem(`oo_${id}`).split("-");
+    const currentValues = window.localStorage.getItem(`oo_${id}`)?.split("-") ?? ["0", "0", "0"];
 
     valueWrapper.append(
         createBaseValueInput(cannonCap, parseInt(currentValues[0]), BASE_PARTS.CANNON, id),
@@ -112,8 +112,7 @@ function createBaseValueInput(cap, currentValue, type, id) {
     }
     
     const [labelInput, inputElm] = createArrowNumberBox(cap, currentValue, () => {
-        //@ts-ignore All localStorage values are automatically initialized if not set.
-        const currentValues = window.localStorage.getItem(`oo_${id}`).split("-");
+        const currentValues = window.localStorage.getItem(`oo_${id}`)?.split("-") ?? ["0", "0", "0"];
         currentValues[type] = inputElm.value;
         window.localStorage.setItem(`oo_${id}`, currentValues.join("-"));
     });
