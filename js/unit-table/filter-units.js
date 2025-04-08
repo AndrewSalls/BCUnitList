@@ -1,6 +1,6 @@
 import { observeRowChange } from "../helper/link-row.js";
 import * as filterFunctions from "./filter-functions.js";
-import * as orbData from "../../../assets/orb-map.js";
+import * as orbData from "../../assets/orb-map.js";
 const ORB_DATA = orbData.default;
 
 let topPos = 0;
