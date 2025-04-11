@@ -215,7 +215,7 @@ async function loadLoadouts() {
     document.body.appendChild(datalist);
     initializeDataset(datalist, await REQUEST_TYPES.GET_NAMES(true));
 
-    const emptyLoadout = createMinimalLoadout(null, unlockedCannons, syncLoadoutAndTable, SETTINGS);
+    const emptyLoadout = createMinimalLoadout(null, unlockedCannons, syncLoadoutAndTable);
     document.querySelector("#loadout-box")?.appendChild(emptyLoadout);
 }
 

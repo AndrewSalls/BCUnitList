@@ -198,7 +198,7 @@ export default class UnitData {
             case UNIT_DATA_TYPE.FORM_NAMES:
                 return units.map(u => [u.id, u.normal_form, u.evolved_form, u.true_form, u.ultra_form]);
             case UNIT_DATA_TYPE.OWNED_FORM_NAMES:
-                return units.map(u => [u.id, u.normal_form, u.evolved_form, u.true_form, u.ultra_form].slice(0, u.current_form + 2));
+                return units.filter(u => u.level > 0).map(u => [u.id, u.normal_form, u.evolved_form, u.true_form, u.ultra_form].slice(0, u.current_form + 2));
             default:
                 console.error(`Invalid data type requested: ${dataType}`);
         }

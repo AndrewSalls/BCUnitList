@@ -138,12 +138,12 @@ export default async function getCostsFor(unitList) {
 
                     // ------------------------------------- Catseye costs ------------------------------------- 
                     if(unit.level_cap.MaxLevel > 30) {
-                        tableAllValues[`catseye_${unit.rarity}`] += Math.min(25, Math.max(0, 45 - unit.level) + 2 * Math.max(0, 50 - unit.level));
+                        tableAllValues[`catseye_${unit.rarity}`] += 15 - Math.max(0, Math.min(15, unit.level - 30)); // 1 eye per level
+                        tableAllValues[`catseye_${unit.rarity}`] += 10 - 2 * Math.max(0, Math.min(5, unit.level - 45)); // 2 eyes per level
                     }
                     if(unit.level_cap.MaxLevel > 50) {
-                        const darkEyes = Math.min(15, Math.max(0, 55 - unit.level) + 2 * Math.max(0, 60 - unit.level));
-                        tableAllValues.catseye_dark += darkEyes;
-                        tableUltraValues.catseye_dark += darkEyes;
+                        tableAllValues.catseye_dark += 5 - Math.max(0, Math.min(5, unit.level - 50)); // 1 eye per level
+                        tableAllValues.catseye_dark += 10 - 2 * Math.max(0, Math.min(5, unit.level - 55)); // 2 eyes per level
                     }
 
                     // ------------------------------------- Evolution Material costs -------------------------------------

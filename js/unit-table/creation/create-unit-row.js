@@ -70,27 +70,26 @@ export function createIconBox(id, currentForm, maxForm, iconDisabled, nameCallba
 
     const rowIMG = document.createElement("img");
     rowIMG.classList.add("unit-icon");
+
     if(iconDisabled) {
         rowIMG.src = "./assets/img/unit_icon/unknown.png";
     } else {
         rowIMG.src = `./assets/img/unit_icon/${id}_${currentForm}.png`;
+        rowIMG.addEventListener("click", () => {
+            if(rowImage.dataset.form === `${maxForm}`) {
+                rowImage.dataset.form = "0";
+            } else {
+                rowImage.dataset.form = `${parseInt(rowImage.dataset.form ?? "-1") + 1}`;
+            }
+    
+            if(!rowIMG.classList.contains("hidden")) {
+                rowIMG.src = `./assets/img/unit_icon/${id}_${rowImage.dataset.form}.png`;
+            }
+            nameCallback(parseInt(rowImage.dataset.form));
+        });
     }
-    rowIMG.onerror = () => { rowIMG.onerror = null; rowIMG.src = "./assets/img/unit_icon/unknown.png"; }
+
     rowImage.appendChild(rowIMG);
-
-    rowIMG.addEventListener("click", () => {
-        if(rowImage.dataset.form === `${maxForm}`) {
-            rowImage.dataset.form = "0";
-        } else {
-            rowImage.dataset.form = `${parseInt(rowImage.dataset.form ?? "-1") + 1}`;
-        }
-
-        if(!rowIMG.classList.contains("hidden")) {
-            rowIMG.src = `./assets/img/unit_icon/${id}_${rowImage.dataset.form}.png`;
-        }
-        nameCallback(parseInt(rowImage.dataset.form));
-    });
-
     return [rowImage,
         () => { rowImage.dataset.form = `${maxForm}`; rowIMG.click(); },
         () => { rowImage.dataset.form = `${maxForm - 1}`; rowIMG.click(); }];

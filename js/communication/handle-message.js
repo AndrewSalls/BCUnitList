@@ -13,7 +13,6 @@ export const RESPONSE_TYPES = {
     GET_ALL_FAVORITED: "get_favorited",
     GET_ALL: "get_all",
     UPDATE_UNIT: "update_id",
-    GET_UNIT_NAMES: "get_names",
 
     GET_ABILITY: "get_ability",
     GET_ALL_ABILITY: "get_all_ability",
@@ -47,7 +46,6 @@ MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ALL_OF_RARITY, (dataManager, content, ig
 MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ALL_FAVORITED, (dataManager, content, ignore_filters) => dataManager.unitData.getAllUnitData(u => u.favorited, content, ignore_filters));
 MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ALL, (dataManager, content, ignore_filters) => dataManager.unitData.getAllUnitData(null, content, ignore_filters));
 MESSAGE_RESPONSE.set(RESPONSE_TYPES.UPDATE_UNIT, (dataManager, content, _ignore_filters) => dataManager.unitData.updateUnit(content));
-MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_UNIT_NAMES, (dataManager, content, _ignore_filters) => dataManager.unitData.getAllUnitData((content === UNIT_DATA_TYPE.OWNED_FORM_NAMES) ? (u => u.level > 0) : null, content, false));
 
 /* -------------------------------------- UPGRADE (ABILITY) REQUESTS -------------------------------------- */
 MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ABILITY, (dataManager, content, _ignore_filters) => dataManager.upgradeData.getAbility(content));

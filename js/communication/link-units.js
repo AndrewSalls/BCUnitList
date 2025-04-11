@@ -46,7 +46,12 @@ function handleMessage(port, res) {
 
     const responseFunc = MESSAGE_RESPONSE.get(res.data.context);
     if(responseFunc) {
-        port.postMessage({ m_id: res.data.m_id, data: responseFunc(dataManager, res.data.content, res.data.ignore_filters) });
+        const output = responseFunc(dataManager, res.data.content, res.data.ignore_filters);
+        if(output.then) {
+             output.then((/** @type {any} */ oRes) => port.postMessage({ m_id: res.data.m_id, data: oRes }));
+        } else {
+            port.postMessage({ m_id: res.data.m_id, data: output });
+        }
     } else {
         console.error(`Unexpected context: "${res.data.context}", unable to finish communication`);
     }

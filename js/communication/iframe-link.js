@@ -18,8 +18,8 @@ export const REQUEST_TYPES = {
     GET_FAVORITED_COST: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../helper/find-costs.js").MATERIAL_COSTS>} */ (makeRequest(RESPONSE_TYPES.GET_ALL_FAVORITED, UNIT_DATA_TYPE.COST, ignoreFilters)),
     GET_ALL_COST: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../helper/find-costs.js").MATERIAL_COSTS>} */ (makeRequest(RESPONSE_TYPES.GET_ALL, UNIT_DATA_TYPE.COST, ignoreFilters)),
     
-    GET_NAMES: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<[number, string|null, string|null, string|null, string|null][]>} */ (makeRequest(RESPONSE_TYPES.GET_UNIT_NAMES, UNIT_DATA_TYPE.FORM_NAMES, ignoreFilters)),
-    GET_OWNED_FORM_NAMES: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<[number, string|null, string|null, string|null, string|null][]>} */ (makeRequest(RESPONSE_TYPES.GET_UNIT_NAMES, UNIT_DATA_TYPE.OWNED_FORM_NAMES, ignoreFilters)),
+    GET_NAMES: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<[number, string|null, string|null, string|null, string|null][]>} */ (makeRequest(RESPONSE_TYPES.GET_ALL, UNIT_DATA_TYPE.FORM_NAMES, ignoreFilters)),
+    GET_OWNED_FORM_NAMES: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<[number, string|null, string|null, string|null, string|null][]>} */ (makeRequest(RESPONSE_TYPES.GET_ALL, UNIT_DATA_TYPE.OWNED_FORM_NAMES, ignoreFilters)),
     GET_CATEGORIES: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../data/category-data.js").CATEGORY_MAP>} */ (makeRequest(RESPONSE_TYPES.GET_CATEGORIES, null, ignoreFilters)),
     GET_CATEGORIES_ORDER: (/** @type {boolean} */ ignoreFilters = false) => /** @type {Promise<import("../data/category-data.js").CATEGORY_ORDER_MAP>} */ (makeRequest(RESPONSE_TYPES.GET_CATEGORIES_ORDER, null, ignoreFilters)),
 
