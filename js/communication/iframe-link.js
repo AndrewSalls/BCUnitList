@@ -56,7 +56,7 @@ window.onmessage = (/** @type {MessageEvent} */ ev) => {
 
         port.onmessage = (/** @type {MessageEvent} */ res) => {
             const response = res.data;
-            callbacks.get(response.m_id)(res.data);
+            callbacks.get(response.m_id)(response.data);
             callbacks.delete(response.m_id);
         };
 

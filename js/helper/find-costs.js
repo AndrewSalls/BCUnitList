@@ -1,5 +1,5 @@
 //@ts-check
-import * as Papa from "../papaparse5.5.2.min.js";
+import Papa from "../papaparse5.5.2.min.js";
 import TALENT_NP_MAP from "../../assets/talent-np-map.js";
 import UT_NP_MAP from "../../assets/ut-np-map.js";
 import ORB_MAP from "../../assets/orb-map.js";

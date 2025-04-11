@@ -1,5 +1,5 @@
 //@ts-check
-import * as Papa from "../papaparse5.5.2.min.js";
+import Papa from "../papaparse5.5.2.min.js";
 import SETTINGS from "../../assets/settings.js";
 import { FORM } from "../data/unit-data.js";
 import { decodeUnit } from "./encoder.js";

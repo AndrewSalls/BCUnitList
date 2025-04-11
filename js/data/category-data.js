@@ -18,10 +18,11 @@ export default class CategoryData {
      */
     constructor(categories) {
         this.#categories = categories;
+        this.#categoryOrdering = {};
         
         for(const superKey of Object.keys(this.#categories)) {
             const sortedSubKeys = Object.keys(this.#categories[superKey]).sort((ka, kb) => this.#categories[superKey][ka][0] - this.#categories[superKey][kb][0]);
-            this.#categoryOrdering = sortedSubKeys;
+            this.#categoryOrdering[superKey] = sortedSubKeys;
         }
     }
 
@@ -37,9 +38,11 @@ export default class CategoryData {
             const categoryFilterBitfield = window.localStorage.getItem(`gk-${superKey}`) ?? "";
             if(!(isFiltered && categoryFilterBitfield.charAt(0) === "0")) {
                 const cloneSub = {};
-                for(const subKey of Object.keys(this.#categories[superKey])) {
-                    if(!(isFiltered && categoryFilterBitfield.charAt(this.#categoryOrdering[superKey][subKey] + 1) === "0")) {
-                        cloneSub[subKey] = this.#categories[superKey][subKey];
+                const subKeyOrder = this.#categoryOrdering[superKey];
+                
+                for(let x = 0; x < subKeyOrder.length; x++) {
+                    if(!(isFiltered && categoryFilterBitfield.charAt(x + 1) === "0")) {
+                        cloneSub[subKeyOrder[x]] = this.#categories[superKey][subKeyOrder[x]];
                     }
                 }
     

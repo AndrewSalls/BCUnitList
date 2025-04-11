@@ -1,5 +1,5 @@
 //@ts-check
-import SETTINGS from "../../assets/settings";
+import SETTINGS from "../../assets/settings.js";
 
 /**
  * @readonly

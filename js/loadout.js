@@ -27,7 +27,7 @@ function initializeContent() {
     const addTo = /** @type {HTMLDivElement} */ (document.querySelector("#loadout-container"));
 
     addButton.onclick = () => {
-        addTo.appendChild(createLoadout(null, SETTINGS));
+        addTo.appendChild(createLoadout(null));
     };
 
     const editToggle = /** @type {HTMLButtonElement} */ (document.querySelector("#toggle-display-mode"));
@@ -57,9 +57,10 @@ async function loadLoadouts() {
     await initializeDataset(datalist, await REQUEST_TYPES.GET_OWNED_FORM_NAMES(true));
 
     const res = await REQUEST_TYPES.GET_ALL_LOADOUT();
+    console.log(res);
     const wrapper = document.querySelector("#loadout-container");
     for(const loadout of res) {
-        wrapper?.appendChild(createLoadout(loadout, SETTINGS));
+        wrapper?.appendChild(createLoadout(loadout));
     }
     
     if(window.localStorage.getItem("tdm") === "1") {
@@ -72,7 +73,7 @@ async function loadLoadouts() {
  * @param {import("./data/loadout-data.js").LOADOUT|null} loadoutData A prexisting loadout to create, or null if a new loadout is being created.
  * @returns {HTMLDivElement} The created loadout display.
  */
-function createLoadout(loadoutData, settings) {
+function createLoadout(loadoutData) {
     let minimalLoadout = null;
     const requestSave = () => {
         const loadoutUnits = [...minimalLoadout.querySelectorAll(".chip.set-unit")].map(c => parseInt(c.dataset.id));
@@ -84,7 +85,7 @@ function createLoadout(loadoutData, settings) {
             REQUEST_TYPES.DELETE_LOADOUT(position);
         }
     };
-    minimalLoadout = createMinimalLoadout(loadoutData, unlockedCannons, requestSave, settings);
+    minimalLoadout = createMinimalLoadout(loadoutData, unlockedCannons, requestSave);
     
     const options = minimalLoadout.querySelector(".loadout-options");
     minimalLoadout.querySelector(".loadout-name")?.addEventListener("input", requestSave);

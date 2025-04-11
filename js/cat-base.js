@@ -60,13 +60,12 @@ function initializeNavButton(button, target) {
 function loadBaseSettings(loadingBar) {
     /** @type {HTMLSpanElement} */ (document.querySelector("#user-rank")).textContent = window.localStorage.getItem("ur");
     loadingBar.increment();
-    loadTreasureInfo(SETTINGS);
+    loadTreasureInfo();
     loadingBar.increment();
-    loadCannonInfo(SETTINGS);
+    loadCannonInfo();
     loadingBar.increment();
     (async () => {
-        await loadUpgradeInfo(SETTINGS,
-            {cgs: await REQUEST_TYPES.GET_CGS(), abilities: await REQUEST_TYPES.GET_ALL_UPGRADE()},
+        await loadUpgradeInfo({cgs: await REQUEST_TYPES.GET_CGS(), abilities: await REQUEST_TYPES.GET_ALL_ABILITY()},
             REQUEST_TYPES.UPDATE_CGS,
             async (index, level, plus) => window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + await REQUEST_TYPES.UPDATE_ABILITY(index, level, plus)}`));
         loadingBar.increment();

@@ -1,16 +1,17 @@
 //@ts-check
 import initializeData, { registerFrame } from "./communication/link-units.js";
 import initializeLocalStorage from "./initialize-localstorage.js";
+import SETTINGS from "../assets/settings.js";
 
 /**
  * Initializes page elements once page has loaded.
  */
 document.addEventListener("DOMContentLoaded", () => {
-    initializeData(/** @type {HTMLIFrameElement} */ (document.querySelector("#content-page")), displayMessage).then(({settings, categories, _unitData}) => {
-        initializeLocalStorage(settings, categories);
+    initializeData(/** @type {HTMLIFrameElement} */ (document.querySelector("#content-page")), displayMessage).then(({categories, _unitData}) => {
+        initializeLocalStorage(categories);
         const nav = /** @type {HTMLElement} */ (document.querySelector("#nav-bar"));
 
-        /** @type {HTMLHeadingElement} */ (nav.querySelector("#version-number")).textContent = settings.gameVersion;
+        /** @type {HTMLHeadingElement} */ (nav.querySelector("#version-number")).textContent = SETTINGS.gameVersion;
         /** @type {HTMLDivElement} */ (nav.querySelector("#version-info")).classList.remove("hidden");
 
         const setPage = (/** @type {HTMLButtonElement} */ target) => {

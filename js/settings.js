@@ -74,7 +74,7 @@ function loadButton(buttonID, storageKey) {
  * Loads content that relies on connecting to the main window.
  */
 function finishSetup() {
-    REQUEST_TYPES.GET_NAMES(true).then(names => initializeCategoryCreator(REQUEST_TYPES.GET_CATEGORY_NAMES, REQUEST_TYPES.MODIFY_CUSTOM_CATEGORY, REQUEST_TYPES.REMOVE_CUSTOM_CATEGORY, names, REQUEST_TYPES.SEND_ALERT));
+    REQUEST_TYPES.GET_NAMES(true).then(names => initializeCategoryCreator(REQUEST_TYPES.GET_CATEGORIES, REQUEST_TYPES.MODIFY_CUSTOM_CATEGORY, REQUEST_TYPES.REMOVE_CUSTOM_CATEGORY, names, REQUEST_TYPES.SEND_ALERT));
 
     const selection = /** @type {HTMLDivElement} */ (document.querySelector("#category-selection"));
     selection.classList.add("hidden");

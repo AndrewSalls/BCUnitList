@@ -62,8 +62,9 @@ export function createSuperCategoryButton(superCategoryName, subCategoriesOrder)
     subWrapper.classList.add("h-align");
     subWrapper.classList.add("sub-category-wrapper");
 
-    for(let x = 0; x < subCategoriesOrder.length; x++) {
-        subWrapper.appendChild(createSubCategoryButton(superCategoryName, subCategoriesOrder[x], x));
+    const indexMap = Object.fromEntries(subCategoriesOrder.map((k, i) => [k, i]));
+    for(const category of Object.keys(indexMap).sort()) {
+        subWrapper.appendChild(createSubCategoryButton(superCategoryName, category, indexMap[category] + 1));
     }
 
     wrapper.append(superButton, subWrapper);

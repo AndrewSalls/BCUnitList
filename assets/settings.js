@@ -1,5 +1,5 @@
-export default SETTINGS = {
-    "version": "1.7",
+const SETTINGS = {
+    "version": "1.8",
     "gameVersion": "14.2.0",
     "unitCount": 786,
     "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782],
@@ -48,4 +48,5 @@ export default SETTINGS = {
         }
     },
     "categoryTypes": ["collabs", "event_units", "gacha_non_uber", "gacha_seasonal", "gacha_uber", "other", "seasonal_events", "small_collabs", "story_units"]
-}
+};
+export default SETTINGS;

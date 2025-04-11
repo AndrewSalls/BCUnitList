@@ -52,6 +52,10 @@ function handleMessage(port, res) {
     }
 }
 
+/**
+ * Initializes all user data.
+ * @param {(message: string, isErrorMsg: boolean) => void} messageCallback A function to call when trying to display a message in the iframe.
+ */
 async function initializeUserData(messageCallback) {
     const upgrades = parseUpgrades();
     const categories = await parseAllCategories();
