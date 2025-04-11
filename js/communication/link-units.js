@@ -57,6 +57,7 @@ function handleMessage(port, res) {
  * @param {(message: string, isErrorMsg: boolean) => void} messageCallback A function to call when trying to display a message in the iframe.
  */
 async function initializeUserData(messageCallback) {
+    window.localStorage.setItem("ur", "0"); //reset user rank before recalculating
     const upgrades = parseUpgrades();
     const categories = await parseAllCategories();
     const units = await getUnitData(categories);

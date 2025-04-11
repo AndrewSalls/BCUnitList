@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadButton("#history-filter", "s6");
     loadButton("#single-category-filter", "s7");
 
-    loadSortButtons(["#ingame-sort-option", "#id-sort-option", "#name-sort-option", "#form-sort-option", "#level-sort-option", "#talent-sort-option", "#orb-sort-option", "#talent-sort-option", "#orb-sort-option", "#favorite-sort-option"]);
+    loadSortButtons(["#ingame-sort-option", "#id-sort-option", "#name-sort-option", "#form-sort-option", "#level-sort-option", "#talent-sort-option", "#orb-sort-option", "#favorite-sort-option"]);
     const ascendingToggle = /** @type {HTMLButtonElement} */ (document.querySelector("#toggle-ascending"));
     const ascendingToggleText = /** @type {HTMLSpanElement} */ (ascendingToggle.querySelector("span"));
     ascendingToggle.onclick = () => {
@@ -207,13 +207,13 @@ function initializeSaveOptions() {
  * @param {string[]} orderedIDs A list of button IDs in order of how they should be rendered. 
  */
 function loadSortButtons(orderedIDs) {
-    const targets = orderedIDs.map(id => document.querySelector(id));
+    const targets = /** @type {HTMLButtonElement[]} */ (orderedIDs.map(id => document.querySelector(id)));
     for(let x = 0; x < targets.length; x++) {
-        targets[x]?.classList.add("active");
-        targets[x]?.addEventListener("click", () => {
+        targets[x].classList.add("active");
+        targets[x].addEventListener("click", () => {
             window.localStorage.setItem("skey", `${x}`);
-            targets.forEach(t => t?.classList.add("active"));
-            targets[x]?.classList.remove("active");
+            targets.forEach(t => t.classList.add("active"));
+            targets[x].classList.remove("active");
         });
     }
     

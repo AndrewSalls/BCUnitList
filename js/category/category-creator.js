@@ -10,8 +10,8 @@ let targetedKey = null;
 /**
  * Initializes the category creator with any custom categories already created in localStorage.
  * @param {(isFiltered: boolean) => Promise<import("../data/category-data.js").CATEGORY_MAP>} getCategories A function that gets an object containing all categories and super-categories.
- * @param {(category: string, IDs: number[]) => void} modifyCategory A function that creates or modifies a custom category to contain the provided unit IDs.
- * @param {(category: string) => void} removeCategory A function that deletes a custom category.
+ * @param {(category: string, IDs: number[]) => Promise<void>} modifyCategory A function that creates or modifies a custom category to contain the provided unit IDs.
+ * @param {(category: string) => Promise<void>} removeCategory A function that deletes a custom category.
  * @param {[number, string|null, string|null, string|null, string|null][]} names The unit ID and name of each unit form, with the name of the form being null if the unit lacks that form.
  * @param {(msg: string, isError: boolean) => void} completionMessager A callback used to alert the user about errors in their custom category, or to confirm a successful category operation.
  */
@@ -85,13 +85,13 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
                 completionMessager("Category must have a name!", true);
             } else if(trimName.length > MAX_CATEGORY_NAME_LENGTH) {
                 completionMessager(`Category name must be at most ${MAX_CATEGORY_NAME_LENGTH} characters long!`, true);
-            } else if(trimName in Object.keys(custom)) {
+            } else if(Object.keys(custom).includes(trimName)) {
                 completionMessager("A custom category with that name already exists!", true);
             } else {
                 const categoryValues = [...chipList.querySelectorAll(".unit-id")].map(c => parseInt(c.textContent ?? "0"));
+                delete custom[targetedKey];
                 addCustomCategory(trimName, categoryValues, modifyCategory, removeCategory).then(_ => {
                     custom[trimName] = categoryValues;
-                    targetedKey = null;
                     
                     antiWrapper.classList.remove("hidden");
                     wrapper.classList.add("hidden");
@@ -165,8 +165,8 @@ function createChip(id) {
  * Adds a custom category to the creator list, the global filter list, and to localStorage.
  * @param {string} categoryName The name to give the custom category, which must be unique from all other custom categories.
  * @param {number[]} categoryIDs A list of unit IDs to add to the category.
- * @param {(category: string, IDs: number[]) => void} modifyCategory A function that creates or modifies a custom category to contain the provided unit IDs.
- * @param {(category: string) => void} removeCategory A function that deletes a custom category.
+ * @param {(category: string, IDs: number[]) => Promise<void>} modifyCategory A function that creates or modifies a custom category to contain the provided unit IDs.
+ * @param {(category: string) => Promise<void>} removeCategory A function that deletes a custom category.
  */
 async function addCustomCategory(categoryName, categoryIDs, modifyCategory, removeCategory) {
     if(targetedKey && targetedKey !== categoryName) {
@@ -174,7 +174,7 @@ async function addCustomCategory(categoryName, categoryIDs, modifyCategory, remo
     }
 
     let customDiv = document.querySelector("#gk-custom .sub-category-wrapper");
-    if(!customDiv) { // If custom category needs to be added to global category selection
+    if(!customDiv) { // If custom super-category needs to be added to global category selection
         const insertingInto = /** @type {!HTMLDivElement} */ (document.querySelector("#category-selection"));
         const inserting = createSuperCategoryButton("custom", []);
 
@@ -191,31 +191,37 @@ async function addCustomCategory(categoryName, categoryIDs, modifyCategory, remo
         }
     }
 
-    customDiv = /** @type {!HTMLDivElement} */ (document.querySelector("#gk-custom .sub-category-wrapper"));
-    
-    window.localStorage.setItem(`gk-custom-${categoryName}`, "1");
-    const inserting = createSubCategoryButton(`custom-${categoryName}`, categoryName, 0);
+    if(!targetedKey || targetedKey !== categoryName) {
+        customDiv = /** @type {!HTMLDivElement} */ (document.querySelector("#gk-custom .sub-category-wrapper"));
+        
+        window.localStorage.setItem(`gk-custom-${categoryName}`, "1");
+        const inserting = createSubCategoryButton(`custom-${categoryName}`, categoryName, 0);
 
-    let inserted = false;
-    for (const child of customDiv.children) {
-        if (child.textContent?.toLocaleLowerCase().localeCompare(categoryName.toLocaleLowerCase()) ?? -1 > 0) {
-            child.insertAdjacentElement("beforebegin", inserting);
-            inserted = true;
-            break;
+        let inserted = false;
+        for (const child of customDiv.children) {
+            if (child.textContent?.toLocaleLowerCase().localeCompare(categoryName.toLocaleLowerCase()) ?? -1 > 0) {
+                child.insertAdjacentElement("beforebegin", inserting);
+                inserted = true;
+                break;
+            }
         }
-    }
-    if (!inserted) {
-        customDiv?.appendChild(inserting);
+        if (!inserted) {
+            customDiv?.appendChild(inserting);
+        }
+
+        const insertedButton = createCategorySelectionButton(categoryName);
+        document.querySelector("#created-category-list")?.appendChild(insertedButton);
+        insertedButton.click();
+        targetedKey = categoryName;
     }
 
-    document.querySelector("#created-category-list")?.appendChild(createCategorySelectionButton(categoryName));
     modifyCategory(categoryName, categoryIDs);
 }
 
 /**
  * Removes a custom category from the global category selection menu and localStorage.
  * @param {string} categoryName The name of the custom category to remove.
- * @param {(category: string) => void} removeCategory A function that deletes a custom category.
+ * @param {(category: string) => Promise<void>} removeCategory A function that deletes a custom category.
  */
 async function removeCustomCategory(categoryName, removeCategory) {
     window.localStorage.removeItem(`gk-custom-${categoryName}`);
