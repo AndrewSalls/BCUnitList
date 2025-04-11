@@ -135,7 +135,7 @@ export default class UnitData {
      */
     getAllUnitData(filterFunction, dataType, checkIfFiltered) {
         if(filterFunction) {
-            return this.#unitData.filter(u => filterFunction(u) && !(checkIfFiltered && isGloballyFiltered(u)));
+            return this.#getDataType(this.#unitData.filter(u => filterFunction(u) && !(checkIfFiltered && isGloballyFiltered(u))), dataType);
         }
 
         return this.#getDataType(this.#unitData.filter(u => !(checkIfFiltered && isGloballyFiltered(u))), dataType);

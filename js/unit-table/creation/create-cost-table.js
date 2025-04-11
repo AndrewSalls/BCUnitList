@@ -61,7 +61,7 @@ export default function createTableFromData(costData, name) {
         createEvoBox("./assets/img/evo_mats/rare_catseye.png", "Rare catseyes needed to fully level all units", "catseye", costData.catseye_RR, costData.ultra.catseye_RR),
         createEvoBox("./assets/img/evo_mats/super_rare_catseye.png", "Super Rare catseyes needed to fully level all units", "catseye", costData.catseye_SR, costData.ultra.catseye_SR),
         createEvoBox("./assets/img/evo_mats/uber_rare_catseye.png", "Uber Rare catseyes needed to fully level all units", "catseye", costData.catseye_UR, costData.ultra.catseye_UR),
-        createEvoBox("./assets/img/evo_mats/legend_catseye.png", "Legend Rare catseyes needed to fully level all units", "catseye", costData.catseye_LR, costData.ultra.catseye_LR),
+        createEvoBox("./assets/img/evo_mats/legend_rare_catseye.png", "Legend Rare catseyes needed to fully level all units", "catseye", costData.catseye_LR, costData.ultra.catseye_LR),
         createEvoBox("./assets/img/evo_mats/dark_catseye.png", "Dark catseyes needed to reach level 60 on all units", "catseye", costData.catseye_dark, costData.ultra.catseye_dark, hasUbers)
     );
 

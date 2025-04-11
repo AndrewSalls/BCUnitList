@@ -128,10 +128,10 @@ export default async function getCostsFor(unitList) {
 
                     // ------------------------------------- Non-S Rank Orb Count -------------------------------------
                     if(unit.orb.length > 0) { // Talent orb
-                        tableAllValues.sOrb += (unit.orb[0] === null || unit.orb[0].rank !== ORB_MAP.ranks.length - 1) ? 0 : 1;
+                        tableAllValues.sOrb += (unit.orb[0] === null || unit.orb[0].rank !== ORB_MAP.ranks.length - 1) ? 1 : 0;
                     }
                     if(unit.orb.length > 1) { // UT orb
-                        const isSRank = (unit.orb[1] === null || unit.orb[1].rank !== ORB_MAP.ranks.length - 1) ? 0 : 1;
+                        const isSRank = (unit.orb[1] === null || unit.orb[1].rank !== ORB_MAP.ranks.length - 1) ? 1 : 0;
                         tableAllValues.sOrb += isSRank;
                         tableUltraValues.sOrb += isSRank;
                     }
