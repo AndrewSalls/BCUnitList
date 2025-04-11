@@ -48,9 +48,12 @@ export function initializeOrbSelection() {
         rank.onclick = () => {
             rankOptions.forEach(v => v.classList.remove("orb-selected"));
             rank.classList.add("orb-selected");
-            resultOrbRank.src = rank.querySelector("img")?.src ?? "";
+
+            const rankIMG = /** @type {HTMLImageElement} */ (rank.querySelector("img"));
+
+            resultOrbRank.src = rankIMG.src;
             resultOrbRank.classList.remove("invisible");
-            resultOrbRank.dataset.rank = rank.dataset.rank;
+            resultOrbRank.dataset.rank = rankIMG.dataset.rank;
 
             if(resultOrbColor.dataset.trait && resultOrbType.dataset.type && resultOrbRank.dataset.rank) {
                 attachOrb.disabled = false;
@@ -129,7 +132,7 @@ export function openOrbSelectionModal(target) {
         resultRank.src = rank.src;
         resultRank.classList.remove("invisible");
         resultRank.dataset.rank = rank.dataset.rank;
-        /** @type {HTMLDivElement} */ (document.querySelector("#rank-selection")?.querySelector(`img[data-rank="${rank.dataset.rank}"]`)?.parentElement).click();
+        /** @type {HTMLDivElement} */ (document.querySelector(`#rank-selection img[data-rank="${rank.dataset.rank}"]`)).click();
     }
 
     if(resultColor.dataset.trait && resultType.dataset.type && resultRank.dataset.rank) {
