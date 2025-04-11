@@ -92,11 +92,11 @@ function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, i
     const userRankDisplay = /** @type {!HTMLParagraphElement} */ (document.querySelector("#user-rank"));
     const [plusLevelElm, plusInputElm] = createArrowNumberBox(levelPlusCap, currentLevelData.plus, (oldValue, newValue) => {
         userRankDisplay.textContent = `${parseInt(userRankDisplay.textContent ?? "0") + (newValue - oldValue)}`;
-        updateAbility(id + 1, parseInt(levelInput.value), parseInt(plusLevelInput.value));
+        updateAbility(id, parseInt(levelInput.value), parseInt(plusLevelInput.value));
     });
     const [levelElm, levelInputElm] = createArrowNumberBox(levelCap, currentLevelData.level, (oldValue, newValue) => {
         userRankDisplay.textContent = `${parseInt(userRankDisplay.textContent ?? "0") + (newValue - oldValue)}`;
-        updateAbility(id + 1, parseInt(levelInput.value), parseInt(plusLevelInput.value));
+        updateAbility(id, parseInt(levelInput.value), parseInt(plusLevelInput.value));
     }, 1);
     levelInput = levelInputElm;
     plusLevelInput = plusInputElm;

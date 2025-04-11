@@ -74,6 +74,7 @@ export default class UpgradeData {
      * @param {boolean} owned Whether CGS is owned or not.
      */
     updateCGS(owned) {
+        window.localStorage.setItem("cgs", owned ? "1" : "0");
         this.#cgs = owned;
     }
 
@@ -91,7 +92,7 @@ export default class UpgradeData {
         urChange += (newPlusLevel - this.#abilities[index].plus);
         this.#abilities[index].plus = newPlusLevel;
 
-        window.localStorage.setItem("abo", new Array(this.#abilities.length).map((_, i) => `${this.#abilities[i].level}+${this.#abilities[i].plus}`).join("-"));
+        window.localStorage.setItem("abo", this.#abilities.map(v => `${v.level}+${v.plus}`).join("-"));
         return urChange;
     }
 }

@@ -57,7 +57,6 @@ async function loadLoadouts() {
     await initializeDataset(datalist, await REQUEST_TYPES.GET_OWNED_FORM_NAMES(true));
 
     const res = await REQUEST_TYPES.GET_ALL_LOADOUT();
-    console.log(res);
     const wrapper = document.querySelector("#loadout-container");
     for(const loadout of res) {
         wrapper?.appendChild(createLoadout(loadout));
