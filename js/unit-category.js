@@ -132,7 +132,9 @@ function appendAllCategoryTables(loadingBar, categoryData) {
         categoryGrouping?.appendChild(superCategory);
     }
 
-    Promise.all(tables).then(_ => loadingBar.increment());
+    Promise.all(tables).then(_ => {
+        loadingBar.increment();
+});
 }
 
 /**
@@ -144,7 +146,7 @@ function appendAllCategoryTables(loadingBar, categoryData) {
  * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar used to hide the page until all elements are loaded.
  */
 async function appendCategoryUnitTable(superCategory, categoryName, target, categoryData, loadingBar) {
-    REQUEST_TYPES.GET_MULTIPLE_DATA(categoryData[superCategory][categoryName]).then(data => {
+    return REQUEST_TYPES.GET_MULTIPLE_DATA(categoryData[superCategory][categoryName]).then(data => {
         if(data.length > 0 || window.localStorage.getItem("s3") === "1") {
             const table = createTableFromData(parseSnakeCase(categoryName), data, loadingBar);
             target.appendChild(table);
