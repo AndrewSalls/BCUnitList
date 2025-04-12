@@ -132,7 +132,10 @@ export function appendChip(id, form, parent, saveCallback) {
 
     makeSearchable(unitSearchInput, (searchID, searchForm) => {
         const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${searchID}"]`);
-        formNameOptions.forEach(o => o.classList.add("global-hidden"));
+        formNameOptions.forEach(o => {
+            o.classList.add("global-hidden");
+            o.classList.remove("suggestion-hovered");
+        });
 
         wrapper.classList.add("set-unit");
         wrapper.dataset.form = `${searchForm}`;
@@ -160,7 +163,10 @@ export function appendChip(id, form, parent, saveCallback) {
         removeButton.classList.remove("hidden");
         unitSearchInput.classList.add("hidden");
         const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${id}"]`);
-        formNameOptions.forEach(o => o.classList.add("global-hidden"));
+        formNameOptions.forEach(o => {
+            o.classList.add("global-hidden");
+            o.classList.remove("suggestion-hovered");
+        });
     }
 
     wrapper.append(img, pId, removeButton, unitSearchInput);

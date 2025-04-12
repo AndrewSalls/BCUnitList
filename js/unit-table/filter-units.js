@@ -129,10 +129,15 @@ function updateRowFilter(row, isUndoing) {
     row.dataset.filteredCount = `${Math.max(0, parseInt(row.dataset.filteredCount ?? "0") + (isUndoing ? -1 : 1))}`;
     if(row.dataset.filteredCount === "0") {
         row.classList.remove("filter-hidden");
-        document.querySelectorAll(`#unit-search-suggestions div[data-target='${target.textContent}']`).forEach((/** @type {Element} */ o) => o.classList.toggle("global-hidden", row.classList.contains("hidden")));
+        document.querySelectorAll(`#unit-search-suggestions div[data-target='${target.textContent}']`).forEach((/** @type {Element} */ o) => {
+            o.classList.toggle("global-hidden", row.classList.contains("hidden"));
+        });
     } else {
         row.classList.add("filter-hidden");
-        document.querySelectorAll(`#unit-search-suggestions div[data-target='${target.textContent}']`).forEach((/** @type {Element} */ o) => o.classList.add("global-hidden"));
+        document.querySelectorAll(`#unit-search-suggestions div[data-target='${target.textContent}']`).forEach((/** @type {Element} */ o) => {
+            o.classList.add("global-hidden");
+            o.classList.remove("suggestion-hovered");
+        });
     }
 }
 

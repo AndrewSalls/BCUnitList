@@ -46,44 +46,46 @@ export default function makeSearchable(input, findCallback) {
     });
     input.addEventListener("keydown", (/** @type {KeyboardEvent} */ ev) => {
         if(ev.key === "ArrowUp") {
-            let target = suggestionDropdown.querySelector(".suggestion-hovered");
-            if(!target) {
-                target = suggestionDropdown.querySelector("div:nth-last-child(1 of :not(.hidden))");
-                if(target) {
-                    target.classList.add("suggestion-hovered");
-                    ensureOnscreen(target, suggestionDropdown);
-                }
+            if(suggestionDropdown.children.length === 0) {
                 return;
             }
-            target.classList.remove("suggestion-hovered");
+
+            let target = suggestionDropdown.querySelector(".suggestion-hovered");
+            if(!target) {
+                target = suggestionDropdown.children[0];
+            } else {
+                target.classList.remove("suggestion-hovered");
+            }
 
             do {
                 if(target === suggestionDropdown.children[0]) {
                     target = suggestionDropdown.children[suggestionDropdown.children.length - 1];
+                } else {
+                    target = /** @type {HTMLDivElement} */ (target.previousElementSibling);
                 }
-                target = /** @type {HTMLDivElement} */ (target.previousElementSibling);
-            } while(target.classList.contains("hidden"));
+            } while(target.classList.contains("hidden") || target.classList.contains("global-hidden"));
 
             target.classList.add("suggestion-hovered");
             ensureOnscreen(target, suggestionDropdown);
         } else if(ev.key === "ArrowDown") {
-            let target = suggestionDropdown.querySelector(".suggestion-hovered");
-            if(!target) {
-                target = suggestionDropdown.querySelector("div:not(.hidden)");
-                if(target) {
-                    target.classList.add("suggestion-hovered");
-                    ensureOnscreen(target, suggestionDropdown);
-                }
+            if(suggestionDropdown.children.length === 0) {
                 return;
             }
-            target.classList.remove("suggestion-hovered");
+
+            let target = suggestionDropdown.querySelector(".suggestion-hovered");
+            if(!target) {
+                target = suggestionDropdown.children[suggestionDropdown.children.length - 1];
+            } else {
+                target.classList.remove("suggestion-hovered");
+            }
 
             do {
                 if(target === suggestionDropdown.children[suggestionDropdown.children.length - 1]) {
                     target = suggestionDropdown.children[0];
+                } else {
+                    target = /** @type {HTMLDivElement} */ (target.nextElementSibling);
                 }
-                target = /** @type {HTMLDivElement} */ (target.nextElementSibling);
-            } while(target.classList.contains("hidden"));
+            } while(target.classList.contains("hidden") || target.classList.contains("global-hidden"));
 
             target.classList.add("suggestion-hovered");
             ensureOnscreen(target, suggestionDropdown);
@@ -100,13 +102,17 @@ export default function makeSearchable(input, findCallback) {
                 form = parseInt(hovered.dataset.form ?? "0");
             } else if(!isNaN(parseInt(input.value))) {
                 id = parseInt(input.value);
-                if(id < 0 || id > parseInt(suggestionDropdown.dataset.max_count ?? "0") || !suggestionDropdown.querySelector(`div[data-target="${id}"]`)) {
+                if(id < 0 || id > parseInt(suggestionDropdown.dataset.max_count ?? "0")) {
+                    return;
+                }
+                const potential = suggestionDropdown.querySelector(`div[data-target="${id}"]`);
+                if(!potential || potential.classList.contains("hidden")) {
                     return;
                 }
                 form = Math.max(.../** @type {HTMLDivElement[]} */ ([...suggestionDropdown.querySelectorAll(`div[data-target="${id}"]`)]).map(d => parseInt(d.dataset.form ?? "0")));
             } else {
                 const idEntry = /** @type {HTMLDivElement|undefined} */ (suggestionDropdown.querySelector(`div[data-content="${input.value.trim().toLowerCase()}"]`));
-                if(idEntry) {
+                if(idEntry && !idEntry.classList.contains("hidden") && !idEntry.classList.contains("global-hidden")) {
                     id = parseInt(idEntry.dataset.target ?? "0");
                     form = parseInt(idEntry.dataset.form ?? "0");
                 } else {
@@ -121,10 +127,13 @@ export default function makeSearchable(input, findCallback) {
         } else {
             const cleanValue = input.value.trim().toLowerCase();
 
+            let shouldShow = false;
             for(const child of /** @type {HTMLCollectionOf<HTMLDivElement>} */ (suggestionDropdown.children)) {
-                child.classList.toggle("hidden", !child.dataset.content?.includes(cleanValue));
+                shouldShow = child.dataset.content?.includes(cleanValue); // name substring
+                shouldShow |= child.dataset.target?.includes(cleanValue); // id substring
+                child.classList.toggle("hidden", !shouldShow);
 
-                if(child.classList.contains("suggestion-hovered") && child.classList.contains("hidden")) {
+                if(child.classList.contains("suggestion-hovered") && (child.classList.contains("hidden") || child.classList.contains("global-hidden"))) {
                     child.classList.remove("suggestion-hovered");
                 }
             }
