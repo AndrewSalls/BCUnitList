@@ -90,7 +90,6 @@ export function encodeUnitData(unitData) {
     if(unitData.plus_level > 0) {
         output += `+${unitData.plus_level}`;
     }
-    console.log(unitData.talents);
     if(unitData.talents.some((/** @type {number} */ t) => t > 0)) {
         output += `T${unitData.talents.join("-")}`;
     }

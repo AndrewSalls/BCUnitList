@@ -129,8 +129,8 @@ export default function makeSearchable(input, findCallback) {
 
             let shouldShow = false;
             for(const child of /** @type {HTMLCollectionOf<HTMLDivElement>} */ (suggestionDropdown.children)) {
-                shouldShow = child.dataset.content?.includes(cleanValue); // name substring
-                shouldShow |= child.dataset.target?.includes(cleanValue); // id substring
+                shouldShow = child.dataset.content?.includes(cleanValue) ?? false; // name substring
+                shouldShow = shouldShow || (child.dataset.target?.includes(cleanValue) ?? false); // id substring
                 child.classList.toggle("hidden", !shouldShow);
 
                 if(child.classList.contains("suggestion-hovered") && (child.classList.contains("hidden") || child.classList.contains("global-hidden"))) {

@@ -53,7 +53,7 @@ window.addEventListener("mouseup", () => {
     }
     mouseDownPos = null;
     if(target) {
-        target.style.pointerEvents = "unset";
+        target.style.pointerEvents = "";
     }
     target = null;
     if(hoverTarget) {

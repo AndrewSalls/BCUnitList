@@ -156,7 +156,7 @@ export function appendChip(id, form, parent, saveCallback) {
         wrapper.classList.add("set-unit");
         wrapper.dataset.form = `${form}`;
         wrapper.dataset.id = `${id}`;
-        wrapper.dataset.maxForm = `${document.querySelectorAll(`#unit-search-suggestions option[data-target="${id}"]`).length - 1}`;
+        wrapper.dataset.maxForm = `${document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${id}"]`).length - 1}`;
         img.src = `./assets/img/unit_icon/${id}_${form}.png`;
         pId.textContent = `${id}`;
         pId.classList.remove("hidden");
