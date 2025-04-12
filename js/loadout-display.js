@@ -42,6 +42,7 @@ function initializeContent() {
     clearButton.onclick = () => {
         idFormMap.clear();
         document.querySelector("#unit-data-box tbody")?.replaceChildren();
+
         /** @type {NodeListOf<HTMLDivElement>} */ (document.querySelectorAll("#loadout-box .chip.set-unit")).forEach(c => {
             c.classList.remove("set-unit");
             delete c.dataset.form;
@@ -55,6 +56,10 @@ function initializeContent() {
             c.querySelector(".remove-unit")?.classList.add("hidden");
             c.querySelector(".unset-search")?.classList.remove("hidden");
         });
+
+        /** @type {HTMLInputElement} */ (document.querySelector("#loadout-cannon input")).value = "1";
+        /** @type {HTMLInputElement} */ (document.querySelector("#loadout-style input")).value = "0";
+        /** @type {HTMLInputElement} */ (document.querySelector("#loadout-foundation input")).value = "0";
     };
     const codeEnterButton = /** @type {HTMLButtonElement} */ (document.querySelector("#import-loadout"));
     const shareCodeInput = /** @type {HTMLInputElement} */ (document.querySelector("#code-input"));
@@ -176,13 +181,13 @@ function createBaseLevelInput(value, cap, type) {
     const labelText = document.createElement("p");
     switch(type) {
         case 0:
-            labelText.textContent = "Cannon";
+            labelText.textContent = "Cannon Level:";
             break;
         case 1:
-            labelText.textContent = "Style";
+            labelText.textContent = "Style Level:";
             break;
         case 2:
-            labelText.textContent = "Foundation";
+            labelText.textContent = "Foundation Level:";
             break;
         default:
             labelText.textContent = "Undefined part of base";
@@ -200,11 +205,11 @@ function createBaseLevelInput(value, cap, type) {
  */
 async function loadLoadouts() {
     const baseLeveling = document.querySelector("#base-box");
-    const cannon = createBaseLevelInput(SETTINGS.ototo.cannon, SETTINGS.ototo.cannon, 0);
+    const cannon = createBaseLevelInput(1, SETTINGS.ototo.cannon, 0);
     cannon.id = "loadout-cannon";
-    const style = createBaseLevelInput(SETTINGS.ototo.style, SETTINGS.ototo.style, 1);
+    const style = createBaseLevelInput(0, SETTINGS.ototo.style, 1);
     style.id = "loadout-style";
-    const foundation = createBaseLevelInput(SETTINGS.ototo.base, SETTINGS.ototo.base, 2);
+    const foundation = createBaseLevelInput(0, SETTINGS.ototo.base, 2);
     foundation.id = "loadout-foundation";
     baseLeveling?.append(cannon, style, foundation);
 

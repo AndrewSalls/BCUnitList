@@ -7,9 +7,13 @@
  * @returns {Promise<string>} The encoded loadout.
  */
 export async function encodeLink(loadoutData, unitData) {
+    //@ts-ignore purposeful type cast from TALENT[] to number[], as there is no reason to construct a new object
+    unitData.forEach(u => { u.talents = u.talents.map(t => t.value); u.ultra_talents = u.ultra_talents.map(t => t.value); });
+
     return encodeDirectLink({
         title: loadoutData.title,
-        units: /** @type {import("../data/unit-data").LOADOUT_UNIT_DATA[]} */ (/** @type {unknown} */ (unitData)),
+        //@ts-ignore LOADOUT_UNIT_DATA is a subtype of UNIT_DATA
+        units: unitData,
         forms: loadoutData.forms,
         baseLevels: loadoutData.baseLevels
     });
@@ -21,7 +25,7 @@ export async function encodeLink(loadoutData, unitData) {
  * @returns {string} The encoded loadout.
  */
 export function encodeDirectLink(loadoutData) {
-    const encodedUnits = loadoutData.units.map((/** @type {import("../data/unit-data").LOADOUT_UNIT_DATA} */ u) => encodeUnit(u));
+    const encodedUnits = loadoutData.units.map(u => encodeLoadoutUnit(u));
     return window.btoa(JSON.stringify({
         title: loadoutData.title,
         units: encodedUnits,
@@ -48,7 +52,7 @@ export function decodeLink(dataString) {
  * @returns {string} The string encoding.
  */
 export function encodeUnitEntry(unitData) {
-    let output = `I${unitData.id}${encodeUnit(unitData)}`;
+    let output = encodeUnitData(unitData);
 
     if(unitData.favorited) {
         output += "F";
@@ -61,11 +65,20 @@ export function encodeUnitEntry(unitData) {
 }
 
 /**
- * Converts a unit's JSON encoding to the unit's string encoding.
+ * Converts the portion of a unit's JSON encoding needed for a loadout to the unit's loadout string encoding.
  * @param {import("../data/unit-data").LOADOUT_UNIT_DATA} unitData The JSON encoding.
  * @returns {string} The string encoding.
  */
-export function encodeUnit(unitData) {
+function encodeLoadoutUnit(unitData) {
+    return `I${unitData.id}${encodeUnitData(unitData)}`;
+}
+
+/**
+ * Converts a unit's user-modifable section of its JSON encoding to the unit's string encoding.
+ * @param {import("../data/unit-data").LOADOUT_UNIT_DATA} unitData The JSON encoding.
+ * @returns {string} The string encoding.
+ */
+export function encodeUnitData(unitData) {
     let output = "";
 
     if(unitData.current_form > 0) {
@@ -77,10 +90,11 @@ export function encodeUnit(unitData) {
     if(unitData.plus_level > 0) {
         output += `+${unitData.plus_level}`;
     }
+    console.log(unitData.talents);
     if(unitData.talents.some((/** @type {number} */ t) => t > 0)) {
         output += `T${unitData.talents.join("-")}`;
     }
-    if(unitData.ultra_talents.some((/** @type {number} */ t) => t > 0)) {
+    if(unitData.ultra_talents.some((/** @type {number} */ t) => t)) {
         output += `U${unitData.ultra_talents.join("-")}`;
     }
     if(unitData.orb.some((/** @type {import("../data/unit-data").ORB} */ o) => o !== null)) {

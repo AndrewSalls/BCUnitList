@@ -55,7 +55,8 @@ export default function initializeLocalStorage(categories) {
     }
     
     // Base Development --------------------------------------------
-    for(let b = 1; b <= SETTINGS.ototo.names.length; b++) {
+    setIfUnset("oo_1", "0-0-1"); // starting foundation is level 1
+    for(let b = 2; b <= SETTINGS.ototo.names.length; b++) {
         setIfUnset(`oo_${b}`, "0-0-0");
     }
     
