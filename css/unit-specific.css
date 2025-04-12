@@ -3,6 +3,29 @@
     --icon-scale: calc(var(--icon-height) / 85);
 }
 
+.legend-rare-color #favorite-wrapper {
+    animation: rainbow 8s linear 0s infinite forwards;
+    border-right: 1px solid var(--rarity-border);
+}
+.legend-rare-color #talent-align {
+    background-color: var(--rainbow-bg1);
+}
+.legend-rare-color #xp-np-catseye-cost {
+    background-color: var(--rainbow-bg2);
+}
+.legend-rare-color #fruit-cost {
+    background-color: var(--rainbow-bg3);
+}
+.legend-rare-color #seed-cost {
+    background-color: var(--rainbow-bg4);
+}
+.legend-rare-color #gem-cost {
+    background-color: var(--rainbow-bg5);
+}
+.legend-rare-color #stone-cost {
+    background-color: var(--rainbow-bg6);
+}
+
 #search-wrapper {
     margin: 5vh 0;
     display: flex;
@@ -43,7 +66,6 @@ td {
     font-size: 20pt;
     padding: 0;
     margin: 0;
-    width: fit-content;
 }
 
 #name-border {
@@ -82,6 +104,10 @@ td.row-image {
     top: calc(-21px * var(--scale));
     left: calc(-9px * var(--scale));
     cursor: pointer;
+}
+
+#rarity-wrapper {
+    width: 100%;
 }
 
 td.row-id {

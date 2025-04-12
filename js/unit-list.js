@@ -42,42 +42,42 @@ function loadUnitTables() {
 
     const tableAppending = [
         REQUEST_TYPES.GET_RARITY_DATA(RARITY.NORMAL).then(units => {
-            const table = createSearchableTable("Normal Units", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
+            const table = createSearchableTable("Normal Cats", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
             table.id = "normal-table";
             table.classList.add("normal-color");
             loadingBar.increment();
             return table;
         }),
         REQUEST_TYPES.GET_RARITY_DATA(RARITY.SPECIAL).then(units => {
-            const table = createSearchableTable("Special Units", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
+            const table = createSearchableTable("Special Cats", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
             table.id = "special-table";
             table.classList.add("special-color");
             loadingBar.increment();
             return table;
         }),
         REQUEST_TYPES.GET_RARITY_DATA(RARITY.RARE).then(units => {
-            const table = createSearchableTable("Rare Units", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
+            const table = createSearchableTable("Rare Cats", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
             table.id = "rare-table";
             table.classList.add("rare-color");
             loadingBar.increment();
             return table;
         }),
         REQUEST_TYPES.GET_RARITY_DATA(RARITY.SUPER_RARE).then(units => {
-            const table = createSearchableTable("Super Rare Units", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
+            const table = createSearchableTable("Super Rare Cats", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
             table.id = "super-table";
             table.classList.add("super-rare-color");
             loadingBar.increment();
             return table;
         }),
         REQUEST_TYPES.GET_RARITY_DATA(RARITY.UBER_RARE).then(units => {
-            const table = createSearchableTable("Uber Rare Units", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
+            const table = createSearchableTable("Uber Rare Cats", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
             table.id = "uber-table";
             table.classList.add("uber-rare-color");
             loadingBar.increment();
             return table;
         }),
         REQUEST_TYPES.GET_RARITY_DATA(RARITY.LEGEND_RARE).then(units => {
-            const table = createSearchableTable("Legend Rare Units", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
+            const table = createSearchableTable("Legend Rare Cats", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
             table.id = "legend-table";
             table.classList.add("legend-rare-color");
             table.querySelector("tbody")?.classList.add("legend-rare-multi");

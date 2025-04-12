@@ -48,13 +48,13 @@ export function attachTableOptionsAndFilters(table) {
         document.body.classList.add("unscrollable");
         document.body.style.top = -1 * topPos + "px";
         tableModal.classList.remove("hidden");
-        (/** @type {HTMLSpanElement} */ (document.querySelector("#table-option-label"))).textContent = openOptionButton.parentElement?.previousElementSibling?.textContent ?? "MISSING TABLE NAME";
+        (/** @type {HTMLSpanElement} */ (document.querySelector("#table-option-label"))).textContent = table.querySelector(".searchable-table-title")?.textContent ?? "MISSING TABLE NAME";
         targettedTable = table;
         filterOptions.forEach((b, i) => b.classList.toggle("active", targettedTable.dataset.options[i] === "1"));
     };
 
     table.querySelector("tbody")?.querySelectorAll("tr")?.forEach((/** @type {HTMLTableRowElement} */ r) => observeRowChange(r, () => updateRowCallback(table, r, filterOptions)));
-    table.parentNode?.insertBefore(tableButtonDiv, table);
+    table.prepend(tableButtonDiv);
 }
 
 /**

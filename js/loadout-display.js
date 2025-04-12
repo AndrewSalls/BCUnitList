@@ -33,7 +33,9 @@ function initializeContent() {
     initializeOrbSelection();
 
     const table = createSearchableTable("Loadout", []);
-    table.querySelector("h2")?.remove();
+    table.querySelector(".searchable-table-title")?.parentElement?.remove();
+    table.querySelector("thead tr.hidden")?.classList.remove("hidden");
+    table.querySelector("tbody.hidden")?.classList.remove("hidden");
     document.querySelector("#unit-data-box")?.appendChild(table);
 
     const clearButton = /** @type {HTMLButtonElement} */ (document.querySelector("#reset-loadout"));

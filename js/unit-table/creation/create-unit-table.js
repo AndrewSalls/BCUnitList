@@ -12,14 +12,27 @@ import attachUnitTableColumnSort from "../sort-units.js";
  */
 export default function createSearchableTable(titleText, unitData, changeEvent = null, loadingBar = null) {
     const wrapper = document.createElement("div");
-    const title = document.createElement("h2");
-    title.classList.add("searchable-table-title");
-    title.textContent = titleText;
 
     const table = document.createElement("table");
 
     const thead = document.createElement("thead");
     const theadRow = document.createElement("tr");
+    const tbody = document.createElement("tbody");
+
+    const titleRow = document.createElement("tr");
+    const titleRowText = /** @type {HTMLTableCellElement} */ (document.createElement("td"));
+    titleRowText.colSpan = 8;
+    titleRowText.classList.add("searchable-table-title");
+    titleRowText.textContent = titleText;
+    titleRow.onclick = () => {
+        theadRow.classList.toggle("hidden");
+        tbody.classList.toggle("hidden");
+    };
+    if(window.localStorage.getItem("s2") === "1") {
+        titleRow.click();
+    }
+
+    titleRow.appendChild(titleRowText);
 
     const favoriteCol = document.createElement("td");
     favoriteCol.classList.add("sort-favorite");
@@ -44,11 +57,10 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
         createColumnHead("sort-option", "Options")
     );
 
-    thead.appendChild(theadRow);
+    thead.append(titleRow, theadRow);
 
-    const tbody = document.createElement("tbody");
     table.append(thead, tbody);
-    wrapper.append(title, table);
+    wrapper.appendChild(table);
 
     for(const unit of unitData) {
         if(unit !== null) {

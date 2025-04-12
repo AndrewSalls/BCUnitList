@@ -170,7 +170,6 @@ async function appendCategoryUnitTable(superCategory, categoryName, target, cate
  */
 function createTableFromData(tableName, data, loadingBar) {
     const table = createSearchableTable(tableName, data, REQUEST_TYPES.UPDATE_ID, loadingBar);
-    const head = table.querySelector("thead tr");
     const body = /** @type {HTMLTableSectionElement} */ (table.querySelector("tbody"));
 
     for(const row of body.querySelectorAll("tr")) {
@@ -179,31 +178,5 @@ function createTableFromData(tableName, data, loadingBar) {
         observeRowChange(row, () => syncRowValues(row, id));
     }
 
-    const title = /** @type {Element} */ (table.querySelector(".searchable-table-title"));
-    const titleText = title.textContent;
-    title.remove();
-
-    const tableTitle = document.createElement("tr");
-    const tableTitleText = document.createElement("td");
-    tableTitleText.classList.add("composite-title");
-    const textH5 = document.createElement("h5");
-    textH5.classList.add("table-title-collapser");
-    textH5.textContent = titleText;
-    tableTitleText.colSpan = 8;
-
-    const nameCollapser = document.createElement("div");
-    nameCollapser.classList.add("table-composite-collapser");
-    nameCollapser.onclick = () => {
-        head?.classList.toggle("hidden");
-        body.classList.toggle("hidden");
-    };
-    if(window.localStorage.getItem("s2") === "1") {
-        nameCollapser.click();
-    }
-
-    tableTitleText.append(textH5, nameCollapser);
-    tableTitle.appendChild(tableTitleText);
-
-    table.querySelector("thead tr")?.insertAdjacentElement("beforebegin", tableTitle);
     return table;
 }
