@@ -5,7 +5,6 @@ import loadTreasureInfo from "./cat-base/treasure.js";
 import loadUpgradeInfo from "./cat-base/upgrade.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 import createLoadingBar from "./helper/loading.js";
-import SETTINGS from "../assets/settings.js";
 
 /**
  * Initializes page elements once page has loaded.
@@ -65,9 +64,7 @@ function loadBaseSettings(loadingBar) {
     loadCannonInfo();
     loadingBar.increment();
     (async () => {
-        await loadUpgradeInfo({cgs: await REQUEST_TYPES.GET_CGS(), abilities: await REQUEST_TYPES.GET_ALL_ABILITY()},
-            REQUEST_TYPES.UPDATE_CGS,
-            async (index, level, plus) => window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + await REQUEST_TYPES.UPDATE_ABILITY(index, level, plus)}`));
+        await loadUpgradeInfo({cgs: await REQUEST_TYPES.GET_CGS(), abilities: await REQUEST_TYPES.GET_ALL_ABILITY()}, REQUEST_TYPES.UPDATE_CGS, REQUEST_TYPES.UPDATE_ABILITY);
         loadingBar.increment();
     })();
     loadOtherInfo();

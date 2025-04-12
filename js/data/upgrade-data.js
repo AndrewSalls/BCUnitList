@@ -83,7 +83,6 @@ export default class UpgradeData {
      * @param {number} index The index of the ability in stored data.
      * @param {number} newLevel The value to apply to the ability's level.
      * @param {number} newPlusLevel The value to apply to the ability's plus level.
-     * @returns {number} The change in user rank from applying the ability.
      */
     updateAbility(index, newLevel, newPlusLevel) {
         let urChange = newLevel - this.#abilities[index].level;
@@ -93,6 +92,6 @@ export default class UpgradeData {
         this.#abilities[index].plus = newPlusLevel;
 
         window.localStorage.setItem("abo", this.#abilities.map(v => `${v.level}+${v.plus}`).join("-"));
-        return urChange;
+        window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + urChange}`);
     }
 }

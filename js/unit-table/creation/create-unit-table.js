@@ -7,7 +7,7 @@ import attachUnitTableColumnSort from "../sort-units.js";
  * Creates a unit table.
  * @param {string} titleText The name of the table.
  * @param {import("../../data/unit-data.js").UNIT_DATA[]} unitData The units to add to the table.
- * @param {((unit: import("../../data/unit-data.js").UNIT_RECORD) => Promise<number>)|null} changeEvent An event that gets called when a row's value changes, returning the change to the user's user rank, or null if no event should be called.
+ * @param {((unit: import("../../data/unit-data.js").UNIT_RECORD) => Promise<void>)|null} changeEvent An event that gets called when a row's value changes, returning the change to the user's user rank, or null if no event should be called.
  * @param {import("../../helper/loading.js").LOADING_BAR|null} loadingBar A loading bar to update the page as the table loads, or null if the page does not need a loading bar.
  */
 export default function createSearchableTable(titleText, unitData, changeEvent = null, loadingBar = null) {
@@ -68,7 +68,7 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
             tbody.appendChild(row);
             if(changeEvent) {
                 observeRowChange(row, () => {
-                    changeEvent(getValuesFromRow(row)).then(userRankDelta => window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + userRankDelta}`));
+                    changeEvent(getValuesFromRow(row)).then();
                 });
             }
         }

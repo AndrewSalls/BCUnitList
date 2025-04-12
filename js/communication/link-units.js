@@ -38,17 +38,23 @@ export function registerFrame(frame) {
  * @param {MessagePort} port A link to the registered iframe.
  * @param {MessageEvent} res The message data recieved from the registered iframe.
  */
-function handleMessage(port, res) {
-    if(res.data.context === RESPONSE_TYPES.REFRESH_DATA) { // special event, should not be called manually, only indirectly from iframe-link via setting localStorage.reset_flag
-        initializeUserData(dataManager.sendMessage);
+async function handleMessage(port, res) {
+    if(res.data.context === RESPONSE_TYPES.DELETE_USER_DATA) {
+        const sendMSG = MESSAGE_RESPONSE.get(RESPONSE_TYPES.DISPLAY_MESSAGE);
+        if(sendMSG) {
+            sendMSG(dataManager, { message: "Save deleted!", isError: false }, false);
+        }
+        window.localStorage.setItem("delete_flag", "1");
         return;
+    } else if(window.localStorage.getItem("delete_flag") === "1") {
+        await initializeUserData(dataManager.sendMessage);
     }
 
     const responseFunc = MESSAGE_RESPONSE.get(res.data.context);
     if(responseFunc) {
         const output = responseFunc(dataManager, res.data.content, res.data.ignore_filters);
         if(output && output.then) {
-             output.then((/** @type {any} */ oRes) => port.postMessage({ m_id: res.data.m_id, data: oRes }));
+            port.postMessage({ m_id: res.data.m_id, data: await output });
         } else {
             port.postMessage({ m_id: res.data.m_id, data: output });
         }
@@ -57,15 +63,33 @@ function handleMessage(port, res) {
     }
 }
 
+let loadingEventExists = false;
+let loadingEventListener = [];
 /**
  * Initializes all user data.
  * @param {(message: string, isErrorMsg: boolean) => void} messageCallback A function to call when trying to display a message in the iframe.
+ * @returns {Promise<void>} A promise that is invoked upon the user data being initialized.
  */
 async function initializeUserData(messageCallback) {
-    const categories = await parseAllCategories();
-    initializeLocalStorage(categories);
-    const upgrades = parseUpgrades();
-    const units = await getUnitData(categories);
-    const loadouts = parseLoadouts();
-    dataManager = new UserData(units, upgrades, categories, loadouts, messageCallback);
+    if(loadingEventExists) {
+        const sync = new Promise(res => { loadingEventListener.push(res) });
+        return sync;
+    } else {
+        loadingEventExists = true;
+        const categories = await parseAllCategories();
+        initializeLocalStorage(categories);
+        const upgrades = parseUpgrades();
+        const units = await getUnitData(categories);
+        const loadouts = parseLoadouts();
+        dataManager = new UserData(units, upgrades, categories, loadouts, messageCallback);
+
+        window.localStorage.removeItem("delete_flag");
+        const loadEventFuncs = loadingEventListener;
+        loadingEventListener = [];
+        loadingEventExists = false;
+
+        for(const func of loadEventFuncs) {
+            func();
+        }
+    }
 }

@@ -31,7 +31,7 @@ export const RESPONSE_TYPES = {
     DELETE_LOADOUT: "delete_loadout",
 
     DISPLAY_MESSAGE: "send_alert",
-    REFRESH_DATA: "REBOOT"
+    DELETE_USER_DATA: "!destroy!"
 }
 
 /**

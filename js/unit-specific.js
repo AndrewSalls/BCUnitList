@@ -118,8 +118,7 @@ function loadSpecific(id) {
 
             observeRowChange(borderWrapper, () => {
                 (async () => {
-                    const userRankDelta = await REQUEST_TYPES.UPDATE_ID(getValuesFromRow(borderWrapper));
-                    window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + userRankDelta}`);
+                    await REQUEST_TYPES.UPDATE_ID(getValuesFromRow(borderWrapper));
                     setSpecificCost(await REQUEST_TYPES.GET_ID_COST(id), entry.rarity);
                 })();
             });

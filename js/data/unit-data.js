@@ -144,7 +144,6 @@ export default class UnitData {
     /**
      * Updates a unit's customizable attributes based on the provided values.
      * @param {UNIT_RECORD} data The values to update the unit with.
-     * @returns {number} The change in user rank caused by modifying the unit.
      */
     updateUnit(data) {
         const id = data.id;
@@ -180,7 +179,7 @@ export default class UnitData {
             window.localStorage.setItem(`${data.id}`, encodeUnitEntry(data));
         }
 
-        return userRankDelta;
+        window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + userRankDelta}`);
     }
 
     /**

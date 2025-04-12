@@ -65,7 +65,7 @@ export default function initializeLocalStorage(categories) {
     setIfUnset("cgs", "0");
 
     // Other Cat Base --------------------------------------------
-    setIfUnset("ur", "0");
+    window.localStorage.setItem("ur", "0");
     setIfUnset("akl", "0");
     setIfUnset("akb", "0");
 

@@ -87,8 +87,9 @@ export async function getUnitData(categories) {
             ));
     }
 
+    const output = (await Promise.all(awaitFinish)).flat();
     window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + totalLevel}`);
-    return (await Promise.all(awaitFinish)).flat();
+    return output;
 }
 
 /**
