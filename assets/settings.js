@@ -32,11 +32,11 @@ const SETTINGS = {
     },
     "abilities": {
         "abilityNames": ["Cat Cannon Power", "Cat Cannon Range", "Cat Cannon Charge", "Worker Cat Rate", "Worker Cat Wallet", "Base Defense", "Research", "Accounting", "Study", "Cat Energy"],
-        "abilityLevelCap": 20,
-        "abilityPlusLevelCap": 10,
         "rangeLevelCap": 10,
         "rangePlusLevelCap": 0,
         "rangePosition": 1,
+        "levelCaps": [20, 10, 20, 20, 20, 20, 20, 20, 20, 20],
+        "plusLevelCaps": [10, 0, 10, 10, 10, 10, 10, 10, 10, 10],
         "costs": {
             "CGSxpAmt": 2000,
             "xpAmt": [

@@ -144,6 +144,7 @@ export default async function getCostsFor(unitList) {
                     if(unit.level_cap.MaxLevel > 50) {
                         tableAllValues.catseye_dark += 5 - Math.max(0, Math.min(5, unit.level - 50)); // 1 eye per level
                         tableAllValues.catseye_dark += 10 - 2 * Math.max(0, Math.min(5, unit.level - 55)); // 2 eyes per level
+                        tableUltraValues.catseye_dark = tableAllValues.catseye_dark;
                     }
 
                     // ------------------------------------- Evolution Material costs -------------------------------------

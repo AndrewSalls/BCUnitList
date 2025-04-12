@@ -23,11 +23,11 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 function loadCosts() {
     const container = document.querySelectorAll(".default-table");
-    const loadingBar = createLoadingBar(9, () => {
+    const loadingBar = createLoadingBar(10, () => {
         CategorySelector.allowSelection();
     });
 
-    attachTotalCostTable(container[0]);
+    attachTotalCostTable(container[0], loadingBar);
     REQUEST_TYPES.GET_UPGRADE_COST().then(data => {
         container[1].appendChild(createAbilityTableFromData(data));
         loadingBar.increment();
@@ -198,11 +198,13 @@ function createIconList(idList) {
 /**
  * Attaches a cost table of all units to the provided element.
  * @param {Element} target The element to attach the table to.
+ * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar that hides the page until content has finished loading.
  */
-function attachTotalCostTable(target) {
+function attachTotalCostTable(target, loadingBar) {
     REQUEST_TYPES.GET_ALL_COST().then(data => {
         const table = createTableFromData(data, "All Units");
         table.classList.add("generic-table");
         target.appendChild(table);
+        loadingBar.increment();
     });
 }

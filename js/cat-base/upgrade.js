@@ -14,17 +14,7 @@ export default async function loadUpgradeInfo(initialUpgrades, updateCGS, update
     wrapper?.appendChild(createCGSBox(initialUpgrades.cgs, updateCGS));
 
     for(let x = 0; x < SETTINGS.abilities.abilityNames.length; x++) {
-        wrapper?.appendChild(createUpgradeLevelBox(SETTINGS.abilities.abilityNames[x], SETTINGS.abilities.abilityLevelCap, SETTINGS.abilities.abilityPlusLevelCap, initialUpgrades.abilities[x], x, updateAbility));
-    }
-
-    const rangeUpgrade = wrapper.querySelectorAll(".upgrade-box").item(SETTINGS.abilities.rangePosition + 1);
-    if(rangeUpgrade) {
-        const upgradeLevel = /** @type {HTMLInputElement} */ (rangeUpgrade.querySelector(".upgrade-level"));
-        if(upgradeLevel) {
-            upgradeLevel.max = `${SETTINGS.abilities.rangeLevelCap}`;
-        }
-        rangeUpgrade.querySelector(".upgrade-plus-text")?.classList.add("hidden");
-        rangeUpgrade.querySelector(".upgrade-plus-level")?.classList.add("hidden");
+        wrapper?.appendChild(createUpgradeLevelBox(SETTINGS.abilities.abilityNames[x], SETTINGS.abilities.levelCaps[x], SETTINGS.abilities.plusLevelCaps[x], initialUpgrades.abilities[x], x, updateAbility));
     }
 }
 
@@ -87,28 +77,33 @@ function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, i
     const levelWrapper = document.createElement("div");
     levelWrapper.classList.add("h-align");
 
-    let levelInput, plusLevelInput;
+    let levelInput = null, plusLevelInput = null;
     
     const userRankDisplay = /** @type {!HTMLParagraphElement} */ (document.querySelector("#user-rank"));
-    const [plusLevelElm, plusInputElm] = createArrowNumberBox(levelPlusCap, currentLevelData.plus, (oldValue, newValue) => {
-        userRankDisplay.textContent = `${parseInt(userRankDisplay.textContent ?? "0") + (newValue - oldValue)}`;
-        updateAbility(id, parseInt(levelInput.value), parseInt(plusLevelInput.value));
-    });
     const [levelElm, levelInputElm] = createArrowNumberBox(levelCap, currentLevelData.level, (oldValue, newValue) => {
         userRankDisplay.textContent = `${parseInt(userRankDisplay.textContent ?? "0") + (newValue - oldValue)}`;
-        updateAbility(id, parseInt(levelInput.value), parseInt(plusLevelInput.value));
+        updateAbility(id, parseInt(levelInput.value), parseInt(plusLevelInput?.value ?? "0"));
     }, 1);
     levelInput = levelInputElm;
-    plusLevelInput = plusInputElm;
 
     levelElm.classList.add("upgrade-level");
-    plusLevelElm.classList.add("upgrade-plus-level");
 
-    const plusSign = document.createElement("p");
-    plusSign.classList.add("upgrade-plus-text");
-    plusSign.textContent = "+";
+    levelWrapper.appendChild(levelElm);
 
-    levelWrapper.append(levelElm, plusSign, plusLevelElm);
+    if(levelPlusCap > 0) {
+        const [plusLevelElm, plusInputElm] = createArrowNumberBox(levelPlusCap, currentLevelData.plus, (oldValue, newValue) => {
+            userRankDisplay.textContent = `${parseInt(userRankDisplay.textContent ?? "0") + (newValue - oldValue)}`;
+            updateAbility(id, parseInt(levelInput.value), parseInt(plusLevelInput.value));
+        });
+        plusLevelElm.classList.add("upgrade-plus-level");
+        plusLevelInput = plusInputElm;
+
+        const plusSign = document.createElement("p");
+        plusSign.classList.add("upgrade-plus-text");
+        plusSign.textContent = "+";
+        levelWrapper.append(plusSign, plusLevelElm);
+    }
+
     wrapper.append(title, image, levelWrapper);
     return wrapper;
 }
