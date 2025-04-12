@@ -40,18 +40,12 @@ function loadCategories() {
         const subWrapper = /** @type {HTMLTableElement} */ (document.querySelector("#favorited-table"));
         subWrapper.classList.add("table-wrapper");
 
-        const favoritedHiddenLabel = document.createElement("p");
-        favoritedHiddenLabel.textContent = "Favorited";
-        favoritedHiddenLabel.classList.add("hidden");
-        subWrapper.appendChild(favoritedHiddenLabel);
-
         const table = createTableFromData("Favorited", data, loadingBar);
         table.classList.add("favorited-table-marker");
         subWrapper.appendChild(table);
         attachTableOptionsAndFilters(table);
 
-        
-        if(window.localStorage.getItem("s4") === "1" || window.localStorage.getItem("s5") === "1") {
+        if(window.localStorage.getItem("s4") === "1") {
             subWrapper.classList.add("hidden");
         }
 

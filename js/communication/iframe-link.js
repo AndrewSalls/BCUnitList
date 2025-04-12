@@ -62,7 +62,7 @@ window.onmessage = (/** @type {MessageEvent} */ ev) => {
 
         if(window.localStorage.getItem("delete_flag") === "1") {
             window.localStorage.removeItem("delete_flag");
-            port.postMessage({ context: "REBOOT" });
+            port.postMessage({ context: RESPONSE_TYPES.REFRESH_DATA });
         }
         window.dispatchEvent(new CustomEvent("portLoaded"));
     }

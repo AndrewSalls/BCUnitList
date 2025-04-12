@@ -3,7 +3,7 @@ import { parseAllCategories } from "../category/category-parser.js";
 import { getUnitData, parseLoadouts, parseUpgrades } from "../helper/parse-file.js";
 import UserData from "../data/user-data.js";
 import MESSAGE_RESPONSE, { RESPONSE_TYPES } from "./handle-message.js";
-import { UNIT_DATA_TYPE } from "../data/unit-data.js";
+import initializeLocalStorage from "../initialize-localstorage.js";
 
 let dataManager = new UserData([], { cgs: false, abilities: []}, {}, [], (_str, _isValid) => {});
 
@@ -16,7 +16,6 @@ export default async function initializeData(frame, messageCallback) {
     await initializeUserData(messageCallback);
 
     registerFrame(frame);
-    return { categories: dataManager.categories.getCategories(false), unitData: dataManager.unitData.getAllUnitData(null, UNIT_DATA_TYPE.UNIT, false) };
 }
 
 /**
@@ -40,8 +39,9 @@ export function registerFrame(frame) {
  * @param {MessageEvent} res The message data recieved from the registered iframe.
  */
 function handleMessage(port, res) {
-    if(res.data.context === RESPONSE_TYPES.REFRESH_DATA) {
+    if(res.data.context === RESPONSE_TYPES.REFRESH_DATA) { // special event, should not be called manually, only indirectly from iframe-link via setting localStorage.reset_flag
         initializeUserData(dataManager.sendMessage);
+        return;
     }
 
     const responseFunc = MESSAGE_RESPONSE.get(res.data.context);
@@ -62,9 +62,9 @@ function handleMessage(port, res) {
  * @param {(message: string, isErrorMsg: boolean) => void} messageCallback A function to call when trying to display a message in the iframe.
  */
 async function initializeUserData(messageCallback) {
-    window.localStorage.setItem("ur", "0"); //reset user rank before recalculating
-    const upgrades = parseUpgrades();
     const categories = await parseAllCategories();
+    initializeLocalStorage(categories);
+    const upgrades = parseUpgrades();
     const units = await getUnitData(categories);
     const loadouts = parseLoadouts();
     dataManager = new UserData(units, upgrades, categories, loadouts, messageCallback);

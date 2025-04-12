@@ -71,9 +71,11 @@ export default class CategoryData {
     setCustomCategory(name, units) {
         if(!this.#categories["custom"]) {
             this.#categories["custom"] = {};
+            this.#categoryOrdering["custom"] = [];
         }
 
         this.#categories["custom"][name] = units.sort();
+        this.#categoryOrdering["custom"].push(name);
         this.#recordCustomCategory(name, units);
     }
     
@@ -83,9 +85,12 @@ export default class CategoryData {
      */
     removeCustomCategory(name) {
         delete this.#categories["custom"][name];
+        this.#categoryOrdering["custom"].splice(this.#categoryOrdering["custom"].indexOf(name), 1);
+
     
         if(Object.keys(this.#categories["custom"]).length === 0) {
             delete this.#categories["custom"];
+            delete this.#categoryOrdering["custom"];
         }
     
         this.#recordCustomCategory(name, []);

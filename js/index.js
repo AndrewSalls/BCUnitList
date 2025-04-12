@@ -7,8 +7,7 @@ import SETTINGS from "../assets/settings.js";
  * Initializes page elements once page has loaded.
  */
 document.addEventListener("DOMContentLoaded", () => {
-    initializeData(/** @type {HTMLIFrameElement} */ (document.querySelector("#content-page")), displayMessage).then(({categories, _unitData}) => {
-        initializeLocalStorage(categories);
+    initializeData(/** @type {HTMLIFrameElement} */ (document.querySelector("#content-page")), displayMessage).then(() => {
         const nav = /** @type {HTMLElement} */ (document.querySelector("#nav-bar"));
 
         /** @type {HTMLHeadingElement} */ (nav.querySelector("#version-number")).textContent = SETTINGS.gameVersion;
