@@ -130,6 +130,19 @@ export function appendChip(id, form, parent, saveCallback) {
     unitSearchInput.type = "text";
     unitSearchInput.placeholder = "Search...";
 
+    unitSearchInput.addEventListener("focus", () => {
+        for(const chipID of parent.querySelectorAll(".chip.set-unit .unit-id")) { 
+            const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${chipID.textContent ?? "0"}"]`);
+            formNameOptions.forEach(o => {
+                o.classList.add("global-hidden");
+                o.classList.remove("suggestion-hovered");
+            });
+        }
+    });
+    unitSearchInput.addEventListener("blur", () => {
+        document.querySelectorAll(`#search-suggestion-dropdown div.global-hidden`).forEach(d => d.classList.remove("global-hidden"));
+    });
+
     makeSearchable(unitSearchInput, (searchID, searchForm) => {
         const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${searchID}"]`);
         formNameOptions.forEach(o => {
@@ -162,11 +175,6 @@ export function appendChip(id, form, parent, saveCallback) {
         pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");
         unitSearchInput.classList.add("hidden");
-        const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${id}"]`);
-        formNameOptions.forEach(o => {
-            o.classList.add("global-hidden");
-            o.classList.remove("suggestion-hovered");
-        });
     }
 
     wrapper.append(img, pId, removeButton, unitSearchInput);

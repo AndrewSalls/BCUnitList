@@ -12,6 +12,7 @@ export default function makeSearchable(input, findCallback) {
     const suggestionDropdown = /** @type {HTMLDivElement} */ (document.querySelector("#search-suggestion-dropdown"));
 
     function displayDropdown() {
+        input.dispatchEvent(new Event("keyup"));
         targettedInput = input;
         const inputBounds = input.getBoundingClientRect();
         const suggestionBounds = suggestionDropdown.getBoundingClientRect();
@@ -37,6 +38,7 @@ export default function makeSearchable(input, findCallback) {
         suggestionDropdown.classList.add("invisible");
         suggestionDropdown.style.top = "-10000000px";
         suggestionDropdown.style.left = "-10000000px";
+        suggestionDropdown.querySelectorAll("div.hidden").forEach(d => d.classList.remove("hidden"));
     });
     input.addEventListener("suggest", (/** @type {Event} */ v) => {
         input.value = "";
@@ -91,7 +93,7 @@ export default function makeSearchable(input, findCallback) {
             ensureOnscreen(target, suggestionDropdown);
         }
     });
-    input.addEventListener("keyup", (/** @type {{ key: string; }} */ ev) => {
+    input.addEventListener("keyup", (/** @type {KeyboardEvent} */ ev) => {
         if(ev.key === "Enter") {
             let id = -1;
             let form = -1;
