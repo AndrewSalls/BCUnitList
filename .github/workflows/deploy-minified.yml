@@ -8,18 +8,15 @@ on:
 permissions:
   contents: write
 
-jobs:
+jobs:          
   checkout-minify-push:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      # Set up Node.js environment
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
 
-      # Cache node_modules
       - name: Cache node_modules
         uses: actions/cache@v3
         with:
@@ -28,10 +25,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-modules-
 
-      # Install CLI tools
-      - run: npm install -g terser csso-cli html-minifier
+      - run: sudo apt-get install -y optipng
+      - name: Minify modified PNG images
+        run: |
+          git fetch origin main
+          git diff --name-only origin/main...HEAD | grep '\.png$' | while read file; do
+            if [ -f "$file" ]; then
+              optipng -o7 "$file" > /dev/null 2>&1
+            fi
+          done
 
-      # Use CLI tools to minify, overwriting existing files
+      - run: npm install -g terser csso-cli html-minifier
       - run: for i in $(find . -type f -name "*.js"); do terser $i --compress -o $i; done
       - run: for i in $(find . -type f -name "*.css"); do csso $i -o $i; done
       - run: for i in $(find . -type f -name "*.html"); do html-minifier --collapse-whitespace --remove-comments $i -o $i; done
