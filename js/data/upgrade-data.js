@@ -61,7 +61,7 @@ export default class UpgradeData {
 
         for(let x = 0; x < this.#abilities.length; x++) {
             const costTable = SETTINGS.abilities.costs.xpAmt[SETTINGS.abilities.costs.costTypes[x]];
-            for(let y = /** @type {{ plus: number; level: number; }} */ (this.#abilities[x]).level; y < SETTINGS.abilities.levelCaps[x]; y++) {
+            for(let y = this.#abilities[x].level; y < SETTINGS.abilities.levelCaps[x]; y++) {
                 xpAmt += costTable[y];
             }
         }

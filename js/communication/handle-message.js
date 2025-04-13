@@ -40,11 +40,11 @@ export const RESPONSE_TYPES = {
 const MESSAGE_RESPONSE = new Map();
 
 /* -------------------------------------- UNIT DATA REQUESTS -------------------------------------- */
-MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_UNIT, (dataManager, content, ignore_filters) => dataManager.unitData.getUnitData(content.target, content.dataType, ignore_filters));
-MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_UNIT_LIST, (dataManager, content, ignore_filters) => dataManager.unitData.getUnitListData(content.target, content.dataType, ignore_filters));
-MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ALL_OF_RARITY, (dataManager, content, ignore_filters) => dataManager.unitData.getAllUnitData(u => u.rarity === content.target, content.dataType, ignore_filters));
-MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ALL_FAVORITED, (dataManager, content, ignore_filters) => dataManager.unitData.getAllUnitData(u => u.favorited, content, ignore_filters));
-MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ALL, (dataManager, content, ignore_filters) => dataManager.unitData.getAllUnitData(null, content, ignore_filters));
+MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_UNIT, (dataManager, content, ignore_filters) => dataManager.unitData.getUnitData(content.target, content.dataType, !ignore_filters));
+MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_UNIT_LIST, (dataManager, content, ignore_filters) => dataManager.unitData.getUnitListData(content.target, content.dataType, !ignore_filters));
+MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ALL_OF_RARITY, (dataManager, content, ignore_filters) => dataManager.unitData.getAllUnitData(u => u.rarity === content.target, content.dataType, !ignore_filters));
+MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ALL_FAVORITED, (dataManager, content, ignore_filters) => dataManager.unitData.getAllUnitData(u => u.favorited, content, !ignore_filters));
+MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_ALL, (dataManager, content, ignore_filters) => dataManager.unitData.getAllUnitData(null, content, !ignore_filters));
 MESSAGE_RESPONSE.set(RESPONSE_TYPES.UPDATE_UNIT, (dataManager, content, _ignore_filters) => dataManager.unitData.updateUnit(content));
 
 /* -------------------------------------- UPGRADE (ABILITY) REQUESTS -------------------------------------- */
@@ -56,7 +56,7 @@ MESSAGE_RESPONSE.set(RESPONSE_TYPES.UPDATE_ABILITY, (dataManager, content, _igno
 MESSAGE_RESPONSE.set(RESPONSE_TYPES.UPDATE_CGS, (dataManager, content, _ignore_filters) => dataManager.upgradeData.updateCGS(content));
 
 /* -------------------------------------- CATEGORY REQUESTS -------------------------------------- */
-MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_CATEGORIES, (dataManager, _content, ignore_filters) => dataManager.categories.getCategories(ignore_filters));
+MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_CATEGORIES, (dataManager, _content, ignore_filters) => dataManager.categories.getCategories(!ignore_filters));
 MESSAGE_RESPONSE.set(RESPONSE_TYPES.GET_CATEGORIES_ORDER, (dataManager, _content, _ignore_filters) => dataManager.categories.getCategoryOrders());
 MESSAGE_RESPONSE.set(RESPONSE_TYPES.MODIFY_CUSTOM_CATEGORY, (dataManager, content, _ignore_filters) => dataManager.categories.setCustomCategory(content.category, content.newUnits));
 MESSAGE_RESPONSE.set(RESPONSE_TYPES.DELETE_CUSTOM_CATEGORY, (dataManager, content, _ignore_filters) => dataManager.categories.removeCustomCategory(content));
