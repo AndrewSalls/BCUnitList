@@ -17,7 +17,7 @@ export function createLevelInteractable(cap, current) {
     target.step = "1";
     target.title = `Max is ${cap}`;
 
-    target.onwheel = ev => {
+    target.addEventListener("wheel", ev => {
         ev.preventDefault();
         if(ev.deltaY < 0) {
             target.value = `${parseInt(target.value) + 1}`;
@@ -26,7 +26,7 @@ export function createLevelInteractable(cap, current) {
             target.value = `${parseInt(target.value) - 1}`;
             target.dispatchEvent(new Event("change"));
         }
-    };
+    }, { passive: true });
 
     target.onchange = _ => {
         if(parseInt(target.value) > cap) {
@@ -83,7 +83,7 @@ export function createTalentInteractable(talentName, talentMax, talentLevel, isU
 
     const background = document.createElement("span");
 
-    container.onwheel = ev => {
+    container.addEventListener("wheel", ev => {
         ev.preventDefault();
         if(ev.deltaY < 0) {
             number.textContent = `${Math.min(talentMax, parseInt(number.textContent ?? "0") + 1)}`;
@@ -92,7 +92,7 @@ export function createTalentInteractable(talentName, talentMax, talentLevel, isU
             number.textContent = `${Math.max(0, parseInt(number.textContent ?? "0") - 1)}`;
             number.dispatchEvent(new Event("change"));
         }
-    };
+    }, { passive: true });
     
     const talentLevelChange = () => container.classList.toggle("maxed-talent", number.textContent === `${talentMax}`);
     talentLevelChange();
