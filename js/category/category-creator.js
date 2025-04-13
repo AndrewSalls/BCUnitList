@@ -43,13 +43,22 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
                     chipList.children[pos].insertAdjacentElement("beforebegin", chip);
                 }
             }
+            
+            const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${id}"]`);
+            formNameOptions.forEach(o => {
+                o.classList.add("global-hidden");
+                o.classList.remove("suggestion-hovered");
+            });
         }
     });
     initializeDataset(datalist, names);
 
     cancelButton.onclick = () => {
+        selectedUnits.clear();
         antiWrapper.classList.remove("hidden");
         wrapper.classList.add("hidden");
+        const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div.global-hidden`);
+        formNameOptions.forEach(o => o.classList.remove("global-hidden"));
         completionMessager("Cancelled category creation.", false);
     };
 
@@ -64,6 +73,15 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
         }
 
         opener.onclick = () => {
+            if(targetedKey && custom[targetedKey]) {
+                for(const preselected of custom[targetedKey]) {
+                    const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${preselected}"]`);
+                    formNameOptions.forEach(o => {
+                        o.classList.add("global-hidden");
+                        o.classList.remove("suggestion-hovered");
+                    });
+                }
+            }
             openCategoryModifier(targetedKey, custom[targetedKey]);
         };
         remover.onclick = () => {
@@ -85,16 +103,19 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
                 completionMessager("Category must have a name!", true);
             } else if(trimName.length > MAX_CATEGORY_NAME_LENGTH) {
                 completionMessager(`Category name must be at most ${MAX_CATEGORY_NAME_LENGTH} characters long!`, true);
-            } else if(Object.keys(custom).includes(trimName)) {
+            } else if(trimName !== targetedKey && Object.keys(custom).includes(trimName)) {
                 completionMessager("A custom category with that name already exists!", true);
             } else {
-                const categoryValues = [...chipList.querySelectorAll(".unit-id")].map(c => parseInt(c.textContent ?? "0"));
+                const categoryValues = [...selectedUnits.values()];
                 delete custom[targetedKey];
+                const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div.global-hidden`);
+                formNameOptions.forEach(o => o.classList.remove("global-hidden"));
                 addCustomCategory(trimName, categoryValues, modifyCategory, removeCategory).then(_ => {
                     custom[trimName] = categoryValues;
                     
                     antiWrapper.classList.remove("hidden");
                     wrapper.classList.add("hidden");
+                    selectedUnits.clear();
                     completionMessager(`${targetedKey ? "Modified" : "Created"} custom category!`, false);
                 });
             }
@@ -120,6 +141,7 @@ export function openCategoryModifier(originalName = null, originalUnits = null) 
         categoryName.value = originalName;
         for(const id of originalUnits.sort((/** @type {number} */ a, /** @type {number} */ b) => a - b)) {
             chipList.appendChild(createChip(id));
+            selectedUnits.add(id);
         }
         createButton.textContent = "Modify";
     } else {
