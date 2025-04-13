@@ -1,9 +1,15 @@
+//@ts-check
+import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 import { getValuesFromRow, observeRowChange } from "./helper/link-row.js";
 import makeSearchable, { createSearchDropdown, initializeDataset } from "./helper/make-searchable.js";
 import * as RowComponents from "./unit-table/creation/create-unit-row.js";
 import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
+import SETTINGS from "../assets/settings.js";
 
+/**
+ * @readonly
+ */
 const RARITY_MAP = {
     "N": "normal",
     "EX": "special",
@@ -13,24 +19,36 @@ const RARITY_MAP = {
     "LR": "legend-rare"
 }
 
+/**
+ * Initializes page elements once page has loaded.
+ */
 document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(createOrbMenu());
     initializeOrbSelection();
-    document.querySelector("#ut-uf-checkbox").oninput = () => document.querySelectorAll(".evo-mat-needed").forEach(p => [p.textContent, p.dataset.alt] = [p.dataset.alt, p.textContent]);
+    /** @type {HTMLInputElement} */ (document.querySelector("#ut-uf-input")).oninput = () => {
+        /** @type {NodeListOf<HTMLParagraphElement>} */ (document.querySelectorAll(".evo-mat-needed")).forEach(p => {
+            const temp = p.dataset.alt;
+            p.dataset.alt = p.textContent ?? "";
+            p.textContent = temp ?? null;
+        });
+    };
 
     window.addEventListener("portLoaded", initialize);
     if(checkPort()) {
-        window.dispatchEvent("portLoaded");
+        window.dispatchEvent(new CustomEvent("portLoaded"));
     }
 });
 
+/**
+ * Initializes static content on the page.
+ */
 function initialize() {
     const datalist = createSearchDropdown();
     document.body.appendChild(datalist);
-    makeSearchable(document.querySelector("#search-box"), id => {
+    makeSearchable(/** @type {HTMLInputElement} */ (document.querySelector("#search-box")), id => {
         loadSpecific(id);
     });
-    initializeDataset(datalist, true);
+    REQUEST_TYPES.GET_NAMES(true).then(names => initializeDataset(datalist, names));
 
     let target = window.localStorage.getItem("su");
     if(!target || Number.isNaN(target)) {
@@ -39,69 +57,82 @@ function initialize() {
     loadSpecific(parseInt(target));
 }
 
+/**
+ * Loads a specific unit to the combined attribute and cost table.
+ * @param {number} id The specific unit ID to load.
+ */
 function loadSpecific(id) {
     const container = document.querySelector("#loading-content");
 
-    makeRequest(REQUEST_TYPES.GET_ID_DATA, id, true).then(async entry => {
-        const settings = await makeRequest(REQUEST_TYPES.GET_SETTINGS, null);
-        window.localStorage.setItem("su", id);
+    REQUEST_TYPES.GET_ID_DATA(id, true).then((/** @type {import("./data/unit-data.js").UNIT_DATA|null} */ entry) => {
+        if(!entry) {
+            console.error(`Missing unit data: ${id}`);
+            return;
+        }
 
-        const wrapper = document.querySelector("#unit-border");
+        window.localStorage.setItem("su", `${id}`);
+
+        const wrapper = /** @type {HTMLDivElement} */ (document.querySelector("#unit-border"));
         wrapper.className = RARITY_MAP[entry.rarity] + "-color";
 
         const idBox = RowComponents.createIDBox(entry.id);
-        wrapper.querySelector("#id-wrapper").replaceChildren(idBox);
+        wrapper.querySelector("#id-wrapper")?.replaceChildren(idBox);
         const [nameBox, nameUpdate] = RowComponents.createNameBox([entry.normal_form, entry.evolved_form, entry.true_form, entry.ultra_form], entry.current_form);
-        wrapper.querySelector("#name-wrapper").replaceChildren(nameBox);
-        const [iconBox, _1, _2] = RowComponents.createIconBox(entry.id, entry.current_form, entry.max_form, settings.skipImages.includes(id), nameUpdate);
-        wrapper.querySelector("#icon-wrapper").replaceChildren(iconBox);
+        wrapper.querySelector("#name-wrapper")?.replaceChildren(nameBox);
+        const [iconBox, _1, _2] = RowComponents.createIconBox(entry.id, entry.current_form, entry.max_form, SETTINGS.skipImages.includes(id), nameUpdate);
+        wrapper.querySelector("#icon-wrapper")?.replaceChildren(iconBox);
         const [levelBox, _3, _4, _5, _6] = RowComponents.createLevelBox(entry.level_cap, entry.level, entry.plus_level);
-        wrapper.querySelector("#level-wrapper").replaceChildren(levelBox);
+        wrapper.querySelector("#level-wrapper")?.replaceChildren(levelBox);
         const [talentBox, _7, _8, _9, _10] = RowComponents.createTalentBox(entry.talents, entry.ultra_talents);
         const talentWrapper = wrapper.querySelector("#talent-wrapper");
-        talentWrapper.replaceChildren(talentBox);
+        talentWrapper?.replaceChildren(talentBox);
         if(entry.talents.length === 0 && entry.ultra_talents.length === 0) {
             const noTalent = document.createElement("h4");
             noTalent.textContent = "No Talents";
-            talentWrapper.replaceChildren(noTalent);
+            talentWrapper?.replaceChildren(noTalent);
         }
-        const [orbBox, _11] = RowComponents.createOrbBox(entry.orb, entry.orb.length);
+        const [orbBox, _11] = RowComponents.createOrbBox(entry.orb);
         const orbWrapper = wrapper.querySelector("#orb-wrapper");
-        orbWrapper.replaceChildren(orbBox);
+        orbWrapper?.replaceChildren(orbBox);
         if(entry.talents.length === 0 && entry.ultra_talents.length === 0) {
             const noOrb = document.createElement("h4");
             noOrb.textContent = "No Talent Orbs";
-            orbWrapper.replaceChildren(noOrb);
+            orbWrapper?.replaceChildren(noOrb);
         }
         const [favoriteBox, _12] = RowComponents.createFavoriteBox(entry.favorited);
-        wrapper.querySelector("#favorite-wrapper").replaceChildren(favoriteBox);
+        wrapper.querySelector("#favorite-wrapper")?.replaceChildren(favoriteBox);
 
-        document.querySelector("#ut-uf-checkbox").classList.toggle("hidden", entry.rarity !== "UR");
-        document.querySelector("#rarity-wrapper").textContent = parseKebabCase(RARITY_MAP[entry.rarity]);
-        document.querySelector("#catseye-wrapper").classList.toggle("hidden", entry.rarity === "N");
+        document.querySelector("#ut-uf-checkbox")?.classList.toggle("hidden", entry.rarity !== "UR");
+        /** @type {HTMLDivElement} */ (document.querySelector("#rarity-wrapper")).textContent = parseKebabCase(RARITY_MAP[entry.rarity]);
+        document.querySelector("#catseye-wrapper")?.classList.toggle("hidden", entry.rarity === "N");
         if(entry.rarity !== "N") {
-            document.querySelector("#catseye-img").src = `./assets/img/evo_mats/${RARITY_MAP[entry.rarity].replace("-", "_")}_catseye.png`;
+            /** @type {HTMLImageElement} */ (document.querySelector("#catseye-img")).src = `./assets/img/evo_mats/${RARITY_MAP[entry.rarity].replace("-", "_")}_catseye.png`;
         }
-        document.querySelector("#dark-wrapper").classList.toggle("hidden", entry.rarity !== "UR");
+        document.querySelector("#dark-wrapper")?.classList.toggle("hidden", entry.rarity !== "UR");
 
-        makeRequest(REQUEST_TYPES.GET_ID_COST, id).then(cost => {
+        REQUEST_TYPES.GET_ID_COST(id, true).then(cost => {
             setSpecificCost(cost, entry.rarity);
 
-            const wrapper = document.querySelector("#unit-border");
-            document.querySelector("#ut-uf-input").checked = true;
+            const borderWrapper = /** @type {HTMLDivElement} */ (document.querySelector("#unit-border"));
+            /** @type {HTMLInputElement} */ (document.querySelector("#ut-uf-input")).checked = true;
 
-            observeRowChange(wrapper, () => {
+            observeRowChange(borderWrapper, () => {
                 (async () => {
-                    await makeRequest(REQUEST_TYPES.UPDATE_ID, getValuesFromRow(wrapper), true);
-                    setSpecificCost(await makeRequest(REQUEST_TYPES.GET_ID_COST, id), entry.rarity);
+                    await REQUEST_TYPES.UPDATE_ID(getValuesFromRow(borderWrapper));
+                    setSpecificCost(await REQUEST_TYPES.GET_ID_COST(id), entry.rarity);
                 })();
             });
 
-            container.classList.remove("hidden");
+            container?.classList.remove("hidden");
         });
     });
 }
 
+/**
+ * Updates the quantities of all cost materials.
+ * @param {import("./helper/find-costs.js").MATERIAL_COSTS} cost All of the costs needed.
+ * @param {string} rarity A string representing the rarity of the unit, for displaying the correct type of non-dark catseye.
+ */
 function setSpecificCost(cost, rarity) {
     setupCostValue("xp-evo", cost.formXP, cost.ultra.formXP);
     setupCostValue("xp-30", cost.lvl30XP, cost.ultra.lvl30XP);
@@ -148,12 +179,23 @@ function setSpecificCost(cost, rarity) {
     setupCostValue("epic-stone", cost.epic_stone, cost.ultra.epic_stone);
 }
 
+/**
+ * Sets the value for a specific cost element.
+ * @param {string} target The id of the cost element that is having its value set. 
+ * @param {number} value The total cost for the targetted cost element.
+ * @param {number|null} ultraValue The amount of the cost element needed only for upgrades involving dark catseyes, or null if the upgrade does not rely on dark catseyes.
+ */
 function setupCostValue(target, value, ultraValue = null) {
-    const text = document.querySelector(`#${target}`);
+    const text = /** @type {HTMLParagraphElement} */ (document.querySelector(`#${target}`));
     text.textContent = value.toLocaleString();
     text.dataset.alt = (value - (ultraValue ?? 0)).toLocaleString();
 }
 
+/**
+ * Parses a kebab-case name.
+ * @param {string} str A kebab-case string.
+ * @returns {string} A Capital Case string (with spaces).
+ */
 function parseKebabCase(str) {
     return str.replaceAll(/\-[a-z]/g, m => ` ${m[1].toUpperCase()}`).replace(/^[a-z]/, m => m[0].toUpperCase());    
 }

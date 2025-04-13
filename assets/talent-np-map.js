@@ -1,4 +1,4 @@
-export default {
+const TALENT_MAP = {
     "EX":  {
         "125": [10, 10, 10, 10, 10, 15, 15, 15, 15, 15],
         "165": [50, 10, 10, 10, 10, 15, 15, 15, 15, 15],
@@ -26,4 +26,5 @@ export default {
         "100": [100],
         "150": [150]
     }
-}
+};
+export default TALENT_MAP;

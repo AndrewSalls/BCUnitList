@@ -1,25 +1,30 @@
+//@ts-check
 import loadCannonInfo from "./cat-base/base.js";
 import loadOtherInfo from "./cat-base/other.js";
 import loadTreasureInfo from "./cat-base/treasure.js";
 import loadUpgradeInfo from "./cat-base/upgrade.js";
+import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 import createLoadingBar from "./helper/loading.js";
 
+/**
+ * Initializes page elements once page has loaded.
+ */
 window.addEventListener("DOMContentLoaded", () => {
     const loadingBar = createLoadingBar(7, () => {});
 
-    const tabQuickButtons = document.querySelector("#quick-complete");
+    const tabQuickButtons = /** @type {Element} */ (document.querySelector("#quick-complete"));
 
-    const defaultTab = document.querySelector("#treasure-tab");
-    initializeNavButton(defaultTab, document.querySelector("#treasure-selector"));
+    const defaultTab = /** @type {HTMLButtonElement} */ (document.querySelector("#treasure-tab"));
+    initializeNavButton(defaultTab, /** @type {HTMLDivElement} */ (document.querySelector("#treasure-selector")));
     defaultTab.addEventListener("click", () => tabQuickButtons.classList.remove("hidden"));
-    const cannonTab = document.querySelector("#cannon-tab");
-    initializeNavButton(cannonTab, document.querySelector("#cat-base-selector"));
+    const cannonTab = /** @type {HTMLButtonElement} */ (document.querySelector("#cannon-tab"));
+    initializeNavButton(cannonTab, /** @type {HTMLDivElement} */ (document.querySelector("#cat-base-selector")));
     cannonTab.addEventListener("click", () => tabQuickButtons.classList.remove("hidden"));
-    const upgradeTab = document.querySelector("#upgrades-tab");
-    initializeNavButton(upgradeTab, document.querySelector("#upgrade-selector"));
+    const upgradeTab = /** @type {HTMLButtonElement} */ (document.querySelector("#upgrades-tab"));
+    initializeNavButton(upgradeTab, /** @type {HTMLDivElement} */ (document.querySelector("#upgrade-selector")));
     upgradeTab.addEventListener("click", () => tabQuickButtons.classList.remove("hidden"));
-    const otherButton = document.querySelector("#other-tab");
-    initializeNavButton(otherButton, document.querySelector("#other-selector"));
+    const otherButton = /** @type {HTMLButtonElement} */ (document.querySelector("#other-tab"));
+    initializeNavButton(otherButton, /** @type {HTMLDivElement} */ (document.querySelector("#other-selector")));
     otherButton.addEventListener("click", () => tabQuickButtons.classList.add("hidden"));
 
     defaultTab.click();
@@ -27,14 +32,19 @@ window.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("portLoaded", () => loadBaseSettings(loadingBar));
     if(checkPort()) {
-        window.dispatchEvent("portLoaded");
+        window.dispatchEvent(new CustomEvent("portLoaded"));
     }
 });
 
+/**
+ * Initializes a button for selecting a tab on the page.
+ * @param {HTMLButtonElement} button The button being initialized.
+ * @param {HTMLDivElement} target The tab the button controls.
+ */
 function initializeNavButton(button, target) {
     button.addEventListener("click", () => {
         if(!button.classList.contains("current")) {
-            document.querySelector("#base-section-nav").querySelectorAll("button").forEach(b => b.classList.remove("current"));
+            document.querySelector("#base-section-nav")?.querySelectorAll("button").forEach(b => b.classList.remove("current"));
             button.classList.add("current");
             document.querySelectorAll("#tab-list > div").forEach(t => t.classList.add("hidden"));
             target.classList.remove("hidden");
@@ -42,39 +52,47 @@ function initializeNavButton(button, target) {
     });
 }
 
+/**
+ * Loads the page data.
+ * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar to hide page content until all data has been inputted.
+ */
 function loadBaseSettings(loadingBar) {
-    makeRequest(REQUEST_TYPES.GET_SETTINGS, null).then(settings => {
-        document.querySelector("#user-rank").textContent = settings.userRank;
+    /** @type {HTMLSpanElement} */ (document.querySelector("#user-rank")).textContent = window.localStorage.getItem("ur");
+    loadingBar.increment();
+    loadTreasureInfo();
+    loadingBar.increment();
+    loadCannonInfo();
+    loadingBar.increment();
+    (async () => {
+        await loadUpgradeInfo({cgs: await REQUEST_TYPES.GET_CGS(), abilities: await REQUEST_TYPES.GET_ALL_ABILITY()}, REQUEST_TYPES.UPDATE_CGS, REQUEST_TYPES.UPDATE_ABILITY);
         loadingBar.increment();
-        loadTreasureInfo(settings);
-        loadingBar.increment();
-        loadCannonInfo(settings);
-        loadingBar.increment();
-        loadUpgradeInfo(settings).then(_ => loadingBar.increment());
-        loadOtherInfo();
-        loadingBar.increment();
-        loadTabButtons();
-        loadingBar.increment();
-    });
+    })();
+    loadOtherInfo();
+    loadingBar.increment();
+    loadTabButtons();
+    loadingBar.increment();
 }
 
+/**
+ * Loads the buttons for resetting and maxing each tab in the page.
+ */
 function loadTabButtons() {
-    document.querySelector("#reset-tab").onclick = () => {
-        const action = document.querySelector("#base-section-nav .current").id;
+    /** @type {HTMLButtonElement} */ (document.querySelector("#reset-tab")).onclick = () => {
+        const action = document.querySelector("#base-section-nav .current")?.id;
         switch(action) {
             case "treasure-tab":
-                document.querySelectorAll(".slider-bronze").forEach(s => { s.value = 0; s.dispatchEvent(new Event("change")); });
-                document.querySelectorAll(".slider-silver").forEach(s => { s.value = 0; s.dispatchEvent(new Event("change")); });
-                document.querySelectorAll(".slider-gold").forEach(s => { s.value = 0; s.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll(".slider-bronze")).forEach(s => { s.value = "0"; s.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll(".slider-silver")).forEach(s => { s.value = "0"; s.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll(".slider-gold")).forEach(s => { s.value = "0"; s.dispatchEvent(new Event("change")); });
                 break;
             case "cannon-tab":
-                document.querySelectorAll(".base-values input[type='number']").forEach(i => { i.value = i.min; i.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll(".base-values input[type='number']")).forEach(i => { i.value = i.min; i.dispatchEvent(new Event("change")); });
                 break;
             case "upgrades-tab":
-                const cgs = document.querySelector("#the-one-true-cat");
+                const cgs = /** @type {HTMLInputElement} */ (document.querySelector("#the-one-true-cat"));
                 cgs.checked = false;
                 cgs.dispatchEvent(new Event("change"));
-                document.querySelectorAll("#upgrade-selector input[type='number']").forEach(i => { i.value = i.min; i.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll("#upgrade-selector input[type='number']")).forEach(i => { i.value = i.min; i.dispatchEvent(new Event("change")); });
                 break;
             default:
                 // Does nothing
@@ -82,22 +100,22 @@ function loadTabButtons() {
         }
     };
 
-    document.querySelector("#max-tab").onclick = () => {
-        const action = document.querySelector("#base-section-nav .current").id;
+    /** @type {HTMLButtonElement} */ (document.querySelector("#max-tab")).onclick = () => {
+        const action = document.querySelector("#base-section-nav .current")?.id;
         switch(action) {
             case "treasure-tab":
-                document.querySelectorAll(".slider-bronze").forEach(s => { s.value = 0; s.dispatchEvent(new Event("change")); });
-                document.querySelectorAll(".slider-silver").forEach(s => { s.value = 0; s.dispatchEvent(new Event("change")); });
-                document.querySelectorAll(".slider-gold").forEach(s => { s.value = s.max; s.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll(".slider-bronze")).forEach(s => { s.value = "0"; s.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll(".slider-silver")).forEach(s => { s.value = "0"; s.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll(".slider-gold")).forEach(s => { s.value = s.max; s.dispatchEvent(new Event("change")); });
                 break;
             case "cannon-tab":
-                document.querySelectorAll(".base-values input[type='number']").forEach(i => { i.value = i.max; i.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll(".base-values input[type='number']")).forEach(i => { i.value = i.max; i.dispatchEvent(new Event("change")); });
                 break;
             case "upgrades-tab":
-                const cgs = document.querySelector("#the-one-true-cat");
+                const cgs = /** @type {HTMLInputElement} */ (document.querySelector("#the-one-true-cat"));
                 cgs.checked = true;
                 cgs.dispatchEvent(new Event("change"));
-                document.querySelectorAll("#upgrade-selector input[type='number']").forEach(i => { i.value = i.max; i.dispatchEvent(new Event("change")); });
+                /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll("#upgrade-selector input[type='number']")).forEach(i => { i.value = i.max; i.dispatchEvent(new Event("change")); });
                 break;
             default:
                 // Does nothing

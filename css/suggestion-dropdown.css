@@ -8,6 +8,7 @@
     scrollbar-width: none;
     z-index: 9999999999999;
     border-radius: 10px;
+    overscroll-behavior: none;
 
     --dropdown-bg: #111111EE;
     --dropdown-hover-bg: #333333EE;

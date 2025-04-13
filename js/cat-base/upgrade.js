@@ -1,22 +1,30 @@
+//@ts-check
 import createArrowNumberBox from "./arrow-box.js";
+import SETTINGS from "../../assets/settings.js";
 
-export default async function loadUpgradeInfo(settings) {
-    const wrapper = document.querySelector("#upgrade-selector");
-    const res = await makeRequest(REQUEST_TYPES.GET_ALL_UPGRADE, null);
+/**
+ * Loads the Upgrades tab of the cat base.
+ * @param {import("../data/upgrade-data.js").UPGRADE_DATA} initialUpgrades All upgrade starting values.
+ * @param {(owned: boolean) => Promise<void>} updateCGS A function called whenever CGS's ownership status changes.
+ * @param {(index: number, level: number, plusLevel: number) => Promise<void>} updateAbility A function called whenever an ability's levels are modified.
+ */
+export default async function loadUpgradeInfo(initialUpgrades, updateCGS, updateAbility) {
+    const wrapper = /** @type {!HTMLDivElement} */ (document.querySelector("#upgrade-selector"));
 
-    wrapper.appendChild(createCGSBox(res[0] === 1));
+    wrapper?.appendChild(createCGSBox(initialUpgrades.cgs, updateCGS));
 
-    for(let x = 0; x < settings.abilities.abilityNames.length; x++) {
-        wrapper.appendChild(createUpgradeLevelBox(settings.abilities.abilityNames[x], settings.abilities.abilityLevelCap, settings.abilities.abilityPlusLevelCap, res[x + 1], x));
+    for(let x = 0; x < SETTINGS.abilities.abilityNames.length; x++) {
+        wrapper?.appendChild(createUpgradeLevelBox(SETTINGS.abilities.abilityNames[x], SETTINGS.abilities.levelCaps[x], SETTINGS.abilities.plusLevelCaps[x], initialUpgrades.abilities[x], x, updateAbility));
     }
-
-    const rangeUpgrade = wrapper.querySelectorAll(".upgrade-box").item(settings.abilities.rangePosition + 1);
-    rangeUpgrade.querySelector(".upgrade-level").max = settings.abilities.rangeLevelCap;
-    rangeUpgrade.querySelector(".upgrade-plus-text").classList.add("hidden");
-    rangeUpgrade.querySelector(".upgrade-plus-level").classList.add("hidden");
 }
 
-function createCGSBox(isOwned) {
+/**
+ * Creates an input for CGS being unlocked.
+ * @param {boolean} isOwned Whether this upgrade is owned already.
+ * @param {(owned: boolean) => Promise<void>} updateCGS A function called whenever CGS's ownership status changes.
+ * @param {(owned: boolean) => void} updateCGS A function called whenever CGS's ownership status changes.
+ */
+function createCGSBox(isOwned, updateCGS) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("v-align");
     wrapper.classList.add("upgrade-box");
@@ -38,14 +46,24 @@ function createCGSBox(isOwned) {
     ownedCheckbox.type = "checkbox";
     ownedCheckbox.title = "Have you purchased The Cat God [not to be confused with Cat God (Cool Dude)]";
     ownedCheckbox.checked = isOwned;
-    ownedCheckbox.onchange = () => makeRequest(REQUEST_TYPES.UPDATE_UPGRADE, { id: 0, level: ownedCheckbox.checked ? 1 : 0 });
+    ownedCheckbox.onchange = () => updateCGS(ownedCheckbox.checked);
 
     ownedWrapper.append(ownedLabel, ownedCheckbox);
     wrapper.append(title, image, ownedWrapper);
     return wrapper;
 }
 
-function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, id) {
+/**
+ * Creates an input for an ability's level and plus level.
+ * @param {string} name The name of the ability.
+ * @param {number} levelCap The regular level cap.
+ * @param {number} levelPlusCap The plus level cap.
+ * @param {import("../data/upgrade-data.js").ABILITY_LEVEL} currentLevelData The initial values for level and plus level inputs.
+ * @param {number} id The position of the ability in the various arrays representing the ability in assets/settings.js
+ * @returns {HTMLDivElement} An element containing the inputs for a level and plus level.
+ * @param {(index: number, level: number, plusLevel: number) => Promise<void>} updateAbility A function called whenever an ability's levels are modified.
+ */
+function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, id, updateAbility) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("v-align");
     wrapper.classList.add("upgrade-box");
@@ -59,28 +77,33 @@ function createUpgradeLevelBox(name, levelCap, levelPlusCap, currentLevelData, i
     const levelWrapper = document.createElement("div");
     levelWrapper.classList.add("h-align");
 
-    let levelInput, plusLevelInput;
+    let levelInput = null, plusLevelInput = null;
     
-    const userRankDisplay = document.querySelector("#user-rank");
-    const [plusLevelElm, plusInputElm] = createArrowNumberBox(levelPlusCap, currentLevelData.plus, (oldValue, newValue) => {
-        userRankDisplay.textContent = parseInt(userRankDisplay.textContent) + (newValue - oldValue);
-        makeRequest(REQUEST_TYPES.UPDATE_UPGRADE, { id: id + 1, level: parseInt(levelInput.value), plus: parseInt(plusLevelInput.value) });
-    });
+    const userRankDisplay = /** @type {!HTMLParagraphElement} */ (document.querySelector("#user-rank"));
     const [levelElm, levelInputElm] = createArrowNumberBox(levelCap, currentLevelData.level, (oldValue, newValue) => {
-        userRankDisplay.textContent = parseInt(userRankDisplay.textContent) + (newValue - oldValue);
-        makeRequest(REQUEST_TYPES.UPDATE_UPGRADE, { id: id + 1, level: parseInt(levelInput.value), plus: parseInt(plusLevelInput.value) });
+        userRankDisplay.textContent = `${parseInt(userRankDisplay.textContent ?? "0") + (newValue - oldValue)}`;
+        updateAbility(id, parseInt(levelInput.value), parseInt(plusLevelInput?.value ?? "0"));
     }, 1);
     levelInput = levelInputElm;
-    plusLevelInput = plusInputElm;
 
     levelElm.classList.add("upgrade-level");
-    plusLevelElm.classList.add("upgrade-plus-level");
 
-    const plusSign = document.createElement("p");
-    plusSign.classList.add("upgrade-plus-text");
-    plusSign.textContent = "+";
+    levelWrapper.appendChild(levelElm);
 
-    levelWrapper.append(levelElm, plusSign, plusLevelElm);
+    if(levelPlusCap > 0) {
+        const [plusLevelElm, plusInputElm] = createArrowNumberBox(levelPlusCap, currentLevelData.plus, (oldValue, newValue) => {
+            userRankDisplay.textContent = `${parseInt(userRankDisplay.textContent ?? "0") + (newValue - oldValue)}`;
+            updateAbility(id, parseInt(levelInput.value), parseInt(plusLevelInput.value));
+        });
+        plusLevelElm.classList.add("upgrade-plus-level");
+        plusLevelInput = plusInputElm;
+
+        const plusSign = document.createElement("p");
+        plusSign.classList.add("upgrade-plus-text");
+        plusSign.textContent = "+";
+        levelWrapper.append(plusSign, plusLevelElm);
+    }
+
     wrapper.append(title, image, levelWrapper);
     return wrapper;
 }

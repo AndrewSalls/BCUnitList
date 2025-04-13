@@ -1,5 +1,16 @@
+//@ts-check
 const RIGGED_ANTI_SCALING = 20;
 
+/**
+ * @typedef {{increment: () => void, rincrement: () => void}} LOADING_BAR
+ */
+
+/**
+ * Overlays a loading bar on the page, which disappears upon calling increment the specified number of times, after which the provided callback is called.
+ * @param {number} barInterval The number of times increment needs to be called before the loading bar finishes.
+ * @param {() => void} fullCallback A function called after the loading bar finishes.
+ * @returns {LOADING_BAR} increment, which counts towards the number of times needed to finish the loading bar, and rincrement, which updates the display but does not atually count.
+ */
 export default function createLoadingBar(barInterval, fullCallback) {
     const container = document.createElement("div");
     container.id = "loading-icon";
@@ -23,8 +34,8 @@ export default function createLoadingBar(barInterval, fullCallback) {
     
         if(loadedCount === barInterval) {
             fullCallback();
-            document.querySelector("#loading-icon").classList.add("hidden");
-            document.querySelector("#loading-content").classList.remove("hidden");
+            document.querySelector("#loading-icon")?.classList.add("hidden");
+            document.querySelector("#loading-content")?.classList.remove("hidden");
         }
     };
     const rinc = () => {

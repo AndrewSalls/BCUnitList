@@ -64,6 +64,7 @@ h3 {
     height: 5vh;
     border-radius: 100vh;
     font-weight: bolder;
+    margin-bottom: 2vh;
 }
 
 .set-unit .unit-icon {

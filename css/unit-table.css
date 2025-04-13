@@ -242,6 +242,15 @@ tbody {
 .row-option-wrapper button {
     width: 30px;
 }
+
 .open-table-option {
+    margin-top: 2vh;
     margin-bottom: 2vh;
+}
+
+.searchable-table-title {
+    height: 40px;
+    font-weight: bolder;
+    font-size: 16pt;
+    cursor: pointer;
 }

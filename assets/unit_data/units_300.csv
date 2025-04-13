@@ -38,7 +38,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 336,UR,Y,Queen Reika,Pharoah Reika,Eternal Reika,,UR,1,Target_Relic1-Curse_Immune1-Slow_Resist10-Defense10-Attack10,
 337,UR,Y,HMS Princess,HMS Princess CC,HMS Princess II CC,,UR,1,Survive10-Weaken_Immune1-Wave_Immune1-Defense10-Attack10,
 338,UR,Y,Imagawa Yoshimoto,Wargod Yoshimoto,Immortal Yoshimoto,,UR,1,Target_Aku1-Survive10-Freeze_Resist10-Defense10-Attack10,
-339,EX,Y,Iron Wall Cat,,,,,0,,
+339,EX,Y,Iron Wall Cat,,,,Summon,0,,
 340,RR,Y,Redhead Yuki Cat,Redhead Lovely Yuki Cat,Redhead Muscled Yuki Cat,,,0,,
 341,UR,Y,Lost World Yuki,Lost World Yuki & Cat,Lost World Catgirl Yuki,,UR,1,Target_Aku1-Surge_Resist10-Warp_Immune1-Defense10-Attack10,
 342,EX,Y,Maneki Cat,Neo Maneki Cat,,,Plus30,0,,

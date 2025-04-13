@@ -1,31 +1,38 @@
+//@ts-check
 import { openOrbSelectionModal } from "../orb/orb-selection.js";
 
+/**
+ * Creates an interactive element for setting the level of a unit.
+ * @param {number} cap The maximum level of the unit.
+ * @param {number} current The current level of the unit.
+ * @returns {HTMLInputElement|HTMLDivElement} The interactable element, or a wrapper surrounding it if the setting for arrow controls is set.
+ */
 export function createLevelInteractable(cap, current) {
     const target = document.createElement("input");
     target.classList.add("level-select");
     target.type = "number";
-    target.value = current;
-    target.min = 0;
-    target.max = parseInt(cap);
-    target.step = 1;
+    target.value = `${current}`;
+    target.min = "0";
+    target.max = `${cap}`;
+    target.step = "1";
     target.title = `Max is ${cap}`;
 
-    target.onwheel = ev => {
+    target.addEventListener("wheel", ev => {
         ev.preventDefault();
         if(ev.deltaY < 0) {
-            target.value = parseInt(target.value) + 1;
+            target.value = `${parseInt(target.value) + 1}`;
             target.dispatchEvent(new Event("change"));
         } else if(ev.deltaY > 0) {
-            target.value = parseInt(target.value) - 1;
+            target.value = `${parseInt(target.value) - 1}`;
             target.dispatchEvent(new Event("change"));
         }
-    };
+    }, { passive: true });
 
     target.onchange = _ => {
-        if(target.value > cap) {
-            target.value = cap;
-        } else if(target.value < 0) {
-            target.value = 0;
+        if(parseInt(target.value) > cap) {
+            target.value = `${cap}`;
+        } else if(parseInt(target.value) < 0) {
+            target.value = "0";
         }
     }
 
@@ -35,13 +42,13 @@ export function createLevelInteractable(cap, current) {
 
         const upArrow = createUpArrow();
         upArrow.onclick = () => {
-            target.value = parseInt(target.value) + 1;
+            target.value = `${parseInt(target.value) + 1}`;
             target.dispatchEvent(new Event("change"));
         };
 
         const downArrow = createDownArrow();
         downArrow.onclick = () => {
-            target.value = parseInt(target.value) - 1;
+            target.value = `${parseInt(target.value) - 1}`;
             target.dispatchEvent(new Event("change"));
         };
 
@@ -52,11 +59,19 @@ export function createLevelInteractable(cap, current) {
     return target;
 }
 
+/**
+ * Creates an interactive element for setting the level of a talent.
+ * @param {string} talentName The name of the talent.
+ * @param {number} talentMax The maximum level of the talent.
+ * @param {number} talentLevel The initial level of the talent.
+ * @param {boolean} isUltra Whether the talent is an ultra talent or regular talent.
+ * @returns {HTMLDivElement} The interactable element.
+ */
 export function createTalentInteractable(talentName, talentMax, talentLevel, isUltra) {
     const container = document.createElement("div");
     container.classList.add("talent-box");
     container.classList.add(isUltra ? "ultra-talent" : "regular-talent");
-    container.dataset.max = talentMax;
+    container.dataset.max = `${talentMax}`;
     container.title = `${talentName.replace("_", " ")} - Max level: ${talentMax}`;
 
     const image = document.createElement("img");
@@ -64,22 +79,22 @@ export function createTalentInteractable(talentName, talentMax, talentLevel, isU
 
     const number = document.createElement("p");
     number.classList.add("talent-level");
-    number.textContent = talentLevel;
+    number.textContent = `${talentLevel}`;
 
     const background = document.createElement("span");
 
-    container.onwheel = ev => {
+    container.addEventListener("wheel", ev => {
         ev.preventDefault();
         if(ev.deltaY < 0) {
-            number.textContent = Math.min(talentMax, parseInt(number.textContent) + 1);
+            number.textContent = `${Math.min(talentMax, parseInt(number.textContent ?? "0") + 1)}`;
             number.dispatchEvent(new Event("change"));
         } else if(ev.deltaY > 0) {
-            number.textContent = Math.max(0, parseInt(number.textContent) - 1);
+            number.textContent = `${Math.max(0, parseInt(number.textContent ?? "0") - 1)}`;
             number.dispatchEvent(new Event("change"));
         }
-    };
+    }, { passive: true });
     
-    const talentLevelChange = () => container.classList.toggle("maxed-talent", number.textContent === talentMax);
+    const talentLevelChange = () => container.classList.toggle("maxed-talent", number.textContent === `${talentMax}`);
     talentLevelChange();
     number.onchange = talentLevelChange;
 
@@ -91,13 +106,13 @@ export function createTalentInteractable(talentName, talentMax, talentLevel, isU
 
         const upArrow = createUpArrow();
         upArrow.onclick = () => {
-            number.textContent = Math.min(talentMax, parseInt(number.textContent) + 1);
+            number.textContent = `${Math.min(talentMax, parseInt(number.textContent ?? "0") + 1)}`;
             number.dispatchEvent(new Event("change"));
         };
 
         const downArrow = createDownArrow();
         downArrow.onclick = () => {
-            number.textContent = Math.max(0, parseInt(number.textContent) - 1);
+            number.textContent = `${Math.max(0, parseInt(number.textContent ?? "0") - 1)}`;
             number.dispatchEvent(new Event("change"));
         };
 
@@ -109,6 +124,11 @@ export function createTalentInteractable(talentName, talentMax, talentLevel, isU
     return container;
 }
 
+/**
+ * Creates an interactive element to set orb data.
+ * @param {import("../../data/unit-data.js").ORB} orbData Initial values for the orb.
+ * @returns {HTMLDivElement} The interactable element.
+ */
 export function createOrbInteractable(orbData) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("orb-wrapper");
@@ -126,11 +146,11 @@ export function createOrbInteractable(orbData) {
     orbRank.classList.add("orb-rank");
 
     if(orbData) {
-        orbColor.dataset.trait = orbData.trait;
+        orbColor.dataset.trait = `${orbData.trait}`;
         orbColor.src = `./assets/img/orb/trait/${orbData.trait}.png`;
-        orbType.dataset.type = orbData.type;
+        orbType.dataset.type = `${orbData.type}`;
         orbType.src = `./assets/img/orb/type/${orbData.type}.png`;
-        orbRank.dataset.rank = orbData.rank;
+        orbRank.dataset.rank = `${orbData.rank}`;
         orbRank.src = `./assets/img/orb/rank/${orbData.rank}.png`;
     } else {
         orbColor.dataset.trait = "";
@@ -149,6 +169,10 @@ export function createOrbInteractable(orbData) {
     return wrapper;
 }
 
+/**
+ * Creates an SVG up arrow.
+ * @returns {SVGElement} An up arrow.
+ */
 function createUpArrow() {
     const upArrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     upArrow.classList.add("upgrade-arrow");
@@ -157,6 +181,10 @@ function createUpArrow() {
     return upArrow;
 }
 
+/**
+ * Creates an SVG down arrow.
+ * @returns {SVGElement} A down arrow.
+ */
 function createDownArrow() {
     const downArrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     downArrow.classList.add("upgrade-arrow");
