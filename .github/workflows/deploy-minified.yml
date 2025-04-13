@@ -26,9 +26,14 @@ jobs:
             ${{ runner.os }}-node-modules-
 
       - run: sudo apt-get install -y optipng
-      - name: Minify PNG images
+      - name: Minify modified PNG images
         run: |
-          find . -type f -name "*.png" -exec optipng -o7 {} \;
+          git fetch origin main
+          git diff --name-only origin/main...HEAD | grep '\.png$' | while read file; do
+            if [ -f "$file" ]; then
+              optipng -o7 "$file" > /dev/null 2>&1
+            fi
+          done
 
       - run: npm install -g terser csso-cli html-minifier
       - run: for i in $(find . -type f -name "*.js"); do terser $i --compress -o $i; done
