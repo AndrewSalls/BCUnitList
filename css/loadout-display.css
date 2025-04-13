@@ -38,7 +38,7 @@
 }
 #base-box input {
     width: 5ch;
-    margin-left: 0.5vw;
+    margin: 0.5vh 0.5vw;
     text-align: center;
     -moz-appearance: textfield;
     appearance: none;
