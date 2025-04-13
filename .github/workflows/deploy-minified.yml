@@ -25,6 +25,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-modules-
 
+      - run: sudo apt-get install -y optipng
+      - name: Minify PNG images
+        run: |
+          find . -type f -name "*.png" -exec optipng -o7 {} \;
+
       - run: npm install -g terser csso-cli html-minifier
       - run: for i in $(find . -type f -name "*.js"); do terser $i --compress -o $i; done
       - run: for i in $(find . -type f -name "*.css"); do csso $i -o $i; done
