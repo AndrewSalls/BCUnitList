@@ -25,12 +25,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-modules-
 
-      - name: Compress Images
-        id: compress-images
-        uses: cadamsdev/image-optimizer-action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
       - run: npm install -g terser csso-cli html-minifier
       - run: for i in $(find . -type f -name "*.js"); do terser $i --compress -o $i; done
       - run: for i in $(find . -type f -name "*.css"); do csso $i -o $i; done
