@@ -55,7 +55,7 @@ export function encodeUnitEntry(unitData) {
     let output = encodeUnitData(unitData);
 
     if(unitData.favorited) {
-        output += "F";
+        output += "S";
     }
     if(unitData.hidden) {
         output += "H";
@@ -151,7 +151,7 @@ export function decodeUnit(unitStr) {
             case "O":
                 output.orb = unitStr.substring(pos + 1, pos + segment.length).split("&").map((/** @type {string} */ o) => decodeOrb(o));
                 break;
-            case "F":
+            case "S":
                 output.favorited = true;
                 break;
             case "H":
