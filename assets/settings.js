@@ -1,7 +1,7 @@
 const SETTINGS = {
     "version": "1.8",
-    "gameVersion": "14.2.0",
-    "unitCount": 786,
+    "gameVersion": "14.3.3",
+    "unitCount": 798,
     "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782],
     "chapters": {
         "eoc": {
@@ -27,7 +27,6 @@ const SETTINGS = {
         "cannon": 30,
         "base": 20,
         "style": 20,
-        "count": 8,
         "names": ["Default", "Slow Beam", "Iron Wall", "Thunderbolt", "Waterblast", "Holy Blast", "Breakerblast", "Curseblast"]
     },
     "abilities": {
