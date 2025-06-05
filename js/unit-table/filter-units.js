@@ -206,6 +206,7 @@ function initializeMiscFilters() {
     registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector("#fake-filter")), filterFunctions.isUnreleased);
     registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector("#collab-filter")), filterFunctions.isCollab);
     registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector("#version-filter")), filterFunctions.isInEN);
+    registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector("#obtained-filter")), filterFunctions.isObtained);
     registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector("#unobtained-filter")), filterFunctions.isUnobtained);
     registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector("#favorite-filter")), filterFunctions.isNotFavorited);
 }

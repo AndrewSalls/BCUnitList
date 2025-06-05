@@ -28,7 +28,7 @@ export default function createArrowNumberBox(cap, currentValue, changeCallback, 
         labelInput.dataset.lastValue = labelInput.value;
     }
 
-    labelInput.onwheel = ev => {
+    labelInput.addEventListener("wheel", ev => {
         ev.preventDefault();
         if(ev.deltaY < 0) {
             labelInput.value = `${parseInt(labelInput.value) + 1}`;
@@ -37,7 +37,7 @@ export default function createArrowNumberBox(cap, currentValue, changeCallback, 
             labelInput.value = `${parseInt(labelInput.value) - 1}`;
             labelInput.dispatchEvent(new Event("change"));
         }
-    };
+    }, { passive: false });
 
     if(window.localStorage.getItem("s1") === "1") {
         const labelInputWrapper = document.createElement("div");

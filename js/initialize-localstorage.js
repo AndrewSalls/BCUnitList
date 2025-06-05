@@ -5,7 +5,7 @@ import SETTINGS from "../assets/settings.js";
  * @readonly
  */
 const DEFAULT_SETTINGS = {
-    "f1": "0", "f2": "1", "f3": "0", "f4": "1", "f5": "1",
+    "f1": "0", "f2": "1", "f3": "0", "f4": "1", "f5": "1", "f6": "1",
     "s1": "0", "s2": "1", "s3": "0", "s4": "0", "s5": "0", "s6": "0", "s7": "0"
 };
 

@@ -20,7 +20,7 @@ export default function loadOtherInfo() {
 
         window.localStorage.setItem("akl", sealLevel.value);
     };
-    sealLevel.onwheel = ev => {
+    sealLevel.addEventListener("wheel", ev => {
         ev.preventDefault();
         if(ev.deltaY < 0) {
             sealLevel.value = `${parseInt(sealLevel.value) + 1}`;
@@ -29,7 +29,7 @@ export default function loadOtherInfo() {
             sealLevel.value = `${parseInt(sealLevel.value) - 1}`;
             sealLevel.dispatchEvent(new Event("change"));
         }
-    };
+    }, { passive: false });
 
     /** @type {SVGElement} */ (document.querySelector("#seal-up-arrow")).onclick = () => {
         sealLevel.value = `${parseInt(sealLevel.value) + 1}`;

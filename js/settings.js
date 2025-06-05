@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadButton("#version-filter", "f3");
     loadButton("#unobtained-filter", "f4");
     loadButton("#favorite-filter", "f5");
+    loadButton("#obtained-filter", "f6");
     loadButton("#arrow-upgrade-filter", "s1");
     loadButton("#auto-collapse-filter", "s2");
     loadButton("#show-empty-filter", "s3");

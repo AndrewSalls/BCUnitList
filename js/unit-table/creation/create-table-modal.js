@@ -134,6 +134,7 @@ function createFilterSelection() {
         createModalButton("Collab Exclusive Units", "collab-filter", "Collab"),
         createModalButton("JP/KR/TW Exclusive Units", "version-filter", "Not in EN")
     ], [
+        createModalButton("Obtained Units", "obtained-filter", "Obtained"),
         createModalButton("Unobtained Units", "unobtained-filter", "Unobtained"),
         createModalButton("Favorited Units", "favorite-filter", "Non-favorited")
     ]));

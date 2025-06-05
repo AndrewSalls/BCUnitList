@@ -5,6 +5,7 @@ export const isUnreleased = (/** @type {HTMLTableRowElement} */ r) => r.dataset.
 export const isCollab = (/** @type {HTMLTableRowElement} */ r) => r.dataset.is_collab === "Y";
 export const isInEN = (/** @type {HTMLTableRowElement} */ r) => r.dataset.in_en === "N";
 export const isUnobtained = (/** @type {HTMLTableRowElement} */ r) => (/** @type {!HTMLInputElement} */ (r.querySelector(".max-level.level-select"))).value === "0";
+export const isObtained = (/** @type {HTMLTableRowElement} */ r) => (/** @type {!HTMLInputElement} */ (r.querySelector(".max-level.level-select"))).value !== "0";
 export const isNotFavorited = (/** @type {HTMLTableRowElement} */ r) => (/** @type {!HTMLDivElement} */ (r.querySelector(".fav-wrapper"))).dataset.favorited === "0";
 
 /* -------------------------- Form Filter Functions -------------------------- */
@@ -68,6 +69,7 @@ export function isGloballyFiltered(unit) {
     shouldBeHidden ||= (window.localStorage.getItem("f3") === "0") && !unit.in_EN;
     shouldBeHidden ||= (window.localStorage.getItem("f4") === "0") && unit.level === 0;
     shouldBeHidden ||= (window.localStorage.getItem("f5") === "0") && !unit.favorited;
+    shouldBeHidden ||= (window.localStorage.getItem("f6") === "0") && unit.level !== 0;
 
     return shouldBeHidden;
 }
