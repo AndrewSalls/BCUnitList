@@ -35,6 +35,10 @@ function loadUnitTables() {
     makeSearchable(/** @type {HTMLInputElement} */ (document.querySelector("#unit-search")), targettedID => {
         const target = [...document.querySelectorAll(".row-id")].find(r => r.textContent === `${targettedID}`)?.parentElement;
         if(target && !target.classList.contains("hidden") && !target.classList.contains("filter-hidden")) {
+            if(target.parentElement?.classList.contains("hidden")) {
+                //@ts-ignore Inside a table, so parentElements must exist. Table is malformatted if searchable-table-title element is missing
+                target.parentElement.parentElement.querySelector(".searchable-table-title").click();
+            }
             window.scrollTo({ left: 0, top: window.scrollY + target.getBoundingClientRect().top, behavior: "smooth" });
         }
     });
