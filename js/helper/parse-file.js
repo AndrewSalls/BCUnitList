@@ -166,7 +166,7 @@ export function parseUpgrades() {
  */
 export function parseLoadouts() {
     const llp = window.localStorage.getItem("llp");
-    if(llp) {
+    if(llp?.trim()) {
         return llp.split(" ").map(b64 => JSON.parse(window.atob(b64)));
     }
 

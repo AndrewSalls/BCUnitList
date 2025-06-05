@@ -1,5 +1,6 @@
 #search-suggestion-dropdown {
     position: absolute;
+    height: min-content;
     max-height: 240px;
     width: max-content;
     max-width: 70ch;

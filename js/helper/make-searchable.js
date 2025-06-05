@@ -18,15 +18,19 @@ export default function makeSearchable(input, findCallback) {
         const suggestionBounds = suggestionDropdown.getBoundingClientRect();
         suggestionDropdown.style.minWidth = `${inputBounds.width}px`;
 
-        if(inputBounds.left + suggestionBounds.width > window.innerWidth) {
-            suggestionDropdown.style.left = `${inputBounds.right + window.scrollX - suggestionBounds.width}px`;
+        if(inputBounds.left + suggestionBounds.width > window.innerWidth) { // only right align when necessary
+            suggestionDropdown.style.left = "";
+            suggestionDropdown.style.right = `${window.innerWidth - inputBounds.left - window.scrollX}px`;
         } else {
+            suggestionDropdown.style.right = "";
             suggestionDropdown.style.left = `${inputBounds.left + window.scrollX}px`;
         }
 
-        if(inputBounds.bottom + suggestionBounds.height > window.innerHeight) {
-            suggestionDropdown.style.top = `${inputBounds.top + window.scrollY - suggestionBounds.height}px`;
+        if(inputBounds.bottom > window.innerHeight / 2) { // however, vertical align is just whichever has more space
+            suggestionDropdown.style.top = "";
+            suggestionDropdown.style.bottom = `${window.innerHeight - inputBounds.top - window.scrollY}px`;
         } else {
+            suggestionDropdown.style.bottom = "";
             suggestionDropdown.style.top = `${inputBounds.bottom + window.scrollY}px`;
         }
         suggestionDropdown.classList.remove("invisible");

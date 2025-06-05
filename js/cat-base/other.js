@@ -31,12 +31,17 @@ export default function loadOtherInfo() {
         }
     }, { passive: false });
 
-    /** @type {SVGElement} */ (document.querySelector("#seal-up-arrow")).onclick = () => {
-        sealLevel.value = `${parseInt(sealLevel.value) + 1}`;
-        sealLevel.dispatchEvent(new Event("change"));
-    };
-    /** @type {SVGElement} */ (document.querySelector("#seal-down-arrow")).onclick = () => {
-        sealLevel.value = `${parseInt(sealLevel.value) - 1}`;
-        sealLevel.dispatchEvent(new Event("change"));
-    };
+    if(window.localStorage.getItem("s1") === "0") {
+        document.querySelector("#seal-up-arrow")?.remove();
+        document.querySelector("#seal-down-arrow")?.remove();
+    } else {
+        /** @type {SVGElement} */ (document.querySelector("#seal-up-arrow")).onclick = () => {
+            sealLevel.value = `${parseInt(sealLevel.value) + 1}`;
+            sealLevel.dispatchEvent(new Event("change"));
+        };
+        /** @type {SVGElement} */ (document.querySelector("#seal-down-arrow")).onclick = () => {
+            sealLevel.value = `${parseInt(sealLevel.value) - 1}`;
+            sealLevel.dispatchEvent(new Event("change"));
+        };
+    }
 }

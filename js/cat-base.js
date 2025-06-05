@@ -57,7 +57,7 @@ function initializeNavButton(button, target) {
  * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar to hide page content until all data has been inputted.
  */
 function loadBaseSettings(loadingBar) {
-    /** @type {HTMLSpanElement} */ (document.querySelector("#user-rank")).textContent = window.localStorage.getItem("ur");
+    /** @type {HTMLSpanElement} */ (document.querySelector("#user-rank")).textContent = window.localStorage.getItem("ur") ?? "11";
     loadingBar.increment();
     loadTreasureInfo();
     loadingBar.increment();
