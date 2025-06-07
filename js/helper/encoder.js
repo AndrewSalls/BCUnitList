@@ -175,7 +175,7 @@ function getSegment(unitStr, startPos) {
     const segmentType = unitStr.charAt(startPos);
 
     let offset;
-    for(offset = 1; startPos + offset < unitStr.length && unitStr.charAt(startPos + offset).match("[0-9&X\\-]"); offset++);
+    for(offset = 1; startPos + offset < unitStr.length && unitStr.charAt(startPos + offset).match("[0-9&X\\-a-z]"); offset++);
     return {
         segmentType: segmentType,
         length: offset

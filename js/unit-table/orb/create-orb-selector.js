@@ -28,13 +28,6 @@ export default function createOrbMenu() {
     const label = document.createElement("h2");
     label.textContent = "Talent Orb Selection";
 
-    const traitLabel = document.createElement("h3");
-    traitLabel.textContent = "Orb Target Trait";
-    const typeLabel = document.createElement("h3");
-    typeLabel.textContent = "Orb Type";
-    const rankLabel = document.createElement("h3");
-    rankLabel.textContent = "Orb Rank";
-
     const confirmCentering = document.createElement("div");
     confirmCentering.id = "orb-option-centering";
 
@@ -62,10 +55,32 @@ export default function createOrbMenu() {
     attachButton.textContent = "Attach Orb";
 
     confirmCentering.append(removeButton, resultDisplay, attachButton);
-    content.append(exit, label, traitLabel, createTraitSelectionSubmenu(), typeLabel, createTypeSelectionSubmenu(), rankLabel, createRankSelectionSubmenu(), confirmCentering);
+
+    const effectSeries = createEffectSubmenu();
+    const abilitySeries = createAbilitySubmenu();
+    abilitySeries.classList.add("hidden"); // TODO: Make based on current orb's series or last selected series
+    const seriesToggle = createSeriesSelector(resultDisplay, effectSeries, abilitySeries);
+
+    content.append(exit, seriesToggle, label, effectSeries, abilitySeries, confirmCentering);
     modalBG.appendChild(content);
 
     return modalBG;
+}
+
+/**
+ * Checks if all of the components of an orb have been selected, and enables/disables the button for attaching the orb to the unit if they have.
+ */
+function updateAttachButton() {
+    const attachOrb = /** @type {HTMLButtonElement} */ (document.querySelector("#attach-orb"));
+    const resultOrb = /** @type {HTMLDivElement} */ (document.querySelector("#orb-result"));
+    const resultOrbColor = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-color"));
+    const resultOrbType = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-type"));
+    const resultOrbRank = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-rank"));
+
+
+    if(resultOrbColor.dataset.trait && resultOrbType.dataset.type && resultOrbRank.dataset.rank) {
+        attachOrb.disabled = false;
+    }
 }
 
 /**
@@ -74,9 +89,23 @@ export default function createOrbMenu() {
  */
 function createTraitSelectionSubmenu() {
     const wrapper = document.createElement("div");
-    wrapper.id = "trait-selection";
+    wrapper.classList.add("trait-selection");
+    const traitOptions = [];
+
     for(let x = 0; x < ORB_DATA.traits.length; x++) {
-        wrapper.appendChild(createTraitSelector(x, ORB_DATA.traits[x]));
+        const trait = createTraitSelector(x, ORB_DATA.traits[x]);
+        traitOptions.push(trait);
+        wrapper.appendChild(trait);
+        trait.onclick = () => {
+            traitOptions.forEach(v => v.classList.remove("orb-selected"));
+            trait.classList.add("orb-selected");
+            
+            const resultOrb = /** @type {HTMLDivElement} */ (document.querySelector("#orb-result"));
+            const resultOrbColor = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-color"));
+            resultOrbColor.src = trait.querySelector("img")?.src ?? "";
+            resultOrbColor.dataset.trait = trait.dataset.trait;
+            updateAttachButton();
+        }
     }
 
     return wrapper;
@@ -110,9 +139,24 @@ function createTraitSelector(traitID, traitTitle) {
  */
 function createTypeSelectionSubmenu() {
     const wrapper = document.createElement("div");
-    wrapper.id = "type-selection";
+    wrapper.classList.add("type-selection");
+    const typeOptions = [];
+
     for(let x = 0; x < ORB_DATA.types.length; x++) {
-        wrapper.appendChild(createTypeSelector(x, ORB_DATA.types[x]));
+        const type = createTypeSelector(x, ORB_DATA.types[x]);
+        typeOptions.push(type);
+        wrapper.appendChild(type);
+        type.onclick = () => {
+            typeOptions.forEach(v => v.classList.remove("orb-selected"));
+            type.classList.add("orb-selected");
+
+            const resultOrb = /** @type {HTMLDivElement} */ (document.querySelector("#orb-result"));
+            const resultOrbType = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-type"));
+            resultOrbType.src = type.querySelector("img")?.src ?? "";
+            resultOrbType.classList.remove("invisible");
+            resultOrbType.dataset.type = type.dataset.type;
+            updateAttachButton();
+        }
     }
 
     return wrapper;
@@ -151,9 +195,26 @@ function createTypeSelector(typeID, typeTitle) {
  */
 function createRankSelectionSubmenu() {
     const wrapper = document.createElement("div");
-    wrapper.id = "rank-selection";
+    wrapper.classList.add("rank-selection");
+    const rankOptions = [];
+
     for(let x = 0; x < ORB_DATA.ranks.length; x++) {
-        wrapper.appendChild(createRankSelector(x, ORB_DATA.ranks[x]));
+        const rank = createRankSelector(x, ORB_DATA.ranks[x]);
+        const rankImg = /** @type {HTMLImageElement} */ (rank.querySelector("img"));
+        rankOptions.push(rank);
+        wrapper.appendChild(rank);
+
+        rank.onclick = () => {
+            rankOptions.forEach(v => v.classList.remove("orb-selected"));
+            rank.classList.add("orb-selected");
+
+            const resultOrb = /** @type {HTMLDivElement} */ (document.querySelector("#orb-result"));
+            const resultOrbRank = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-rank"));
+            resultOrbRank.src = rank.querySelector("img")?.src ?? "";
+            resultOrbRank.classList.remove("invisible");
+            resultOrbRank.dataset.rank = rankImg.dataset.rank;
+            updateAttachButton();
+        }
     }
 
     return wrapper;
@@ -168,9 +229,8 @@ function createRankSelectionSubmenu() {
 function createRankSelector(imgID, imgTitle) {
     const superWrapper = document.createElement("div");
     superWrapper.classList.add("rank-shrinkwrap");
-
+    
     const wrapper = document.createElement("div");
-
     const img = document.createElement("img");
 
     img.src = `./assets/img/orb/rank/${imgID}.png`;
@@ -181,4 +241,167 @@ function createRankSelector(imgID, imgTitle) {
     superWrapper.appendChild(wrapper);
 
     return superWrapper;
+}
+
+function createAbilitySelectionSubmenu() {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("ability-selection");
+    const abilityOptions = [];
+
+    for(let x = 0; x < ORB_DATA.abilities.length; x++) {
+        const ability = createAbilitySelector(x, ORB_DATA.abilities[x]);
+        abilityOptions.push(ability);
+        wrapper.appendChild(ability);
+        ability.onclick = () => {
+            abilityOptions.forEach(v => v.classList.remove("orb-selected"));
+            ability.classList.add("orb-selected");
+
+            const resultOrb = /** @type {HTMLDivElement} */ (document.querySelector("#orb-result"));
+            const resultOrbType = /** @type {HTMLImageElement} */ (resultOrb.querySelector(".orb-type"));
+            resultOrbType.src = ability.querySelector("img")?.src ?? "";
+            resultOrbType.classList.remove("invisible");
+            resultOrbType.dataset.type = ability.dataset.type;
+            updateAttachButton();
+        }
+    }
+
+    return wrapper;
+}
+
+/**
+ * Creates an element for selecting an orb ability.
+ * @param {number} imgID The ID of the ability based on its order in assets/orb-map.js
+ * @param {string} imgTitle The string representation of the ability in assets/orb-map.js
+ * @returns {HTMLDivElement} An element representing a single ability.
+ */
+function createAbilitySelector(imgID, imgTitle) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("image-selector");
+    wrapper.dataset.type = `${imgID}`;
+
+    const title = document.createElement("h4");
+    title.textContent = imgTitle;
+
+    const abilityImgWrapper = document.createElement("div");
+    abilityImgWrapper.classList.add("ability-shrinkwrap");
+
+    const abilityImg = document.createElement("img");
+    abilityImg.src = `./assets/img/orb/ability/${imgID}.png`;
+    abilityImg.title = imgTitle;
+
+    abilityImgWrapper.appendChild(abilityImg);
+
+    wrapper.append(title, abilityImgWrapper);
+    return wrapper;
+}
+
+/**
+ * Creates a selector for switching between different types of orbs (called series to differentiate from type being used for the orb's ability target)
+ * @param {HTMLDivElement} orbDisplay An element containing the elements which represent the final orb being created.
+ * @param {HTMLElement} effectUI The UI for selecting effect orbs.
+ * @param {HTMLElement} abilityUI The UI for selecting ability orbs.
+ * @returns {HTMLDivElement} An element containing the selector.
+ */
+function createSeriesSelector(orbDisplay, effectUI, abilityUI) {
+    const seriesToggle = document.createElement("div");
+    seriesToggle.id = "orb-series-toggle";
+    seriesToggle.classList.add("v-align");
+
+    const seriesCaption = document.createElement("h4");
+    seriesCaption.id = "series-caption";
+    seriesCaption.textContent = "Select Orb Type";
+
+    const seriesOptionWrapper = document.createElement("div");
+    seriesOptionWrapper.id = "orb-series-wrapper";
+    seriesOptionWrapper.classList.add("h-align");
+
+    const toggleEffect = document.createElement("button");
+    toggleEffect.id = "effect-toggle";
+    toggleEffect.title = "Trait-based orbs";
+    toggleEffect.textContent = "Effect";
+    toggleEffect.onclick = () => {
+        abilityUI.classList.add("hidden");
+        resetOrb(orbDisplay);
+        effectUI.classList.remove("hidden");
+    };
+
+    const toggleAbility = document.createElement("button");
+    toggleAbility.id = "ability-toggle";
+    toggleAbility.title = "Ability-based orbs";
+    toggleAbility.textContent = "Ability";
+    toggleAbility.onclick = () => {
+        effectUI.classList.add("hidden");
+        resetOrb(orbDisplay);
+        const color = /** @type {HTMLImageElement} */ (orbDisplay.querySelector(".orb-color"));
+        color.src = "./assets/img/orb/trait/99.png";
+        color.dataset.trait = "99";
+        abilityUI.classList.remove("hidden");
+    };
+
+    seriesOptionWrapper.append(toggleEffect, toggleAbility);
+    seriesToggle.append(seriesCaption, seriesOptionWrapper);
+
+    return seriesToggle;
+}
+
+/**
+ * Creates the UI for selecting an effect orb.
+ * @returns {HTMLDivElement} An element containing the submenu for selecting an effect orb.
+ */
+function createEffectSubmenu() {
+    const wrapper = document.createElement("div");
+    wrapper.id = "effect-submenu";
+
+    const traitLabel = document.createElement("h3");
+    traitLabel.textContent = "Orb Target Trait";
+    const typeLabel = document.createElement("h3");
+    typeLabel.textContent = "Orb Type";
+    const rankLabel = document.createElement("h3");
+    rankLabel.textContent = "Orb Rank";
+
+    wrapper.append(traitLabel, createTraitSelectionSubmenu(), typeLabel, createTypeSelectionSubmenu(), rankLabel, createRankSelectionSubmenu());
+
+    return wrapper;
+}
+
+/**
+ * Creates the UI for selecting an ability orb.
+ * @returns {HTMLDivElement} An element containing the submenu for selecting an ability orb.
+ */
+function createAbilitySubmenu() {
+    const wrapper = document.createElement("div");
+    wrapper.id = "ability-submenu";
+
+    const abilityLabel = document.createElement("h3");
+    abilityLabel.textContent = "Orb Ability";
+    const rankLabel = document.createElement("h3");
+    rankLabel.textContent = "Orb Rank";
+    
+    wrapper.append(abilityLabel, createAbilitySelectionSubmenu(), rankLabel, createRankSelectionSubmenu());
+
+    return wrapper;
+}
+
+/**
+ * Removes all selected orb properties from the current orb, and clears any selected orb properties from the orb menu.
+ * @param {HTMLDivElement} orbDisplay An element containing the display of the orb and selected orb properties.
+ */
+function resetOrb(orbDisplay) {
+    const color = /** @type {HTMLImageElement} */ (orbDisplay.querySelector(".orb-color"));
+    const type = /** @type {HTMLImageElement} */ (orbDisplay.querySelector(".orb-type"));
+    const rank = /** @type {HTMLImageElement} */ (orbDisplay.querySelector(".orb-rank"));
+
+    color.src = "./assets/img/orb/empty-orb.png";
+    color.dataset.trait = "";
+    type.src = "";
+    type.dataset.type = "";
+    type.classList.add("invisible");
+    rank.src = "";
+    rank.dataset.rank = "";
+    rank.classList.add("invisible");
+
+    document.querySelectorAll("#orb-selection-modal .orb-selected").forEach(v => v.classList.remove("orb-selected"));
+
+    const attachOrb = /** @type {HTMLButtonElement} */ (document.querySelector("#attach-orb"));
+    attachOrb.disabled = true;
 }

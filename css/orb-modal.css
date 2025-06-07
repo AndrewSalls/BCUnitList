@@ -16,18 +16,26 @@
     height: fit-content;
     max-width: 90vw;
     max-height: 90vh;
+    min-width: 90vw;
+    min-height: 90vh;
     background-color: var(--highlight-bg);
     padding: 2vw;
     border-radius: 1vh;
     position: relative;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .modal-fill h2, .modal-fill h3 {
     width: 100%;
     text-align: center;
+    margin: 1vh 0;
 }
 
-#trait-selection, #type-selection, #rank-selection {
+.trait-selection, .type-selection, .rank-selection {
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -43,16 +51,16 @@
     user-select: none;
 }
 
-#type-selection h4, .image-selector h4 {
+.image-selector h4 {
     padding: 0;
     margin: 0;
 }
 
-#rank-selection {
+.rank-selection {
     padding-bottom: 2vh;
 }
 
-#rank-selection img {
+.rank-selection img {
     cursor: pointer;
 }
 
@@ -60,6 +68,7 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    width: 70%;
 }
 
 #orb-option-centering button {
@@ -76,74 +85,74 @@
     background-color: var(--highlight-warning);
 }
 
-#rank-selection .rank-shrinkwrap, .image-selector {
+.rank-selection .rank-shrinkwrap, .image-selector {
     padding: 10px;
     border-radius: 5px;
 }
 
-#type-selection .image-selector .type-shrinkwrap {
+.type-selection .image-selector .type-shrinkwrap {
     --max-width: 52px;
     --max-height: 55px;
     position: relative;
 }
-#type-selection .image-selector .type-shrinkwrap img {
+.type-selection .image-selector .type-shrinkwrap img {
     position: absolute;
     width: 87px;
     height: 87px;
 }
 
-#type-selection .image-selector[data-type="0"] .type-shrinkwrap {
+.type-selection .image-selector[data-type="0"] .type-shrinkwrap {
     width: 47px;
     height: 49px;
     margin: calc(calc(var(--max-height) - 49px) / 2) calc(calc(var(--max-width) - 47px) / 2);
 }
-#type-selection .image-selector[data-type="0"] .type-shrinkwrap img {
+.type-selection .image-selector[data-type="0"] .type-shrinkwrap img {
     top: -22px;
     left: -22px;
 }
-#type-selection .image-selector[data-type="1"] .type-shrinkwrap {
+.type-selection .image-selector[data-type="1"] .type-shrinkwrap {
     width: 52px;
     height: 55px;
     margin: calc(calc(var(--max-height) - 55px) / 2) calc(calc(var(--max-width) - 52px) / 2);
 }
-#type-selection .image-selector[data-type="1"] .type-shrinkwrap img {
+.type-selection .image-selector[data-type="1"] .type-shrinkwrap img {
     top: -19px;
     left: -23px;
 }
-#type-selection .image-selector[data-type="2"] .type-shrinkwrap {
+.type-selection .image-selector[data-type="2"] .type-shrinkwrap {
     width: 38px;
     height: 40px;
     margin: calc(calc(var(--max-height) - 40px) / 2) calc(calc(var(--max-width) - 38px) / 2);
 }
-#type-selection .image-selector[data-type="2"] .type-shrinkwrap img {
+.type-selection .image-selector[data-type="2"] .type-shrinkwrap img {
     top: -24px;
     left: -25px;
 }
-#type-selection .image-selector[data-type="3"] .type-shrinkwrap {
+.type-selection .image-selector[data-type="3"] .type-shrinkwrap {
     width: 48px;
     height: 44px;
     margin: calc(calc(var(--max-height) - 44px) / 2) calc(calc(var(--max-width) - 48px) / 2);
 }
-#type-selection .image-selector[data-type="3"] .type-shrinkwrap img {
+.type-selection .image-selector[data-type="3"] .type-shrinkwrap img {
     top: -22px;
     left: -20px;
 }
-#type-selection .image-selector[data-type="4"] .type-shrinkwrap {
+.type-selection .image-selector[data-type="4"] .type-shrinkwrap {
     width: 44px;
     height: 34px;
     margin: calc(calc(var(--max-height) - 34px) / 2) calc(calc(var(--max-width) - 44px) / 2);
 }
-#type-selection .image-selector[data-type="4"] .type-shrinkwrap img {
+.type-selection .image-selector[data-type="4"] .type-shrinkwrap img {
     top: -27px;
     left: -22px;
 }
 
-#rank-selection .rank-shrinkwrap > div {
+.rank-selection .rank-shrinkwrap > div {
     width: 33px;
     height: 34px;
     position: relative;
 }
-#rank-selection .rank-shrinkwrap img {
+.rank-selection .rank-shrinkwrap img {
     top: -7px;
     left: -9px;
     width: 87px;
@@ -151,9 +160,7 @@
     position: absolute;
 }
 
-#trait-selection .orb-selected,
-#type-selection .orb-selected,
-#rank-selection .orb-selected {
+.orb-selected {
     background-color: var(--highlight-content);
 }
 
@@ -170,4 +177,31 @@
     top: 1vw;
     right: 1vw;
     cursor: pointer;
+}
+
+#orb-series-toggle {
+    position: absolute;
+    top: 1vw;
+    left: 1vw;
+}
+
+#series-caption {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 1vh;
+}
+
+#orb-series-wrapper {
+    column-gap: 1vw;
+}
+
+.ability-selection {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    column-gap: 1vw;
+}
+.ability-selection > * {
+    width: 100%;
+    text-align: center;
 }
