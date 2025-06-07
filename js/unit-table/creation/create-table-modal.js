@@ -172,11 +172,16 @@ function createFilterSelection() {
         createModalButton("Cannot Have any Ultra Talents", "utless-filter", "Can't Have UTs")
     ]));
 
-    const traitModals = ORB_DATA.traits.map((t, i) => createModalButton(`Has Anti-${t} Orb Equipped`, `trait-${i}-filter`, t));
-    const typeModals = ORB_DATA.types.map((t, i) => createModalButton(`Has ${t} Orb Equipped`, `type-${i}-filter`, t));
+    const traitModals = [
+        createModalButton("Has Empty Orb Slots", "trait-empty-filter", "Empty"),
+        ...ORB_DATA.traits.map((t, i) => createModalButton(`Has Anti-${t} Orb Equipped`, `trait-${i}-filter`, t))
+    ];
+    traitModals.push(createModalButton("Has Ability Orb Equipped", "trait-ability-filter", "Ability"));
+    const typeModals = ORB_DATA.types.map((t, i) => createModalButton(`Has ${t} Orb Equipped`, `type-effect-${i}-filter`, t));
+    const typeModals2 = ORB_DATA.abilities.map((t, i) => createModalButton(`Has ${t} Orb Equipped`, `type-ability-${i}-filter`, t));
     const rankModals = ORB_DATA.ranks.map((r, i) => createModalButton(`Has ${r} Rank Orb Equipped`, `rank-${i}-filter`, r));
 
-    filterButtonCollection.appendChild(createModalButtonSuperGroup("Talent Orbs", traitModals, typeModals, rankModals));
+    filterButtonCollection.appendChild(createModalButtonSuperGroup("Talent Orbs", traitModals, typeModals, typeModals2, rankModals));
 
     wrapper.append(label, filterButtonCollection);
     return wrapper;

@@ -53,8 +53,11 @@ export const isTalentable = (/** @type {HTMLTableRowElement} */ r) => r.querySel
 export const isUltraTalentable = (/** @type {HTMLTableRowElement} */ r) => r.querySelectorAll(".ultra-talent").length > 0;
 /* -------------------------- Orb Filter Functions -------------------------- */
 
+export const emptyOrbTrait = (/** @type {HTMLTableRowElement} */ r) => r.querySelectorAll(`.orb-color[data-trait='']`).length > 0;
+
 export const isOrbTrait = (/** @type {HTMLTableRowElement} */ r, /** @type {number} */ x) => r.querySelectorAll(`.orb-color[data-trait='${x}']`).length > 0;
-export const isOrbType = (/** @type {HTMLTableRowElement} */ r, /** @type {number} */ x) => r.querySelectorAll(`.orb-type[data-type='${x}']`).length > 0;
+export const isEffectOrbType = (/** @type {HTMLTableRowElement} */ r, /** @type {number} */ x) => !isOrbTrait(r, 99) && r.querySelectorAll(`.orb-type[data-type='${x}']`).length > 0;
+export const isAbilityOrbType = (/** @type {HTMLTableRowElement} */ r, /** @type {number} */ x) => isOrbTrait(r, 99) && r.querySelectorAll(`.orb-type[data-type='${x}']`).length > 0;
 export const isOrbRank = (/** @type {HTMLTableRowElement} */ r, /** @type {number} */ x) => r.querySelectorAll(`.orb-rank[data-rank='${x}']`).length > 0;
 
 /* -------------------------- Global Filter Checking Function -------------------------- */

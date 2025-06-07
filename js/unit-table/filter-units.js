@@ -270,9 +270,13 @@ function initializeOrbFilters() {
 function initializeOrbTraitFilters() {
     const filterWrapper = /** @type {!HTMLDivElement} */ (document.querySelector("#table-filter-options"));
 
+    registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector("#trait-empty-filter")), filterFunctions.emptyOrbTrait);
+
     for(let x = 0; x < ORB_DATA.traits.length; x++) {
         registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector(`#trait-${x}-filter`)), (/** @type {HTMLTableRowElement} */ r) => filterFunctions.isOrbTrait(r, x));
     }
+
+    registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector("#trait-ability-filter")), (/** @type {HTMLTableRowElement} */ r) => filterFunctions.isOrbTrait(r, 99));
 }
 
 /**
@@ -281,8 +285,13 @@ function initializeOrbTraitFilters() {
 function initializeOrbTypeFilters() {
     const filterWrapper = /** @type {!HTMLDivElement} */ (document.querySelector("#table-filter-options"));
 
+    // effect orb filters
     for(let x = 0; x < ORB_DATA.types.length; x++) {
-        registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector(`#type-${x}-filter`)), (/** @type {HTMLTableRowElement} */ r) => filterFunctions.isOrbType(r, x));
+        registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector(`#type-effect-${x}-filter`)), (/** @type {HTMLTableRowElement} */ r) => filterFunctions.isEffectOrbType(r, x));
+    }
+
+    for(let x = 0; x < ORB_DATA.abilities.length; x++) {
+        registerFilter(/** @type {HTMLButtonElement} */ (filterWrapper.querySelector(`#type-ability-${x}-filter`)), (/** @type {HTMLTableRowElement} */ r) => filterFunctions.isAbilityOrbType(r, x));
     }
 }
 
