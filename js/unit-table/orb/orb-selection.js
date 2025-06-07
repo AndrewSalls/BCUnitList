@@ -38,27 +38,36 @@ export function openOrbSelectionModal(target) {
     const type = /** @type {HTMLImageElement} */ (target.querySelector(".orb-type"));
     const rank = /** @type {HTMLImageElement} */ (target.querySelector(".orb-rank"));
 
-    const series = color.dataset.trait === "99" ? "ability" : "effect";
+    const series = color.dataset.trait ? (color.dataset.trait === "99" ? "ability" : "effect") : "";
 
     resultColor.src = color.src;
-    if(!color.dataset.trait) {
+    if(series === "ability") {
+        /** @type {HTMLButtonElement} */ (document.querySelector("#ability-toggle")).click();
+        resultColor.dataset.trait = color.dataset.trait;
+        window.localStorage.setItem("tss", "a");
+    } else if(series === "effect") {
+        /** @type {HTMLButtonElement} */ (document.querySelector("#effect-toggle")).click();
+        /** @type {HTMLDivElement} */ (document.querySelector(".trait-selection")?.querySelector(`.image-selector[data-trait="${color.dataset.trait}"]`)).click();
+        resultColor.dataset.trait = color.dataset.trait;
+        window.localStorage.setItem("tss", "e");
+    } else {
         resultColor.dataset.trait = "";
-        document.querySelector(".trait-selection")?.querySelector(".orb-selected")?.classList.remove("orb-selected");
-    } else { // Note: If orb is valid orb, it has a color, and thus one of the toggles will be called from here. This resets all orb properties
-        if(series === "ability") {
+        modal.querySelectorAll(".orb-selected").forEach(s => s.classList.remove("orb-selected"));
+
+        if(window.localStorage.getItem("tss") === "a") {
             /** @type {HTMLButtonElement} */ (document.querySelector("#ability-toggle")).click();
+        } else if(window.localStorage.getItem("tss") === "e") {
+            /** @type {HTMLButtonElement} */ (document.querySelector("#effect-toggle")).click();
         } else {
             /** @type {HTMLButtonElement} */ (document.querySelector("#effect-toggle")).click();
-            /** @type {HTMLDivElement} */ (document.querySelector(".trait-selection")?.querySelector(`.image-selector[data-trait="${color.dataset.trait}"]`)).click();
+            window.localStorage.setItem("tss", "e");
         }
-        resultColor.dataset.trait = color.dataset.trait;
     }
 
     if(type.classList.contains("invisible")) {
         resultType.src = "";
         resultType.classList.add("invisible");
         resultType.dataset.type = "";
-        document.querySelector("#type-selection")?.querySelector(".orb-selected")?.classList.remove("orb-selected");
     } else {
         resultType.src = type.src;
         resultType.classList.remove("invisible");
@@ -75,7 +84,6 @@ export function openOrbSelectionModal(target) {
         resultRank.src = "";
         resultRank.classList.add("invisible");
         resultRank.dataset.rank = "";
-        document.querySelector("#rank-selection")?.querySelector(".orb-selected")?.classList.remove("orb-selected");
     } else {
         resultRank.src = rank.src;
         resultRank.classList.remove("invisible");

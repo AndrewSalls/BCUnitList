@@ -229,7 +229,7 @@ function createRankSelectionSubmenu() {
 function createRankSelector(imgID, imgTitle) {
     const superWrapper = document.createElement("div");
     superWrapper.classList.add("rank-shrinkwrap");
-    
+
     const wrapper = document.createElement("div");
     const img = document.createElement("img");
 
@@ -321,8 +321,11 @@ function createSeriesSelector(orbDisplay, effectUI, abilityUI) {
     toggleEffect.textContent = "Effect";
     toggleEffect.onclick = () => {
         abilityUI.classList.add("hidden");
-        resetOrb(orbDisplay);
+        if(effectUI.classList.contains("hidden")) {
+            resetOrb(orbDisplay);
+        }
         effectUI.classList.remove("hidden");
+        window.localStorage.setItem("tss", "e");
     };
 
     const toggleAbility = document.createElement("button");
@@ -331,11 +334,14 @@ function createSeriesSelector(orbDisplay, effectUI, abilityUI) {
     toggleAbility.textContent = "Ability";
     toggleAbility.onclick = () => {
         effectUI.classList.add("hidden");
-        resetOrb(orbDisplay);
+        if(abilityUI.classList.contains("hidden")) {
+            resetOrb(orbDisplay);
+        }
         const color = /** @type {HTMLImageElement} */ (orbDisplay.querySelector(".orb-color"));
         color.src = "./assets/img/orb/trait/99.png";
         color.dataset.trait = "99";
         abilityUI.classList.remove("hidden");
+        window.localStorage.setItem("tss", "a");
     };
 
     seriesOptionWrapper.append(toggleEffect, toggleAbility);

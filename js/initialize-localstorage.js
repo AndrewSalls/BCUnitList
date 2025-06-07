@@ -33,6 +33,9 @@ export default function initializeLocalStorage(categories) {
     // Site unit sort settings --------------------------------------------
     setIfUnset("skey", "0");
     setIfUnset("sasc", "Y");
+
+    // Unit row settings --------------------------------------------
+    setIfUnset("tss", "e");
     
     // Categories --------------------------------------------
     for(const superCategory of Object.keys(categories)) {
