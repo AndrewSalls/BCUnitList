@@ -6,7 +6,7 @@ import SETTINGS from "../assets/settings.js";
  */
 const DEFAULT_SETTINGS = {
     "f1": "0", "f2": "1", "f3": "0", "f4": "1", "f5": "1", "f6": "1",
-    "s1": "0", "s2": "1", "s3": "0", "s4": "0", "s5": "0", "s6": "0", "s7": "0"
+    "s1": "0", "s2": "0", "s3": "0", "s5": "0", "s6": "0", "s7": "0" //s4 removed, used to be auto-hide categories
 };
 
 /**

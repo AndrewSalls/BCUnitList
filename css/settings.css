@@ -2,6 +2,10 @@
     --jitter: 1px;
 }
 
+body {
+    width: 100vw;
+}
+
 .filter-button {
     color: var(--text);
     border: 2px solid var(--text);
@@ -27,6 +31,9 @@ h3 {
 
 .h-spacer {
     column-gap: 1vw;
+    row-gap: 1vw;
+    max-width: 100%;
+    flex-wrap: wrap;
 }
 
 #category-selection {

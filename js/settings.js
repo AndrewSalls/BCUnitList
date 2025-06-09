@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadButton("#arrow-upgrade-filter", "s1");
     loadButton("#auto-collapse-filter", "s2");
     loadButton("#show-empty-filter", "s3");
-    loadButton("#hide-category-filter", "s4");
     loadButton("#auto-group-collapse-filter", "s5");
     loadButton("#history-filter", "s6");
     loadButton("#single-category-filter", "s7");

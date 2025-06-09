@@ -3,115 +3,235 @@
 <head>
     <link rel="stylesheet" href="./css/common.css">
     <link rel="stylesheet" href="./css/home.css">
+    <script src="./js/home.js" type="module"></script>
 </head>
 <body>
     <div id="loading-content">
-        <h1>Welcome to</h1>
-        <h2>The (Unofficial) Battle Cats Collectopedia (BCC)!</h2>
-        <h6>Also known as BCUnitList</h6>
-        <div class="two-pane">
-            <section>
-                <h3>Navigation</h3>
-                <ul>
-                    <li>
-                        <p>Home</p>
-                        <ul>
-                            <li>View this explanation, or credits (on the right).</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>View All Units</p>
-                        <ul>
-                            <li>Displays all units at once, sorted by rarity.</li>
-                            <li>Good for learning about units or changing a large number at once.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>View Specific Unit</p>
-                        <ul>
-                            <li>Displays a single unit, both their upgrades and evolution costs.</li>
-                            <li>Good for quickly finding/modifying a unit.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Search by Category</p>
-                        <ul>
-                            <li>Displays units by category.</li>
-                            <li>Categories are units grouped by similarity, e.g. all being obtained from a certain gacha banner.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>View Upgrade Costs</p>
-                        <ul>
-                            <li>Based on upgrades given to units, shows the resources needed to maximally upgrade the unit.</li>
-                            <li>XP, NP, evolution materials, etc.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Cat Base</p>
-                        <ul>
-                            <li>Contains miscellaneous upgrades like treasures and ability orbs.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Loadouts</p>
-                        <ul>
-                            <li>Create loadouts containing 10 units and a base cannon/style/foundation for when you don't have enough loadout slots in game.</li>
-                            <li>Share loadouts, or view shared loadouts, for strategies and advice.</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Settings</p>
-                        <ul>
-                            <li>Various settings for ease of use, managing save data, etc.</li>
-                            <li>All save data is local to your browser. Make sure you back up your data before clearing cookies or local data!</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <p>Version Number</p>
-                        <ul>
-                            <li>This website is updated manually.</li>
-                            <li>If you can't find a unit or a unit is missing upgrades, it's probably because the website's data hasn't caught up to the game yet.</li>
-                        </ul>
-                    </li>
-                </ul>
+        <nav id="home-sidebar">
+            <div class="sidebar-section sidebar-title">
+                Tab Info
+            </div>
+            <div class="sidebar-section">
+                Home
+            </div>
+            <div class="sidebar-section">
+                All Units
+            </div>
+            <div class="sidebar-section">
+                Single Unit
+            </div>
+            <div class="sidebar-section">
+                Categories
+            </div>
+            <div class="sidebar-section">
+                Upgrade Costs
+            </div>
+            <div class="sidebar-section">
+                Cat Base
+            </div>
+            <div class="sidebar-section">
+                Loadouts
+            </div>
+            <div class="sidebar-section">
+                Settings
+            </div>
+            <div class="sidebar-section">
+                Miscellaneous
+            </div>
+            <div class="sidebar-section">
+                Credits/Copyright
+            </div>
+        </nav>
+        <span></span>
+        <div id="home-content-wrapper">
+            <section class="content-section" id="home-content-section">
+                <h2>Welcome to The Battle Cats Collectopedia (BCC)!</h2>
+                <h6>Also known as BCUnitList</h6>
+                <p>This is an unofficial, fan-run website for cat-aloging your collection of cats in the popular mobile game <i>The Battle Cats</i>.</p>
+                <p>Here on the home page, you can view explanations for any other page by selecting one of the options on the left, or go to another page by clicking one of the options on the top.</p>
+                <p>Most things on the website will have a hover tooltip providing a brief explanation of what they mean.</p>
+                <p>Don't know what <i>The Battle Cats</i> is? Check out the app on <a href="https://play.google.com/store/apps/details?id=jp.co.ponos.battlecatsen&hl=en_US">Android</a> or <a href="https://apps.apple.com/us/app/the-battle-cats/id850057092">iOS</a>. If you haven't played the game this website isn't very useful...</p>
+                <p>And don't forget,</p>
+                <div id="home-cat-quote" class="h-align">
+                    <span id="home-splash"></span>
+                </div>
             </section>
-            <section>
-                <h3>Credits/Sources</h3>
+            <section class="content-section hidden">
+                <h2>All Units</h2>
+                <p>This tab displays a list of every unit in the game, sorted by rarity.</p>
+                <img src="./assets/img/home-tutorial/unit-row-example-1.png" loading="lazy">
+                <p>By clicking or scrolling, you can change every aspect of a unit to match how you've upgraded them:</p>
+                <img src="./assets/img/home-tutorial/unit-row-example-2.png" loading="lazy">
+                <hr>
+                <p>With so many units, it can be hard to find a specific one. Use the quick nav at the bottom left to jump to a unit or rarity.</p>
+                <img src="./assets/img/home-tutorial/unit-quick-nav-example.png" loading="lazy">
+                <p>Even with quick nav, there are still a lot of units to go through. Each table has an options button for quickly filtering or modifying large numbers of units at once.</p>
+                <div class="v-align multi-image-example">
+                    <img src="./assets/img/home-tutorial/normal-unsorted.png" loading="lazy">
+                    <p>↓</p>
+                    <img src="./assets/img/home-tutorial/disable-tf-example.png" loading="lazy">
+                    <p>↓</p>
+                    <img src="./assets/img/home-tutorial/normal-sorted.png" loading="lazy">
+                </div>
+                <p>You can click the headers (the boxes that say "ID", "Icon", etc.) to sort the table in ascending order. Click the header again to switch to descending order. Check the Settings page for a brief explanation of how units are sorted for each header.</p>
+                <p>The options box for each unit contains buttons to quickly modify the unit's values. Hover on each button to see what it does, but an explanation is also shown below. Buttons are only shown when the unit could be modified by the option.</p>
                 <ul>
-                    <li><a href="https://battlecats.miraheze.org/wiki/Battle_Cats_Wiki">https://battlecats.miraheze.org/wiki/Battle_Cats_Wiki</a></li>
-                    <ul>
-                        <li>For unit data, images, and data validation.</li>
-                    </ul>
+                    <li>R: Resets the unit, removing all upgrades and unfavoriting the unit.</li>
+                    <li>L: Sets the unit's level to max. This includes any levels that require catseyes.</li>
+                    <li>+: Sets the unit's plus level to max.</li>
+                    <li>T: Sets the unit's talents to max.</li>
+                    <li>UT: Sets the unit's ultra talents to max.</li>
+                    <li>M: Maxes all of the units upgrades. This includes all of the previously mentioned options, as well as the unit's form.</li>
+                    <li>H: Hides the unit. This prevents the unit from appearing in any unit tables, and lasts until showing all units using the table options menu.</li>
                 </ul>
+                <p>Note that there is no button to set the unit's Talent Orbs to max, because many units have multiple equally useful talent orb options.</p>
+            </section>
+            <section class="content-section hidden">
+                <h2>Single Unit</h2>
+                <p>If you just want to update a single unit, there's no reason to wait for all of the units' data to load. This page lets you focus on a single unit in greater detail.</p>
+                <p>This page combines the upgrade costs tab and all units tab into one place, but for only one unit at a time.</p>
+                <img src="./assets/img/home-tutorial/single-unit-example.png" loading="lazy">
+            </section>
+            <section class="content-section hidden">
+                <h2>Categories</h2>
+                <p>Categories are a way of organizing cats into groups of related units, such as all units from the same gacha banner, or all Li'l cats.</p>
+                <p>This tab acts the same as the All Units tab, but instead of tables for each rarity, there are tables for each category.</p>
+                <img src="./assets/img/home-tutorial/category-example.png" loading="lazy">
+                <p>There are a bunch of predefined categories, but if you wish, you can customize which ones are shown, or create your own categories, in the Settings tab.</p>
+            </section>
+            <section class="content-section hidden">
+                <h2>Upgrade Costs</h2>
+                <p>Ever wonder how much EXP you need to level up every unit to level 30. How about how much catfruit you need to farm?</p>
+                <p>In the Upgrade Costs tab, you can view the total amount of every resource in the game needed to fully upgrade every cat of a certain rarity or category.</p>
+                <img src="./assets/img/home-tutorial/cost-example.png" loading="lazy">
+                <p>There are a bunch of predefined categories, but if you wish, you can customize which ones are shown, or create your own categories, in the Settings tab.</p>
+                <p>There are two special categories, "All Units", which is self-explanatory, and "Abilities", which are the non-cat upgrades shown in the in-game upgrade menu after the normal cats.</p>
+                <p>Finally, for any category with an Uber Super Rare, there is an option to include resources needed for Ultra Form and Ultra Talent related upgrades. When this is turned off, any upgrade that relies on spending Dark Catseyes is not counted in the upgrade costs.</p>
+            </section>
+            <section class="content-section hidden">
+                <h2>Cat Base</h2>
+                <p>This page contains all of the upgrades that effect gameplay but aren't related to units.</p>
+                <p>The page contains your total user rank, useful for seeing if you forgot to set a unit's level. There are also several subtabs.</p>
+                <img src="./assets/img/home-tutorial/ur-example.png" loading="lazy">
+                <p>The first subtab is for treasures. There is a slider for each treasure in each chapter, as well as buttons to quickly max treasures, since you have them all maxed, right?</p>
+                <img src="./assets/img/home-tutorial/treasure-example.png" loading="lazy">
+                <p>The second subtab is for the Cat Cannon & variants. You can level up each part of the different designs. Of course, the initial cannon only has one part, which also controls your base's health.</p>
+                <img src="./assets/img/home-tutorial/cannon-example.png" loading="lazy">
+                <p>The third subtab is for having purchased The Cat God (completely different from the popular Cat God), and for your levels in each Ability. Abilities are the upgrades in the normal cat upgrade menu that aren't actually cats, e.g. the Study ability that increases EXP earned.</p>
+                <img src="./assets/img/home-tutorial/ability-example.png" loading="lazy">
+                <p>The final subtab is for the random other upgrades that don't fit cleanly into a specific subtab. Right now, the only upgrades in here are the Aku Altar level cap, and a toggle for if the Aku Altar has been fully disabled.</p>
+            </section>
+            <section class="content-section hidden">
+                <h2>Loadouts</h2>
+                <p>With the limited number of in-game loadouts, it can be difficult to save loadouts for specific levels, especially if they reset like Labrynth levels.</p>
+                <p>In the Loadouts tab, you can create loadouts like in game, equipping cannon parts and any unit you own in the website. Ownership is defined as the unit being at least level 1.</p>
+                <img src="./assets/img/home-tutorial/loadout-example.png" loading="lazy">
+                <p>You can also generate a share code. This code can be entered into the "Freeform Loadouts" view, which lets you create loadouts with any unit in the game, even if you haven't marked them as owned on the website.</p>
+                <p>These share codes are a great way to ask for advice on a loadout or to give someone a loadout to help them with a stage they're struggling on.</p>
+                <div class="v-align" id="home-break-overflow">
+                    <p>The loadout in the previous image, for example, can be loaded using the following code!</p>
+                    <h6>eyJ0aXRsZSI6ImZpc2giLCJ1bml0cyI6WyJJNkYyTDIwKzkwIiwiSTY4NEYyTDUwKzcwIiwiSTk3RjJMNTAiLCJJMzZGMkw1MCs3MFQxMC0xMC0xMC0xMC0xMCIsIkk1MUYyTDUwKzgwVDEwLTEwLTEtMTAtMTAiLCJJMzExRjJMNTArNjBUMS0xMC0xMC0xMC0xMCIsIkk3NEYyTDUwIl0sImZvcm1zIjpbMCwwLDAsMiwxLDAsMF0sImJhc2VMZXZlbHMiOls3LDEsMV19</h6>
+                </div>
+                <p>In the "Freeform Loadouts" view, you can also modify the unit's upgrades, and your cannon levels, without modifying your units elsewhere on the site.</p>
+            </section>
+            <section class="content-section hidden">
+                <h2>Settings</h2>
+                <p>There are several types of settings, starting with global unit filters. These are especially useful filters that apply to the entire website. This website actually contains every unit in every version of the game, but since it is English focused, units exclusive to non-English versions of the game are hidden by default using one of these global filters.</p>
+                <img src="./assets/img/home-tutorial/not-in-en-example.png" loading="lazy">
+                <p>Next is the global category selection. This is like the global unit filters, but for entire unit categories. This does not effect the individual unit views, only categories as in the Categories and Upgrade Costs tabs.</p>
+                <p>After that is the custom unit categories section. This allows you to create categories with any grouping of units you want.</p>
+                <img src="./assets/img/home-tutorial/custom-category-example.png" loading="lazy">
+                <p>These custom categories work like any other category. You can even hide them in the global category selection if you want!</p>
+                <img src="./assets/img/home-tutorial/custom-category-result-example.png" loading="lazy">
+                <p>Then, there are the settings that modify how you view the website. They are divided into three parts:</p>
                 <ul>
-                    <li><a href="https://thanksfeanor.pythonanywhere.com/xpcurves">https://thanksfeanor.pythonanywhere.com/xpcurves</a></li>
-                    <ul>
-                        <li>For providing more accurate XP level curves for old/weird collab units than the wiki.</li>
-                    </ul>
+                    <li>
+                        Organization settings are settings that effect how some things get displayed, making it easier to focus on what you care about the most.
+                        <ul>
+                            <li>
+                                <p><b>Auto-Collapse Tables</b>: You can click on the title of any table that displays units to hide the units. This option, has those tables start collapsed.</p>
+                            </li>
+                            <li>
+                                <p><b>Auto-Collapse Category Sections</b>: Categories are divided into sections (e.g. "Collabs" or "Seasonal Events"). Like with tables, you can click on these section titles to collapse them, hiding all of the categories inside. This option has those sections start collapsed.</p>
+                            </li>
+                            <li>
+                                <p><b>Single Category Display</b>: This option has the Categories and Upgrade Costs pages only show one category at a time, using the "Select Categories" panel at the bottom of the page to switch between categories.</p>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        Default Sort settings is a single setting that controls exactly what the name suggests. Any table with units in it will be initially sorted using the sort specified here.
+                        <ul>
+                            <li><b>In-Game Order</b> sorts units based on their order in the actual game, which is a weird mix of the unit's category, ID, and date added to the game.</li>
+                            <li><b>ID</b> is sorted in numerical order.</li>
+                            <li><b>Names</b> are sorted in alphabetical order based on the unit's form when loading the table.</li>
+                            <li><b>Forms</b> are sorted lowest to highest based on the unit's form when loading the table.</li>
+                            <li><b>Levels</b> are sorted numerically based first on regular level, then on plus level.</li>
+                            <li><b>Talents</b> are sorted numerically based first on the number of maxed out talents, then on the number of non-maxed talents, then finally on the number of unleved talents.</li>
+                            <li><b>Talent Orbs</b> are sorted numerically on the quality of the orbs on the unit, with a single orb of a higher rank beating out any number of orbs of a lower rank (so 1 S rank orb is higher numerically then 2 A rank orbs). Units without orb slots are put lowest numerically.</li>
+                            <li><b>Favorited</b> puts favorited units before nonfavorited units.</li>
+                        </ul>
+                        All of these sort options can be ascending or descending. If there is ever a tie, the tie is resolved by using the two unit's IDs in numerical order.
+                    </li>
+                    <li>
+                        Other settings are miscellaneous settings that do something unique.
+                        <ul>
+                            <li>
+                                <p><b>Arrow Upgrade Controls</b>: Adds increment and decrement arrows for anything on the website that you modify by scrolling the mouse wheel. Good for touch pads!</p>
+                            </li>
+                        </ul>
+                        <img src="./assets/img/home-tutorial/arrow-control-example.png" loading="lazy">
+                        <ul>
+                            <li>
+                                <p><b>Show Empty Categories</b>: By default, any category containing only units that are filtered out by global filters is removed. This setting stops that, so every category always exists.</p>
+                            </li>
+                            <li>
+                                <p><b>Short Browsing History</b>: By default, this website creates a new entry in your browsing history every time you switch tabs. This can quickly fill up your browsing history. This setting changes that, so changing tabs does not effect the page history.</p>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
-                <ul>
-                    <li><a href="https://mygamatoto.com">https://mygamatoto.com</a></li>
-                    <ul>
-                        <li>For unit data and generally being a helpful source of information.</li>
-                    </ul>
-                </ul>
-                <ul>
-                    <li><a href="https://github.com/battlecatsinfo/battlecatsinfo.github.io">https://github.com/battlecatsinfo/battlecatsinfo.github.io</a></li>
-                    <ul>
-                        <li>For having a lot of information about the Japanese version of the game.</li>
-                    </ul>
-                </ul>
-                <ul>
-                    <li><a href="https://github.com/battlecatsultimate/BCU-java-PC">https://github.com/battlecatsultimate/BCU-java-PC</a></li>
-                    <ul>
-                        <li>For some images (in particular talent orb components)</li>
-                    </ul>
-                </ul>
-    
+                <p>Lastly, there are the save management settings. These are powerful settings, so be careful when using one.</p>
+                <p>Import Save allows you to load a save from a file or from the clipboard. You can create a save in the clipboard or in a file using the options from Export Save.</p>
+                <p>Lastly, there is an option to delete your save data. This deletes everything, including settings, and cannot be undone except by loading a previous save (Assuming you created one).</p>
+                <p>After importing or deleting a save, it is recommended that you refresh the page, or at least change tabs, before attempting to make any changes.</p>
+
+                <p>There is a small message at the bottom of the page when using any of the save management settings. If that box is red, it means the action you tried to do failed, so read it carefully!</p>
+                <!-- Picture of successful save to file versus failed save to file, multi image -->
+            </section>
+            <section class="content-section hidden">
+                <h2>Miscellaneous</h2>
+                <p>This section covers features and information about the website not specific to a single tab.</p>
+                <p>In the top right, you'll see Update <span id="home-update-ver"></span>. This site is updated manually, so that number lets you know what version of the app the site is updated to. Any new units, upgrades/forms, or mechanics that are added in an update after the one displayed have not been added yet, so please be patient :)</p>
+                <p>If you encounter any errors with the site, unit values that are incorrect, or just have something that you think it's really important gets added, please let me know! On the GitHub, there is a few issue templates for different possible issues. Please use one of those, but before you do, double check that there isn't actually a mistake on the Wiki or from your end.</p>
+            </section>
+            <section class="content-section hidden">
+                <h2>Credits/Copyright</h2>
+                <div class="home-citation">
+                    <a href="https://battlecats.miraheze.org/wiki/Battle_Cats_Wiki">https://battlecats.miraheze.org/wiki/Battle_Cats_Wiki</a>
+                    <p>For unit data, images, and data validation.</p>
+                </div>
+                <div class="home-citation">
+                    <a href="https://thanksfeanor.pythonanywhere.com/xpcurves">https://thanksfeanor.pythonanywhere.com/xpcurves</a>
+                    <p>For providing more accurate XP level curves for old/weird collab units.</p>
+                </div>
+                <div class="home-citation">
+                    <a href="https://mygamatoto.com">https://mygamatoto.com</a>
+                    <p>For unit data and generally being a helpful source of information.</p>
+                </div>
+                <div class="home-citation">
+                    <a href="https://github.com/battlecatsinfo/battlecatsinfo.github.io">https://github.com/battlecatsinfo/battlecatsinfo.github.io</a>
+                    <p>For having a lot of information about the Japanese version of the game.</p>
+                </div>
+                <div class="home-citation">
+                    <a href="https://github.com/battlecatsultimate/BCU-java-PC">https://github.com/battlecatsultimate/BCU-java-PC</a>
+                    <p>For several images that are a pain to find otherwise.</p>
+                </div>
+
                 <p>And of course PONOS Corporation for making the game!</p>
-                <h4>Minor legal note</h4>
-                <p class="centered-text">All data and images from The Battle Cats, as well as the name, brand, and any other related content, belong to PONOS Corporation. I do not make any claim of ownership for anything originally produced by PONOS.</p>
+                <h4>Copyright Notice</h4>
+                <p>All data and images from The Battle Cats, as well as the name, brand, and any other related content, belong to PONOS Corporation. I do not make any claim of ownership for anything originally produced by PONOS.</p>
+                <p>This site is non-profit, and exists under fair use as an educational/informational tool.</p>
             </section>
         </div>
     </div>

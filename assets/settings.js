@@ -1,5 +1,5 @@
 const SETTINGS = {
-    "version": "1.9",
+    "version": "1.10",
     "gameVersion": "14.3.3",
     "unitCount": 798,
     "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782],

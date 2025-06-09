@@ -45,10 +45,6 @@ function loadCategories() {
         subWrapper.appendChild(table);
         attachTableOptionsAndFilters(table);
 
-        if(window.localStorage.getItem("s4") === "1") {
-            subWrapper.classList.add("hidden");
-        }
-
         loadingBar.increment();
     });
 
@@ -118,7 +114,7 @@ function appendAllCategoryTables(loadingBar, categoryData) {
 
             tables.push(appendCategoryUnitTable(key, subCategory, subWrapper, categoryData, loadingBar));
 
-            if(window.localStorage.getItem("s4") === "1" || window.localStorage.getItem("s5") === "1") {
+            if(window.localStorage.getItem("s5") === "1") {
                 subWrapper.classList.add("hidden");
                 hidden = true;
             }

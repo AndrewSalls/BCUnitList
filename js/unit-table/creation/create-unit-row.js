@@ -70,6 +70,7 @@ export function createIconBox(id, currentForm, maxForm, iconDisabled, nameCallba
 
     const rowIMG = document.createElement("img");
     rowIMG.classList.add("unit-icon");
+    rowIMG.loading = "lazy";
 
     if(iconDisabled) {
         rowIMG.src = "./assets/img/unit_icon/unknown.png";

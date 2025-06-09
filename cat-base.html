@@ -29,19 +29,24 @@
             <div id="other-selector" class="v-align">
                 <h3>Aku Seal</h3>
                 <div class="h-align">
-                    <label for="seal-broken">Seal Broken?</label>
-                    <input type="checkbox" id="seal-broken" title="Whether the Aku Realms have been cleared, disabling the Aku Altar.">
-                </div>
-                <div class="h-align">
-                    <label for="seal-level">Aku Seal Level</label>
+                    <img id="seal-altar" src="./assets/img/active_altar.png" loading="lazy">
                     <div class="v-align">
-                        <svg id="seal-up-arrow" class="upgrade-arrow" viewBox="0 0 32 24">
-                            <path d="M0 24 L16 8 L32 24"></path>
-                        </svg>
-                        <input type="number" min="0" max="50" step="1" id="seal-level" title="The maximum level of units while the Aku Altar is active.">
-                        <svg id="seal-down-arrow" class="upgrade-arrow" viewBox="0 0 32 24">
-                            <path d="M0 0 L16 16 L32 0"></path>
-                        </svg>
+                        <div class="h-align">
+                            <label for="seal-broken">Seal Broken?</label>
+                            <input type="checkbox" id="seal-broken" title="Whether the Aku Realms have been cleared, disabling the Aku Altar.">
+                        </div>
+                        <div class="h-align">
+                            <label for="seal-level">Aku Seal Level</label>
+                            <div class="v-align">
+                                <svg id="seal-up-arrow" class="upgrade-arrow" viewBox="0 0 32 24">
+                                    <path d="M0 24 L16 8 L32 24"></path>
+                                </svg>
+                                <input type="number" min="0" max="50" step="1" id="seal-level" title="The maximum level of units while the Aku Altar is active.">
+                                <svg id="seal-down-arrow" class="upgrade-arrow" viewBox="0 0 32 24">
+                                    <path d="M0 0 L16 16 L32 0"></path>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

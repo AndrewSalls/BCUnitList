@@ -8,7 +8,13 @@ export default function loadOtherInfo() {
     const sealLevel = /** @type {!HTMLInputElement} */ (document.querySelector("#seal-level"));
 
     brokenCheck.checked = window.localStorage.getItem("akb") === "1";
-    brokenCheck.onchange = () => window.localStorage.setItem("akb", brokenCheck.checked ? "1" : "0");
+    if(brokenCheck.checked) {
+        /** @type {HTMLImageElement} */ (document.querySelector("#seal-altar")).src = "./assets/img/inactive_altar.png";
+    }
+    brokenCheck.onchange = () => {
+        window.localStorage.setItem("akb", brokenCheck.checked ? "1" : "0");
+        /** @type {HTMLImageElement} */ (document.querySelector("#seal-altar")).src = `./assets/img/${brokenCheck.checked ? "in" : ""}active_altar.png`;
+    }
 
     sealLevel.value = window.localStorage.getItem("akl") ?? "0";
     sealLevel.onchange = () => {
