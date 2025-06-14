@@ -105,6 +105,7 @@ function openWarningModal(warningText, warningAction, confirmCallback, showFileS
         document.querySelector("#warning-modal")?.classList.add("hidden");
         document.body.classList.remove("unscrollable");
         document.documentElement.scrollTop = topPos;
+        document.body.style.top = '';
     };
 
     document.querySelector("#warning-modal")?.classList.remove("hidden");

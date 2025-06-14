@@ -26,69 +26,75 @@ function loadCosts() {
     const loadingBar = createLoadingBar(10, () => {
         CategorySelector.allowSelection();
     });
+    
+    if(window.localStorage.getItem("s7") === "0") {
 
-    attachTotalCostTable(container[0], loadingBar);
-    REQUEST_TYPES.GET_UPGRADE_COST().then(data => {
-        container[1].appendChild(createAbilityTableFromData(data));
-        loadingBar.increment();
-    });
-    REQUEST_TYPES.GET_RARITY_COST(RARITY.NORMAL).then(data => {
-        const table = createTableFromData(data, "Normal");
-        table.classList.add("normal-color");
-        container[2].appendChild(table);
-        loadingBar.increment();
-    });
-    REQUEST_TYPES.GET_RARITY_COST(RARITY.SPECIAL).then(data => {
-        const table = createTableFromData(data, "Special");
-        table.classList.add("special-color");
-        container[3].appendChild(table);
-        loadingBar.increment();
-    });
-    REQUEST_TYPES.GET_RARITY_COST(RARITY.RARE).then(data => {
-        const table = createTableFromData(data, "Rare");
-        table.classList.add("rare-color");
-        container[4].appendChild(table);
-        loadingBar.increment();
-    });
-    REQUEST_TYPES.GET_RARITY_COST(RARITY.SUPER_RARE).then(data => {
-        const table = createTableFromData(data, "Super Rare");
-        table.classList.add("super-rare-color");
-        container[5].appendChild(table);
-        loadingBar.increment();
-    });
-    REQUEST_TYPES.GET_RARITY_COST(RARITY.UBER_RARE).then(data => {
-        const table = createTableFromData(data, "Uber Rare");
-        table.classList.add("uber-rare-color");
-        container[6].appendChild(table);
-        loadingBar.increment();
-    });
-    REQUEST_TYPES.GET_RARITY_COST(RARITY.LEGEND_RARE).then(data => {
-        const table = createTableFromData(data, "Legend Rare");
-        table.classList.add("legend-rare-color");
-        table.querySelector(".collapsible")?.classList.add("legend-rare-multi");
-        container[7].appendChild(table);
-        loadingBar.increment();
-    });
-    REQUEST_TYPES.GET_FAVORITED_COST().then(data => {
-        const table = createTableFromData(data, "Favorited");
-        container[8].appendChild(table);
-        loadingBar.increment();
-    });
+        attachTotalCostTable(container[0], loadingBar);
+        REQUEST_TYPES.GET_UPGRADE_COST().then(data => {
+            container[1].appendChild(createAbilityTableFromData(data));
+            loadingBar.increment();
+        });
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.NORMAL).then(data => {
+            const table = createTableFromData(data, "Normal");
+            table.classList.add("normal-color");
+            container[2].appendChild(table);
+            loadingBar.increment();
+        });
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.SPECIAL).then(data => {
+            const table = createTableFromData(data, "Special");
+            table.classList.add("special-color");
+            container[3].appendChild(table);
+            loadingBar.increment();
+        });
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.RARE).then(data => {
+            const table = createTableFromData(data, "Rare");
+            table.classList.add("rare-color");
+            container[4].appendChild(table);
+            loadingBar.increment();
+        });
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.SUPER_RARE).then(data => {
+            const table = createTableFromData(data, "Super Rare");
+            table.classList.add("super-rare-color");
+            container[5].appendChild(table);
+            loadingBar.increment();
+        });
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.UBER_RARE).then(data => {
+            const table = createTableFromData(data, "Uber Rare");
+            table.classList.add("uber-rare-color");
+            container[6].appendChild(table);
+            loadingBar.increment();
+        });
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.LEGEND_RARE).then(data => {
+            const table = createTableFromData(data, "Legend Rare");
+            table.classList.add("legend-rare-color");
+            table.querySelector(".collapsible")?.classList.add("legend-rare-multi");
+            container[7].appendChild(table);
+            loadingBar.increment();
+        });
+        REQUEST_TYPES.GET_FAVORITED_COST().then(data => {
+            const table = createTableFromData(data, "Favorited");
+            container[8].appendChild(table);
+            loadingBar.increment();
+        });
 
-    REQUEST_TYPES.GET_CATEGORIES().then(categories => {
-        if(window.localStorage.getItem("s7") === "0") {
+        REQUEST_TYPES.GET_CATEGORIES().then(categories => {
             attachAllCategoryCostTables(loadingBar, categories);
-        } else {
+            loadingBar.increment();
+        });
+    } else {
+        bindGenericCategories(loadingBar);
+
+        REQUEST_TYPES.GET_CATEGORIES().then(categories => {
             const categorySearchBuiltin = document.querySelector("#builtin-categories");
             document.querySelector("#category-label-centering")?.classList.add("hidden");
 
+            const waitArray = [];
             for(const key of Object.keys(categories).sort()) {
                 const subButtons = [];
+                const superName = parseSnakeCase(key);
 
                 for(const subCategory of Object.keys(categories[key]).sort()) {
-                    const categoryButton = document.createElement("button");
-                    categoryButton.type = "button";
-                    categoryButton.textContent = parseSnakeCase(subCategory);
+                    const categoryButton = CategorySelector.createCategoryButton(parseSnakeCase(subCategory), container[7]);
                     categoryButton.onclick = () => {
                         container[7].innerHTML = "";
                         container[7].classList.remove("hidden");
@@ -96,13 +102,23 @@ function loadCosts() {
                     };
 
                     subButtons.push(categoryButton);
+                    if(window.localStorage.getItem("s3") === "0") {
+                        waitArray.push(REQUEST_TYPES.IS_ANY_UNFILTERED(categories[key][subCategory]).then(res => categoryButton.classList.toggle("hidden", !res)));
+                    }
                 }
-                categorySearchBuiltin?.appendChild(CategorySelector.createCategory(parseSnakeCase(key), subButtons));
-            }
-        }
 
-        loadingBar.increment();
-    });
+                categorySearchBuiltin?.appendChild(CategorySelector.createCategory(superName, subButtons));
+            }
+            
+            REQUEST_TYPES.GET_FAVORITED_COST().then(data => {
+                const table = createTableFromData(data, "Favorited");
+                container[7].appendChild(table);
+                loadingBar.rincrement();
+            });
+
+            Promise.all(waitArray).then(_res => loadingBar.increment());
+        });
+    }
 }
 
 /**
@@ -207,4 +223,94 @@ function attachTotalCostTable(target, loadingBar) {
         target.appendChild(table);
         loadingBar.increment();
     });
+}
+
+/**
+ * Initializes select categories generic category buttons to load the category in single category mode
+ * @param {import("./helper/loading.js").LOADING_BAR} loadingBar A loading bar that hides the page until content has finished loading.
+ */
+function bindGenericCategories(loadingBar) {
+    const buttons = /** @type {HTMLButtonElement[]} */ ([...document.querySelectorAll("#base-categories button")]);
+    const container = document.querySelectorAll(".default-table")[7];
+
+    buttons[0].onclick = () => attachTotalCostTable(container, loadingBar);
+    loadingBar.increment();
+    buttons[1].onclick = () => {
+        REQUEST_TYPES.GET_UPGRADE_COST().then(data => {
+            container.innerHTML = "";
+            container.classList.remove("hidden");
+            container.appendChild(createAbilityTableFromData(data));
+        });
+    };
+    loadingBar.increment();
+    buttons[2].onclick = () => {
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.NORMAL).then(data => {
+            const table = createTableFromData(data, "Normal");
+            table.classList.add("normal-color");
+            container.innerHTML = "";
+            container.classList.remove("hidden");
+            container.appendChild(table);
+        });
+    };
+    loadingBar.increment();
+    buttons[3].onclick = () => {
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.SPECIAL).then(data => {
+            const table = createTableFromData(data, "Special");
+            table.classList.add("special-color");
+            container.innerHTML = "";
+            container.classList.remove("hidden");
+            container.appendChild(table);
+        });
+    };
+    loadingBar.increment();
+    buttons[4].onclick = () => {
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.RARE).then(data => {
+            const table = createTableFromData(data, "Rare");
+            table.classList.add("rare-color");
+            container.innerHTML = "";
+            container.classList.remove("hidden");
+            container.appendChild(table);
+        });
+    };
+    loadingBar.increment();
+    buttons[5].onclick = () => {
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.SUPER_RARE).then(data => {
+            const table = createTableFromData(data, "Super Rare");
+            table.classList.add("super-rare-color");
+            container.innerHTML = "";
+            container.classList.remove("hidden");
+            container.appendChild(table);
+        });
+    };
+    loadingBar.increment();
+    buttons[6].onclick = () => {
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.UBER_RARE).then(data => {
+            const table = createTableFromData(data, "Uber Rare");
+            table.classList.add("uber-rare-color");
+            container.innerHTML = "";
+            container.classList.remove("hidden");
+            container.appendChild(table);
+        });
+    };
+    loadingBar.increment();
+    buttons[7].onclick = () => {
+        REQUEST_TYPES.GET_RARITY_COST(RARITY.LEGEND_RARE).then(data => {
+            const table = createTableFromData(data, "Legend Rare");
+            table.classList.add("legend-rare-color");
+            table.querySelector(".collapsible")?.classList.add("legend-rare-multi");
+            container.innerHTML = "";
+            container.classList.remove("hidden");
+            container.appendChild(table);
+        });
+    };
+    loadingBar.increment();
+    buttons[8].onclick = () => {
+        REQUEST_TYPES.GET_FAVORITED_COST().then(data => {
+            const table = createTableFromData(data, "Favorited");
+            container.innerHTML = "";
+            container.classList.remove("hidden");
+            container.appendChild(table);
+        });
+    };
+    loadingBar.increment();
 }

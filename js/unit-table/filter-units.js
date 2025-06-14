@@ -15,6 +15,7 @@ export function initializeTableModal() {
         tableModal.classList.add("hidden");
         document.body.classList.remove("unscrollable");
         document.documentElement.scrollTop = topPos;
+        document.body.style.top = '';
     });
 
     initializeUpdateOptions();

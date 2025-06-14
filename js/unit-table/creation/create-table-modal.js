@@ -130,7 +130,7 @@ function createFilterSelection() {
     filterButtonCollection.id = "table-filter-options";
 
     filterButtonCollection.appendChild(createModalButtonSuperGroup("Misc", [
-        createModalButton("Units that haven't been released or are summons", "fake-filter", "Unreleased"),
+        createModalButton("Units that cannot be added to a loadout without cheating (e.g. Summons)", "fake-filter", "Unreleased"),
         createModalButton("Collab Exclusive Units", "collab-filter", "Collab"),
         createModalButton("JP/KR/TW Exclusive Units", "version-filter", "Not in EN")
     ], [

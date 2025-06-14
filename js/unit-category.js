@@ -56,6 +56,7 @@ function loadCategories() {
             const replaceTable = /** @type {HTMLDivElement} */ (document.querySelector("#favorited-table"));
             document.querySelector("#category-label-centering")?.classList.add("hidden");
 
+            const waitArray = [];
             for(const key of Object.keys(categories).sort()) {
                 const subButtons = [];
 
@@ -69,11 +70,14 @@ function loadCategories() {
                     };
 
                     subButtons.push(categoryButton);
+                    if(window.localStorage.getItem("s3") === "0") {
+                        waitArray.push(REQUEST_TYPES.IS_ANY_UNFILTERED(categories[key][subCategory]).then(res => categoryButton.classList.toggle("hidden", !res)));
+                    }
                 }
                 categorySearchBuiltin?.appendChild(CategorySelector.createCategory(parseSnakeCase(key), subButtons));
             }
 
-            loadingBar.increment();
+            Promise.all(waitArray).then(_res => loadingBar.increment());
         }
     });
 }
