@@ -5,6 +5,7 @@ import createLoadingBar from "./helper/loading.js";
 import { parseSnakeCase } from "./helper/parse-string.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 import { RARITY } from "./data/unit-data.js";
+import SETTINGS from "../assets/settings.js";
 
 /**
  * Initializes page elements once page has loaded.
@@ -200,7 +201,11 @@ function createIconList(idList) {
     REQUEST_TYPES.GET_MULTIPLE_DATA(idList, true).then(unitList => {
         for(const unit of unitList) {
             const iconIMG = document.createElement("img");
-            iconIMG.src = `./assets/img/unit_icon/${unit.id}_${unit.current_form}.png`;
+            if(SETTINGS.skipImages.includes(unit.id)) {
+                iconIMG.src = "./assets/img/unit_icon/unknown.png";
+            } else {
+                iconIMG.src = `./assets/img/unit_icon/${unit.id}_${unit.current_form}.png`;
+            }
             iconIMG.onerror = () => iconIMG.src = "./assets/img/unit_icon/unknown.png";
             iconIMG.title = [unit.normal_form, unit.evolved_form, unit.true_form, unit.ultra_form][unit.current_form] ?? "";
             wrapper.appendChild(iconIMG);
