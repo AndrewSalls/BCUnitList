@@ -1,8 +1,8 @@
 const SETTINGS = {
-    "version": "1.10.2",
-    "gameVersion": "14.3.3",
-    "unitCount": 798,
-    "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782],
+    "version": "2.0",
+    "gameVersion": "14.4",
+    "unitCount": 810,
+    "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782, 800, 802],
     "chapters": {
         "eoc": {
             "name": "Empire of Cats",

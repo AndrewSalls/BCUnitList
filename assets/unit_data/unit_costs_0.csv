@@ -56,7 +56,7 @@ ID,LevelFormat,TrueXPCost,TrueMaterial1,TrueMaterialCount1,TrueMaterial2,TrueMat
 54,GachaSR,,,,,,,,,,,,,,,,,,,,,,,,
 55,,200000,green_seed,3,purple_seed,2,blue_seed,2,yellow_seed,1,red_fruit,2,75-95-50-75-75,,,,,,,,,,,,
 56,,200000,purple_seed,1,red_seed,2,blue_seed,3,yellow_seed,2,green_fruit,2,50-50-75-75-75,,,,,,,,,,,,
-57,,1000000,green_fruit,4,purple_fruit,5,blue_fruit,4,yellow_fruit,4,epic_fruit,3,235-100-100-175-175,,,,,,,,,,,,
+57,,1000000,green_fruit,4,purple_fruit,5,blue_fruit,4,yellow_fruit,4,epic_fruit,3,235-100-100-175-175,,,,,,,,,,,,225-285-150
 58,,200000,green_seed,3,purple_seed,2,blue_seed,2,yellow_seed,1,red_fruit,2,75-50-75-75-75,,,,,,,,,,,,
 59,,1000000,green_fruit,6,red_fruit,3,blue_fruit,6,yellow_fruit,4,epic_fruit,4,235-175-100-175-175,2000000,blue_gem,1,green_gem,1,green_fruit,10,,,,,
 60,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -75,7 +75,7 @@ ID,LevelFormat,TrueXPCost,TrueMaterial1,TrueMaterialCount1,TrueMaterial2,TrueMat
 73,,1000000,green_fruit,6,purple_fruit,8,blue_fruit,4,yellow_fruit,3,epic_fruit,4,235-175-100-175-175,2000000,blue_gem,1,red_gem,1,purple_gem,1,aku_fruit,3,,,
 74,Salary,,,,,,,,,,,,,,,,,,,,,,,,
 75,,1000000,green_fruit,8,purple_fruit,4,red_fruit,2,yellow_fruit,5,epic_fruit,4,235-235-100-175-175,2000000,green_gem,2,yellow_stone,5,gold_fruit,1,,,,,
-76,,1000000,purple_fruit,4,red_fruit,8,blue_fruit,3,yellow_fruit,4,epic_fruit,4,235-175-100-175-175,,,,,,,,,,,,
+76,,1000000,purple_fruit,4,red_fruit,8,blue_fruit,3,yellow_fruit,4,epic_fruit,4,235-175-100-175-175,2000000,red_gem,2,green_stone,10,gold_fruit,1,,,,,
 77,Adult,,,,,,,,,,,,,,,,,,,,,,,,
 78,,,,,,,,,,,,,,,,,,,,,,,,,
 79,Adult,,,,,,,,,,,,,,,,,,,,,,,,

@@ -22,7 +22,7 @@ ID,LevelFormat,TrueXPCost,TrueMaterial1,TrueMaterialCount1,TrueMaterial2,TrueMat
 720,BadCollab,200000,purple_stone,15,blue_stone,15,red_gem,2,green_gem,2,yellow_gem,1,,,,,,,,,,,,,
 721,,,,,,,,,,,,,,,,,,,,,,,,,
 722,,,,,,,,,,,,,,,,,,,,,,,,,
-723,,,,,,,,,,,,,,,,,,,,,,,,,
+723,,1000000,epic_seed,1,yellow_fruit,5,,,,,,,,,,,,,,,,,,,
 724,Advent,200000,red_stone,15,green_stone,15,purple_gem,2,blue_gem,2,,,,,,,,,,,,,,,
 725,,,,,,,,,,,,,,,,,,,,,,,,,
 726,BadCollab,,,,,,,,,,,,,,,,,,,,,,,,
@@ -98,3 +98,4 @@ ID,LevelFormat,TrueXPCost,TrueMaterial1,TrueMaterialCount1,TrueMaterial2,TrueMat
 796,BadEvents,,,,,,,,,,,,,,,,,,,,,,,,
 797,BadEvents,,,,,,,,,,,,,,,,,,,,,,,,
 798,BadEvents,,,,,,,,,,,,,,,,,,,,,,,,
+799,,,,,,,,,,,,,,,,,,,,,,,,,
