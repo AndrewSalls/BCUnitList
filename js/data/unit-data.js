@@ -52,6 +52,17 @@ export const FORM = {
  * @property {boolean} favorited
  * @property {boolean} hidden
  * 
+ * @typedef UNIT_STATS
+ * @property {number} health
+ * @property {number} attack
+ * @property {number} range
+ * @property {number} knockbacks
+ * @property {number} speed
+ * @property {number} cooldown
+ * @property {boolean} has_area
+ * @property {string[]} targets
+ * @property {string[]} abilities
+ * 
  * @typedef UNIT_DATA
  * @property {number} id
  * @property {RARITY} rarity
@@ -72,6 +83,7 @@ export const FORM = {
  * @property {ORB[]} orb
  * @property {boolean} favorited
  * @property {boolean} hidden
+ * @property {UNIT_STATS[]} stats
  */
 
 /**

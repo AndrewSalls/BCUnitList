@@ -43,6 +43,7 @@ const SETTINGS = {
             "costTypes": [2, 0, 0, 1, 1, 1, 1, 1, 1, 1]
         }
     },
-    "categoryTypes": ["collabs", "event_units", "gacha_non_uber", "gacha_seasonal", "gacha_uber", "other", "seasonal_events", "small_collabs", "story_units"]
+    "categoryTypes": ["collabs", "event_units", "gacha_non_uber", "gacha_seasonal", "gacha_uber", "other", "seasonal_events", "small_collabs", "story_units"],
+    "traits": ["Traitless", "Red", "Floating", "Black", "Angel", "Metal", "Alien", "Zombie", "Relic", "Aku"]
 };
 export default SETTINGS;

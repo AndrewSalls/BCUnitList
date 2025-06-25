@@ -19,76 +19,144 @@ async function getLevelCaps() {
  */
 export async function getUnitData(categories) {
     const unitCount = SETTINGS.unitCount;
-    const levelingCaps = await getLevelCaps();
+    const levelCaps = await getLevelCaps();
     const collabUnits = [...Object.values(categories["collabs"]).flat(), ...Object.values(categories["small_collabs"]).flat()];
     const unobtainableUnits = categories["other"]["Unobtainable"];
     let totalLevel = 0;
 
     const awaitFinish = [];
     for(let x = 0; x <= Math.floor(unitCount / 100); x++) {
-        awaitFinish.push(fetch(`./assets/unit_data/units_${x * 100}.csv`)
-            .then(r => r.text())
-            .then(t => Papa.parse(t, {
-                header: true,
-                dynamicTyping: true,
-                skipEmptyLines: true
-            }).data)
-            .then(entries => entries.map((/** @type {Object} */ entry) => {
-                    let levelType = levelingCaps.find((/** @type {{ Type: any; }} */ t) => t.Type === entry.LevelCapFormat);
-                    if(!levelType) {
-                        levelType = levelingCaps.find((/** @type {{ Type: string; }} */ t) => t.Type === "Default");
+        awaitFinish.push(new Promise(res => {
+            readDescriptiveData(x * 100, levelCaps).then(desc => {
+                readStatData(x * 100).then(stats => {
+                    for(let p = 0; p < desc.length; p++) {
+                        desc[p].stats = stats[p];
+                        desc[p].collab = collabUnits.includes(desc.id);
+                        desc[p].unobtainable = unobtainableUnits.includes(desc.id);
                     }
 
-                    const unitData = {
-                        id: entry.ID,
-                        rarity: entry.Rarity,
-                        in_EN: entry.InEN === "Y",
-                        collab: collabUnits.includes(entry.ID),
-                        unobtainable: unobtainableUnits.includes(entry.ID),
-                        normal_form: entry.NF,
-                        evolved_form: entry.EF,
-                        true_form: entry.TF,
-                        ultra_form: entry.UF,
-                        max_form: findFormNumber(entry.NF, entry.EF, entry.TF, entry.UF),
-                        level_cap: levelType,
-                        talents: parseTalents(entry.Talents),
-                        ultra_talents: parseTalents(entry.UltraTalents),
-                        orb: new Array(parseInt(entry.OrbCount)).fill(null),
-                        favorited: false,
-                        level: 0,
-                        plus_level: 0,
-                        current_form: FORM.NORMAL,
-                        hidden: false
-                    };
-                    
-                    if(window.localStorage.getItem(entry.ID)) {
-                        const decompressed = decodeUnit(window.localStorage.getItem(entry.ID));
-                        unitData.current_form = decompressed.current_form;
-                        unitData.favorited = decompressed.favorited;
-                        unitData.hidden = decompressed.hidden;
-                        unitData.level = decompressed.level;
-                        unitData.plus_level = decompressed.plus_level;
-                        for(let x = 0; x < decompressed.orb.length; x++) {
-                            unitData.orb[x] = decompressed.orb[x];
-                        }
-                        for(let x = 0; x < decompressed.talents.length; x++) {
-                            unitData.talents[x].value = decompressed.talents[x];
-                        }
-                        for(let x = 0; x < decompressed.ultra_talents.length; x++) {
-                            unitData.ultra_talents[x].value = decompressed.ultra_talents[x];
-                        }
-                    } else if(entry.ID === 0) { // Cat must be at least level 1, ensures no weirdness with not owning any units
-                        unitData.level = 1;
-                    }
-
-                    totalLevel += unitData.level + unitData.plus_level;
-                    return unitData;
-                })
-            ));
+                    res(desc);
+                });
+            });
+        }));
     }
 
     const output = (await Promise.all(awaitFinish)).flat();
     window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + totalLevel}`);
+    return output;
+}
+
+/**
+ * Reads in a file containing all descriptive unit data (data that describes qualities of a unit).
+ * @param {number} fileNumber The starting unit id of the read file, a multiple of 100.
+ * @param {import("../data/unit-data.js").LEVEL_CAP[]} levelCaps A list of all valid level cap types.
+ * @returns {Promise<any>} An unfinited unit object.
+ */
+async function readDescriptiveData(fileNumber, levelCaps) {
+    return fetch(`./assets/unit_data/units_${fileNumber}.csv`)
+        .then(r => r.text())
+        .then(t => Papa.parse(t, {
+            header: true,
+            dynamicTyping: true,
+            skipEmptyLines: true
+        }).data)
+        .then(entries => entries.map((/** @type {Object} */ entry) => {
+                let levelType = levelCaps.find((/** @type {{ Type: any; }} */ t) => t.Type === entry.LevelCapFormat);
+                if(!levelType) {
+                    levelType = levelCaps.find((/** @type {{ Type: string; }} */ t) => t.Type === "Default");
+                }
+
+                const unitData = {
+                    id: entry.ID,
+                    rarity: entry.Rarity,
+                    in_EN: entry.InEN === "Y",
+                    normal_form: entry.NF,
+                    evolved_form: entry.EF,
+                    true_form: entry.TF,
+                    ultra_form: entry.UF,
+                    max_form: findFormNumber(entry.NF, entry.EF, entry.TF, entry.UF),
+                    level_cap: levelType,
+                    talents: parseTalents(entry.Talents),
+                    ultra_talents: parseTalents(entry.UltraTalents),
+                    orb: new Array(parseInt(entry.OrbCount)).fill(null),
+                    favorited: false,
+                    level: 0,
+                    plus_level: 0,
+                    current_form: FORM.NORMAL,
+                    hidden: false
+                };
+                
+                if(window.localStorage.getItem(entry.ID)) {
+                    const decompressed = decodeUnit(window.localStorage.getItem(entry.ID));
+                    unitData.current_form = decompressed.current_form;
+                    unitData.favorited = decompressed.favorited;
+                    unitData.hidden = decompressed.hidden;
+                    unitData.level = decompressed.level;
+                    unitData.plus_level = decompressed.plus_level;
+                    for(let x = 0; x < decompressed.orb.length; x++) {
+                        unitData.orb[x] = decompressed.orb[x];
+                    }
+                    for(let x = 0; x < decompressed.talents.length; x++) {
+                        unitData.talents[x].value = decompressed.talents[x];
+                    }
+                    for(let x = 0; x < decompressed.ultra_talents.length; x++) {
+                        unitData.ultra_talents[x].value = decompressed.ultra_talents[x];
+                    }
+                } else if(entry.ID === 0) { // Cat must be at least level 1, ensures no weirdness with not owning any units
+                    unitData.level = 1;
+                }
+
+                return unitData;
+            })
+        );
+}
+
+/**
+ * Reads in a file containing all stat data (data that describes quantities of a unit).
+ * @param {number} fileNumber The starting unit id of the read file, a multiple of 100.
+ * @returns {Promise<any>} An unfinited unit object.
+ */
+async function readStatData(fileNumber) {
+    const output = [];
+
+    await fetch(`./assets/unit_data/unit_abilities_${fileNumber}.csv`)
+        .then(r => r.text())
+        .then(t => Papa.parse(t, {
+            header: true,
+            dynamicTyping: true,
+            skipEmptyLines: true
+        }).data)
+        .then(entries => {
+            for(const entry of entries) {
+                const outputObj = {
+                    cost: parseInt(entry.Cost),
+                    health: parseInt(entry.Health),
+                    damage: parseInt(entry.Damage),
+                    range: parseInt(entry.Range),
+                    knockbacks: parseInt(entry.KBCount),
+                    speed: parseInt(entry.Speed),
+                    cooldown: parseFloat(entry.Cooldown),
+                    has_area: entry.HasArea === "T",
+                    abilities: entry.Abilities?.split("-") ?? []
+                };
+
+                if(entry.Traits === "All") {
+                    outputObj.traits = [...SETTINGS.traits];
+                } else if(entry.Traits === "Non-Metal") {
+                    outputObj.traits = SETTINGS.traits.filter(t => t != "Metal");
+                } else {
+                    outputObj.traits = entry.Traits?.split("-") ?? [];
+                }
+
+                const id = parseInt(entry.ID) - fileNumber;
+                if(output[id]) {
+                    output[id].push(outputObj);
+                } else {
+                    output[id] = [outputObj];
+                }
+            }
+        });
+
     return output;
 }
 
