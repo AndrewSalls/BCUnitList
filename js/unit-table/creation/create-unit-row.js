@@ -2,6 +2,7 @@
 import { FORM } from "../../data/unit-data.js";
 import { createLevelInteractable, createOrbInteractable, createTalentInteractable } from "./create-row-interactable.js";
 import SETTINGS from "../../../assets/settings.js";
+import createStatRow from "./create-stat-row.js";
 
 /**
  * Creates a row in a unit table.
@@ -10,6 +11,7 @@ import SETTINGS from "../../../assets/settings.js";
  */
 export default function createRow(entry) {
     const row = document.createElement("tr");
+    row.classList.add("unit-mod-row");
     row.dataset.is_collab = entry.collab ? "Y" : "N";
     row.dataset.in_en = entry.in_EN ? "Y" : "N";
     row.dataset.is_unobtainable = entry.unobtainable ? "Y" : "N";
@@ -23,6 +25,9 @@ export default function createRow(entry) {
     const [talentBox, talentReset, talentMax, ultraTalentReset, ultraTalentMax] = createTalentBox(entry.talents, entry.ultra_talents);
     const [orbBox, orbReset] = createOrbBox(entry.orb);
     const [favoriteBox, favoriteReset] = createFavoriteBox(entry.favorited);
+    
+    let statRow = null;
+    let unobserveCallback = null;
     const optionsBox = createOptionsBox({
         reset: {
             icon: iconReset, level: levelReset, plusLevel: plusLevelReset, talent: talentReset, ultraTalent: ultraTalentReset, orb: orbReset, favorite: favoriteReset
@@ -33,6 +38,18 @@ export default function createRow(entry) {
         hide: () => {
             row.classList.add("hidden");
             document.querySelectorAll(`#unit-search-suggestions div[data-target='${entry.id}']`).forEach(o => o.classList.add("global-hidden"));
+        },
+        stats: () => {
+            if(!unobserveCallback) {              
+                const res = createStatRow(entry, row);
+                statRow = res.row;
+                unobserveCallback = res.callback;
+
+                row.insertAdjacentElement("afterend", statRow);
+            } else {
+                unobserveCallback();
+                statRow.remove();
+            }
         }
     });
 
@@ -250,7 +267,7 @@ export function createFavoriteBox(isFavorited) {
 
 /**
  * Creates the options column entry for the row.
- * @param {{ reset: { [key: string]: (() => void)|null }; max: { [key: string]: (() => void)|null }; hide: () => void; }} optionCallbacks Functions that describe what actions can be performed to the row, based on what columns are filled in.
+ * @param {{ reset: { [key: string]: (() => void)|null }; max: { [key: string]: (() => void)|null }; hide: () => void; stats: () => void; }} optionCallbacks Functions that describe what actions can be performed to the row, based on what columns are filled in.
  * @returns {HTMLTableCellElement} The created options entry.
  */
 export function createOptionsBox(optionCallbacks) {
@@ -291,6 +308,9 @@ export function createOptionsBox(optionCallbacks) {
 
     const hideUnit = createOptionButton("H", "Hide Unit", "hide-option", optionCallbacks.hide);
     rowOptionAlign.appendChild(hideUnit);
+
+    const viewStats = createOptionButton("S", "Show/Hide Unit Stats", "stat-display-option", optionCallbacks.stats);
+    rowOptionAlign.appendChild(viewStats);
 
     rowOptions.appendChild(rowOptionAlign);
 

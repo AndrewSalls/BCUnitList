@@ -53,14 +53,15 @@ export const FORM = {
  * @property {boolean} hidden
  * 
  * @typedef UNIT_STATS
+ * @property {number} cost
  * @property {number} health
- * @property {number} attack
+ * @property {number} damage
  * @property {number} range
  * @property {number} knockbacks
  * @property {number} speed
  * @property {number} cooldown
  * @property {boolean} has_area
- * @property {string[]} targets
+ * @property {string[]} traits
  * @property {string[]} abilities
  * 
  * @typedef UNIT_DATA
@@ -214,4 +215,23 @@ export default class UnitData {
                 console.error(`Invalid data type requested: ${dataType}`);
         }
     }
+}
+
+/**
+ * Converts unit data to a unit record.
+ * @param {UNIT_DATA} unitData The unconverted data.
+ * @returns {UNIT_RECORD} The convered data.
+ */
+export function dataToRecord(unitData) {
+    return {
+        id: unitData.id,
+        current_form: unitData.current_form,
+        level: unitData.level,
+        plus_level: unitData.plus_level,
+        talents: unitData.talents.map(t => t.value),
+        ultra_talents: unitData.ultra_talents.map(u => u.value),
+        orb: unitData.orb,
+        favorited: unitData.favorited,
+        hidden: unitData.hidden
+    };
 }

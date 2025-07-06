@@ -64,16 +64,31 @@ function attachSort(sortTarget, sort, allSort, tbody) {
  * @param {boolean} isAscending Whether the sort should be ascending or descending.
  */
 export function sortRows(tbody, comparator, isAscending) {
-    var rows = [...tbody.rows];
-    
-    rows.sort(comparator);
+    const rowMixed = [...tbody.rows];
 
-    var fragment = document.createDocumentFragment();
+    /** @type {HTMLTableRowElement[][]} */
+    const templateArray = [];
+    const rowPairs = rowMixed.reduce((prev, next) => {
+        if(next.classList.contains("unit-mod-row")) {
+            prev.push([next]);
+        } else if(next.classList.contains("stat-mod-row")) {
+            // @ts-ignore Stat rows should always come after unit rows.
+            prev[prev.length - 1].push(next);
+        }
+
+        return prev;
+    }, templateArray);
+
+    rowPairs.sort((a, b) => comparator(a[0], b[0]));
+
+    const fragment = document.createDocumentFragment();
     if(isAscending) {
-        rows.forEach(r => fragment.appendChild(r));
+        for(let i = 0; i < rowPairs.length; i++) {
+            fragment.append(...rowPairs[i]);
+        }
     } else {
-        for(let i = rows.length - 1; i >= 0; i--) {
-            fragment.appendChild(rows[i]);
+        for(let i = rowPairs.length - 1; i >= 0; i--) {
+            fragment.append(...rowPairs[i]);
         }
     }
     tbody.appendChild(fragment);

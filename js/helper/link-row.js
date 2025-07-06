@@ -2,7 +2,7 @@
 
 /**
  * Register delegate to call when a row changes any value.
- * @param {HTMLDivElement} row An element containing a unit row.
+ * @param {HTMLDivElement|HTMLTableRowElement} row An element containing a unit row.
  * @param {() => void} observerCallback A function to call when observing a change in the row's values.
  */
 export function observeRowChange(row, observerCallback) {
@@ -13,6 +13,21 @@ export function observeRowChange(row, observerCallback) {
     row.querySelector(".fav-icon")?.addEventListener("click", observerCallback);
     row.querySelectorAll(".row-option .option-button").forEach((/** @type {Element} */ o) => o.addEventListener("click", observerCallback));
     row.addEventListener("generic-update", observerCallback);
+}
+
+/**
+ * Removes registered delegate.
+ * @param {HTMLDivElement|HTMLTableRowElement} row An element containing a unit row.
+ * @param {() => void} observerCallback A function to call when observing a change in the row's values.
+ */
+export function unobserveRowChange(row, observerCallback) {
+    row.querySelector(".unit-icon")?.removeEventListener("click", observerCallback);
+    row.querySelectorAll(".level-select").forEach((/** @type {Element} */ l) => l.removeEventListener("change", observerCallback));
+    row.querySelectorAll(".talent-box .talent-level").forEach((/** @type {Element} */ t) => t.removeEventListener("change", observerCallback));
+    row.querySelectorAll(".orb-selector").forEach((/** @type {Element} */ o) => o.removeEventListener("change", observerCallback));
+    row.querySelector(".fav-icon")?.removeEventListener("click", observerCallback);
+    row.querySelectorAll(".row-option .option-button").forEach((/** @type {Element} */ o) => o.removeEventListener("click", observerCallback));
+    row.removeEventListener("generic-update", observerCallback);
 }
 
 /**

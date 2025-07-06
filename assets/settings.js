@@ -44,6 +44,61 @@ const SETTINGS = {
         }
     },
     "categoryTypes": ["collabs", "event_units", "gacha_non_uber", "gacha_seasonal", "gacha_uber", "other", "seasonal_events", "small_collabs", "story_units"],
-    "traits": ["Traitless", "Red", "Floating", "Black", "Angel", "Metal", "Alien", "Zombie", "Relic", "Aku"]
+    "traits": ["Red", "Floating", "Black", "Metal", "Angel", "Alien", "Zombie", "Relic", "Aku", "Traitless"],
+    "targettingAbilities": ["Omnistrike", "Long_Distance", "Multi_Hit"],
+    "statGrowth": {
+        "rarity": {
+            "N": [60],
+            "EX": [60],
+            "RR": [70, 90],
+            "SR": [60, 80],
+            "UR": [60, 80],
+            "LR": [60, 80]
+        },
+        "unique": {
+            "25": [30],
+            "91": [20],
+            "92": [20],
+            "93": [20],
+            "94": [20],
+            "95": [20],
+            "96": [20],
+            "97": [20],
+            "98": [20],
+            "99": [20]
+        },
+        "P2W": {
+            "558": [[20, 0.2], [30, 0.6], [40, 1.2], [50, 1.8]],
+            "735": [[20, 0.2], [30, 1.2], [40, 1], [50, 0.8]],
+            "784": [[20, 0.2], [30, 0.8], [40, 0.4], [50, 0.8]]
+        }
+    },
+    "traitEffectMult": {
+        "atk": {
+            "Strong": [1.5, 0.3],
+            "Massive_Damage": [3, 1],
+            "Insane_Damage": [5, 6],
+            "Colossus_Slayer": [1.6, 0],
+            "Behemoth_Slayer": [2.5, 0],
+            "Sage_Slayer": [1.2, 0]
+        },
+        "def": {
+            "Strong": [2, 0.5],
+            "Resistant": [4, 5],
+            "Insane_Resistance": [6, 7],
+            "Colossus_Slayer": [1.3, 0],
+            "Behemoth_Slayer": [1.4, 0],
+            "Sage_Slayer": [2, 0]
+        },
+        "trait": {
+            "Black": ["Void Fruit", "itf"],
+            "Red": ["Blood Fruit", "itf"],
+            "Floating": ["Sky Fruit", "itf"],
+            "Angel": ["Heaven's Fruit", "itf"],
+            "Metal": ["Titanium Fruit", "cotc"],
+            "Zombie": ["Antimatter Fruit", "cotc"],
+            "Alien": ["Enigma Fruit", "cotc"]
+        }
+    }
 };
 export default SETTINGS;

@@ -194,6 +194,10 @@ img {
     user-select: none;
 }
 
+td {
+    padding: 0;
+}
+
 .h-align {
     display: flex;
     align-items: center;

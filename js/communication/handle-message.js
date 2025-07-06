@@ -1,5 +1,4 @@
 //@ts-check
-import { UNIT_DATA_TYPE } from "../data/unit-data.js";
 import UserData from "../data/user-data.js";
 
 /**

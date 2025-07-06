@@ -54,7 +54,8 @@ export function attachTableOptionsAndFilters(table) {
         filterOptions.forEach((b, i) => b.classList.toggle("active", targettedTable.dataset.options[i] === "1"));
     };
 
-    table.querySelector("tbody")?.querySelectorAll("tr")?.forEach((/** @type {HTMLTableRowElement} */ r) => observeRowChange(r, () => updateRowCallback(table, r, filterOptions)));
+    //@ts-ignore Can't be bothered to deal with type hint's terrible handling of querySelector
+    table.querySelector("tbody")?.querySelectorAll("tr.unit-mod-row")?.forEach(r => observeRowChange(r, () => updateRowCallback(table, r, filterOptions)));
     table.prepend(tableButtonDiv);
 }
 

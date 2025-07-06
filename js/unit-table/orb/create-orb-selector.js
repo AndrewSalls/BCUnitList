@@ -58,7 +58,7 @@ export default function createOrbMenu() {
 
     const effectSeries = createEffectSubmenu();
     const abilitySeries = createAbilitySubmenu();
-    abilitySeries.classList.add("hidden"); // TODO: Make based on current orb's series or last selected series
+    abilitySeries.classList.add("hidden");
     const seriesToggle = createSeriesSelector(resultDisplay, effectSeries, abilitySeries);
 
     content.append(exit, seriesToggle, label, effectSeries, abilitySeries, confirmCentering);

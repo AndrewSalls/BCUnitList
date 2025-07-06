@@ -168,9 +168,11 @@ function createTableFromData(tableName, data, loadingBar) {
     const table = createSearchableTable(tableName, data, REQUEST_TYPES.UPDATE_ID, loadingBar);
     const body = /** @type {HTMLTableSectionElement} */ (table.querySelector("tbody"));
 
-    for(const row of body.querySelectorAll("tr")) {
+    for(const row of body.querySelectorAll("tr.unit-mod-row")) {
         const id = parseInt(row.querySelector(".row-id")?.textContent ?? "0");
+        // @ts-ignore adding a class to a .querySelector prevents recognizing element type
         registerSyncedRow(row, id);
+        // @ts-ignore adding a class to a .querySelector prevents recognizing element type
         observeRowChange(row, () => syncRowValues(row, id));
     }
 

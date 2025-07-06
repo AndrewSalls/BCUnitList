@@ -27,10 +27,12 @@ const SPLASH_TEXT = {
         "Some enemies actually do fight like a cornered cat! Look up the meaning on your smartphone, mmkay?",
         "Save some time on the Equip screen! Double-tap the unit icon and the menu will display that unit. How convenient!",
         "Space ain't no cakewalk! Make sure to collect treasures from earlier chapters if it gets tough!",
-        "Tap and hold on a unit icon to show info about their skills & abilities!",
+        "Tap and hold on a unit in battle to show their abilities!!",
         "Long pressing the Equip button on the stage select screen equips the same team last used to clear the stage.",
         "Tap a stage's name to check what enemies will appear. You gotta play the stage at least once, though!",
-        "Tap any stage name to make sure you didn't miss out on a one-time drop reward! You'll be glad you did!"
+        "Tap any stage name to make sure you didn't miss out on a one-time drop reward! You'll be glad you did!",
+        "Don't forget about your Cat Combos! They can be super duper strong!!",
+        "Drop and give me 20! I want to see your 300%!!"
     ],
     "uncommon": [
         "A strong Uber means nothing if they never get to attack! Send cheap units to distract the enemies while the strong units charge up their moves!!",
@@ -41,7 +43,7 @@ const SPLASH_TEXT = {
         "You get rewards for reaching certain user ranks! Keep every new unit you get!",
         "There's a strange shadow in your room? That means a cat is watching over you from afar…",
         "Daisensou means 'Great War'. Learning is everything.",
-        "You don't need to make a difference. You already have.",
+        "You don't need to make a difference. To me, you already have.",
         "The Aku Altar curses your units, forcing them to be level 1!! Beat levels in the Aku Realms to be able to use all your levels!",
         "Sage enemies have a massive resistance to status effects! Units with Sage Slayer can ignore that resistance.",
         "You know those blue things you get from cat capsules sometimes? Those are ability orbs. Exchange five of them for a rare ticket!",
@@ -56,8 +58,11 @@ const SPLASH_TEXT = {
         "Units summoned by cats with the Conjure ability are immune to knockback, even the special knockback when a boss comes out of the enemy base. Does it smell like cheese in here?",
         "Some stages have seemingly unbeatable enemies! Try beating the stage before they show up, or keeping other enemies around so they never appear!",
         "Be fierce, be brave, be graceful.",
-        "Devistating wave, surge, and explosions only appear when an enemy attack lands. Try to make the enemy miss if you can't afford to get hit by those!",
-        "The different cat cannons all have their uses. Make sure you upgrade them all and equip the right one for the job!"
+        "Devistating wave, surge, and explosions only appear when an enemy attack lands. Try to make the enemy miss if you can't afford to get hit by one of those!",
+        "The different cat cannons all have their uses. Make sure you upgrade them all and equip the right one for the job!",
+        "The Holyblast cannon does damage based on a zombie's max HP. With cannon recharge combos, you can quickly obliterate even the strongest zombies!",
+        "If you want others to believe in you, start by believing in yourself!",
+        "Eat your vegetables, and you can have some catfruit as a treat!"
     ],
     "rare": [
         "↑ ↑ ↓ ↓ ← → ← → B A",
@@ -74,7 +79,8 @@ const SPLASH_TEXT = {
         "Cat food is PEOPLE!!! Oh wait, no it's not.",
         "Inside of you, there are two cats. One tells you to eat more fish, and the other also tells you that.",
         "You close your eyes. You open them again: It's Cat God. 'Sup bro, want some catfood?'",
-        "What are they, some kind of battling cats?\nThey must be… The Battle Cats™®©!"
+        "What are they, some kind of battling cats?\n\nSay that again...",
+        "There's a fire burning in your heart. Never let anyone put it out, not even you."
     ],
     "22t": "Flower Cat's true form is available tomorrow!",
     "22": "2:22 PM, Flower Cat Awakens, don't forget!"
