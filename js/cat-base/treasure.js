@@ -68,6 +68,7 @@ function createTreasureSelector(location, id, treasureCount, chapterNum) {
 
     const wrapperIMG = document.createElement("img");
     wrapperIMG.src = `./assets/img/treasure/${location}_${id}.png`;
+    wrapperIMG.title = SETTINGS.chapters[location].treasureNames[id];
 
     const treasureSliderBox = document.createElement("div");
     treasureSliderBox.classList.add("h-align");

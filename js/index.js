@@ -1,6 +1,5 @@
 //@ts-check
 import initializeData, { registerFrame } from "./communication/link-units.js";
-import initializeLocalStorage from "./initialize-localstorage.js";
 import SETTINGS from "../assets/settings.js";
 
 /**

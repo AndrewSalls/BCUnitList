@@ -30,6 +30,8 @@ export async function getUnitData(categories) {
             readDescriptiveData(x * 100, levelCaps).then(desc => {
                 readStatData(x * 100).then(stats => {
                     for(let p = 0; p < desc.length; p++) {
+                        totalLevel += desc[p].level + desc[p].plus_level;
+
                         desc[p].stats = stats[p];
                         desc[p].collab = collabUnits.includes(desc.id);
                         desc[p].unobtainable = unobtainableUnits.includes(desc.id);
