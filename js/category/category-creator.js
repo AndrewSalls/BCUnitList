@@ -33,7 +33,8 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
                 chipList.appendChild(chip);
             } else {
                 let pos = 0;
-                const targetID = chipList.children[pos].querySelector(".unit-id")?.textContent;
+                // @ts-ignore Why does it return an Element instead of an HTMLElement ahh
+                const targetID = chipList.children[pos].dataset.id;
                 while(pos < chipList.children.length && targetID && id > parseInt(targetID)) {
                     pos++;
                 }
@@ -167,10 +168,6 @@ function createChip(id) {
     icon.classList.add("unit-icon");
     icon.src = `/assets/img/unit_icon/${id}_0.png`;
 
-    const iconID = document.createElement("p");
-    iconID.classList.add("unit-id");
-    iconID.textContent = `${id}`;
-
     const removeUnit = document.createElement("div");
     removeUnit.classList.add("remove-unit");
     removeUnit.textContent = "x";
@@ -179,7 +176,7 @@ function createChip(id) {
         wrapper.remove();
     };
 
-    wrapper.append(icon, iconID, removeUnit);
+    wrapper.append(icon, removeUnit);
     return wrapper;
 }
 

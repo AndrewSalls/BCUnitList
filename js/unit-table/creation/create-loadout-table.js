@@ -4,8 +4,6 @@ import makeDraggable, { sortIcons } from "../../helper/make-draggable.js";
 import { FORM } from "../../data/unit-data.js";
 import SETTINGS from "../../../assets/settings.js";
 
-const MAX_LOADOUT_NAME_LENGTH = 64;
-
 /**
  * Creates an element used to create a loadout.
  * @param {import("../../data/loadout-data.js").LOADOUT|null} loadoutData Loadout data to initialize the loadout to, or null if the loadout should start blank.
@@ -29,7 +27,7 @@ export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback)
     nameOption.type = "text";
     nameOption.placeholder = "Enter loadout name...";
     nameOption.value = loadoutData?.title ?? "";
-    nameOption.maxLength = MAX_LOADOUT_NAME_LENGTH;
+    nameOption.maxLength = SETTINGS.maxLoadoutNameLength;
 
     options.appendChild(nameOption);
 
@@ -37,7 +35,10 @@ export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback)
     contentWrapper.classList.add("loadout-contents");
     contentWrapper.classList.add("h-align");
 
-    contentWrapper.append(createUnitInput(loadoutData && loadoutData.units, loadoutData && loadoutData.forms, saveCallback), createCannonInput(loadoutData && loadoutData.baseLevels, unlockedCannons, saveCallback));
+    contentWrapper.append(
+        createUnitInput(loadoutData && loadoutData.units, loadoutData && loadoutData.forms, saveCallback),
+        createCannonInput(loadoutData && loadoutData.baseLevels, unlockedCannons, saveCallback)
+    );
     wrapper.append(options, contentWrapper);
 
     return wrapper;
@@ -100,9 +101,6 @@ export function appendChip(id, form, parent, saveCallback) {
         }
     };
 
-    const pId = document.createElement("p");
-    pId.classList.add("unit-id");
-    pId.classList.add("hidden");
     const removeButton = document.createElement("div");
     removeButton.classList.add("remove-unit");
     removeButton.textContent = "X";
@@ -117,8 +115,6 @@ export function appendChip(id, form, parent, saveCallback) {
         delete wrapper.dataset.maxForm;
 
         img.src = "./assets/img/unit_icon/unknown.png";
-        pId.textContent = "";
-        pId.classList.add("hidden");
         removeButton.classList.add("hidden");
         unitSearchInput.classList.remove("hidden");
         sortIcons(parent);
@@ -131,8 +127,9 @@ export function appendChip(id, form, parent, saveCallback) {
     unitSearchInput.placeholder = "Search...";
 
     unitSearchInput.addEventListener("focus", () => {
-        for(const chipID of parent.querySelectorAll(".chip.set-unit .unit-id")) { 
-            const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${chipID.textContent ?? "0"}"]`);
+        for(const chipID of parent.querySelectorAll(".chip.set-unit")) {
+            //@ts-ignore VSCode fix your type hints
+            const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${chipID.dataset.id ?? "0"}"]`);
             formNameOptions.forEach(o => {
                 o.classList.add("global-hidden");
                 o.classList.remove("suggestion-hovered");
@@ -157,8 +154,6 @@ export function appendChip(id, form, parent, saveCallback) {
         if(!SETTINGS.skipImages.includes(searchID)) {
             img.src = `./assets/img/unit_icon/${searchID}_${searchForm}.png`;
         }
-        pId.textContent = `${searchID}`;
-        pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");
         unitSearchInput.classList.add("hidden");
         sortIcons(parent);
@@ -171,13 +166,11 @@ export function appendChip(id, form, parent, saveCallback) {
         wrapper.dataset.id = `${id}`;
         wrapper.dataset.maxForm = `${document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${id}"]`).length - 1}`;
         img.src = `./assets/img/unit_icon/${id}_${form}.png`;
-        pId.textContent = `${id}`;
-        pId.classList.remove("hidden");
         removeButton.classList.remove("hidden");
         unitSearchInput.classList.add("hidden");
     }
 
-    wrapper.append(img, pId, removeButton, unitSearchInput);
+    wrapper.append(img, removeButton, unitSearchInput);
     parent.appendChild(wrapper);
 }
 

@@ -50,9 +50,6 @@ function initializeContent() {
             delete c.dataset.id;
 
             /** @type {HTMLImageElement} */ (c.querySelector(".unit-icon")).src = "./assets/img/unit_icon/unknown.png";
-            const unitID = /** @type {HTMLTableCellElement} */ (c.querySelector(".unit-id"));
-            unitID.classList.add("hidden");
-            unitID.textContent = "";
             c.querySelector(".remove-unit")?.classList.add("hidden");
             c.querySelector(".unset-search")?.classList.remove("hidden");
         });
@@ -104,9 +101,6 @@ function initializeContent() {
                     chips[x].dataset.id = `${decoded.units[x].id}`;
                     chips[x].dataset.maxForm = `${u.max_form}`;
     
-                    const unitID = /** @type {HTMLTableCellElement} */ (chips[x].querySelector(".unit-id"));
-                    unitID.classList.remove("hidden");
-                    unitID.textContent = `${decoded.units[x].id}`;
                     chips[x].querySelector(".remove-unit")?.classList.remove("hidden");
                     chips[x].querySelector(".unset-search")?.classList.add("hidden");
 

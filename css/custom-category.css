@@ -15,22 +15,6 @@
     left: -9px;
 }
 
-.chip .unit-id {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    font-weight: bolder;
-    font-size: 12pt;
-    margin: 0;
-    padding: 5% 5% calc(5% - 3px) 20%;
-    background-color: var(--generic-content);
-    border: 5px solid var(--text);
-    border-left: 2px solid var(--text);
-    border-top: 2px solid var(--text);
-    border-radius: 2000px 0 0 0;
-    user-select: none;
-}
-
 .chip .remove-unit {
     position: absolute;
     top: 0;

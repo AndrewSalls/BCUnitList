@@ -3,6 +3,7 @@ const SETTINGS = {
     "gameVersion": "14.4",
     "unitCount": 810,
     "skipImages": [339, 729, 732, 734, 739, 755, 761, 764, 770, 775, 782, 800, 802],
+    "maxLoadoutNameLength": 64,
     "chapters": {
         "eoc": {
             "name": "Empire of Cats",
