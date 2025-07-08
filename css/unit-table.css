@@ -18,9 +18,9 @@ td.row-id {
 
 td.sort-form, td.row-image {
     --scale: calc(60 / 85);
-    width: calc(106px * var(--scale));
-    min-width: calc(106px * var(--scale));
-    max-width: calc(106px * var(--scale));
+    width: calc(110px * var(--scale));
+    min-width: calc(110px * var(--scale));
+    max-width: calc(110px * var(--scale));
 }
 td.row-image {
     overflow: hidden;
@@ -56,6 +56,13 @@ table {
     border-spacing: 0;
 }
 
+.unit-mod-row {
+    background-color: var(--rarity-bg);
+}
+.unit-mod-row.row-bg2 {
+    background-color: var(--rarity-bg2);
+}
+
 td {
     border: 1px solid var(--rarity-border);
 }
@@ -75,12 +82,8 @@ tbody tr {
     overflow: hidden;
 }
 
-tbody {
-    background-image: repeating-linear-gradient(var(--rarity-bg) 0 60px, var(--rarity-bg2) 60px 120px);
-}
-
 .unit-icon {
-    height: calc(127px * var(--scale));
+    height: calc(128px * var(--scale));
     position: absolute;
     top: calc(-21px * var(--scale));
     left: calc(-9px * var(--scale));

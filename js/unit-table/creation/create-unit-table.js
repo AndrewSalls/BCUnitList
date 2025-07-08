@@ -68,7 +68,7 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
             tbody.appendChild(row);
             if(changeEvent) {
                 observeRowChange(row, () => {
-                    changeEvent(getValuesFromRow(row)).then();
+                    changeEvent(getValuesFromRow(row));
                 });
             }
         }

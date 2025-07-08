@@ -12,6 +12,13 @@
     border-bottom: 1px solid var(--rarity-border);
 }
 
+.unit-mod-row + .stat-mod-row {
+    background-color: var(--rarity-bg);
+}
+.unit-mod-row.row-bg2 + .stat-mod-row {
+    background-color: var(--rarity-bg2);
+}
+
 .stat-mod-row td {
     border: none;
 }

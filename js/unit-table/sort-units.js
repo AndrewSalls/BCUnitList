@@ -82,12 +82,17 @@ export function sortRows(tbody, comparator, isAscending) {
     rowPairs.sort((a, b) => comparator(a[0], b[0]));
 
     const fragment = document.createDocumentFragment();
+    let flipBG = false;
     if(isAscending) {
         for(let i = 0; i < rowPairs.length; i++) {
+            rowPairs[i][0].classList.toggle("row-bg2", flipBG);
+            flipBG = !flipBG;
             fragment.append(...rowPairs[i]);
         }
     } else {
         for(let i = rowPairs.length - 1; i >= 0; i--) {
+            rowPairs[i][0].classList.toggle("row-bg2", flipBG);
+            flipBG = !flipBG;
             fragment.append(...rowPairs[i]);
         }
     }
