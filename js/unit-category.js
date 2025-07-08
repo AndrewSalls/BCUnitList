@@ -54,6 +54,18 @@ function loadCategories() {
         } else {
             const categorySearchBuiltin = document.querySelector("#builtin-categories");
             const replaceTable = /** @type {HTMLDivElement} */ (document.querySelector("#favorited-table"));
+
+            /** @type {HTMLButtonElement} */ (document.querySelector("#base-categories .favorited-color")).onclick = () => {
+                replaceTable.innerHTML = "";
+                REQUEST_TYPES.GET_FAVORITED_DATA().then(data => {
+                    const table = createTableFromData("Favorited", data, loadingBar);
+                    table.classList.add("favorited-table-marker");
+                    replaceTable.appendChild(table);
+                    attachTableOptionsAndFilters(table);
+
+                    loadingBar.increment();
+                });
+            };
             document.querySelector("#category-label-centering")?.classList.add("hidden");
 
             const waitArray = [];
@@ -166,14 +178,17 @@ async function appendCategoryUnitTable(superCategory, categoryName, target, cate
  */
 function createTableFromData(tableName, data, loadingBar) {
     const table = createSearchableTable(tableName, data, REQUEST_TYPES.UPDATE_ID, loadingBar);
-    const body = /** @type {HTMLTableSectionElement} */ (table.querySelector("tbody"));
 
-    for(const row of body.querySelectorAll("tr.unit-mod-row")) {
-        const id = parseInt(row.querySelector(".row-id")?.textContent ?? "0");
-        // @ts-ignore adding a class to a .querySelector prevents recognizing element type
-        registerSyncedRow(row, id);
-        // @ts-ignore adding a class to a .querySelector prevents recognizing element type
-        observeRowChange(row, () => syncRowValues(row, id));
+    if(window.localStorage.getItem("s7") === "0") {
+        const body = /** @type {HTMLTableSectionElement} */ (table.querySelector("tbody"));
+
+        for(const row of body.querySelectorAll("tr.unit-mod-row")) {
+            const id = parseInt(row.querySelector(".row-id")?.textContent ?? "0");
+            // @ts-ignore adding a class to a .querySelector prevents recognizing element type
+            registerSyncedRow(row, id);
+            // @ts-ignore adding a class to a .querySelector prevents recognizing element type
+            observeRowChange(row, () => syncRowValues(row, id));
+        }
     }
 
     return table;

@@ -159,6 +159,7 @@ export function createCategorySelector(includeAbilityCategory = false) {
     defaultButtons[6].classList.add("legend-rare-color");
     defaultButtons[6].classList.add("legend-rare-animation");
     defaultButtons.push(createCategoryButton("Favorited", defaultTables[7]));
+    defaultButtons[7].classList.add("favorited-color");
     if(includeAbilityCategory) {
         defaultButtons.splice(1, 0, /** @type {HTMLButtonElement} */ (abilityButton));
     }

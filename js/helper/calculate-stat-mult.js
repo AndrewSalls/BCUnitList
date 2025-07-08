@@ -15,8 +15,6 @@ import { CALCULATOR_LEVEL_OPTIONS } from "./calculate-stats.js";
  * @returns {number} The unit's stats after multipliers and level are taken into account.
  */
 export function getLevelStatMult(baseStat, totalLevel, id, rarity, treasureMult) {
-    console.log(baseStat);
-    console.log(treasureMult);
     let bp1 = Infinity, bp2 = Infinity;
     if(`${id}` in SETTINGS.statGrowth.unique) {
         bp1 = SETTINGS.statGrowth.unique[id]?.[0] ?? bp1;
@@ -29,19 +27,15 @@ export function getLevelStatMult(baseStat, totalLevel, id, rarity, treasureMult)
     }
 
     let levelMult = Math.min(bp1, totalLevel) * 0.2 + 0.8; // + 20% per level, starting at 100%
-    console.log(levelMult);
     
     if(totalLevel > bp1) {
         levelMult += (Math.min(bp2, totalLevel) - bp1) * 0.1; // After break point 1, + 10% per level
-    console.log(levelMult);
 
         if(totalLevel > bp2) {
             levelMult += (totalLevel - bp2) * 0.05; // After break point 2, + 5% per level
-    console.log(levelMult);
         }
     }
 
-    console.log(Math.floor(Math.round(baseStat * levelMult) * treasureMult));
     return Math.floor(Math.round(baseStat * levelMult) * treasureMult);
 }
 
