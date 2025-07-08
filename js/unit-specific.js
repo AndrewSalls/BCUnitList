@@ -6,6 +6,7 @@ import * as RowComponents from "./unit-table/creation/create-unit-row.js";
 import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
 import SETTINGS from "../assets/settings.js";
+import createStatRow from "./unit-table/creation/create-stat-row.js";
 
 /**
  * @readonly
@@ -57,11 +58,13 @@ function initialize() {
     loadSpecific(parseInt(target));
 }
 
+let loadedLink = null;
 /**
  * Loads a specific unit to the combined attribute and cost table.
  * @param {number} id The specific unit ID to load.
  */
 function loadSpecific(id) {
+    loadedLink && loadedLink();
     const container = document.querySelector("#loading-content");
 
     REQUEST_TYPES.GET_ID_DATA(id, true).then((/** @type {import("./data/unit-data.js").UNIT_DATA|null} */ entry) => {
@@ -110,10 +113,10 @@ function loadSpecific(id) {
         }
         document.querySelector("#dark-wrapper")?.classList.toggle("hidden", entry.rarity !== "UR");
 
+        const borderWrapper = /** @type {HTMLDivElement} */ (document.querySelector("#unit-border"));
         REQUEST_TYPES.GET_ID_COST(id, true).then(cost => {
             setSpecificCost(cost, entry.rarity);
 
-            const borderWrapper = /** @type {HTMLDivElement} */ (document.querySelector("#unit-border"));
             /** @type {HTMLInputElement} */ (document.querySelector("#ut-uf-input")).checked = true;
 
             observeRowChange(borderWrapper, () => {
@@ -125,6 +128,14 @@ function loadSpecific(id) {
 
             container?.classList.remove("hidden");
         });
+
+        //@ts-ignore Don't tell anyone, but createStatRow doesn't actually need the input to be an HTMLTableRowElement
+        const { row: statBox, callback: deloadCallback } = createStatRow(entry, borderWrapper);
+        loadedLink = deloadCallback;
+        const rowContents = /** @type {HTMLElement} */ (statBox.querySelector(".unit-stat-table"));
+        rowContents.classList.add("specific-unit-stats");
+
+        wrapper.appendChild(rowContents);
     });
 }
 

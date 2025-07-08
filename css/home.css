@@ -96,3 +96,8 @@ ul {
 ul ul {
     font-size: 10pt;
 }
+
+.home-citation p {
+    margin-top: 0.1vh;
+    margin-bottom: 3vh;
+}

@@ -53,7 +53,7 @@
     margin-top: calc(calc(85vh - var(--height)) / 2);
     display: grid;
     grid-template-rows: 5vh var(--row-height) var(--row-height) var(--row-height) var(--row-height) var(--row-height) var(--row-height);
-    grid-template-columns: 1fr calc(108px * var(--icon-scale));
+    grid-template-columns: 50% 1fr calc(108px * var(--icon-scale));
     position: relative;
 }
 
@@ -76,7 +76,7 @@ td {
     align-items: start;
     height: 5vh;
     grid-row: 1;
-    grid-column: 1 / 2;
+    grid-column: 1 / 3;
 }
 
 #unit-top-section {
@@ -118,7 +118,7 @@ td.row-id {
     border-left: 2px solid var(--rarity-border);
     border-bottom: 2px solid var(--rarity-border);
     grid-row: 2 / 4;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
     background-color: var(--rarity-content);
 }
 
@@ -140,14 +140,14 @@ td.row-id {
     width: unset;
     background-color: var(--rarity-content);
     grid-row: 1;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
 }
 
 #talent-align {
     width: 100%;
     justify-content: space-around;
     grid-row: 2;
-    grid-column: 1 / 2;
+    grid-column: 1 / 3;
     border-bottom: 1px solid var(--rarity-border);
 }
 
@@ -170,7 +170,7 @@ td.row-id {
 
 #xp-np-catseye-cost {
     grid-row: 3;
-    grid-column: 1 / 2;
+    grid-column: 1 / 3;
     background-color: var(--rarity-bg2);
     border-bottom: 1px solid var(--rarity-border);
 }
@@ -185,27 +185,31 @@ td.row-id {
 
 #fruit-cost {
     grid-row: 4;
-    grid-column: 1 / 3;
+    grid-column: 1 / 2;
     border-bottom: 1px solid var(--rarity-border);
+    border-right: 1px solid var(--rarity-border);
 }
 
 #seed-cost {
     grid-row: 5;
-    grid-column: 1 / 3;
+    grid-column: 1 / 2;
     background-color: var(--rarity-bg2);
     border-bottom: 1px solid var(--rarity-border);
+    border-right: 1px solid var(--rarity-border);
 }
 
 #gem-cost {
     grid-row: 6;
-    grid-column: 1 / 3;
+    grid-column: 1 / 2;
     border-bottom: 1px solid var(--rarity-border);
+    border-right: 1px solid var(--rarity-border);
 }
 
 #stone-cost {
     grid-row: 7;
-    grid-column: 1 / 3;
+    grid-column: 1 / 2;
     background-color: var(--rarity-bg2);
+    border-right: 1px solid var(--rarity-border);
 }
 
 .included-label {
@@ -214,4 +218,26 @@ td.row-id {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.specific-unit-stats {
+    grid-row: 4 / 8;
+    grid-column: 2 / 4;
+    width: 100%;
+    height: 100%;
+    grid-template-rows: repeat(6, calc(100% / 6));
+}
+
+.specific-unit-stats .unit-stat-power-icon {
+    width: 30px;
+    aspect-ratio: 1/1;
+}
+
+.specific-unit-stats .unit-stat-calc-cell {
+    width: 90%;
+    padding: 0 5%;
+}
+
+.specific-unit-stats h6 {
+    font-size: 10pt;
 }

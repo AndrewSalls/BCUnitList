@@ -27,7 +27,7 @@ export default function createStatRow(unitData, mainRow) {
     const { statBox: healthStat, onUpdate: updateHealth } = createSmartStatBox("Health", StatCalculator.calculateHealth(unitData.stats[unitData.current_form].health, recordClone, unitData));
     const { statBox: damageStat, onUpdate: updateDamage } = createSmartStatBox("Damage", StatCalculator.calculateDamage(unitData.stats[unitData.current_form].damage, recordClone, unitData));
     const { statBox: knockbackStat, onUpdate: updateKnockbacks } = createSmartStatBox("Knockbacks", StatCalculator.calculateKnockbacks(unitData.stats[unitData.current_form].knockbacks, recordClone, unitData));
-    const { statBox: rechargeStat, onUpdate: updateRecharge } = createSmartStatBox("Recharge Time", StatCalculator.calculateRechargeTime(unitData.stats[unitData.current_form].cooldown, recordClone, unitData), " Seconds");
+    const { statBox: rechargeStat, onUpdate: updateRecharge } = createSmartStatBox("Recharge", StatCalculator.calculateRechargeTime(unitData.stats[unitData.current_form].cooldown, recordClone, unitData), " sec");
     const { statBox: rangeStat, onUpdate: updateRange } = createSmartStatBox("Range", StatCalculator.calculateRange(unitData.stats[unitData.current_form].range, recordClone, unitData));
     const { statBox: speedStat, onUpdate: updateSpeed } = createSmartStatBox("Speed", StatCalculator.calculateSpeed(unitData.stats[unitData.current_form].speed, recordClone, unitData));
 
