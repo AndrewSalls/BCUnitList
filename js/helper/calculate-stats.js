@@ -1,7 +1,7 @@
 //@ts-check
 import ORB_MAP from "../../assets/orb-map.js";
 import SETTINGS from "../../assets/settings.js";
-import { getAbilityMult, getAbilityOrb, getDesiredLevel, getEffectOrb, getLevelStatMult, getTalentStatMod, getTreasurePercent, getUnitTraitTargets, hasAbility } from "./calculate-stat-mult.js";
+import { getTraitSpecificMult, getAbilityOrb, getDesiredLevel, getEffectOrb, getLevelStatMult, getTalentStatMod, getTreasurePercent, getUnitTraitTargets, hasAbility } from "./calculate-stat-mult.js";
 
 /**
  * @enum {number}
@@ -20,9 +20,9 @@ export const CALCULATOR_LEVEL_OPTIONS = {
  * @property {string[]} targetSubTraits
  * @property {CALCULATOR_LEVEL_OPTIONS} testLevelValue
  * @property {boolean} includeTalents
- * @property {boolean} includeAbilityOrbs
- * @property {boolean} includeEffectOrbs
+ * @property {boolean} includeOrbs
  * @property {number} eocChapterPrice
+ * @property {boolean} talentIgnoreForm
  */
 
 /**
@@ -33,9 +33,9 @@ export const DEFAULT_CALCULATOR_OPTIONS = {
     targetSubTraits: [],
     testLevelValue: CALCULATOR_LEVEL_OPTIONS.LEVEL_CURRENT,
     includeTalents: true,
-    includeAbilityOrbs: true,
-    includeEffectOrbs: true,
-    eocChapterPrice: 2
+    includeOrbs: true,
+    eocChapterPrice: 2, // Currently unused
+    talentIgnoreForm: false
 }
 
 /**
@@ -49,7 +49,7 @@ export const DEFAULT_CALCULATOR_OPTIONS = {
 export function calculateCost(initialValue, updatedData, fixedData, calculatorOptions = DEFAULT_CALCULATOR_OPTIONS) {
     let cost = initialValue;
 
-    cost -= getTalentStatMod("Cost_Down", fixedData, updatedData);
+    cost -= getTalentStatMod("Cost_Down", fixedData, updatedData, calculatorOptions.talentIgnoreForm);
 
     if(calculatorOptions.eocChapterPrice === 1) {
         cost = Math.ceil(cost * 2 / 3);
@@ -73,15 +73,15 @@ export function calculateHealth(initialValue, updatedData, fixedData, calculator
     const usedLevel = getDesiredLevel(calculatorOptions.testLevelValue, updatedData.level + updatedData.plus_level, fixedData);
 
     let health = getLevelStatMult(initialValue, usedLevel, fixedData.id, fixedData.rarity, shieldMult);
-    health *= getAbilityMult(fixedData, updatedData, calculatorOptions.targetTraits, "def");
+    health *= getTraitSpecificMult(fixedData, updatedData, calculatorOptions, "def");
     
     for(const subTrait of calculatorOptions.targetSubTraits) {
-        if(hasAbility(subTrait, fixedData, updatedData)) {
-            health *= SETTINGS.traitEffectMult.def[subTrait];
+        if(hasAbility(`${subTrait}_Slayer`, fixedData, updatedData, calculatorOptions.includeTalents, calculatorOptions.talentIgnoreForm)) {
+            health *= SETTINGS.subTraitEffectMult.def[`${subTrait}_Slayer`];
         }
     }
 
-    if(calculatorOptions.includeAbilityOrbs) {
+    if(calculatorOptions.includeOrbs) {
         if(calculatorOptions.targetSubTraits.includes("Colossus")) {
             // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
             health *= getAbilityOrb("Colossus Slayer", updatedData).reduce((prev, curr) => Math.max(prev, ORB_MAP.type_mults.def.Colossus_Slayer[curr.rank]), 1);
@@ -90,11 +90,15 @@ export function calculateHealth(initialValue, updatedData, fixedData, calculator
         health *= getAbilityOrb("Stories of Legend Buff", updatedData).reduce((prev, curr) => Math.max(prev, ORB_MAP.type_mults.def.SoL_Buff[curr.rank]), 1);
     }
 
-    health *= 1 + getTalentStatMod("Defense", fixedData, updatedData);
+    if(calculatorOptions.includeTalents) {
+        health *= 1 + getTalentStatMod("Defense", fixedData, updatedData, calculatorOptions.talentIgnoreForm);
+    }
 
-    // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
-    const orbDef = getEffectOrb("Defense", calculatorOptions.targetTraits, updatedData).reduce((prev, next) => prev + ORB_MAP.type_mults.def.Defense[next.rank], 1);
-    health *= orbDef;
+    if(calculatorOptions.includeOrbs) {
+        // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
+        const orbDef = getEffectOrb("Defense", calculatorOptions.targetTraits, updatedData).reduce((prev, next) => prev + ORB_MAP.type_mults.def.Defense[next.rank], 1);
+        health *= orbDef;
+    }
 
     return Math.max(1, Math.floor(health));
 }
@@ -109,9 +113,9 @@ export function calculateHealth(initialValue, updatedData, fixedData, calculator
  */
 export function calculateDamage(initialValue, updatedData, fixedData, calculatorOptions = DEFAULT_CALCULATOR_OPTIONS) {
     if(calculatorOptions.targetTraits.length > 0 &&
-       hasAbility("Restricted_Target", fixedData, updatedData) &&
-       getUnitTraitTargets(fixedData, updatedData).every(t => !calculatorOptions.targetTraits.includes(t))) {
-        // If can only attack cerrtain traits and none of the selected traits are those traits, cannot attack, and thus does 0 damage
+       hasAbility("Restricted_Target", fixedData, updatedData, calculatorOptions.includeTalents, calculatorOptions.talentIgnoreForm) &&
+       getUnitTraitTargets(fixedData, updatedData, calculatorOptions.includeTalents, calculatorOptions.talentIgnoreForm).every(t => !calculatorOptions.targetTraits.includes(t))) {
+        // If can only attack certain traits and none of the selected traits are those traits, cannot attack, and thus does 0 damage
         return 0;
     }
 
@@ -119,15 +123,15 @@ export function calculateDamage(initialValue, updatedData, fixedData, calculator
     const usedLevel = getDesiredLevel(calculatorOptions.testLevelValue, updatedData.level + updatedData.plus_level, fixedData);
 
     let damage = getLevelStatMult(initialValue, usedLevel, fixedData.id, fixedData.rarity, swordMult);
-    damage *= getAbilityMult(fixedData, updatedData, calculatorOptions.targetTraits, "atk");
+    damage *= getTraitSpecificMult(fixedData, updatedData, calculatorOptions, "atk");
     
     for(const subTrait of calculatorOptions.targetSubTraits) {
-        if(hasAbility(subTrait, fixedData, updatedData)) {
-            damage *= SETTINGS.traitEffectMult.atk[subTrait];
+        if(hasAbility(`${subTrait}_Slayer`, fixedData, updatedData, calculatorOptions.includeTalents, calculatorOptions.talentIgnoreForm)) {
+            damage *= SETTINGS.subTraitEffectMult.atk[`${subTrait}_Slayer`];
         }
     }
 
-    if(calculatorOptions.includeAbilityOrbs) {
+    if(calculatorOptions.includeOrbs) {
         if(calculatorOptions.targetSubTraits.includes("Colossus")) {
             // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
             damage *= getAbilityOrb("Colossus Slayer", updatedData).reduce((prev, curr) => Math.max(prev, ORB_MAP.type_mults.atk.Colossus_Slayer[curr.rank]), 1);
@@ -136,11 +140,15 @@ export function calculateDamage(initialValue, updatedData, fixedData, calculator
         damage *= getAbilityOrb("Stories of Legend Buff", updatedData).reduce((prev, curr) => Math.max(prev, ORB_MAP.type_mults.atk.SoL_Buff[curr.rank]), 1);
     }
 
-    damage *= 1 + getTalentStatMod("Attack", fixedData, updatedData);
+    if(calculatorOptions.includeTalents) {
+        damage *= 1 + getTalentStatMod("Attack", fixedData, updatedData, calculatorOptions.talentIgnoreForm);
+    }
     
-    // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
-    const flatOrbAtk = getEffectOrb("Attack", calculatorOptions.targetTraits, updatedData).reduce((prev, next) => prev + ORB_MAP.type_mults.atk.Attack[next.rank], 1);
-    damage += flatOrbAtk * initialValue;
+    if(calculatorOptions.includeOrbs) {
+        // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
+        const flatOrbAtk = getEffectOrb("Attack", calculatorOptions.targetTraits, updatedData).reduce((prev, next) => prev + ORB_MAP.type_mults.atk.Attack[next.rank], 0);
+        damage += flatOrbAtk * initialValue;
+    }
 
     return Math.max(1, Math.floor(damage));
 }
@@ -162,10 +170,10 @@ export function calculateKnockbacks(initialValue, _updatedData, _fixedData, _cal
  * @param {number} initialValue The recharge time before any modifiers.
  * @param {import("../data/unit-data").UNIT_RECORD} updatedData Values for the unit that can be modified, e.g. level, talents, etc.
  * @param {import("../data/unit-data").UNIT_DATA} fixedData Values for the unit that cannot be modified. Also contains modifiable values, but these may be outdated and should not be used.
- * @param {CALCULATOR_OPTIONS} _calculatorOptions Options for modifying the calculations for convenience, not currently used.
+ * @param {CALCULATOR_OPTIONS} calculatorOptions Options for modifying the calculations for convenience.
  * @returns {number} The calculated recharge time.
  */
-export function calculateRechargeTime(initialValue, updatedData, fixedData, _calculatorOptions = DEFAULT_CALCULATOR_OPTIONS) {
+export function calculateRechargeTime(initialValue, updatedData, fixedData, calculatorOptions = DEFAULT_CALCULATOR_OPTIONS) {
     let output = initialValue;
 
     // 30 is for 30 frames per second, since recharge is by number of frames and it doesn't make sense to say a unit recharges in, e.g., 42.53 frames.
@@ -178,7 +186,7 @@ export function calculateRechargeTime(initialValue, updatedData, fixedData, _cal
 
     output -= 0.2 * (totalResearchLevel - 1); // - 0.2 sec per level starting at level 2 (since you start with level 1)
 
-    output -= Math.round(30 * getTalentStatMod("Recover_Speed", fixedData, updatedData)) / 900; // 30 for 30 frames per second, / (30 * 30) because getTalentStatMod output is in frames
+    output -= Math.round(30 * getTalentStatMod("Recover_Speed", fixedData, updatedData, calculatorOptions.talentIgnoreForm)) / 900; // 30 for 30 frames per second, / (30 * 30) because getTalentStatMod output is in frames
 
     return Math.max(2, output); // Recharge time cannot go below 2 seconds
 }
@@ -200,13 +208,13 @@ export function calculateRange(initialValue, _updatedData, _fixedData, _calculat
  * @param {number} initialValue The speed before any modifiers.
  * @param {import("../data/unit-data").UNIT_RECORD} updatedData Values for the unit that can be modified, e.g. level, talents, etc.
  * @param {import("../data/unit-data").UNIT_DATA} fixedData Values for the unit that cannot be modified. Also contains modifiable values, but these may be outdated and should not be used.
- * @param {import("./calculate-stats.js").CALCULATOR_OPTIONS} _calculatorOptions Options for modifying the calculations for convenience, not currently used.
+ * @param {import("./calculate-stats.js").CALCULATOR_OPTIONS} calculatorOptions Options for modifying the calculations for convenience.
  * @returns {number} The calculated speed.
  */
-export function calculateSpeed(initialValue, updatedData, fixedData, _calculatorOptions = DEFAULT_CALCULATOR_OPTIONS) {
+export function calculateSpeed(initialValue, updatedData, fixedData, calculatorOptions = DEFAULT_CALCULATOR_OPTIONS) {
     let speed = initialValue;
 
-    speed += getTalentStatMod("Move_Speed", fixedData, updatedData);
+    speed += getTalentStatMod("Move_Speed", fixedData, updatedData, calculatorOptions.talentIgnoreForm);
 
     return speed;
 }

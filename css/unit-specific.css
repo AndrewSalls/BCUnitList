@@ -42,7 +42,7 @@
 }
 
 #unit-border {
-    --width: 80vw;
+    --width: 90vw;
     --row-height: 12vh;
     --height: calc(5vh + calc(6 * var(--row-height)));
     background-color: var(--rarity-bg);

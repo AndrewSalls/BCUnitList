@@ -46,6 +46,7 @@ const SETTINGS = {
     },
     "categoryTypes": ["collabs", "event_units", "gacha_non_uber", "gacha_seasonal", "gacha_uber", "other", "seasonal_events", "small_collabs", "story_units"],
     "traits": ["Red", "Floating", "Black", "Metal", "Angel", "Alien", "Zombie", "Relic", "Aku", "Traitless"],
+    "subTraits": ["Behemoth", "Colossus", "Sage"],
     "targettingAbilities": ["Omnistrike", "Long_Distance", "Multi_Hit"],
     "statGrowth": {
         "rarity": {
@@ -78,18 +79,12 @@ const SETTINGS = {
         "atk": {
             "Strong": [1.5, 0.3],
             "Massive_Damage": [3, 1],
-            "Insane_Damage": [5, 6],
-            "Colossus_Slayer": [1.6, 0],
-            "Behemoth_Slayer": [2.5, 0],
-            "Sage_Slayer": [1.2, 0]
+            "Insane_Damage": [5, 1]
         },
         "def": {
             "Strong": [2, 0.5],
-            "Resistant": [4, 5],
-            "Insane_Resistance": [6, 7],
-            "Colossus_Slayer": [1.3, 0],
-            "Behemoth_Slayer": [1.4, 0],
-            "Sage_Slayer": [2, 0]
+            "Resistant": [4, 1],
+            "Insane_Resistance": [6, 1]
         },
         "trait": {
             "Black": ["Void Fruit", "itf"],
@@ -100,6 +95,18 @@ const SETTINGS = {
             "Zombie": ["Antimatter Fruit", "cotc"],
             "Alien": ["Enigma Fruit", "cotc"]
         }
+    },
+    "subTraitEffectMult": {
+        "atk": {
+            "Colossus_Slayer": 1.6,
+            "Behemoth_Slayer": 2.5,
+            "Sage_Slayer": 1.2
+        },
+        "def": {
+            "Colossus_Slayer": 1.3,
+            "Behemoth_Slayer": 1.4,
+            "Sage_Slayer": 2
+        },
     }
 };
 export default SETTINGS;

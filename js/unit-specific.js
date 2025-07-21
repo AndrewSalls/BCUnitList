@@ -58,6 +58,7 @@ function initialize() {
     loadSpecific(parseInt(target));
 }
 
+let loadedObj = null;
 let loadedLink = null;
 /**
  * Loads a specific unit to the combined attribute and cost table.
@@ -65,6 +66,8 @@ let loadedLink = null;
  */
 function loadSpecific(id) {
     loadedLink && loadedLink();
+    loadedObj && loadedObj.remove();
+    
     const container = document.querySelector("#loading-content");
 
     REQUEST_TYPES.GET_ID_DATA(id, true).then((/** @type {import("./data/unit-data.js").UNIT_DATA|null} */ entry) => {
@@ -133,6 +136,7 @@ function loadSpecific(id) {
         const { row: statBox, callback: deloadCallback } = createStatRow(entry, borderWrapper);
         loadedLink = deloadCallback;
         const rowContents = /** @type {HTMLElement} */ (statBox.querySelector(".unit-stat-table"));
+        loadedObj = rowContents;
         rowContents.classList.add("specific-unit-stats");
 
         wrapper.appendChild(rowContents);
