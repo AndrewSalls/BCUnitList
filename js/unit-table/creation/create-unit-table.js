@@ -25,12 +25,12 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
     titleRowText.colSpan = 8;
     titleRowText.classList.add("searchable-table-title");
     titleRowText.textContent = titleText;
-    titleRow.onclick = () => {
+    titleRowText.onclick = () => {
         theadRow.classList.toggle("hidden");
         tbody.classList.toggle("hidden");
     };
     if(window.localStorage.getItem("s2") === "1") {
-        titleRow.click();
+        titleRowText.click();
     }
 
     titleRow.appendChild(titleRowText);
