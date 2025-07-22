@@ -157,6 +157,12 @@ body {
     width: 100%;
     height: 100vh;
     position: relative;
+    scrollbar-width: thin;
+}
+
+* {
+    scrollbar-color: var(--rarity-border) var(--rarity-content);
+    scrollbar-width: thin;
 }
 
 iframe {
@@ -168,7 +174,7 @@ iframe {
 button {
     background-color: var(--content);
     cursor: pointer;
-    transition: background-color 0.2s linear;
+    transition: background-color 0.1s linear;
     font-weight: bolder;
     user-select: none;
 }
@@ -196,6 +202,10 @@ img {
 
 td {
     padding: 0;
+}
+
+input {
+    accent-color: var(--rarity-bg);
 }
 
 .h-align {

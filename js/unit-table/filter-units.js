@@ -26,19 +26,22 @@ export function initializeTableModal() {
     initializeOrbFilters();
 }
 
+const gearSVGString = 
+`<svg version="1.1" viewBox="0 0 33.9 33.9" xmlns="http://www.w3.org/2000/svg">
+	<path d="m21.3 0.0553-2.5 4.39a12.7 12.7 60 0 0-3.66-0.0126l-2.52-4.43-4.49 1.86 1.33 4.86a12.7 12.7 60 0 0-2.68 2.62l-4.9-1.34-1.86 4.48 4.36 2.47a12.7 12.7 60 0 0-0.03 3.89l-4.35 2.48 1.85 4.47 4.81-1.33a12.7 12.7 60 0 0 2.7 2.7l-1.32 4.79 4.48 1.85 2.46-4.31a12.7 12.7 60 0 0 3.8-5e-3l2.5 4.39 4.48-1.86-1.34-4.87a12.7 12.7 60 0 0 2.69-2.69l4.9 1.34 1.86-4.48-4.43-2.51a12.7 12.7 60 0 0-0.0076-3.76l4.36-2.48-1.85-4.47-4.85 1.34a12.7 12.7 60 0 0-2.65-2.64l1.34-4.86zm-1.36 9.4a8.09 8.11 60 0 1 0.0695 0.0287 8.09 8.11 60 0 1 4.37 10.6 8.09 8.11 60 0 1-10.6 4.39 8.09 8.11 60 0 1-4.37-10.6 8.09 8.11 60 0 1 10.5-4.42z"/>
+</svg>`;
 let targettedTable = null;
 /**
  * Creates a button for opening a table modal targetting the provided table.
  * @param {HTMLDivElement} table An element containing the targetted table.
  */
 export function attachTableOptionsAndFilters(table) {
-    const tableButtonDiv = document.createElement("div");
-    tableButtonDiv.classList.add("h-align");
+    const wrapper = document.createElement("td");
+    wrapper.classList.add("open-table-option-wrapper");
 
     const openOptionButton = document.createElement("button");
     openOptionButton.classList.add("open-table-option");
-    openOptionButton.innerText = "Table Options";
-    tableButtonDiv.appendChild(openOptionButton);
+    openOptionButton.innerHTML = gearSVGString;
 
     const tableModal = /** @type {HTMLDivElement} */ (document.querySelector("#table-option-modal"));
     const filterOptions = /** @type {HTMLButtonElement[]} */ ([...tableModal.querySelectorAll("#table-filter-options button")]);
@@ -56,7 +59,9 @@ export function attachTableOptionsAndFilters(table) {
 
     //@ts-ignore Can't be bothered to deal with type hint's terrible handling of querySelector
     table.querySelector("tbody")?.querySelectorAll("tr.unit-mod-row")?.forEach(r => observeRowChange(r, () => updateRowCallback(table, r, filterOptions)));
-    table.prepend(tableButtonDiv);
+
+    wrapper.appendChild(openOptionButton);
+    table.querySelector(".searchable-table-title")?.parentElement?.appendChild(wrapper);
 }
 
 /**

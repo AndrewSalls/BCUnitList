@@ -14,10 +14,10 @@
 .modal-fill {
     width: fit-content;
     height: fit-content;
-    max-width: 90vw;
-    max-height: 90vh;
-    min-width: 90vw;
-    min-height: 90vh;
+    max-width: 90%;
+    max-height: 90%;
+    min-width: 90%;
+    min-height: 90%;
     background-color: var(--highlight-bg);
     padding: 2vw;
     border-radius: 1vh;
@@ -27,6 +27,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    box-sizing: border-box;
 }
 
 .modal-fill h2, .modal-fill h3 {

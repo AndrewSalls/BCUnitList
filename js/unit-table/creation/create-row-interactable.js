@@ -29,10 +29,10 @@ export function createLevelInteractable(cap, current) {
     }, { passive: false });
 
     target.onchange = _ => {
-        if(parseInt(target.value) > cap) {
+        if(parseInt(target.value) > parseInt(target.max)) {
             target.value = `${cap}`;
-        } else if(parseInt(target.value) < 0) {
-            target.value = "0";
+        } else if(parseInt(target.value) < parseInt(target.min)) {
+            target.value = target.min;
         }
     }
 

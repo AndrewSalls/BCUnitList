@@ -87,7 +87,7 @@ function loadSpecific(id) {
         wrapper.querySelector("#name-wrapper")?.replaceChildren(nameBox);
         const [iconBox, _1, _2] = RowComponents.createIconBox(entry.id, entry.current_form, entry.max_form, SETTINGS.skipImages.includes(id), nameUpdate);
         wrapper.querySelector("#icon-wrapper")?.replaceChildren(iconBox);
-        const [levelBox, _3, _4, _5, _6] = RowComponents.createLevelBox(entry.level_cap, entry.level, entry.plus_level);
+        const [levelBox, _3, _4, _5, _6] = RowComponents.createLevelBox(entry.id, entry.level_cap, entry.level, entry.plus_level);
         wrapper.querySelector("#level-wrapper")?.replaceChildren(levelBox);
         const [talentBox, _7, _8, _9, _10] = RowComponents.createTalentBox(entry.talents, entry.ultra_talents);
         const talentWrapper = wrapper.querySelector("#talent-wrapper");

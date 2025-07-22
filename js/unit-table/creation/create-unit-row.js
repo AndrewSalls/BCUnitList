@@ -21,7 +21,7 @@ export default function createRow(entry) {
     const idBox = createIDBox(entry.id);
     const [nameBox, nameUpdate] = createNameBox([entry.normal_form, entry.evolved_form, entry.true_form, entry.ultra_form], entry.current_form);
     const [iconBox, iconReset, iconMax] = createIconBox(entry.id, entry.current_form, entry.max_form, SETTINGS.skipImages.includes(entry.id), nameUpdate);
-    const [levelBox, levelReset, levelMax, plusLevelReset, plusLevelMax] = createLevelBox(entry.level_cap, entry.level, entry.plus_level);
+    const [levelBox, levelReset, levelMax, plusLevelReset, plusLevelMax] = createLevelBox(entry.id, entry.level_cap, entry.level, entry.plus_level);
     const [talentBox, talentReset, talentMax, ultraTalentReset, ultraTalentMax] = createTalentBox(entry.talents, entry.ultra_talents);
     const [orbBox, orbReset] = createOrbBox(entry.orb);
     const [favoriteBox, favoriteReset] = createFavoriteBox(entry.favorited);
@@ -133,12 +133,13 @@ export function createNameBox(names, currentForm) {
 
 /**
  * Creates a level column entry.
+ * @param {number} id The unit's id.
  * @param {import("../../data/unit-data.js").LEVEL_CAP} levelCapInfo The level caps to apply to the level and plus level inputs.
  * @param {number} currentLevel The initial value of the level input.
  * @param {number} currentPlusLevel  The initial value of the plus level input.
  * @returns {[HTMLTableCellElement, () => void, () => void, (() => void)|null, (() => void)|null]} The level column entry, and functions that (in order) reset level, max level, reset plus level, max plus level. If the unit does not have plus levels, those functions are instead null.
  */
-export function createLevelBox(levelCapInfo, currentLevel, currentPlusLevel) {
+export function createLevelBox(id, levelCapInfo, currentLevel, currentPlusLevel) {
     const rowLevel = document.createElement("td");
     rowLevel.classList.add("row-level");
     const horizontalAlign = document.createElement("span");
@@ -148,6 +149,10 @@ export function createLevelBox(levelCapInfo, currentLevel, currentPlusLevel) {
     horizontalAlign.appendChild(maxLevel);
     const maxLevelInput = /** @type {HTMLInputElement} */ (maxLevel.querySelector(".level-select") ?? maxLevel);
     maxLevelInput.classList.add("max-level");
+
+    if(id === 0) {
+        maxLevelInput.min = "1";
+    }
 
     let setPlusMin = null, setPlusMax = null;
     if(levelCapInfo.MaxPlusLevel > 0) {
@@ -272,6 +277,7 @@ export function createFavoriteBox(isFavorited) {
  */
 export function createOptionsBox(optionCallbacks) {
     const rowOptions = document.createElement("td");
+    rowOptions.colSpan = 2;
     rowOptions.classList.add("row-option");
     const rowOptionAlign = document.createElement("div");
     rowOptionAlign.classList.add("row-option-wrapper");

@@ -14,6 +14,7 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
     const wrapper = document.createElement("div");
 
     const table = document.createElement("table");
+    table.classList.add("unit-table-list");
 
     const thead = document.createElement("thead");
     const theadRow = document.createElement("tr");
@@ -46,6 +47,9 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
     favIconWrapper.appendChild(favIcon);
     favoriteCol.appendChild(favIconWrapper);
 
+    const optionHead = createColumnHead("sort-option", "Options");
+    optionHead.colSpan = 2;
+
     theadRow.append(
         createColumnHead("sort-id", "ID"),
         createColumnHead("sort-form", "Icon"),
@@ -54,12 +58,21 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
         createColumnHead("sort-talent", "Talents"),
         createColumnHead("sort-orb", "Talent Orb(s)"),
         favoriteCol,
-        createColumnHead("sort-option", "Options")
+        optionHead
     );
 
     thead.append(titleRow, theadRow);
 
-    table.append(thead, tbody);
+    const colgroup = document.createElement("colgroup");
+    const inst = (_class) => {
+        const output = document.createElement("col");
+        output.classList.add(_class);
+        return output;
+    }
+    const last = inst("col-option");
+    colgroup.append(inst("col-id"), inst("col-form"), inst("col-name"), inst("col-level"), inst("col-talent"), inst("col-orb"), inst("col-favorite"), inst("col-option"), inst("col-mega-option"));
+
+    table.append(colgroup, thead, tbody);
     wrapper.appendChild(table);
 
     for(const unit of unitData) {

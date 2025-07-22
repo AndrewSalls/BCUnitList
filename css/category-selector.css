@@ -84,7 +84,7 @@
     border-radius: 100vh;
     cursor: pointer;
     position: absolute;
-    transition: transform 0.2s ease-in-out, background-color 0.2s linear;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease;
 }
 .slider-ball:hover {
     --slider-bg: var(--generic-border);
@@ -129,7 +129,7 @@
     background-color: var(--rarity-content);
     border: 1px solid var(--rarity-border);
     border-radius: 5px;
-    transition: filter 0.2s linear;
+    transition: filter 0.2s ease;
     width: fit-content;
     height: fit-content;
 }
