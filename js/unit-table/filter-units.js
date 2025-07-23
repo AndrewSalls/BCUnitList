@@ -167,6 +167,7 @@ function registerFilter(button, callback) {
  * Initializes buttons for updating or sorting all units in the table at once.
  */
 function initializeUpdateOptions() {
+    return;
     const optionWrapper = /** @type {!HTMLDivElement} */ (document.querySelector("#table-update-options"));
     
     const applyToOwnedOnly = /** @type {HTMLInputElement} */ (optionWrapper.querySelector("#update-owned-only"));
@@ -179,6 +180,7 @@ function initializeUpdateOptions() {
     const level50Button = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#level-50-all"));
     const maxAllButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#max-all"));
 
+    // TODO: add functions to filterFunctions that max/min respective button targets
     unhideButton.onclick = () => applyUpdate((/** @type {{ classList: { remove: (arg0: string) => void; contains: (arg0: string) => any; }; querySelector: (arg0: string) => { (): any; new (): any; textContent: any; }; }} */ r) => {
         r.classList.remove("hidden");
         document.querySelectorAll(`#unit-search-suggestions div[data-target='${r.querySelector(".row-id").textContent}']`).forEach(o => o.classList.toggle("global-hidden", r.classList.contains("filter-hidden")));

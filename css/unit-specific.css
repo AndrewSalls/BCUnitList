@@ -112,6 +112,8 @@ td.row-image {
 
 td.row-id {
     width: unset;
+    max-width: unset;
+    min-width: unset;
 }
 
 #icon-rarity-favorite {

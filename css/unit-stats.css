@@ -8,9 +8,6 @@
     height: 360px;
     max-height: 360px;
 }
-.stat-mod-row:last-child {
-    border-bottom: 1px solid var(--rarity-border);
-}
 
 .unit-mod-row + .stat-mod-row {
     background-color: var(--rarity-bg);
@@ -33,6 +30,8 @@
     grid-template-columns: 30% 30% 40%;
     grid-template-rows: repeat(6, 60px);
     border-left: 1px solid var(--rarity-border);
+    border-bottom: 1px solid var(--rarity-border);
+    box-sizing: border-box;
 }
 
 .unit-stat-table h6 {
@@ -129,10 +128,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     row-gap: 1vh;
     overflow-y: auto;
-    padding: 0 0 1vh 0;
+    padding: 0;
+    padding-bottom: 3vh;
 }
 
 .option-label-box {
@@ -149,7 +149,7 @@
     margin: 0;
     padding: 1vh 0;
     border-bottom: 1px solid var(--rarity-border);
-    background-color: var(--rarity-bg);
+    background-color: var(--rarity-content);
     width: 100%;
     text-align: center;
     position: sticky;

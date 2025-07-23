@@ -47,7 +47,7 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
     favIconWrapper.appendChild(favIcon);
     favoriteCol.appendChild(favIconWrapper);
 
-    const optionHead = createColumnHead("sort-option", "Options");
+    const optionHead = createColumnHead("head-option", "Stats");
     optionHead.colSpan = 2;
 
     theadRow.append(

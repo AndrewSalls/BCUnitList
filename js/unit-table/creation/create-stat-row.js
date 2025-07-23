@@ -16,7 +16,7 @@ export default function createStatRow(unitData, mainRow) {
     statRow.classList.add("stat-mod-row");
 
     const rowBox = document.createElement("td");
-    rowBox.colSpan = 10000;
+    rowBox.colSpan = 9;
 
     const statTable = document.createElement("div");
     statTable.classList.add("unit-stat-table");

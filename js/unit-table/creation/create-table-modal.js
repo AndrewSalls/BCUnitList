@@ -1,6 +1,6 @@
 //@ts-check
 import { getModalTarget } from "../filter-units.js";
-import { gameSortLambda, sortRows } from "../sort-units.js";
+import { favoriteSortLambda, formSortLambda, gameSortLambda, idSortLambda, levelSortLambda, nameSortLambda, orbSortLambda, sortRows, talentSortLambda } from "../sort-units.js";
 import * as orbData from "../../../assets/orb-map.js";
 const ORB_DATA = orbData.default;
 
@@ -48,7 +48,7 @@ function createOptionSelection() {
     const wrapper = document.createElement("div");
 
     const title = document.createElement("h3");
-    title.textContent = "Update Entire Table";
+    title.textContent = "Modify Units";
 
     const options = document.createElement("div");
     options.id = "table-update-options";
@@ -89,31 +89,121 @@ function createOptionSelection() {
     const optionButtonCollection = document.createElement("div");
     optionButtonCollection.id = "table-modal-modifer-options";
     optionButtonCollection.classList.add("h-align");
+    
+    const maxList = [
+        createModalButton("Obtain unit (level 0 -> level 1)", "own-all", "Own"),
+        createModalButton("Put unit in its highest form", "fully-evolve-all", "Fully Evolve"),
+        createModalButton("Level up unit to level 30", "level-30-all", "Level to 30"),
+        createModalButton("Level up unit to level 50", "level-50-all", "Level to 50"),
+        createModalButton("Level up unit to their highest possible + level", "level-plus-ultra", "Max + Level"),
+        createModalButton("Level up regular talents to maximum amount", "level-talents", "Max Talents"),
+        createModalButton("Level up ultra talents to maximum amount", "level-ultra-talents", "Max Ultra Talents")
+    ];
+    maxList.forEach(b => {
+        b.classList.add("active");
+        b.onclick = () => b.classList.toggle("active");
+    });
+
+    const uniqueList = [
+        createModalButton("Hide hidden units", "hide-all", "Hide"),
+        createModalButton("Show hidden units", "unhide-all", "Unhide"),
+        createModalButton("Reset all changes to unit", "reset-all", "Reset")
+    ];
+    uniqueList.forEach(b => {
+        b.classList.add("active");
+        b.onclick = () => {
+            const status = b.classList.contains("active");
+            uniqueList.forEach(b2 => {
+                b2.classList.add("active");
+            });
+            b.classList.toggle("active", !status);
+
+            maxList.forEach(a => a.disabled = status);
+        }
+    });
+
+    const uniqueWrapper = document.createElement("div");
+    uniqueWrapper.id = "disjoint-update-options";
+    uniqueWrapper.append(...uniqueList);
+
+    const applyAllWrapper = document.createElement("div");
+    applyAllWrapper.id = "table-update-all-wrapper";
+
+    const applyAllButton = createModalButton("Apply all of the selected updates to every unit in the table", "apply-to-all", "Apply to All");
+    applyAllButton.onclick = () => {
+        // TODO: Make apply all previous buttons
+    };
+    applyAllWrapper.appendChild(applyAllButton);
 
     optionButtonCollection.append(
-        createModalButton("Show all Hidden Units", "unhide-all", "Unhide All"),
-        createModalButton("Reset all Units to Default, Unowned State", "reset-all", "Reset All"),
-        createModalButton("Obtain all Units (Set Lvl 0 to Lvl 1)", "own-all", "Own All"),
-        createModalButton("Set all Units to Highest Available Evolution", "fully-evolve-all", "Fully Evolve All"),
-        createModalButton("Increase all Levels to 30 (If Possible)", "level-30-all", "Level All to 30"),
-        createModalButton("Increase all Levels to Maximum", "level-50-all", "Level All to Max"),
-        createModalButton("Max Everything but Talent Orbs", "max-all", "Max All")
+        uniqueWrapper,
+        ...maxList,
+        applyAllWrapper
     );
-    
+    options.append(twoPaneToggle, optionButtonCollection);
+
+    const title2 = document.createElement("h3");
+    title2.textContent = "Sort Table";
+
+    wrapper.append(title, options, title2, createSortSelection());
+    return wrapper;
+}
+
+/**
+ * Creates all sorts for the modal.
+ * @returns {HTMLDivElement} A container for all sort buttons.
+ */
+function createSortSelection() {
     const sortWrapper = document.createElement("div");
     sortWrapper.id = "table-modal-sort";
 
-    const ingameSortButton = createModalButton("Order units like in-game", "ingame-sort", "In-Game Sort");
-    ingameSortButton.onclick = () => {
-        sortRows(/** @type {HTMLTableSectionElement} */ (getModalTarget().querySelector("tbody")), gameSortLambda, true);
-    };
-    sortWrapper.append(ingameSortButton);
+    const ascendBtn = document.createElement("button");
+    ascendBtn.type = "button";
+    ascendBtn.id = "sort-selection-asc";
 
-    optionButtonCollection.appendChild(sortWrapper);
-    options.append(twoPaneToggle, optionButtonCollection);
+    const ascendText = document.createElement("span");
+    ascendText.textContent = "Ascending";
 
-    wrapper.append(title, options);
-    return wrapper;
+    ascendBtn.onclick = () => {
+        ascendText.textContent = (ascendText.textContent?.startsWith("A") ? "Descending" : "Ascending");
+        ascendBtn.classList.toggle("descending");
+    }
+    ascendBtn.innerHTML = `
+        <svg class="sort-direction" viewBox="0 0 32 32">
+            <path d="M0 32 L16 0 L32 32"></path>
+        </svg>
+    `;
+    ascendBtn.prepend(ascendText);
+
+    sortWrapper.append(
+        createSortModalButton("Order units like in-game", "ingame-sort", "In-Game", gameSortLambda, ascendBtn),
+        createSortModalButton("Order units by their ID number", "id-sort", "ID", idSortLambda, ascendBtn),
+        createSortModalButton("Order units by their current evolution", "form-sort", "Form", formSortLambda, ascendBtn),
+        createSortModalButton("Order units by the current form's name, alphabetically", "alphabetical-sort", "Alphabetical", nameSortLambda, ascendBtn),
+        createSortModalButton("Order units by the sum of their level and + level", "level-sort", "Total Level", levelSortLambda, ascendBtn),
+        createSortModalButton("Order units by the number of completed talents", "talent-sort", "Talent Level", talentSortLambda, ascendBtn),
+        createSortModalButton("Order units by the quality of attached orbs", "orb-sort", "Orb Quality", orbSortLambda, ascendBtn),
+        createSortModalButton("Order units by whether they're favorited", "favorited-sort", "Favorited", favoriteSortLambda, ascendBtn),
+        ascendBtn
+    );
+
+    return sortWrapper;
+}
+
+/**
+ * Creates a filter button.
+ * @param {string} title The button description.
+ * @param {string} id An ID to assign to the button.
+ * @param {string} text The text displayed on the button.
+ * @param {(a: HTMLTableRowElement, b: HTMLTableRowElement) => number} sortFunc A function that compares two unit rows and returns a comparator output.
+ * @param {HTMLElement} ascendBtn A button that represents whether the sort direction should be ascending or descending.
+ * @returns {HTMLButtonElement} The created button.
+ */
+function createSortModalButton(title, id, text, sortFunc, ascendBtn) {
+    const button = createModalButton(title, id, text);
+    button.onclick = () => sortRows(/** @type {HTMLTableSectionElement} */ (getModalTarget().querySelector("tbody")), sortFunc, !ascendBtn.classList.contains("descending"));
+
+    return button;
 }
 
 /**

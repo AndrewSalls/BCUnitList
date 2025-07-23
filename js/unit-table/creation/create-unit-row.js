@@ -20,36 +20,26 @@ export default function createRow(entry) {
 
     const idBox = createIDBox(entry.id);
     const [nameBox, nameUpdate] = createNameBox([entry.normal_form, entry.evolved_form, entry.true_form, entry.ultra_form], entry.current_form);
-    const [iconBox, iconReset, iconMax] = createIconBox(entry.id, entry.current_form, entry.max_form, SETTINGS.skipImages.includes(entry.id), nameUpdate);
-    const [levelBox, levelReset, levelMax, plusLevelReset, plusLevelMax] = createLevelBox(entry.id, entry.level_cap, entry.level, entry.plus_level);
-    const [talentBox, talentReset, talentMax, ultraTalentReset, ultraTalentMax] = createTalentBox(entry.talents, entry.ultra_talents);
-    const [orbBox, orbReset] = createOrbBox(entry.orb);
-    const [favoriteBox, favoriteReset] = createFavoriteBox(entry.favorited);
-    
+    const iconBox = createIconBox(entry.id, entry.current_form, entry.max_form, SETTINGS.skipImages.includes(entry.id), nameUpdate);
+    const levelBox = createLevelBox(entry.id, entry.level_cap, entry.level, entry.plus_level);
+    const talentBox = createTalentBox(entry.talents, entry.ultra_talents);
+    const orbBox = createOrbBox(entry.orb);
+    const favoriteBox = createFavoriteBox(entry.favorited);
+
     let statRow = null;
     let unobserveCallback = null;
-    const optionsBox = createOptionsBox({
-        reset: {
-            icon: iconReset, level: levelReset, plusLevel: plusLevelReset, talent: talentReset, ultraTalent: ultraTalentReset, orb: orbReset, favorite: favoriteReset
-        },
-        max: {
-            icon: iconMax, level: levelMax, plusLevel: plusLevelMax, talent: talentMax, ultraTalent: ultraTalentMax
-        },
-        hide: () => {
-            row.classList.add("hidden");
-            document.querySelectorAll(`#unit-search-suggestions div[data-target='${entry.id}']`).forEach(o => o.classList.add("global-hidden"));
-        },
-        stats: () => {
-            if(!unobserveCallback) {              
-                const res = createStatRow(entry, row);
-                statRow = res.row;
-                unobserveCallback = res.callback;
+    const optionsBox = createOptionsBox(() => {
+        if(!unobserveCallback) {              
+            const res = createStatRow(entry, row);
+            statRow = res.row;
+            unobserveCallback = res.callback;
 
-                row.insertAdjacentElement("afterend", statRow);
-            } else {
-                unobserveCallback();
-                statRow.remove();
-            }
+            row.insertAdjacentElement("afterend", statRow);
+        } else {
+            unobserveCallback();
+            statRow.remove();
+            statRow = null;
+            unobserveCallback = null;
         }
     });
 
@@ -77,7 +67,7 @@ export function createIDBox(id) {
  * @param {FORM} maxForm The maximum allowed form of the unit.
  * @param {boolean} iconDisabled Whether the unit should display an icon.
  * @param {(form: FORM) => void} nameCallback A function to update the unit name column entry.
- * @returns {[HTMLTableCellElement, () => void, () => void]} The icon column entry, and a function to reset the unit form, and to max the unit form.
+ * @returns {HTMLTableCellElement} The icon column entry.
  */
 export function createIconBox(id, currentForm, maxForm, iconDisabled, nameCallback) {
     const rowImage = document.createElement("td");
@@ -108,9 +98,7 @@ export function createIconBox(id, currentForm, maxForm, iconDisabled, nameCallba
     }
 
     rowImage.appendChild(rowIMG);
-    return [rowImage,
-        () => { rowImage.dataset.form = `${maxForm}`; rowIMG.click(); },
-        () => { rowImage.dataset.form = `${maxForm - 1}`; rowIMG.click(); }];
+    return rowImage;
 }
 
 /**
@@ -137,7 +125,7 @@ export function createNameBox(names, currentForm) {
  * @param {import("../../data/unit-data.js").LEVEL_CAP} levelCapInfo The level caps to apply to the level and plus level inputs.
  * @param {number} currentLevel The initial value of the level input.
  * @param {number} currentPlusLevel  The initial value of the plus level input.
- * @returns {[HTMLTableCellElement, () => void, () => void, (() => void)|null, (() => void)|null]} The level column entry, and functions that (in order) reset level, max level, reset plus level, max plus level. If the unit does not have plus levels, those functions are instead null.
+ * @returns {HTMLTableCellElement} The level column entry.
  */
 export function createLevelBox(id, levelCapInfo, currentLevel, currentPlusLevel) {
     const rowLevel = document.createElement("td");
@@ -154,7 +142,6 @@ export function createLevelBox(id, levelCapInfo, currentLevel, currentPlusLevel)
         maxLevelInput.min = "1";
     }
 
-    let setPlusMin = null, setPlusMax = null;
     if(levelCapInfo.MaxPlusLevel > 0) {
         const plusText = document.createElement("p");
         plusText.classList.add("level-text");
@@ -165,24 +152,17 @@ export function createLevelBox(id, levelCapInfo, currentLevel, currentPlusLevel)
         horizontalAlign.appendChild(maxPlusLevel);
         const maxPlusLevelInput = /** @type {HTMLInputElement} */ (maxPlusLevel.querySelector(".level-select") ?? maxPlusLevel);
         maxPlusLevelInput.classList.add("max-plus-level");
-
-        setPlusMin = () => maxPlusLevelInput.value = maxPlusLevelInput.min;
-        setPlusMax = () => maxPlusLevelInput.value = maxPlusLevelInput.max;
     }
 
     rowLevel.appendChild(horizontalAlign);
-    return [rowLevel,
-        () => maxLevelInput.value = maxLevelInput.min,
-        () => maxLevelInput.value = maxLevelInput.max,
-        setPlusMin,
-        setPlusMax];
+    return rowLevel;
 }
 
 /**
  * Creates a talent and ultra talent column entrty.
  * @param {import("../../data/unit-data.js").TALENT[]} normalTalents The normal talents of the unit.
  * @param {import("../../data/unit-data.js").TALENT[]} ultraTalents The ultra talents of the unit.
- * @returns {[HTMLTableCellElement, (() => void)|null, (() => void)|null, (() => void)|null, (() => void)|null]} The column entry, and then functions to (in order) reset normal talents, max normal talents, reset ultra talents, max ultra talents. If the unit lacks talents and/or ultra talents, the respective functions are instead null.
+ * @returns {HTMLTableCellElement} The column entry.
  */
 export function createTalentBox(normalTalents, ultraTalents) {
     const rowTalents = document.createElement("td");
@@ -203,17 +183,13 @@ export function createTalentBox(normalTalents, ultraTalents) {
     }
 
     rowTalents.appendChild(horizontalAlign);
-    return [rowTalents,
-        normalTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".regular-talent p")).forEach(p => { p.innerText = "0"; p.onchange && p.onchange(new Event("change")); }) : null,
-        normalTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".regular-talent p")).forEach(p => { p.innerText = `${p.parentElement?.dataset.max}`; p.onchange && p.onchange(new Event("change")); }) : null,
-        ultraTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".ultra-talent p")).forEach(p => { p.innerText = "0"; p.onchange && p.onchange(new Event("change")); }) : null,
-        ultraTalents.length !== 0 ? () => /** @type {NodeListOf<HTMLParagraphElement>} */ (horizontalAlign.querySelectorAll(".ultra-talent p")).forEach(p => { p.innerText = `${p.parentElement?.dataset.max}`; p.onchange && p.onchange(new Event("change")); }) : null];
+    return rowTalents;
 }
 
 /**
  * Creates an orb selection column entry.
  * @param {import("../../data/unit-data.js").ORB[]} existingOrbs Any existing orbs for the unit, being null if the unit does not have an orb in that slot.
- * @returns {[HTMLTableCellElement, (() => void)|null]} The column entry and a function to reset the orb(s), or null if the unit does not have any orb slots.
+ * @returns {HTMLTableCellElement} The column entry.
  */
 export function createOrbBox(existingOrbs) {
     const rowOrb = document.createElement("td");
@@ -230,17 +206,13 @@ export function createOrbBox(existingOrbs) {
         rowOrb.appendChild(horizontalAlign);
     }
 
-    return [rowOrb, existingOrbs.length > 0 ? () => {
-        /** @type {NodeListOf<HTMLImageElement>} */ (horizontalAlign?.querySelectorAll(".orb-color")).forEach(oc => { oc.dataset.trait = ""; oc.src = "./assets/img/orb/empty-orb.png"; });
-        /** @type {NodeListOf<HTMLImageElement>} */ (horizontalAlign?.querySelectorAll(".orb-type")).forEach(ot => { ot.dataset.type = ""; ot.src = ""; ot.classList.add("invisible"); });
-        /** @type {NodeListOf<HTMLImageElement>} */ (horizontalAlign?.querySelectorAll(".orb-rank")).forEach(or => { or.dataset.rank = ""; or.src = ""; or.classList.add("invisible"); });
-    } : null];
+    return rowOrb;
 }
 
 /**
  * Creates a favorite selection column entry.
  * @param {boolean} isFavorited Whether the unit should start off favorited.
- * @returns {[HTMLTableCellElement, () => void]} The created entry, and a function to reset the favorited state of the row (there is no "max" function that sets the favorited state since that is intended to only be done manually).
+ * @returns {HTMLTableCellElement} The created entry.
  */
 export function createFavoriteBox(isFavorited) {
     const rowFavorite = document.createElement("td");
@@ -267,77 +239,32 @@ export function createFavoriteBox(isFavorited) {
     favWrapper.appendChild(favIcon);
     rowFavorite.appendChild(favWrapper);
 
-    return [rowFavorite, () => { favWrapper.dataset.favorited = "1"; favIcon.click(); }];
+    return rowFavorite;
 }
 
 /**
  * Creates the options column entry for the row.
- * @param {{ reset: { [key: string]: (() => void)|null }; max: { [key: string]: (() => void)|null }; hide: () => void; stats: () => void; }} optionCallbacks Functions that describe what actions can be performed to the row, based on what columns are filled in.
+ * @param { () => void } statDisplayCallback Functions that describe what actions can be performed to the row, based on what columns are filled in.
  * @returns {HTMLTableCellElement} The created options entry.
  */
-export function createOptionsBox(optionCallbacks) {
+export function createOptionsBox(statDisplayCallback) {
     const rowOptions = document.createElement("td");
     rowOptions.colSpan = 2;
     rowOptions.classList.add("row-option");
     const rowOptionAlign = document.createElement("div");
     rowOptionAlign.classList.add("row-option-wrapper");
 
-    const includedInMax = [];
+    const viewStats = document.createElement("button");
+    viewStats.textContent = "+";
+    viewStats.title = "Toggle Unit Stats";
+    viewStats.classList.add("stat-display-option");
+    viewStats.classList.add("option-button");
+    viewStats.onclick = () => {
+        viewStats.textContent = (viewStats.textContent === "+") ? "−" : "+";
+        statDisplayCallback();
+    };
 
-    const reset = createOptionButton("R", "Reset Unit", "reset-option", () => Object.values(optionCallbacks.reset).forEach(f => f !== null && f()));
-    rowOptionAlign.appendChild(reset);
-
-    if(optionCallbacks.max.level) {
-        const maxLevel = createOptionButton("L", "Max Regular Level", "level-option", optionCallbacks.max.level);
-        rowOptionAlign.appendChild(maxLevel);
-        includedInMax.push(maxLevel);
-    }
-
-    if(optionCallbacks.max.plusLevel) {
-        const maxPlusLevel = createOptionButton("+", "Max + Level", "plus-level-option", optionCallbacks.max.plusLevel);
-        rowOptionAlign.appendChild(maxPlusLevel);
-        includedInMax.push(maxPlusLevel);
-    }
-    if(optionCallbacks.max.talent) {
-        const maxTalents = createOptionButton("T", "Max Regular Talents", "talent-option", optionCallbacks.max.talent);
-        rowOptionAlign.appendChild(maxTalents);
-        includedInMax.push(maxTalents);
-    }
-    if(optionCallbacks.max.ultraTalent) {
-        const maxUltraTalents = createOptionButton("U", "Max Ultra Talents", "ultra-talent-option", optionCallbacks.max.ultraTalent);
-        rowOptionAlign.appendChild(maxUltraTalents);
-        includedInMax.push(maxUltraTalents);
-    }
-
-    const maxAll = createOptionButton("M", "Max Everything", "max-option", () => Object.values(optionCallbacks.max).forEach(f => f !== null && f()));
-    rowOptionAlign.appendChild(maxAll);
-
-    const hideUnit = createOptionButton("H", "Hide Unit", "hide-option", optionCallbacks.hide);
-    rowOptionAlign.appendChild(hideUnit);
-
-    const viewStats = createOptionButton("S", "Show/Hide Unit Stats", "stat-display-option", optionCallbacks.stats);
     rowOptionAlign.appendChild(viewStats);
-
     rowOptions.appendChild(rowOptionAlign);
-
     return rowOptions;
-}
-
-/**
- * Creates an option button.
- * @param {string} text The button text.
- * @param {string} description The button description.
- * @param {string} className A class for the button.
- * @param {() => void} effect The effect of clicking on the button.
- * @returns {HTMLButtonElement} The created button.
- */
-function createOptionButton(text, description, className, effect) {
-    const button = document.createElement("button");
-    button.textContent = text;
-    button.title = description;
-    button.classList.add(className);
-    button.classList.add("option-button");
-    button.onclick = effect;
-
-    return button;
 }

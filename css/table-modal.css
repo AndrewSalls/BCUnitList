@@ -64,6 +64,30 @@
     cursor: pointer;
 }
 
-#table-modal-sort {
+#disjoint-update-options {
+    margin-right: 2vw;
+}
+
+#table-update-all-wrapper {
     margin-left: 2vw;
+}
+
+.sort-direction {
+    height: 8px;
+    aspect-ratio: 1/1;
+}
+.descending .sort-direction {
+    transform: rotate(180deg);
+}
+
+#table-modal-sort {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#table-modal-sort button {
+    border: 2px solid var(--text) !important;
+    border-radius: 5px;
 }

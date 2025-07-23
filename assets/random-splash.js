@@ -54,7 +54,7 @@ const SPLASH_TEXT = {
         "Don't trust what you see on TV! Unless a cat said it, then it's probably true.",
         "Equipping an S rank Resist Orb on a unit with the same ability gives the unit a full immunity! This even works just by equipping two S rank orbs!!",
         "Complete every (yes EVERY) level in Stories of Legend for a secret reward!",
-        "You can slide the cat base's door to reveal a hidden cat! I wonder if it would get annoyed if you quickly slid the door open over and over?",
+        "You can slide the cat base's door for a chance to find an ULTRA RARE cat!",
         "Units summoned by cats with the Conjure ability are immune to knockback, even the special knockback when a boss comes out of the enemy base. Does it smell like cheese in here?",
         "Some stages have seemingly unbeatable enemies! Try beating the stage before they show up, or keeping other enemies around so they never appear!",
         "Be fierce, be brave, be graceful.",
