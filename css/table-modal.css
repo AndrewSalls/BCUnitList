@@ -8,6 +8,12 @@
     border-right: 1px solid var(--warning-border);
 }
 
+#table-option-modal h3 {
+    width: 100%;
+    text-align: center;
+    margin: 2vh 0 1vh 0;
+}
+
 #table-option-modal h2 {
     padding: 0;
     margin: 0;
@@ -64,14 +70,6 @@
     cursor: pointer;
 }
 
-#disjoint-update-options {
-    margin-right: 2vw;
-}
-
-#table-update-all-wrapper {
-    margin-left: 2vw;
-}
-
 .sort-direction {
     height: 8px;
     aspect-ratio: 1/1;
@@ -90,4 +88,55 @@
 #table-modal-sort button {
     border: 2px solid var(--text) !important;
     border-radius: 5px;
+}
+
+#table-modal-modifer-options {
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 50% 50%;
+    grid-template-areas: "unique applyAll" "multi applyOptions";
+    width: 100%;
+    row-gap: 1vh;
+    column-gap: 1vh;
+}
+
+#disjoint-update-options {
+    grid-area: unique;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#table-update-all-wrapper {
+    grid-area: applyAll;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#table-modal-modifier-multiselect {
+    grid-area: multi;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.table-option-selection {
+    width: 80%;
+}
+
+#table-update-target-focus {
+    grid-area: applyOptions;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#table-update-target-focus div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }

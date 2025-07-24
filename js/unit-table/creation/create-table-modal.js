@@ -46,6 +46,7 @@ export default function createTableOptionModal() {
  */
 function createOptionSelection() {
     const wrapper = document.createElement("div");
+    wrapper.classList.add("table-option-selection");
 
     const title = document.createElement("h3");
     title.textContent = "Modify Units";
@@ -54,10 +55,9 @@ function createOptionSelection() {
     options.id = "table-update-options";
 
     const twoPaneToggle = document.createElement("div");
-    twoPaneToggle.classList.add("two-pane");
+    twoPaneToggle.id = "table-update-target-focus";
 
     const panel1 = document.createElement("div");
-    panel1.classList.add("h-align");
     const panel1Input = document.createElement("input");
     panel1Input.type = "checkbox";
     panel1Input.id = "update-owned-only";
@@ -68,10 +68,9 @@ function createOptionSelection() {
     panel1Label.textContent = "Only apply to owned units";
     panel1Label.title = "Only update owned units (Level ≥ 1)";
 
-    panel1.append(panel1Input, panel1Label);
+    panel1.append(panel1Label, panel1Input);
 
     const panel2 = document.createElement("div");
-    panel2.classList.add("h-align");
     const panel2Input = document.createElement("input");
     panel2Input.type = "checkbox";
     panel2Input.id = "update-visible-only";
@@ -83,12 +82,15 @@ function createOptionSelection() {
     panel2Label.textContent = "Only apply to visible units";
     panel2Label.title = "Only update units that aren't hidden by a filter or the unit's hide button";
 
-    panel2.append(panel2Input, panel2Label);
+    panel2.append(panel2Label, panel2Input);
     twoPaneToggle.append(panel1, panel2);
 
     const optionButtonCollection = document.createElement("div");
     optionButtonCollection.id = "table-modal-modifer-options";
     optionButtonCollection.classList.add("h-align");
+
+    const updateMultiselect = document.createElement("div");
+    updateMultiselect.id = "table-modal-modifier-multiselect";
     
     const maxList = [
         createModalButton("Obtain unit (level 0 -> level 1)", "own-all", "Own"),
@@ -103,6 +105,7 @@ function createOptionSelection() {
         b.classList.add("active");
         b.onclick = () => b.classList.toggle("active");
     });
+    updateMultiselect.append(...maxList);
 
     const uniqueList = [
         createModalButton("Hide hidden units", "hide-all", "Hide"),
@@ -135,12 +138,8 @@ function createOptionSelection() {
     };
     applyAllWrapper.appendChild(applyAllButton);
 
-    optionButtonCollection.append(
-        uniqueWrapper,
-        ...maxList,
-        applyAllWrapper
-    );
-    options.append(twoPaneToggle, optionButtonCollection);
+    optionButtonCollection.append(uniqueWrapper, updateMultiselect, applyAllWrapper, twoPaneToggle);
+    options.appendChild(optionButtonCollection);
 
     const title2 = document.createElement("h3");
     title2.textContent = "Sort Table";

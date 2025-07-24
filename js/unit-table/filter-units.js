@@ -1,6 +1,7 @@
 //@ts-check
 import { observeRowChange } from "../helper/link-row.js";
 import * as filterFunctions from "./filter-functions.js";
+import * as updateFunctions from "./update-functions.js";
 import * as orbData from "../../assets/orb-map.js";
 const ORB_DATA = orbData.default;
 
@@ -167,43 +168,37 @@ function registerFilter(button, callback) {
  * Initializes buttons for updating or sorting all units in the table at once.
  */
 function initializeUpdateOptions() {
-    return;
     const optionWrapper = /** @type {!HTMLDivElement} */ (document.querySelector("#table-update-options"));
     
     const applyToOwnedOnly = /** @type {HTMLInputElement} */ (optionWrapper.querySelector("#update-owned-only"));
     const applyToVisibleOnly = /** @type {HTMLInputElement} */ (optionWrapper.querySelector("#update-visible-only"));
+    const applyToAllButton = /** @type {HTMLInputElement} */ (optionWrapper.querySelector("#apply-to-all"));
+
+    const hideButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#hide-all"));
     const unhideButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#unhide-all"));
     const resetButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#reset-all"));
     const ownAllButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#own-all"));
     const fullyEvolveButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#fully-evolve-all"));
     const level30Button = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#level-30-all"));
     const level50Button = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#level-50-all"));
-    const maxAllButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#max-all"));
+    const levelMaxButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#level-plus-ultra"));
+    const talentMaxButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#level-talents"));
+    const utTalentMaxButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#level-ultra-talents"));
 
-    // TODO: add functions to filterFunctions that max/min respective button targets
-    unhideButton.onclick = () => applyUpdate((/** @type {{ classList: { remove: (arg0: string) => void; contains: (arg0: string) => any; }; querySelector: (arg0: string) => { (): any; new (): any; textContent: any; }; }} */ r) => {
-        r.classList.remove("hidden");
-        document.querySelectorAll(`#unit-search-suggestions div[data-target='${r.querySelector(".row-id").textContent}']`).forEach(o => o.classList.toggle("global-hidden", r.classList.contains("filter-hidden")));
-    }, applyToOwnedOnly.checked, applyToVisibleOnly.checked);
-    resetButton.onclick = () => applyUpdate((/** @type {{ querySelector: (arg0: string) => { (): any; new (): any; click: { (): any; new (): any; }; }; }} */ r) => r.querySelector(".reset-option").click(), applyToOwnedOnly.checked, applyToVisibleOnly.checked);
-    ownAllButton.onclick = () => applyUpdate((/** @type {{ querySelector: (arg0: string) => any; }} */ r) => {
-        const levelSelector = r.querySelector(".max-level.level-select");
-        levelSelector.value = Math.max(parseInt(levelSelector.value), 1);
-    }, false, applyToVisibleOnly.checked);
-    fullyEvolveButton.onclick = () => applyUpdate((/** @type {{ querySelector: (arg0: string) => any; }} */ r) => {
-        const icon = r.querySelector(".row-image");
-        icon.dataset.form = parseInt(icon.dataset.max_form) - 1;
-        icon.querySelector("img").click();
-    }, applyToOwnedOnly.checked, applyToVisibleOnly.checked);
-    level30Button.onclick = () => applyUpdate((/** @type {{ querySelector: (arg0: string) => any; }} */ r) => {
-        const levelSelector = r.querySelector(".max-level.level-select");
-        levelSelector.value = Math.min(Math.max(parseInt(levelSelector.value), 30), parseInt(levelSelector.max));
-    }, applyToOwnedOnly.checked, applyToVisibleOnly.checked);
-    level50Button.onclick = () => applyUpdate((/** @type {{ querySelector: (arg0: string) => any; }} */ r) => {
-        const levelSelector = r.querySelector(".max-level.level-select");
-        levelSelector.value = levelSelector.max;
-    }, applyToOwnedOnly.checked, applyToVisibleOnly.checked);
-    maxAllButton.onclick = () => applyUpdate((/** @type {{ querySelector: (arg0: string) => { (): any; new (): any; click: { (): any; new (): any; }; }; }} */ r) => r.querySelector(".max-option").click(), applyToOwnedOnly.checked, applyToVisibleOnly.checked);
+    applyToAllButton.onclick = () => {
+        if(!hideButton.classList.contains("active")) { applyUpdate(updateFunctions.hideUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
+        else if(!unhideButton.classList.contains("active")) { applyUpdate(updateFunctions.unhideUnit, applyToOwnedOnly.checked, false); } // Always want to target hidden units when unhiding
+        else if(!resetButton.classList.contains("active")) { applyUpdate(updateFunctions.resetUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
+        else {
+            if(!ownAllButton.classList.contains("active")) { applyUpdate(updateFunctions.ownUnit, false, applyToVisibleOnly.checked); }
+            if(!fullyEvolveButton.classList.contains("active")) { applyUpdate(updateFunctions.evolveUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
+            if(!level30Button.classList.contains("active")) { applyUpdate(updateFunctions.level30Unit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
+            if(!level50Button.classList.contains("active")) { applyUpdate(updateFunctions.level50Unit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
+            if(!levelMaxButton.classList.contains("active")) { applyUpdate(updateFunctions.levelMaxUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
+            if(!talentMaxButton.classList.contains("active")) { applyUpdate(updateFunctions.talentMaxUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
+            if(!utTalentMaxButton.classList.contains("active")) { applyUpdate(updateFunctions.utMaxUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
+        }
+    };
 }
 
 /**
