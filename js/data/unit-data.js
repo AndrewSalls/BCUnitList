@@ -182,14 +182,11 @@ export default class UnitData {
         this.#unitData[id].favorited = data.favorited ?? this.#unitData[id].favorited;
         this.#unitData[id].hidden = data.hidden ?? this.#unitData[id].hidden;
     
-        if(data.current_form === 0 &&
-            data.level === 0 && data.plus_level === 0 &&
-            data.talents.every(t => t === 0) && data.ultra_talents.every(t => t === 0) &&
-            data.orb.every(o => !o) &&
-            !data.hidden && !data.favorited && window.localStorage.getItem(`${data.id}`)) {
-                window.localStorage.removeItem(`${data.id}`);
+        const entry = encodeUnitEntry(data);
+        if(entry !== "") {
+            window.localStorage.setItem(`${data.id}`, entry);
         } else {
-            window.localStorage.setItem(`${data.id}`, encodeUnitEntry(data));
+            window.localStorage.removeItem(`${data.id}`);
         }
 
         window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + userRankDelta}`);

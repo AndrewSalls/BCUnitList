@@ -174,6 +174,27 @@ function initializeUpdateOptions() {
     const applyToVisibleOnly = /** @type {HTMLInputElement} */ (optionWrapper.querySelector("#update-visible-only"));
     const applyToAllButton = /** @type {HTMLInputElement} */ (optionWrapper.querySelector("#apply-to-all"));
 
+    applyToAllButton.onclick = () => {
+        const callbackClass = getActiveCallbacks();
+        for(const key of Object.keys(callbackClass)) {
+            if(key === "unhide") {
+                applyUpdate(callbackClass[key], applyToOwnedOnly.checked, false);
+            } else if(key === "own") {
+                applyUpdate(callbackClass[key], false, applyToVisibleOnly.checked);
+            } else {
+                applyUpdate(callbackClass[key], applyToOwnedOnly.checked, applyToVisibleOnly.checked);
+            }
+        }
+    };
+}
+
+/**
+ * Gets a list of active callbacks.
+ * @returns {object} An object containing all active callbacks.
+ */
+export function getActiveCallbacks() {
+    const optionWrapper = /** @type {!HTMLDivElement} */ (document.querySelector("#table-update-options"));
+
     const hideButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#hide-all"));
     const unhideButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#unhide-all"));
     const resetButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#reset-all"));
@@ -185,20 +206,22 @@ function initializeUpdateOptions() {
     const talentMaxButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#level-talents"));
     const utTalentMaxButton = /** @type {HTMLButtonElement} */ (optionWrapper.querySelector("#level-ultra-talents"));
 
-    applyToAllButton.onclick = () => {
-        if(!hideButton.classList.contains("active")) { applyUpdate(updateFunctions.hideUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
-        else if(!unhideButton.classList.contains("active")) { applyUpdate(updateFunctions.unhideUnit, applyToOwnedOnly.checked, false); } // Always want to target hidden units when unhiding
-        else if(!resetButton.classList.contains("active")) { applyUpdate(updateFunctions.resetUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
-        else {
-            if(!ownAllButton.classList.contains("active")) { applyUpdate(updateFunctions.ownUnit, false, applyToVisibleOnly.checked); }
-            if(!fullyEvolveButton.classList.contains("active")) { applyUpdate(updateFunctions.evolveUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
-            if(!level30Button.classList.contains("active")) { applyUpdate(updateFunctions.level30Unit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
-            if(!level50Button.classList.contains("active")) { applyUpdate(updateFunctions.level50Unit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
-            if(!levelMaxButton.classList.contains("active")) { applyUpdate(updateFunctions.levelMaxUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
-            if(!talentMaxButton.classList.contains("active")) { applyUpdate(updateFunctions.talentMaxUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
-            if(!utTalentMaxButton.classList.contains("active")) { applyUpdate(updateFunctions.utMaxUnit, applyToOwnedOnly.checked, applyToVisibleOnly.checked); }
-        }
-    };
+    const output = {};
+
+    if(!hideButton.classList.contains("active")) { output.hide = updateFunctions.hideUnit }
+    else if(!unhideButton.classList.contains("active")) { output.unhide = updateFunctions.unhideUnit } // Always want to target hidden units when unhiding
+    else if(!resetButton.classList.contains("active")) { output.reset = updateFunctions.resetUnit }
+    else {
+        if(!ownAllButton.classList.contains("active")) { output.own = updateFunctions.ownUnit }
+        if(!fullyEvolveButton.classList.contains("active")) { output.evolve = updateFunctions.evolveUnit }
+        if(!level30Button.classList.contains("active")) { output.level30 = updateFunctions.level30Unit }
+        if(!level50Button.classList.contains("active")) { output.level50 = updateFunctions.level50Unit }
+        if(!levelMaxButton.classList.contains("active")) { output.levelMax = updateFunctions.levelMaxUnit }
+        if(!talentMaxButton.classList.contains("active")) { output.talents = updateFunctions.talentMaxUnit }
+        if(!utTalentMaxButton.classList.contains("active")) { output.ultraTalents = updateFunctions.utMaxUnit }
+    }
+
+    return output;
 }
 
 /**

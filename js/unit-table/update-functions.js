@@ -87,10 +87,10 @@ export const level50Unit = (/** @type {HTMLTableRowElement} */ r) => {
 };
 
 export const levelMaxUnit = (/** @type {HTMLTableRowElement} */ r) => {
-    const levelBox = /** @type {HTMLInputElement} */ (r.querySelector(".level-select.max-level"));
-    levelBox.value = levelBox.max;
     const plusLevelBox = /** @type {HTMLInputElement} */ (r.querySelector(".level-select.max-plus-level"));
-    plusLevelBox.value = plusLevelBox.max;
+    if(plusLevelBox) {
+        plusLevelBox.value = plusLevelBox.max;
+    }
 };
 
 export const talentMaxUnit = (/** @type {HTMLTableRowElement} */ r) => {

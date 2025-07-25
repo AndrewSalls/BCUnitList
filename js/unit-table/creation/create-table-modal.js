@@ -91,6 +91,7 @@ function createOptionSelection() {
 
     const updateMultiselect = document.createElement("div");
     updateMultiselect.id = "table-modal-modifier-multiselect";
+    updateMultiselect.classList.add("table-filter-group");
     
     const maxList = [
         createModalButton("Obtain unit (level 0 -> level 1)", "own-all", "Own"),
@@ -127,16 +128,22 @@ function createOptionSelection() {
 
     const uniqueWrapper = document.createElement("div");
     uniqueWrapper.id = "disjoint-update-options";
+    uniqueWrapper.classList.add("table-filter-group");
     uniqueWrapper.append(...uniqueList);
 
     const applyAllWrapper = document.createElement("div");
     applyAllWrapper.id = "table-update-all-wrapper";
 
     const applyAllButton = createModalButton("Apply all of the selected updates to every unit in the table", "apply-to-all", "Apply to All");
-    applyAllButton.onclick = () => {
-        // TODO: Make apply all previous buttons
+    const toggleEditModeButton = createModalButton("Enter or exit editing mode, which allows for quickly applying any of the selected update options to specific units", "toggle-update-column", "Quick-Edit Mode");
+    toggleEditModeButton.classList.add("active");
+    toggleEditModeButton.onclick = () => {
+        const status = !toggleEditModeButton.classList.toggle("active");
+        document.body.classList.toggle("quick-update-enabled", status);
+        /** @type {HTMLTableCellElement} */ (getModalTarget().querySelector("thead .head-option")).textContent = (status ? "Quick-Edit" : "Stats");
     };
-    applyAllWrapper.appendChild(applyAllButton);
+
+    applyAllWrapper.append(applyAllButton, toggleEditModeButton);
 
     optionButtonCollection.append(uniqueWrapper, updateMultiselect, applyAllWrapper, twoPaneToggle);
     options.appendChild(optionButtonCollection);

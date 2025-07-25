@@ -3,6 +3,7 @@ import { FORM } from "../../data/unit-data.js";
 import { createLevelInteractable, createOrbInteractable, createTalentInteractable } from "./create-row-interactable.js";
 import SETTINGS from "../../../assets/settings.js";
 import createStatRow from "./create-stat-row.js";
+import { getActiveCallbacks } from "../filter-units.js";
 
 /**
  * Creates a row in a unit table.
@@ -40,6 +41,11 @@ export default function createRow(entry) {
             statRow.remove();
             statRow = null;
             unobserveCallback = null;
+        }
+    }, () => {
+        const updateCallbacks = getActiveCallbacks();
+        for(const key of Object.keys(updateCallbacks)) {
+            updateCallbacks[key](row);
         }
     });
 
@@ -244,10 +250,11 @@ export function createFavoriteBox(isFavorited) {
 
 /**
  * Creates the options column entry for the row.
- * @param { () => void } statDisplayCallback Functions that describe what actions can be performed to the row, based on what columns are filled in.
+ * @param { () => void } statDisplayCallback Function that handles opening/closing the stats row for this row's unit.
+ * @param { () => void } quickEditCallback A function that describes how to apply a quick-edit action to this row.
  * @returns {HTMLTableCellElement} The created options entry.
  */
-export function createOptionsBox(statDisplayCallback) {
+export function createOptionsBox(statDisplayCallback, quickEditCallback) {
     const rowOptions = document.createElement("td");
     rowOptions.colSpan = 2;
     rowOptions.classList.add("row-option");
@@ -260,8 +267,12 @@ export function createOptionsBox(statDisplayCallback) {
     viewStats.classList.add("stat-display-option");
     viewStats.classList.add("option-button");
     viewStats.onclick = () => {
-        viewStats.textContent = (viewStats.textContent === "+") ? "−" : "+";
-        statDisplayCallback();
+        if(document.body.classList.contains("quick-update-enabled")) {
+            quickEditCallback();
+        } else {
+            viewStats.textContent = (viewStats.textContent === "+") ? "−" : "+";
+            statDisplayCallback();
+        }
     };
 
     rowOptionAlign.appendChild(viewStats);

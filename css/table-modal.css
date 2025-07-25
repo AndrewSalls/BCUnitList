@@ -1,20 +1,20 @@
-#table-option-modal button:not(:last-of-type) {
+.table-filter-group button:not(:last-of-type) {
     border-right: 1px solid var(--content-border);
 }
-#table-option-modal button:not(:first-of-type) {
+.table-filter-group button:not(:first-of-type) {
     border-left: none;
 }
-#table-option-modal button:not(:last-of-type).active {
+.table-filter-group button:not(:last-of-type).active {
     border-right: 1px solid var(--warning-border);
 }
 
-#table-option-modal h3 {
+.table-filter-group h3 {
     width: 100%;
     text-align: center;
     margin: 2vh 0 1vh 0;
 }
 
-#table-option-modal h2 {
+.table-filter-group h2 {
     padding: 0;
     margin: 0;
 }
@@ -41,24 +41,24 @@
     height: fit-content;
 }
 
-.table-filter-group .h-align, #table-update-options .h-align {
+.table-filter-group .h-align {
     margin: 1vh 0;
 }
 
-.table-filter-group button, #table-update-options button {
+.table-filter-group button {
     border-top: 2px solid var(--text);
     border-bottom: 2px solid var(--text);
     padding: 0.5vw;
     font-size: 12pt;
 }
 
-.table-filter-group button:first-of-type, #table-update-options button:first-of-type {
+.table-filter-group button:first-of-type {
     border-radius: 5px 0 0 5px;
 }
-.table-filter-group button:last-of-type, #table-update-options button:last-of-type {
+.table-filter-group button:last-of-type {
     border-radius: 0 5px 5px 0;
 }
-.table-filter-group button:only-of-type, #table-update-options button:only-of-type {
+.table-filter-group button:only-of-type {
     border-radius: 5px 5px 5px 5px;
 }
 
@@ -92,7 +92,7 @@
 
 #table-modal-modifer-options {
     display: grid;
-    grid-template-columns: 80% 20%;
+    grid-template-columns: 1fr minmax(20%, min-content);
     grid-template-rows: 50% 50%;
     grid-template-areas: "unique applyAll" "multi applyOptions";
     width: 100%;
@@ -112,6 +112,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    column-gap: 1vw;
 }
 
 #table-modal-modifier-multiselect {
@@ -139,4 +140,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+#table-update-options .table-filter-group {
+    padding: 0;
+    margin: 0;
+}
+
+#table-update-all-wrapper button {
+    border-top: 2px solid var(--text);
+    border-bottom: 2px solid var(--text);
+    padding: 0.5vw;
+    font-size: 12pt;
+    border-radius: 5px;
 }
