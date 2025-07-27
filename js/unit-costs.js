@@ -69,6 +69,8 @@ function loadCosts() {
             const table = createTableFromData(data, "Legend Rare");
             table.classList.add("legend-rare-color");
             table.querySelector(".collapsible")?.classList.add("legend-rare-multi");
+            // @ts-ignore By definition this class exists
+            [...table.querySelector(".collapsible").querySelectorAll(".upgrade-cost-row")].forEach((r, i) => r.classList.add(`legend-row-${(i % 8) + 1}`));
             container[7].appendChild(table);
             loadingBar.increment();
         });

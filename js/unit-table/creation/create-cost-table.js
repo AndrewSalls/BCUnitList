@@ -47,6 +47,7 @@ export default function createTableFromData(costData, name) {
     }
 
     const xpNPWrapper = document.createElement("div");
+    xpNPWrapper.classList.add("upgrade-cost-row");
     xpNPWrapper.append(
         createLabelledImageEvoBox("./assets/img/evo_mats/xp.png", "XP needed to perform all evolutions", "p-img", "EVO", costData.formXP, costData.ultra.formXP, hasUbers),
         createLabelledImageEvoBox("./assets/img/evo_mats/xp.png", "XP needed to level all units up to level 30", "p-img", "30", costData.lvl30XP, costData.ultra.lvl30XP),
@@ -56,6 +57,7 @@ export default function createTableFromData(costData, name) {
     );
 
     const catseyeWrapper = document.createElement("div");
+    catseyeWrapper.classList.add("upgrade-cost-row");
     catseyeWrapper.append(
         createEvoBox("./assets/img/evo_mats/special_catseye.png", "Special catseyes needed to fully level all units", "catseye", costData.catseye_EX, costData.ultra.catseye_EX),
         createEvoBox("./assets/img/evo_mats/rare_catseye.png", "Rare catseyes needed to fully level all units", "catseye", costData.catseye_RR, costData.ultra.catseye_RR),
@@ -66,6 +68,7 @@ export default function createTableFromData(costData, name) {
     );
 
     const catfruitWrapper = document.createElement("div");
+    catfruitWrapper.classList.add("upgrade-cost-row");
     catfruitWrapper.append(
         createEvoBox("./assets/img/evo_mats/green_fruit.png", "Green Catfruit needed to fully evolve all units", "big-fruit", costData.green_fruit, costData.ultra.green_fruit, hasUbers),
         createEvoBox("./assets/img/evo_mats/purple_fruit.png", "Purple Catfruit needed to fully evolve all units", "big-fruit", costData.purple_fruit, costData.ultra.purple_fruit, hasUbers),
@@ -79,6 +82,7 @@ export default function createTableFromData(costData, name) {
     );
 
     const seedWrapper = document.createElement("div");
+    seedWrapper.classList.add("upgrade-cost-row");
     seedWrapper.append(
         createEvoBox("./assets/img/evo_mats/green_seed.png", "Green Catfruit Seeds needed to fully evolve all units", "small-fruit", costData.green_seed, costData.ultra.green_seed, hasUbers),
         createEvoBox("./assets/img/evo_mats/purple_seed.png", "Purple Catfruit Seeds needed to fully evolve all units", "small-fruit", costData.purple_seed, costData.ultra.purple_seed, hasUbers),
@@ -92,6 +96,7 @@ export default function createTableFromData(costData, name) {
     );
 
     const gemWrapper = document.createElement("div");
+    gemWrapper.classList.add("upgrade-cost-row");
     const epicGap = document.createElement("span");
     epicGap.classList.add("evo-mat-wrapper");
 
@@ -105,6 +110,7 @@ export default function createTableFromData(costData, name) {
     );
 
     const stoneWrapper = document.createElement("div");
+    stoneWrapper.classList.add("upgrade-cost-row");
     stoneWrapper.append(
         createEvoBox("./assets/img/evo_mats/green_stone.png", "Green Behemoth Stones needed to fully evolve all units", "small-rock", costData.green_stone, costData.ultra.green_stone, hasUbers),
         createEvoBox("./assets/img/evo_mats/purple_stone.png", "Purple Behemoth Stones needed to fully evolve all units", "small-rock", costData.purple_stone, costData.ultra.purple_stone, hasUbers),

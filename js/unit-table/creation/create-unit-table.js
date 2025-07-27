@@ -9,8 +9,9 @@ import attachUnitTableColumnSort from "../sort-units.js";
  * @param {import("../../data/unit-data.js").UNIT_DATA[]} unitData The units to add to the table.
  * @param {((unit: import("../../data/unit-data.js").UNIT_RECORD) => Promise<void>)|null} changeEvent An event that gets called when a row's value changes, returning the change to the user's user rank, or null if no event should be called.
  * @param {import("../../helper/loading.js").LOADING_BAR|null} loadingBar A loading bar to update the page as the table loads, or null if the page does not need a loading bar.
+ * @param {boolean} [isLegendTable=false] Pre-attaches the legend table class to ensure sorting properly updates table visuals.
  */
-export default function createSearchableTable(titleText, unitData, changeEvent = null, loadingBar = null) {
+export default function createSearchableTable(titleText, unitData, changeEvent = null, loadingBar = null, isLegendTable = false) {
     const wrapper = document.createElement("div");
 
     const table = document.createElement("table");
@@ -19,6 +20,7 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
     const thead = document.createElement("thead");
     const theadRow = document.createElement("tr");
     const tbody = document.createElement("tbody");
+    tbody.classList.toggle("legend-rare-multi", isLegendTable);
 
     const titleRow = document.createElement("tr");
     const titleRowText = /** @type {HTMLTableCellElement} */ (document.createElement("td"));

@@ -128,3 +128,7 @@
     user-select: none;
     paint-order: stroke fill;
 }
+
+.upgrade-cost-row {
+    background-color: var(--rarity-bg);
+}

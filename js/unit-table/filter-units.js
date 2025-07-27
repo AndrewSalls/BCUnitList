@@ -5,7 +5,6 @@ import * as updateFunctions from "./update-functions.js";
 import * as orbData from "../../assets/orb-map.js";
 const ORB_DATA = orbData.default;
 
-let topPos = 0;
 /**
  * Iniitializes the table modal, which displays table options, filters, and sorts.
  */
@@ -14,9 +13,6 @@ export function initializeTableModal() {
     tableModal.querySelector("#table-option-cancel")?.addEventListener("click", () => {
         targettedTable.dataset.options = [...tableModal.querySelectorAll("#table-filter-options button")].reduce((s, a) => s + (a.classList.contains("active") ? "1" : "0"), "");
         tableModal.classList.add("hidden");
-        document.body.classList.remove("unscrollable");
-        document.documentElement.scrollTop = topPos;
-        document.body.style.top = '';
     });
 
     initializeUpdateOptions();
@@ -49,9 +45,6 @@ export function attachTableOptionsAndFilters(table) {
     table.dataset.options = "0".repeat(filterOptions.length); // prefill with zeros
 
     openOptionButton.onclick = () => {
-        topPos = document.documentElement.scrollTop;
-        document.body.classList.add("unscrollable");
-        document.body.style.top = -1 * topPos + "px";
         tableModal.classList.remove("hidden");
         (/** @type {HTMLSpanElement} */ (document.querySelector("#table-option-label"))).textContent = table.querySelector(".searchable-table-title")?.textContent ?? "MISSING TABLE NAME";
         targettedTable = table;

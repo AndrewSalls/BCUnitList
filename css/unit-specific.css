@@ -114,6 +114,7 @@ td.row-id {
     width: unset;
     max-width: unset;
     min-width: unset;
+    border-left: none;
 }
 
 #icon-rarity-favorite {
@@ -228,6 +229,8 @@ td.row-id {
     width: 100%;
     height: 100%;
     grid-template-rows: repeat(6, calc(100% / 6));
+    border-top: 4px solid var(--rarity-border);
+    border-left-width: 4px;
 }
 
 .specific-unit-stats .unit-stat-power-icon {
@@ -236,10 +239,45 @@ td.row-id {
 }
 
 .specific-unit-stats .unit-stat-calc-cell {
-    width: 90%;
     padding: 0 5%;
 }
 
 .specific-unit-stats h6 {
     font-size: 10pt;
+}
+
+.specific-unit-stats .unit-stat-options {
+    border-right: none;
+}
+
+#unit-border.legend-rare-color {
+    .specific-unit-stats .unit-stat-calc-cell:nth-of-type(1) {
+        background-color: var(--rainbow-bg1);
+    }
+    .specific-unit-stats .unit-stat-calc-cell:nth-of-type(2) {
+        background-color: var(--rainbow-bg2);
+    }
+    .specific-unit-stats .unit-stat-calc-cell:nth-of-type(3) {
+        background-color: var(--rainbow-bg3);
+    }
+    .specific-unit-stats .unit-stat-calc-cell:nth-of-type(4) {
+        background-color: var(--rainbow-bg4);
+    }
+    .specific-unit-stats .unit-stat-calc-cell:nth-of-type(5) {
+        background-color: var(--rainbow-bg5);
+    }
+    .specific-unit-stats .double-stat-box .unit-stat-calc-cell {
+        background-color: var(--rainbow-bg6);
+    }
+    .specific-unit-stats .unit-stat-traits, .specific-unit-stats .unit-stat-targetting, .specific-unit-stats .unit-stat-abilities {
+        background-color: var(--rainbow-bg7);
+    }
+
+    .specific-unit-stats .option-title-box {
+        animation: rainbow 8s linear 0s infinite forwards;
+    }
+
+    .specific-unit-stats .unit-stat-options {
+        background-color: var(--rainbow-bg8);
+    }
 }

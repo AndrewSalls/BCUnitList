@@ -82,17 +82,28 @@ export function sortRows(tbody, comparator, isAscending) {
     rowPairs.sort((a, b) => comparator(a[0], b[0]));
 
     const fragment = document.createDocumentFragment();
-    let flipBG = false;
+    let flipBG = 0;
+    const visualUpdate = tbody.classList.contains("legend-rare-multi") ?
+        ((i) => {
+            for(let x = 1; x <= 8; x++) {
+                rowPairs[i][0].classList.remove(`legend-row-${x}`);
+            }
+            rowPairs[i][0].classList.add(`legend-row-${flipBG + 1}`);
+            flipBG = ((flipBG + 1) % 8);
+        }) :
+        ((i) => {
+            rowPairs[i][0].classList.toggle("row-bg2", flipBG === 1);
+            flipBG = 1 - flipBG;
+        });
+
     if(isAscending) {
         for(let i = 0; i < rowPairs.length; i++) {
-            rowPairs[i][0].classList.toggle("row-bg2", flipBG);
-            flipBG = !flipBG;
+            visualUpdate(i);
             fragment.append(...rowPairs[i]);
         }
     } else {
         for(let i = rowPairs.length - 1; i >= 0; i--) {
-            rowPairs[i][0].classList.toggle("row-bg2", flipBG);
-            flipBG = !flipBG;
+            visualUpdate(i);
             fragment.append(...rowPairs[i]);
         }
     }

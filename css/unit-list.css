@@ -84,3 +84,7 @@
 h2 {
     text-align: center;
 }
+
+ #legend-table .open-table-option {
+    animation: rainbow 8s linear 0s infinite forwards;
+ }

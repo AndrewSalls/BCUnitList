@@ -81,10 +81,9 @@ function loadUnitTables() {
             return table;
         }),
         REQUEST_TYPES.GET_RARITY_DATA(RARITY.LEGEND_RARE).then(units => {
-            const table = createSearchableTable("Legend Rare Cats", units, REQUEST_TYPES.UPDATE_ID, loadingBar);
+            const table = createSearchableTable("Legend Rare Cats", units, REQUEST_TYPES.UPDATE_ID, loadingBar, true);
             table.id = "legend-table";
             table.classList.add("legend-rare-color");
-            table.querySelector("tbody")?.classList.add("legend-rare-multi");
             loadingBar.increment();
             return table;
         })

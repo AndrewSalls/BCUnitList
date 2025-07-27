@@ -1,11 +1,8 @@
-html {
-    overflow-y: scroll;
-}
-
 #loading-content {
     min-height: 100vh;
     background-color: var(--highlight-bg2);
     justify-content: start;
+    overflow-y: scroll;
 }
 
 #tab-list {
@@ -206,4 +203,9 @@ input[type='number']::-webkit-inner-spin-button {
 
 #seal-altar {
     max-height: 30vh;
+}
+
+input[type='range'] {
+    accent-color: var(--rarity-content);
+    fill: var(--generic-content);
 }

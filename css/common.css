@@ -104,29 +104,37 @@
     --rarity-content: var(--legend-rare-content);
     --rarity-border: var(--legend-rare-border);
 }
-.legend-rare-multi > *:nth-child(8n - 7) {
-    background-color: var(--rainbow-bg1);
+.legend-row-1 {
+    --rarity-bg: var(--rainbow-bg1);
+    --rarity-bg2: var(--rainbow-bg1);
 }
-.legend-rare-multi > *:nth-child(8n - 6) {
-    background-color: var(--rainbow-bg2);
+.legend-row-2 {
+    --rarity-bg: var(--rainbow-bg2);
+    --rarity-bg2: var(--rainbow-bg2);
 }
-.legend-rare-multi > *:nth-child(8n - 5) {
-    background-color: var(--rainbow-bg3);
+.legend-row-3 {
+    --rarity-bg: var(--rainbow-bg3);
+    --rarity-bg2: var(--rainbow-bg3);
 }
-.legend-rare-multi > *:nth-child(8n - 4) {
-    background-color: var(--rainbow-bg4);
+.legend-row-4 {
+    --rarity-bg: var(--rainbow-bg4);
+    --rarity-bg2: var(--rainbow-bg4);
 }
-.legend-rare-multi > *:nth-child(8n - 3) {
-    background-color: var(--rainbow-bg5);
+.legend-row-5 {
+    --rarity-bg: var(--rainbow-bg5);
+    --rarity-bg2: var(--rainbow-bg5);
 }
-.legend-rare-multi > *:nth-child(8n - 2) {
-    background-color: var(--rainbow-bg6);
+.legend-row-6 {
+    --rarity-bg: var(--rainbow-bg6);
+    --rarity-bg2: var(--rainbow-bg6);
 }
-.legend-rare-multi > *:nth-child(8n - 1) {
-    background-color: var(--rainbow-bg7);
+.legend-row-7 {
+    --rarity-bg: var(--rainbow-bg7);
+    --rarity-bg2: var(--rainbow-bg7);
 }
-.legend-rare-multi > *:nth-child(8n) {
-    background-color: var(--rainbow-bg8);
+.legend-row-8 {
+    --rarity-bg: var(--rainbow-bg8);
+    --rarity-bg2: var(--rainbow-bg8);
 }
 @keyframes rainbow {
     0% { background-color: var(--rainbow-bg1); }
@@ -145,8 +153,9 @@
 
 html {
     overflow-x: hidden;
-    overflow-y: auto;
     scrollbar-color: var(--content-border) var(--highlight-content);
+    height: 100%;
+    max-height: 100%;
 }
 
 body {
@@ -155,9 +164,18 @@ body {
     padding: 0;
     margin: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
+    max-height: 100%;
     position: relative;
     scrollbar-width: thin;
+    box-sizing: border-box;
+}
+
+#loading-content {
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding-bottom: 5vh;
 }
 
 * {
@@ -189,10 +207,6 @@ button.active {
 }
 button.active:not(:disabled):hover {
     background-color: var(--warning);
-}
-
-body > .main {
-    padding-bottom: 8vh;
 }
 
 img {
@@ -233,10 +247,6 @@ input {
     display: grid;
     grid-template-columns: 50% 50%;
     grid-template-rows: 100%;
-}
-
-.unscrollable {
-    position: fixed;
 }
 
 .transitionless {
