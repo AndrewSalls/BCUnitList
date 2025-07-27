@@ -101,6 +101,7 @@ td.head-option, td.row-option {
 
 .unit-mod-row {
     background-color: var(--rarity-bg);
+    transition: opacity 0.1s linear;
 }
 .unit-mod-row.row-bg2 {
     background-color: var(--rarity-bg2);
@@ -314,4 +315,9 @@ td.head-option, td.row-option {
 }
 .stat-display-option:not(:disabled):hover {
     background-color: var(--rarity-content);
+}
+
+.quick-update-enabled .unit-mod-row.hidden {
+    display: table-row !important;
+    opacity: 0.35;
 }

@@ -85,11 +85,11 @@ function loadSpecific(id) {
         wrapper.querySelector("#id-wrapper")?.replaceChildren(idBox);
         const [nameBox, nameUpdate] = RowComponents.createNameBox([entry.normal_form, entry.evolved_form, entry.true_form, entry.ultra_form], entry.current_form);
         wrapper.querySelector("#name-wrapper")?.replaceChildren(nameBox);
-        const [iconBox, _1, _2] = RowComponents.createIconBox(entry.id, entry.current_form, entry.max_form, SETTINGS.skipImages.includes(id), nameUpdate);
+        const iconBox = RowComponents.createIconBox(entry.id, entry.current_form, entry.max_form, SETTINGS.skipImages.includes(id), nameUpdate);
         wrapper.querySelector("#icon-wrapper")?.replaceChildren(iconBox);
-        const [levelBox, _3, _4, _5, _6] = RowComponents.createLevelBox(entry.id, entry.level_cap, entry.level, entry.plus_level);
+        const levelBox = RowComponents.createLevelBox(entry.id, entry.level_cap, entry.level, entry.plus_level);
         wrapper.querySelector("#level-wrapper")?.replaceChildren(levelBox);
-        const [talentBox, _7, _8, _9, _10] = RowComponents.createTalentBox(entry.talents, entry.ultra_talents);
+        const talentBox = RowComponents.createTalentBox(entry.talents, entry.ultra_talents);
         const talentWrapper = wrapper.querySelector("#talent-wrapper");
         talentWrapper?.replaceChildren(talentBox);
         if(entry.talents.length === 0 && entry.ultra_talents.length === 0) {
@@ -97,7 +97,7 @@ function loadSpecific(id) {
             noTalent.textContent = "No Talents";
             talentWrapper?.replaceChildren(noTalent);
         }
-        const [orbBox, _11] = RowComponents.createOrbBox(entry.orb);
+        const orbBox = RowComponents.createOrbBox(entry.orb);
         const orbWrapper = wrapper.querySelector("#orb-wrapper");
         orbWrapper?.replaceChildren(orbBox);
         if(entry.talents.length === 0 && entry.ultra_talents.length === 0) {
@@ -105,7 +105,7 @@ function loadSpecific(id) {
             noOrb.textContent = "No Talent Orbs";
             orbWrapper?.replaceChildren(noOrb);
         }
-        const [favoriteBox, _12] = RowComponents.createFavoriteBox(entry.favorited);
+        const favoriteBox = RowComponents.createFavoriteBox(entry.favorited);
         wrapper.querySelector("#favorite-wrapper")?.replaceChildren(favoriteBox);
 
         document.querySelector("#ut-uf-checkbox")?.classList.toggle("hidden", entry.rarity !== "UR");
