@@ -312,9 +312,24 @@ td.head-option, td.row-option {
     background-color: inherit;
     font-size: 40px;
     user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .stat-display-option:not(:disabled):hover {
     background-color: var(--rarity-content);
+}
+
+.stat-display-option::after {
+    content: "+";
+}
+.stat-display-option.displaying::after {
+    content: "−";
+}
+.quick-update-enabled .stat-display-option::after,
+.quick-update-enabled .stat-display-option.displaying::after {
+    content: "Apply";
+    font-size: 20px;
 }
 
 .quick-update-enabled .unit-mod-row.hidden {

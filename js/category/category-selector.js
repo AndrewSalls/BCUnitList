@@ -53,6 +53,7 @@ export function createCategoryButton(buttonText, categoryObject) {
     button.type = "button";
     button.textContent = buttonText;
 
+    const scrollable = /** @type {HTMLDivElement} */ (document.querySelector("#loading-content"));
     button.onclick = () => {
         const toggle = /** @type {!HTMLInputElement} */ (document.querySelector("#jump-or-toggle"));
         if(toggle.checked) {
@@ -61,7 +62,7 @@ export function createCategoryButton(buttonText, categoryObject) {
         } else {
             // Jump to category
             categoryObject.classList.toggle("hidden", false);
-            window.scrollTo({ left: 0, top: window.scrollY + categoryObject.getBoundingClientRect().top, behavior: "smooth" });
+            scrollable.scrollTo({ left: 0, top: scrollable.scrollTop + categoryObject.getBoundingClientRect().top, behavior: "smooth" });
         }
     };
 

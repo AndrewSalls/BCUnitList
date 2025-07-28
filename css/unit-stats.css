@@ -16,6 +16,39 @@
     background-color: var(--rarity-bg2);
 }
 
+.unit-mod-row.legend-row-1 + .stat-mod-row {
+    --rarity-bg: var(--rainbow-bg1);
+    --rarity-bg2: var(--rainbow-bg1);
+}
+.unit-mod-row.legend-row-2 + .stat-mod-row {
+    --rarity-bg: var(--rainbow-bg2);
+    --rarity-bg2: var(--rainbow-bg2);
+}
+.unit-mod-row.legend-row-3 + .stat-mod-row {
+    --rarity-bg: var(--rainbow-bg3);
+    --rarity-bg2: var(--rainbow-bg3);
+}
+.unit-mod-row.legend-row-4 + .stat-mod-row {
+    --rarity-bg: var(--rainbow-bg4);
+    --rarity-bg2: var(--rainbow-bg4);
+}
+.unit-mod-row.legend-row-5 + .stat-mod-row {
+    --rarity-bg: var(--rainbow-bg5);
+    --rarity-bg2: var(--rainbow-bg5);
+}
+.unit-mod-row.legend-row-6 + .stat-mod-row {
+    --rarity-bg: var(--rainbow-bg6);
+    --rarity-bg2: var(--rainbow-bg6);
+}
+.unit-mod-row.legend-row-7 + .stat-mod-row {
+    --rarity-bg: var(--rainbow-bg7);
+    --rarity-bg2: var(--rainbow-bg7);
+}
+.unit-mod-row.legend-row-8 + .stat-mod-row {
+    --rarity-bg: var(--rainbow-bg8);
+    --rarity-bg2: var(--rainbow-bg8);
+}
+
 .stat-mod-row td {
     border: none;
 }

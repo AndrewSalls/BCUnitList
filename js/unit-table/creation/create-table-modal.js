@@ -172,7 +172,15 @@ function createSortSelection() {
 
     ascendBtn.onclick = () => {
         ascendText.textContent = (ascendText.textContent?.startsWith("A") ? "Descending" : "Ascending");
-        ascendBtn.classList.toggle("descending");
+        const res = ascendBtn.classList.toggle("descending");
+        const sortButton = /** @type {HTMLDivElement} */ (getModalTarget().querySelector("thead .column-header-text td.ascending, thead .column-header-text .descending"));
+        if(sortButton) {
+            if(sortButton.classList.contains("descending") !== res) {
+                sortButton.click();
+            }
+        } else {
+            sortRows(/** @type {HTMLTableSectionElement} */ (getModalTarget().querySelector("tbody")), gameSortLambda, !res);
+        }
     }
     ascendBtn.innerHTML = `
         <svg class="sort-direction" viewBox="0 0 32 32">
@@ -183,13 +191,13 @@ function createSortSelection() {
 
     sortWrapper.append(
         createSortModalButton("Order units like in-game", "ingame-sort", "In-Game", gameSortLambda, ascendBtn),
-        createSortModalButton("Order units by their ID number", "id-sort", "ID", idSortLambda, ascendBtn),
-        createSortModalButton("Order units by their current evolution", "form-sort", "Form", formSortLambda, ascendBtn),
-        createSortModalButton("Order units by the current form's name, alphabetically", "alphabetical-sort", "Alphabetical", nameSortLambda, ascendBtn),
-        createSortModalButton("Order units by the sum of their level and + level", "level-sort", "Total Level", levelSortLambda, ascendBtn),
-        createSortModalButton("Order units by the number of completed talents", "talent-sort", "Talent Level", talentSortLambda, ascendBtn),
-        createSortModalButton("Order units by the quality of attached orbs", "orb-sort", "Orb Quality", orbSortLambda, ascendBtn),
-        createSortModalButton("Order units by whether they're favorited", "favorited-sort", "Favorited", favoriteSortLambda, ascendBtn),
+        createSortModalButton("Order units by their ID number", "id-sort", "ID", idSortLambda, ascendBtn, "sort-id"),
+        createSortModalButton("Order units by their current evolution", "form-sort", "Form", formSortLambda, ascendBtn, "sort-form"),
+        createSortModalButton("Order units by the current form's name, alphabetically", "alphabetical-sort", "Alphabetical", nameSortLambda, ascendBtn, "sort-name"),
+        createSortModalButton("Order units by the sum of their level and + level", "level-sort", "Total Level", levelSortLambda, ascendBtn, "sort-level"),
+        createSortModalButton("Order units by the number of completed talents", "talent-sort", "Talent Level", talentSortLambda, ascendBtn, "sort-talent"),
+        createSortModalButton("Order units by the quality of attached orbs", "orb-sort", "Orb Quality", orbSortLambda, ascendBtn, "sort-orb"),
+        createSortModalButton("Order units by whether they're favorited", "favorited-sort", "Favorited", favoriteSortLambda, ascendBtn, "sort-favorite"),
         ascendBtn
     );
 
@@ -203,11 +211,19 @@ function createSortSelection() {
  * @param {string} text The text displayed on the button.
  * @param {(a: HTMLTableRowElement, b: HTMLTableRowElement) => number} sortFunc A function that compares two unit rows and returns a comparator output.
  * @param {HTMLElement} ascendBtn A button that represents whether the sort direction should be ascending or descending.
+ * @param {string} sortAssociate The class of the associated thead button that performs the same sort, if any.
  * @returns {HTMLButtonElement} The created button.
  */
-function createSortModalButton(title, id, text, sortFunc, ascendBtn) {
+function createSortModalButton(title, id, text, sortFunc, ascendBtn, sortAssociate = "") {
     const button = createModalButton(title, id, text);
-    button.onclick = () => sortRows(/** @type {HTMLTableSectionElement} */ (getModalTarget().querySelector("tbody")), sortFunc, !ascendBtn.classList.contains("descending"));
+    button.onclick = () => {
+        sortRows(/** @type {HTMLTableSectionElement} */ (getModalTarget().querySelector("tbody")), sortFunc, !ascendBtn.classList.contains("descending"));
+        // TODO: Set ascending/descending on repsective thead element in getModalTarget
+        getModalTarget().querySelectorAll("thead .column-header-text td").forEach(t => { t.classList.remove("descending", "ascending"); });
+        if(sortAssociate) {
+            getModalTarget().querySelector(`thead .column-header-text .${sortAssociate}`)?.classList.add(ascendBtn.classList.contains("descending") ? "descending" : "ascending");
+        }
+    };
 
     return button;
 }

@@ -102,26 +102,27 @@ function loadUnitTables() {
  */
 function initializeQuickNav() {
     const nav = /** @type {HTMLDivElement} */ (document.querySelector("#quick-nav"));
+    const scrollable = /** @type {HTMLDivElement} */ (document.querySelector("#loading-content"));
 
     const navToggle = /** @type {HTMLDivElement} */ (nav.querySelector("#quick-nav-access"));
     navToggle.onclick = () => nav.classList.toggle("raised");
 
     const normalJump = /** @type {HTMLButtonElement} */ (nav.querySelector("#normal-jump"));
     const normalTable = /** @type {HTMLDivElement} */ (document.querySelector("#normal-table"));
-    normalJump.onclick = () => window.scrollTo({ left: 0, top: window.scrollY + normalTable.getBoundingClientRect().top, behavior: "smooth" });
+    normalJump.onclick = () => scrollable.scrollTo({ left: 0, top: scrollable.scrollTop + normalTable.getBoundingClientRect().top, behavior: "smooth" });
     const specialJump = /** @type {HTMLButtonElement} */ (nav.querySelector("#special-jump"));
     const specialTable = /** @type {HTMLDivElement} */ (document.querySelector("#special-table"));
-    specialJump.onclick = () => window.scrollTo({ left: 0, top: window.scrollY + specialTable.getBoundingClientRect().top, behavior: "smooth" });
+    specialJump.onclick = () => scrollable.scrollTo({ left: 0, top: scrollable.scrollTop + specialTable.getBoundingClientRect().top, behavior: "smooth" });
     const rareJump = /** @type {HTMLButtonElement} */ (nav.querySelector("#rare-jump"));
     const rareTable = /** @type {HTMLDivElement} */ (document.querySelector("#rare-table"));
-    rareJump.onclick = () => window.scrollTo({ left: 0, top: window.scrollY + rareTable.getBoundingClientRect().top, behavior: "smooth" });
+    rareJump.onclick = () => scrollable.scrollTo({ left: 0, top: scrollable.scrollTop + rareTable.getBoundingClientRect().top, behavior: "smooth" });
     const superJump = /** @type {HTMLButtonElement} */ (nav.querySelector("#super-jump"));
     const superTable = /** @type {HTMLDivElement} */ (document.querySelector("#super-table"));
-    superJump.onclick = () => window.scrollTo({ left: 0, top: window.scrollY + superTable.getBoundingClientRect().top, behavior: "smooth" });
+    superJump.onclick = () => scrollable.scrollTo({ left: 0, top: scrollable.scrollTop + superTable.getBoundingClientRect().top, behavior: "smooth" });
     const uberJump = /** @type {HTMLButtonElement} */ (nav.querySelector("#uber-jump"));
     const uberTable = /** @type {HTMLDivElement} */ (document.querySelector("#uber-table"));
-    uberJump.onclick = () => window.scrollTo({ left: 0, top: window.scrollY + uberTable.getBoundingClientRect().top, behavior: "smooth" });
+    uberJump.onclick = () => scrollable.scrollTo({ left: 0, top: scrollable.scrollTop + uberTable.getBoundingClientRect().top, behavior: "smooth" });
     const legendJump = /** @type {HTMLButtonElement} */ (nav.querySelector("#legend-jump"));
     const legendTable = /** @type {HTMLDivElement} */ (document.querySelector("#legend-table"));
-    legendJump.onclick = () => window.scrollTo({ left: 0, top: window.scrollY + legendTable.getBoundingClientRect().top, behavior: "smooth" });
+    legendJump.onclick = () => scrollable.scrollTo({ left: 0, top: scrollable.scrollTop + legendTable.getBoundingClientRect().top, behavior: "smooth" });
 };

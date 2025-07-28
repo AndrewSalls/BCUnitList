@@ -110,10 +110,14 @@ function createLoadout(loadoutData) {
     shareOption.textContent = "Copy Share Code";
     shareOption.onclick = async () => {
         const tableUnits = createLoadoutObject(minimalLoadout);
-        encodeLink(tableUnits, await REQUEST_TYPES.GET_MULTIPLE_DATA(tableUnits.units, true)).then(link => {
-            navigator.clipboard.writeText(link);
-            REQUEST_TYPES.SEND_ALERT("Loadout data copied to clipboard!", false);
-        });
+        if(tableUnits.units.length > 0) {
+            encodeLink(tableUnits, await REQUEST_TYPES.GET_MULTIPLE_DATA(tableUnits.units, true)).then(link => {
+                navigator.clipboard.writeText(link);
+                REQUEST_TYPES.SEND_ALERT("Loadout data copied to clipboard!", false);
+            });
+        } else {
+            REQUEST_TYPES.SEND_ALERT("Loadout has no units!", true);
+        }
     };
 
     rightOptionWrapper.append(deleteOption, shareOption);

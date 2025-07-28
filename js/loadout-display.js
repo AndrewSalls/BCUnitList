@@ -153,10 +153,14 @@ function initializeContent() {
         const unitData = unitRows.map(r => getValuesFromRow(r));
         unitData.forEach((d, i) => d.current_form = output.forms[i]);
         output.units = unitData;
-        
-        const link = encodeDirectLink(output);
-        navigator.clipboard.writeText(link);
-        REQUEST_TYPES.SEND_ALERT("Loadout data copied to clipboard!", false);
+
+        if(output.units.length > 0) {
+            const link = encodeDirectLink(output);
+            navigator.clipboard.writeText(link);
+            REQUEST_TYPES.SEND_ALERT("Loadout data copied to clipboard!", false);
+        } else {
+            REQUEST_TYPES.SEND_ALERT("Loadout has no units!", true);
+        }
     };
 }
 

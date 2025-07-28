@@ -166,6 +166,9 @@ h3 {
    font-weight: bolder;
    font-size: 10pt;
 }
+.disabled-editing-mode .loadout-name:placeholder-shown::placeholder {
+   color: transparent;
+}
 
 .unit-chip-cost {
    position: absolute;

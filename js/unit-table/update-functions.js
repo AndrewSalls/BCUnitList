@@ -7,11 +7,6 @@ export const hideUnit = (/** @type {HTMLTableRowElement} */ r) => {
     const id = parseInt(r.querySelector(".row-id")?.textContent ?? "0");
     r.classList.add("hidden");
     document.querySelectorAll(`#unit-search-suggestions div[data-target='${id}']`).forEach(o => o.classList.add("global-hidden"));
-
-    const statButton = /** @type {HTMLInputElement} */ (r.querySelector(".stat-display-option"));
-    if(statButton.textContent !== "+") {
-        statButton.click();
-    }
 };
 
 export const unhideUnit = (/** @type {HTMLTableRowElement} */ r) => {

@@ -19,6 +19,7 @@ export default function createSearchableTable(titleText, unitData, changeEvent =
 
     const thead = document.createElement("thead");
     const theadRow = document.createElement("tr");
+    theadRow.classList.add("column-header-text");
     const tbody = document.createElement("tbody");
     tbody.classList.toggle("legend-rare-multi", isLegendTable);
 

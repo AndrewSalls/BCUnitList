@@ -68,7 +68,7 @@ body {
     0% {
         opacity: 1;
     }
-    50% {
+    95% {
         opacity: 1;
     }
     100% {
@@ -76,7 +76,7 @@ body {
     }
 }
 #save-change-text:not(.hidden) {
-    animation: fadeout 6s linear;
+    animation: fadeout var(--fadeout-timer) linear;
     animation-fill-mode: forwards;
 }
 

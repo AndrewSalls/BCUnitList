@@ -29,23 +29,32 @@ export default function createRow(entry) {
 
     let statRow = null;
     let unobserveCallback = null;
-    const optionsBox = createOptionsBox(() => {
-        if(!unobserveCallback) {              
+    const optionsBox = createOptionsBox(_this => {
+        if(_this.classList.contains("displaying")) {
+            _this.classList.remove("displaying");
+            unobserveCallback?.();
+            statRow?.remove();
+            statRow = null;
+        } else {
+            _this.classList.add("displaying");
+            unobserveCallback = null;     
             const res = createStatRow(entry, row);
             statRow = res.row;
             unobserveCallback = res.callback;
 
             row.insertAdjacentElement("afterend", statRow);
-        } else {
-            unobserveCallback();
-            statRow.remove();
-            statRow = null;
-            unobserveCallback = null;
         }
-    }, () => {
+    }, _this => {
         const updateCallbacks = getActiveCallbacks();
         for(const key of Object.keys(updateCallbacks)) {
             updateCallbacks[key](row);
+        }
+
+        if("hide" in updateCallbacks && statRow !== null) {
+            _this.classList.remove("displaying");
+            unobserveCallback?.();
+            statRow?.remove();
+            statRow = null;
         }
     });
 
@@ -250,8 +259,8 @@ export function createFavoriteBox(isFavorited) {
 
 /**
  * Creates the options column entry for the row.
- * @param { () => void } statDisplayCallback Function that handles opening/closing the stats row for this row's unit.
- * @param { () => void } quickEditCallback A function that describes how to apply a quick-edit action to this row.
+ * @param { (HTMLButtonElement) => void } statDisplayCallback Function that handles opening/closing the stats row for this row's unit.
+ * @param { (HTMLButtonElement) => void } quickEditCallback A function that describes how to apply a quick-edit action to this row.
  * @returns {HTMLTableCellElement} The created options entry.
  */
 export function createOptionsBox(statDisplayCallback, quickEditCallback) {
@@ -262,16 +271,13 @@ export function createOptionsBox(statDisplayCallback, quickEditCallback) {
     rowOptionAlign.classList.add("row-option-wrapper");
 
     const viewStats = document.createElement("button");
-    viewStats.textContent = "+";
-    viewStats.title = "Toggle Unit Stats";
     viewStats.classList.add("stat-display-option");
     viewStats.classList.add("option-button");
     viewStats.onclick = () => {
-        if(document.body.classList.contains("quick-update-enabled")) {
-            quickEditCallback();
+        if(!document.body.classList.contains("quick-update-enabled")) {
+            statDisplayCallback(viewStats);
         } else {
-            viewStats.textContent = (viewStats.textContent === "+") ? "−" : "+";
-            statDisplayCallback();
+            quickEditCallback(viewStats);
         }
     };
 
