@@ -11,7 +11,7 @@ const ORB_DATA = orbData.default;
 export function initializeTableModal() {
     const tableModal = /** @type {HTMLDivElement} */ (document.querySelector("#table-option-modal"));
     tableModal.querySelector("#table-option-cancel")?.addEventListener("click", () => {
-        targettedTable.dataset.options = [...tableModal.querySelectorAll("#table-filter-options button")].reduce((s, a) => s + (a.classList.contains("active") ? "1" : "0"), "");
+        targettedTable.dataset.options = [...tableModal.querySelectorAll("#table-filter-options button")].reduce((s, a) => s + (a.classList.contains("inactive") ? "1" : "0"), "");
         tableModal.classList.add("hidden");
     });
 
@@ -48,7 +48,7 @@ export function attachTableOptionsAndFilters(table) {
         tableModal.classList.remove("hidden");
         (/** @type {HTMLSpanElement} */ (document.querySelector("#table-option-label"))).textContent = table.querySelector(".searchable-table-title")?.textContent ?? "MISSING TABLE NAME";
         targettedTable = table;
-        filterOptions.forEach((b, i) => b.classList.toggle("active", targettedTable.dataset.options[i] === "1"));
+        filterOptions.forEach((b, i) => b.classList.toggle("inactive", targettedTable.dataset.options[i] === "1"));
     };
 
     //@ts-ignore Can't be bothered to deal with type hint's terrible handling of querySelector
@@ -148,7 +148,7 @@ function updateRowFilter(row, isUndoing) {
  * @param {(r: HTMLTableRowElement) => boolean} callback The filter function associated with this button.
  */
 function registerFilter(button, callback) {
-    button.onclick = () => applyFilter(callback, !button.classList.toggle("active"));
+    button.onclick = () => applyFilter(callback, !button.classList.toggle("inactive"));
     button.addEventListener("filter-row", (/** @type {Event} */ ev) => {
         const detail = /** @type {CustomEvent} */ (ev).detail;
         if(callback(detail)) {
@@ -201,17 +201,17 @@ export function getActiveCallbacks() {
 
     const output = {};
 
-    if(!hideButton.classList.contains("active")) { output.hide = updateFunctions.hideUnit }
-    else if(!unhideButton.classList.contains("active")) { output.unhide = updateFunctions.unhideUnit } // Always want to target hidden units when unhiding
-    else if(!resetButton.classList.contains("active")) { output.reset = updateFunctions.resetUnit }
+    if(!hideButton.classList.contains("inactive")) { output.hide = updateFunctions.hideUnit }
+    else if(!unhideButton.classList.contains("inactive")) { output.unhide = updateFunctions.unhideUnit } // Always want to target hidden units when unhiding
+    else if(!resetButton.classList.contains("inactive")) { output.reset = updateFunctions.resetUnit }
     else {
-        if(!ownAllButton.classList.contains("active")) { output.own = updateFunctions.ownUnit }
-        if(!fullyEvolveButton.classList.contains("active")) { output.evolve = updateFunctions.evolveUnit }
-        if(!level30Button.classList.contains("active")) { output.level30 = updateFunctions.level30Unit }
-        if(!level50Button.classList.contains("active")) { output.level50 = updateFunctions.level50Unit }
-        if(!levelMaxButton.classList.contains("active")) { output.levelMax = updateFunctions.levelMaxUnit }
-        if(!talentMaxButton.classList.contains("active")) { output.talents = updateFunctions.talentMaxUnit }
-        if(!utTalentMaxButton.classList.contains("active")) { output.ultraTalents = updateFunctions.utMaxUnit }
+        if(!ownAllButton.classList.contains("inactive")) { output.own = updateFunctions.ownUnit }
+        if(!fullyEvolveButton.classList.contains("inactive")) { output.evolve = updateFunctions.evolveUnit }
+        if(!level30Button.classList.contains("inactive")) { output.level30 = updateFunctions.level30Unit }
+        if(!level50Button.classList.contains("inactive")) { output.level50 = updateFunctions.level50Unit }
+        if(!levelMaxButton.classList.contains("inactive")) { output.levelMax = updateFunctions.levelMaxUnit }
+        if(!talentMaxButton.classList.contains("inactive")) { output.talents = updateFunctions.talentMaxUnit }
+        if(!utTalentMaxButton.classList.contains("inactive")) { output.ultraTalents = updateFunctions.utMaxUnit }
     }
 
     return output;

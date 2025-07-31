@@ -107,6 +107,17 @@ const SETTINGS = {
             "Behemoth_Slayer": 1.4,
             "Sage_Slayer": 2
         },
-    }
+    },
+    "abilityGroupings": [
+        ["Weaken", "Freeze", "Slow", "Restricted_Target", "Strong", "Resistant", "Insane_Resistance", "Massive_Damage", "Insane_Damage", "Knockback", "Curse", "Dodge"],
+        ["Critical", "Metal_Killer", "Zombie_Killer", "Soulstrike", "Barrier_Breaker", "Shield_Pierce"],
+        ["Strengthen", "Survive", "Base_Destroyer", "Savage_Blow", "Money_Up", "Metal", "Kamikaze"],
+        ["Mini_Wave", "Wave", "Wave_Shield", "Mini_Surge", "Surge", "Counter_Surge", "Explosion", "Conjure"],
+        ["Single_Attack", "Area_Attack", "Multi_Hit", "Long_Distance", "Omnistrike"],
+        ["Colossus_Slayer", "Behemoth_Slayer", "Sage_Slayer", "Witch_Killer", "Eva_Killer"],
+        ["Weaken_Immune", "Freeze_Immune", "Slow_Immune", "Knockback_Immune", "Warp_Immune", "Curse_Immune", "Toxic_Immune", "Wave_Immune", "Surge_Immune", "Explosion_Immune", "Shockwave_Immune"],
+        ["Weaken_Resist", "Freeze_Resist", "Slow_Resist", "Knockback_Resist", "Warp_Resist", "Curse_Resist", "Toxic_Resist", "Wave_Resist", "Surge_Resist"],
+        ["Defense", "Attack", "Move_Speed", "Cost_Down", "Recover_Speed", "Attack_Rate"]
+    ]
 };
 export default SETTINGS;

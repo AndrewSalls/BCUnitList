@@ -1,5 +1,7 @@
 //@ts-check
 import { FORM } from "../data/unit-data.js";
+import createSearchModal from "../unit-table/creation/create-search-modal.js";
+document.body.appendChild(createSearchModal());
 
 let targettedInput = null;
 

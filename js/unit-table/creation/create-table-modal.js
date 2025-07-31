@@ -103,8 +103,8 @@ function createOptionSelection() {
         createModalButton("Level up ultra talents to maximum amount", "level-ultra-talents", "Max Ultra Talents")
     ];
     maxList.forEach(b => {
-        b.classList.add("active");
-        b.onclick = () => b.classList.toggle("active");
+        b.classList.add("inactive");
+        b.onclick = () => b.classList.toggle("inactive");
     });
     updateMultiselect.append(...maxList);
 
@@ -114,13 +114,13 @@ function createOptionSelection() {
         createModalButton("Reset all changes to unit", "reset-all", "Reset")
     ];
     uniqueList.forEach(b => {
-        b.classList.add("active");
+        b.classList.add("inactive");
         b.onclick = () => {
-            const status = b.classList.contains("active");
+            const status = b.classList.contains("inactive");
             uniqueList.forEach(b2 => {
-                b2.classList.add("active");
+                b2.classList.add("inactive");
             });
-            b.classList.toggle("active", !status);
+            b.classList.toggle("inactive", !status);
 
             maxList.forEach(a => a.disabled = status);
         }
@@ -136,9 +136,9 @@ function createOptionSelection() {
 
     const applyAllButton = createModalButton("Apply all of the selected updates to every unit in the table", "apply-to-all", "Apply to All");
     const toggleEditModeButton = createModalButton("Enter or exit editing mode, which allows for quickly applying any of the selected update options to specific units", "toggle-update-column", "Quick-Edit Mode");
-    toggleEditModeButton.classList.add("active");
+    toggleEditModeButton.classList.add("inactive");
     toggleEditModeButton.onclick = () => {
-        const status = !toggleEditModeButton.classList.toggle("active");
+        const status = !toggleEditModeButton.classList.toggle("inactive");
         document.body.classList.toggle("quick-update-enabled", status);
         /** @type {HTMLTableCellElement} */ (getModalTarget().querySelector("thead .head-option")).textContent = (status ? "Quick-Edit" : "Stats");
     };

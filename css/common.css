@@ -54,6 +54,11 @@
     --ability-upgade-bg2: #a0e6e9;
     --ability-upgade-border: #09b0ad;
 
+    --inactive-content: #8b8b8b;
+    --inactive-bg: #bebebe;
+    --inactive-bg2: #8d8d8d;
+    --inactive-border: #2c2c2c;
+    
     --generic-content: #ffa620;
     --generic-bg: #fff0d2;
     --generic-bg2: #ffeac0;
@@ -191,9 +196,14 @@ iframe {
 }
 
 button {
-    background-color: var(--content);
+    --rarity-content: var(--content);
+    --rarity-bg: var(--highlight-bg);
+    --rarity-bg2: var(--highlight-bg2);
+    --rarity-border: var(--content-border);
+    background-color: var(--rarity-content);
+    border: 2px solid var(-text);
     cursor: pointer;
-    transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear, filter 0.1s linear;
     font-weight: bolder;
     user-select: none;
 }
@@ -201,13 +211,7 @@ button:disabled {
     filter: contrast(0.5);
 }
 button:not(:disabled):hover {
-    background-color: var(--highlight-content);
-}
-button.active {
-    background-color: var(--highlight-warning);
-}
-button.active:not(:disabled):hover {
-    background-color: var(--warning);
+    filter: invert(0.25) saturate(1.5);
 }
 
 img {
@@ -252,4 +256,11 @@ input {
 
 .transitionless {
     transition: none !important;
+}
+
+.inactive {
+    --rarity-content: var(--inactive-content) !important;
+    --rarity-bg: var(--inactive-bg) !important;
+    --rarity-bg2: var(--inactive-bg2) !important;
+    --rarity-border: var(--inactive-border) !important;
 }

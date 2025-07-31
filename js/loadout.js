@@ -95,7 +95,7 @@ function createLoadout(loadoutData) {
     const deleteOption = document.createElement("button");
     deleteOption.type = "button";
     deleteOption.classList.add("delete-loadout");
-    deleteOption.classList.add("active");
+    deleteOption.classList.add("inactive");
     deleteOption.textContent = "Delete Loadout";
     deleteOption.onclick = () => {
         if(minimalLoadout.classList.contains("save")) {

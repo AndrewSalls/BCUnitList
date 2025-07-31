@@ -279,14 +279,14 @@ function createCategorySelectionButton(categoryName) {
 
     catButton.type = "button";
     catButton.classList.add("filter-button");
-    catButton.classList.add("active");
+    catButton.classList.add("inactive");
     catButton.textContent = categoryName;
     catButton.onclick = () => {
-        const toggleState = catButton.classList.contains("active");
-        existingList?.querySelectorAll("button").forEach(b => b.classList.add("active"));
+        const toggleState = catButton.classList.contains("inactive");
+        existingList?.querySelectorAll("button").forEach(b => b.classList.add("inactive"));
         remover.disabled = !toggleState;
         if(toggleState) {
-            catButton.classList.remove("active");
+            catButton.classList.remove("inactive");
             opener.textContent = "Modify Category";
             targetedKey = categoryName;
         } else {

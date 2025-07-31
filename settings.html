@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="./css/settings.css">
     <link rel="stylesheet" href="./css/custom-category.css">
     <link rel="stylesheet" href="./css/suggestion-dropdown.css">
+    <link rel="stylesheet" href="./css/search-modal.css">
     <script src="./js/settings.js" type="module"></script>
 </head>
 <body>
@@ -38,7 +39,7 @@
                 <input type="text" id="add-unit" placeholder="Search for ID/Name...">
                 <div id="category-units" class="h-align h-spacer"></div>
                 <div class="h-align h-spacer">
-                    <button type="button" id="cancel-category-creation" class="filter-button active">Cancel</button>
+                    <button type="button" id="cancel-category-creation" class="filter-button inactive">Cancel</button>
                     <button type="button" id="create-category-creation" class="filter-button"></button>
                 </div>
             </div>
@@ -48,7 +49,7 @@
 
                 </div>
                 <div class="h-align">
-                    <button type="button" title="Delete an existing category" class="filter-button active" disabled="true" id="delete-category">Delete Category</button>
+                    <button type="button" title="Delete an existing category" class="filter-button inactive" disabled="true" id="delete-category">Delete Category</button>
                     <button type="button" title="Create or modify a category" class="filter-button" id="open-creator">Create Category</button>
                 </div>
             </div>
@@ -112,7 +113,7 @@
             </div>
             <div class="v-align">
                 <h4>Delete Save</h4>
-                <button type="button" class="filter-button super-category-button active" title="Export Save to File" id="delete-save">Delete Save Data</button>
+                <button type="button" class="filter-button super-category-button inactive" title="Export Save to File" id="delete-save">Delete Save Data</button>
             </div>
         </section>
         <div id="warning-modal" class="modal-bg hidden">

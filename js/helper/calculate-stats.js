@@ -9,9 +9,10 @@ import { getTraitSpecificMult, getAbilityOrb, getDesiredLevel, getEffectOrb, get
  */
 export const CALCULATOR_LEVEL_OPTIONS = {
     LEVEL_CURRENT: 0,
-    LEVEL_30: 1,
-    LEVEL_50: 2,
-    LEVEL_MAX: 3
+    LEVEL_1: 1,
+    LEVEL_30: 2,
+    LEVEL_50: 3,
+    LEVEL_MAX: 4
 }
 
 /** 

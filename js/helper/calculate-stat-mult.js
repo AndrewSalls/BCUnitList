@@ -100,6 +100,8 @@ export function getTreasurePercent(treasureName, chapterAbbr) {
  */
 export function getDesiredLevel(levelOption, currentLevel, unitData) {
     switch(levelOption) {
+        case CALCULATOR_LEVEL_OPTIONS.LEVEL_1:
+            return 1;
         case CALCULATOR_LEVEL_OPTIONS.LEVEL_30:
             return 30;
         case CALCULATOR_LEVEL_OPTIONS.LEVEL_50:

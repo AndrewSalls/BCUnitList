@@ -1,11 +1,8 @@
 .table-filter-group button:not(:last-of-type) {
-    border-right: 1px solid var(--content-border);
+    border-right: 1px solid var(--rarity-border);
 }
 .table-filter-group button:not(:first-of-type) {
     border-left: none;
-}
-.table-filter-group button:not(:last-of-type).active {
-    border-right: 1px solid var(--warning-border);
 }
 
 .table-filter-group h3 {

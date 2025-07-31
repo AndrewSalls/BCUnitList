@@ -110,6 +110,19 @@ export default class UnitData {
     }
 
     /**
+     * Checks if a unit has an ability.
+     * @param {UNIT_DATA} unitData A unit's data to check for the ability. 
+     * @param {string} ability The ability to check for.
+     * @param {number} [form = unitData.current_form] The form of the unit to check for the ability.
+     * @returns {boolean} Whether the unit has the ability.
+     */
+    static hasAbility(unitData, ability, form = unitData.current_form) {
+        return unitData.stats[form].abilities.includes(ability) ||
+            unitData.talents.some(t => t.name === ability && t.value > 0) ||
+            unitData.ultra_talents.some(ut => ut.name === ability && ut.value > 0);
+    }
+
+    /**
      * Gets a singular unit.
      * @param {number} id The unit's ID.
      * @param {UNIT_DATA_TYPE} dataType What type of data is being obtained.

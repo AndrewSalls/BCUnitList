@@ -273,10 +273,6 @@ td.row-id {
         background-color: var(--rainbow-bg7);
     }
 
-    .specific-unit-stats .option-title-box {
-        animation: rainbow 8s linear 0s infinite forwards;
-    }
-
     .specific-unit-stats .unit-stat-options {
         background-color: var(--rainbow-bg8);
     }

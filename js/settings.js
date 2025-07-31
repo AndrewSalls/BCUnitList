@@ -65,9 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function loadButton(buttonID, storageKey) {
     const target = /** @type {HTMLButtonElement} */ (document.querySelector(buttonID));
     target.addEventListener("click", () => {
-        window.localStorage.setItem(storageKey, target.classList.toggle("active") ? "0" : "1");
+        window.localStorage.setItem(storageKey, target.classList.toggle("inactive") ? "0" : "1");
     });
-    target.classList.toggle("active", window.localStorage.getItem(storageKey) === "0");
+    target.classList.toggle("inactive", window.localStorage.getItem(storageKey) === "0");
 }
 
 /**
@@ -209,13 +209,13 @@ function initializeSaveOptions() {
 function loadSortButtons(orderedIDs) {
     const targets = /** @type {HTMLButtonElement[]} */ (orderedIDs.map(id => document.querySelector(id)));
     for(let x = 0; x < targets.length; x++) {
-        targets[x].classList.add("active");
+        targets[x].classList.add("inactive");
         targets[x].addEventListener("click", () => {
             window.localStorage.setItem("skey", `${x}`);
-            targets.forEach(t => t.classList.add("active"));
-            targets[x].classList.remove("active");
+            targets.forEach(t => t.classList.add("inactive"));
+            targets[x].classList.remove("inactive");
         });
     }
     
-    targets[parseInt(window.localStorage.getItem("skey") ?? "0")]?.classList.remove("active");
+    targets[parseInt(window.localStorage.getItem("skey") ?? "0")]?.classList.remove("inactive");
 }
