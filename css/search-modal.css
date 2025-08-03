@@ -339,3 +339,7 @@
 .advanced-clickable {
     cursor: pointer;
 }
+
+.advanced-resource img {
+    filter: grayscale(1);
+}

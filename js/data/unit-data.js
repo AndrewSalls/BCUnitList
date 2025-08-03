@@ -142,23 +142,6 @@ export default class UnitData {
     }
 
     /**
-     * Maximizes all modifiable stats in the unit data.
-     * @param {UNIT_DATA} unitData The unmodified data.
-     * @returns {UNIT_DATA} The modified data.
-     */
-    static maxUnit(unitData) {
-        const cpy = structuredClone(unitData);
-
-        cpy.current_form = cpy.max_form;
-        cpy.level = cpy.level_cap.MaxLevel;
-        cpy.plus_level = cpy.level_cap.MaxPlusLevel;
-        cpy.talents.forEach(t => t.value = t.cap);
-        cpy.ultra_talents.forEach(t => t.value = t.cap);
-
-        return cpy;
-    }
-
-    /**
      * Gets a singular unit.
      * @param {number} id The unit's ID.
      * @param {UNIT_DATA_TYPE} dataType What type of data is being obtained.

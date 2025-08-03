@@ -3,6 +3,7 @@
 import SETTINGS from "../../../assets/settings.js";
 import { REQUEST_TYPES } from "../../communication/iframe-link.js";
 import UnitData from "../../data/unit-data.js";
+import { getUnitTraitTargets } from "../../helper/calculate-stat-mult.js";
 import { calculateCost, calculateDamage, calculateHealth, calculateKnockbacks, calculateRange, calculateRechargeTime, calculateSpeed, CALCULATOR_LEVEL_OPTIONS } from "../../helper/calculate-stats.js";
 
 const rarityMap = { N: "Normal", EX: "Special", RR: "Rare", SR: "Super Rare", UR: "Uber Rare", LR: "Legend Rare" };
@@ -29,8 +30,8 @@ export default function createSearchModal() {
     const {obj: raritySelection, filterCallback: filterRarity } = createRarityFilterInput();
     const { obj: traitSelection, filterCallback: filterTargetTraits } = createTargetTraitFilterInput();
     const { obj: abilityMultibox, filterCallback: filterAbilities } = createAbilityFilterInput();
-    // @ts-ignore
-    const { obj: statMultiRange, filterCallback: filterStatRange } = createStatFilterInput(ownedCheckbox.querySelector("input"));
+    const actualOwnedCheckbox = /** @type {HTMLInputElement} */ (ownedCheckbox.querySelector("input"));
+    const { obj: statMultiRange, filterCallback: filterStatRange } = createStatFilterInput(actualOwnedCheckbox);
     const { obj: randomToggle, filterCallback: filterRandom10 } = createRandom10FilterInput();
 
     const searchButton = document.createElement("button");
@@ -47,7 +48,25 @@ export default function createSearchModal() {
         const formAbilities = filterAbilities(u);
         const formStats = filterStatRange(u);
 
-        return [...new Array(u.max_form + 1).keys()].filter(i => isOwned && isRarity && formNames.includes(i) && formTraits.includes(i) && formAbilities.includes(i) && formStats.includes(i));
+        let nullCount = 0;
+        const units = [...new Array(u.max_form + 1).keys()].map(i => {
+            const unitOutput = [false, false, false];
+
+            unitOutput[0] = isOwned && isRarity && formNames.includes(i) && formTraits[i][0] && formAbilities[i][0] && formStats[i][0];
+            unitOutput[1] = !actualOwnedCheckbox.checked && isOwned && isRarity && formNames.includes(i) && formTraits[i][1] && formAbilities[i][1] && formStats[i][1];
+            unitOutput[2] = !actualOwnedCheckbox.checked && isOwned && isRarity && formNames.includes(i) && formTraits[i][2] && formAbilities[i][2] && formStats[i][2];
+            if(!(unitOutput[0] || unitOutput[1] || unitOutput[2])) {
+                nullCount++;
+                return null;
+            }
+            return unitOutput;
+        });
+
+        if(nullCount === units.length) {
+            return null;
+        }
+
+        return units;
     }, filterRandom10);
 
     const searchButtonText = document.createElement("p");
@@ -170,7 +189,7 @@ function createRarityFilterInput() {
 
 /**
  * Creates a search filter element.
- * @returns {{obj: HTMLElement, filterCallback: (u: import("../../data/unit-data.js").UNIT_DATA) => number[] }} An object containing the created input, and a function which determines which forms of a unit meet the filter.
+ * @returns {{obj: HTMLElement, filterCallback: (u: import("../../data/unit-data.js").UNIT_DATA) => boolean[][] }} An object containing the created input, and a function which determines which forms of a unit meet the filter.
  */
 function createTargetTraitFilterInput() {
     const output = {};
@@ -208,16 +227,39 @@ function createTargetTraitFilterInput() {
     wrapper.append(wrapperLabel, wrapperContent);
     output.obj = wrapper;
 
-    output.filterCallback = (/** @type {import("../../data/unit-data.js").UNIT_DATA} */ u) => [...new Array(u.max_form + 1).keys()].filter(form => 
-        /** @type {HTMLDivElement[]} */ ([...wrapperContent.querySelectorAll(".advanced-trait-selector-wrapper")])
-                .every(w => w.classList.contains("inactive") || u.stats[form].traits.includes(w.dataset.trait ?? "")));
+    output.filterCallback = (/** @type {import("../../data/unit-data.js").UNIT_DATA} */ u) => [...new Array(u.max_form + 1).keys()].map(form => {
+        const output = [];
+        const unitCpy = UnitData.dataToRecord(u);
+        unitCpy.current_form = form;
+
+        let formTraits = getUnitTraitTargets(u, unitCpy, true, false);
+        output.push(/** @type {HTMLDivElement[]} */ ([...wrapperContent.querySelectorAll(".advanced-trait-selector-wrapper")])
+                .every(w => w.classList.contains("inactive") || formTraits.includes(w.dataset.trait ?? "")));
+
+        if(form < 2) {
+            output.push(false, false);
+            return output;
+        }
+
+        unitCpy.talents = u.talents.map(t => t.cap);
+        formTraits = getUnitTraitTargets(u, unitCpy, true, false);
+        output.push(/** @type {HTMLDivElement[]} */ ([...wrapperContent.querySelectorAll(".advanced-trait-selector-wrapper")])
+                .every(w => w.classList.contains("inactive") || formTraits.includes(w.dataset.trait ?? "")));
+
+        unitCpy.ultra_talents = u.ultra_talents.map(t => t.cap);
+        formTraits = getUnitTraitTargets(u, unitCpy, true, false);
+        output.push(/** @type {HTMLDivElement[]} */ ([...wrapperContent.querySelectorAll(".advanced-trait-selector-wrapper")])
+                .every(w => w.classList.contains("inactive") || formTraits.includes(w.dataset.trait ?? "")));
+
+        return output;
+    });
 
     return output;
 }
 
 /**
  * Creates a search filter element.
- * @returns {{obj: HTMLElement, filterCallback: (u: import("../../data/unit-data.js").UNIT_DATA) => number[] }} An object containing the created input, and a function which determines which forms of a unit meet the filter.
+ * @returns {{obj: HTMLElement, filterCallback: (u: import("../../data/unit-data.js").UNIT_DATA) => boolean[][] }} An object containing the created input, and a function which determines which forms of a unit meet the filter.
  */
 function createAbilityFilterInput() {
     const output = {};
@@ -252,9 +294,29 @@ function createAbilityFilterInput() {
     wrapper.append(wrapperLabel, wrapperContent);
     output.obj = wrapper;
 
-    output.filterCallback = (/** @type {import("../../data/unit-data.js").UNIT_DATA} */ u) => [...new Array(u.max_form + 1).keys()].filter(form =>
-        /** @type {HTMLDivElement[]} */ ([...wrapperContent.querySelectorAll(".advanced-ability-selector")])
-            .every(w => w.classList.contains("inactive") || UnitData.hasAbility(u, w.dataset.ability ?? "", form)));
+    output.filterCallback = (/** @type {import("../../data/unit-data.js").UNIT_DATA} */ u) => [...new Array(u.max_form + 1).keys()].map(form => {
+        const output = [];
+        const unitCpy = structuredClone(u);
+        unitCpy.current_form = form;
+
+        output.push(/** @type {HTMLDivElement[]} */ ([...wrapperContent.querySelectorAll(".advanced-ability-selector")])
+            .every(w => w.classList.contains("inactive") || UnitData.hasAbility(unitCpy, w.dataset.ability ?? "", form)));
+
+        if(form < 2) {
+            output.push(false, false);
+            return output;
+        }
+
+        unitCpy.talents.map(t => t.value = t.cap);
+        output.push(/** @type {HTMLDivElement[]} */ ([...wrapperContent.querySelectorAll(".advanced-ability-selector")])
+            .every(w => w.classList.contains("inactive") || UnitData.hasAbility(unitCpy, w.dataset.ability ?? "", form)));
+
+        unitCpy.ultra_talents.map(t => t.value = t.cap);
+        output.push(/** @type {HTMLDivElement[]} */ ([...wrapperContent.querySelectorAll(".advanced-ability-selector")])
+            .every(w => w.classList.contains("inactive") || UnitData.hasAbility(unitCpy, w.dataset.ability ?? "", form)));
+
+        return output;
+    });
         
     return output;
 }
@@ -262,7 +324,7 @@ function createAbilityFilterInput() {
 /**
  * Creates a search filter element.
  * @param {HTMLInputElement} ownedCheckbox The checkbox that determines if all unit upgrades should be considered.
- * @returns {{obj: HTMLElement, filterCallback: (u: import("../../data/unit-data.js").UNIT_DATA) => number[] }} An object containing the created input, and a function which determines which forms of a unit meet the filter.
+ * @returns {{obj: HTMLElement, filterCallback: (u: import("../../data/unit-data.js").UNIT_DATA) => boolean[][] }} An object containing the created input, and a function which determines which forms of a unit meet the filter.
  */
 function createStatFilterInput(ownedCheckbox) {
     const output = {};
@@ -326,20 +388,44 @@ function createStatFilterInput(ownedCheckbox) {
     wrapper.append(wrapperLabel, wrapperContent);
     output.obj = wrapper;
 
-    output.filterCallback = (/** @type {import("../../data/unit-data.js").UNIT_DATA} */ u) => {
-        const formCosts = statCallback1(u);
-        const formHP = statCallback2(u);
-        const formATK = statCallback3(u);
-        const formKBs = statCallback4(u);
-        const formCD = statCallback5(u);
-        const formRange = statCallback6(u);
-        const formSPD = statCallback7(u);
+    output.filterCallback = (/** @type {import("../../data/unit-data.js").UNIT_DATA} */ u) => [...new Array(u.max_form + 1).keys()].map(form => {
+        const output = [];
+        const unitCpy = structuredClone(u);
+        unitCpy.current_form = form;
 
-        return [...new Array(u.max_form + 1).keys()]
-            .filter(f => formCosts.includes(f) && formHP.includes(f) && formATK.includes(f) && formKBs.includes(f) && formCD.includes(f) && formRange.includes(f) && formSPD.includes(f));
-    }
+        output.push(testAllStats(unitCpy, form, statCallback1, statCallback2, statCallback3, statCallback4, statCallback5, statCallback6, statCallback7));
+
+        if(form < 2) {
+            output.push(false, false);
+            return output;
+        }
+        unitCpy.talents.map(t => t.value = t.cap);
+        output.push(testAllStats(unitCpy, form, statCallback1, statCallback2, statCallback3, statCallback4, statCallback5, statCallback6, statCallback7));
+
+        unitCpy.ultra_talents.map(t => t.value = t.cap);
+        output.push(testAllStats(unitCpy, form, statCallback1, statCallback2, statCallback3, statCallback4, statCallback5, statCallback6, statCallback7));
+
+        return output;
+    });
 
     return output;
+}
+
+/**
+ * Tests a unit for multiple testing functions at once.
+ * @param {import("../../data/unit-data.js").UNIT_DATA} u The unit being tested.
+ * @param {number} form The form of the unit to test.
+ * @param  {...(u: import("../../data/unit-data.js").UNIT_DATA) => number[]} callbacks Functions that test the stats.
+ * @returns {boolean} Whether the unit passed all tests.
+ */
+function testAllStats(u, form, ...callbacks) {
+    let flag = true;
+
+    for(const callback of callbacks) {
+        flag = flag && callback(u).includes(form);
+    }
+
+    return flag;
 }
 
 /**
@@ -393,11 +479,10 @@ function createSingleStatFilterInput(statName, displayName, statCallback, ownedC
 
     output.obj = wrapper;
     output.filterCallback = (/** @type {import("../../data/unit-data.js").UNIT_DATA} */ u) => {
-        let modData;
-        if(ownedCheckbox.checked) {
-            modData = UnitData.dataToRecord(u);
-        } else {
-            modData = UnitData.dataToRecord(UnitData.maxUnit(u));
+        let modData = UnitData.dataToRecord(u);
+        if(!ownedCheckbox.checked) {
+            modData.talents = u.talents.map(t => t.cap);
+            modData.ultra_talents = u.talents.map(ut => ut.cap);
         }
 
         // @ts-ignore
@@ -407,7 +492,6 @@ function createSingleStatFilterInput(statName, displayName, statCallback, ownedC
             const calcStat = statCallback(u.stats[i][statName], modData, u, { 
                 targetTraits: (useTraits ? SETTINGS.traits : []),
                 targetSubTraits: (useTraits ? SETTINGS.subTraits : []),
-                // @ts-ignore
                 testLevelValue: testLevelValue,
                 includeTalents: true,
                 includeOrbs: true,
@@ -462,7 +546,7 @@ function createRandom10FilterInput() {
 
 /**
  * 
- * @param {(u: import("../../data/unit-data.js").UNIT_DATA) => number[]} searchCallback A function which returns only the forms of the provided unit which met the search criteria.
+ * @param {(u: import("../../data/unit-data.js").UNIT_DATA) => (boolean[]|null)[]|null} searchCallback A function which returns only the forms of the provided unit which met the search criteria.
  * @param {(units: number[]) => number[]} resultFilter A function which filters the search results.
  */
 async function applySearch(searchCallback, resultFilter) {
@@ -471,14 +555,16 @@ async function applySearch(searchCallback, resultFilter) {
 
     for(const u of data) {
         const forms = searchCallback(u);
-        if(forms.length > 0) {
-            res[u.id] = forms;
+        if(forms) {
+            res[u.id] = {
+                forms: forms,
+                data: u
+            };
         }
     }
 
     const resFilter = resultFilter(Object.keys(res).map(k => parseInt(k)));
-    const filteredRes = Object.fromEntries(resFilter.map(k => [k, { forms: res[k], data: data[k] }]));
-
+    const filteredRes = Object.fromEntries(resFilter.map(k => [k, res[k]]));
     displayResults(filteredRes);
 }
 
@@ -533,7 +619,7 @@ function displayResults(results) {
         iconWrapper.classList.add("advanced-icon-centering");
 
         const icon = document.createElement("img");
-        const maxValidForm = Math.max(...results[key].forms);
+        const maxValidForm = results[key].forms.findLastIndex(x => x !== null);
         const validImage = SETTINGS.skipImages.includes(parseInt(key));
         if(!validImage) {
             icon.src = `./assets/img/unit_icon/${key}_${maxValidForm}.png`;
@@ -554,6 +640,7 @@ function displayResults(results) {
 
         const talentReq = document.createElement("div");
         talentReq.classList.add("advanced-talent-required");
+        talentReq.title = "Whether the unit needs talents unlocked to meet the search criteria"
 
         const npImg = document.createElement("img");
         npImg.classList.add("advanced-np-img");
@@ -562,6 +649,7 @@ function displayResults(results) {
 
         const utReq = document.createElement("div");
         utReq.classList.add("advanced-ut-required");
+        utReq.title = "Whether the unit needs ultra talents unlocked to meet the search criteria"
 
         const npImg2 = document.createElement("img");
         npImg2.classList.add("advanced-np-img");
@@ -571,6 +659,8 @@ function displayResults(results) {
         darkImg.classList.add("advanced-dark-img");
         darkImg.src = "./assets/img/evo_mats/dark_catseye.png";
 
+        talentReq.classList.toggle("advanced-resource", !(!results[key].forms[maxValidForm][0] && results[key].forms[maxValidForm][1]));
+        utReq.classList.toggle("advanced-resource", !(!results[key].forms[maxValidForm][0] && !results[key].forms[maxValidForm][1]));
         utReq.append(darkImg, npImg2);
         hAlign.append(talentReq, utReq);
 
@@ -578,7 +668,7 @@ function displayResults(results) {
             const formBtn = document.createElement("div");
             formBtn.classList.add("advanced-form-option");
             formBtn.classList.add(`advanced-form-${x}`);
-            if(results[key].forms.includes(x)) {
+            if(results[key].forms[x]) {
                 formBtn.innerHTML = ["N", "E", "T", "U"][x];
                 formBtn.classList.add("advanced-clickable");
                 formBtn.onclick = () => {
@@ -589,6 +679,9 @@ function displayResults(results) {
                     }
                     icon.title = [results[key].data.normal_form, results[key].data.evolved_form, results[key].data.true_form, results[key].data.ultra_form][x];
                     icon.dataset.form = `${x}`;
+
+                    talentReq.classList.toggle("advanced-resource", !(!results[key].forms[x][0] && results[key].forms[x][1]));
+                    utReq.classList.toggle("advanced-resource", !(!results[key].forms[x][0] && !results[key].forms[x][1]));
                 };
             }
             hAlign.appendChild(formBtn);
