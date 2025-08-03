@@ -224,7 +224,7 @@ td {
 }
 
 input {
-    accent-color: var(--rarity-bg);
+    accent-color: var(--rarity-content);
 }
 
 .h-align {

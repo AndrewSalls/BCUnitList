@@ -1,7 +1,7 @@
 //@ts-check
 
 import SETTINGS from "../../../assets/settings.js";
-import { dataToRecord } from "../../data/unit-data.js";
+import UnitData from "../../data/unit-data.js";
 import * as StatCalculator from "../../helper/calculate-stats.js";
 import { getValuesFromRow, observeRowChange, unobserveRowChange } from "../../helper/link-row.js";
 
@@ -21,7 +21,7 @@ export default function createStatRow(unitData, mainRow) {
     const statTable = document.createElement("div");
     statTable.classList.add("unit-stat-table");
     
-    const recordClone = dataToRecord(unitData);
+    const recordClone = UnitData.dataToRecord(unitData);
 
     const { statBox: costStat, onUpdate: updateCost } = createSmartStatBox("Cost", StatCalculator.calculateCost(unitData.stats[unitData.current_form].cost, recordClone, unitData), "¢");
     const { statBox: healthStat, onUpdate: updateHealth } = createSmartStatBox("Health", StatCalculator.calculateHealth(unitData.stats[unitData.current_form].health, recordClone, unitData));

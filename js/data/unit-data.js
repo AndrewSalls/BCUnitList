@@ -123,6 +123,42 @@ export default class UnitData {
     }
 
     /**
+     * Converts unit data to a unit record.
+     * @param {UNIT_DATA} unitData The unconverted data.
+     * @returns {UNIT_RECORD} The convered data.
+     */
+    static dataToRecord(unitData) {
+        return {
+            id: unitData.id,
+            current_form: unitData.current_form,
+            level: unitData.level,
+            plus_level: unitData.plus_level,
+            talents: unitData.talents.map(t => t.value),
+            ultra_talents: unitData.ultra_talents.map(u => u.value),
+            orb: unitData.orb,
+            favorited: unitData.favorited,
+            hidden: unitData.hidden
+        };
+    }
+
+    /**
+     * Maximizes all modifiable stats in the unit data.
+     * @param {UNIT_DATA} unitData The unmodified data.
+     * @returns {UNIT_DATA} The modified data.
+     */
+    static maxUnit(unitData) {
+        const cpy = structuredClone(unitData);
+
+        cpy.current_form = cpy.max_form;
+        cpy.level = cpy.level_cap.MaxLevel;
+        cpy.plus_level = cpy.level_cap.MaxPlusLevel;
+        cpy.talents.forEach(t => t.value = t.cap);
+        cpy.ultra_talents.forEach(t => t.value = t.cap);
+
+        return cpy;
+    }
+
+    /**
      * Gets a singular unit.
      * @param {number} id The unit's ID.
      * @param {UNIT_DATA_TYPE} dataType What type of data is being obtained.
@@ -225,23 +261,4 @@ export default class UnitData {
                 console.error(`Invalid data type requested: ${dataType}`);
         }
     }
-}
-
-/**
- * Converts unit data to a unit record.
- * @param {UNIT_DATA} unitData The unconverted data.
- * @returns {UNIT_RECORD} The convered data.
- */
-export function dataToRecord(unitData) {
-    return {
-        id: unitData.id,
-        current_form: unitData.current_form,
-        level: unitData.level,
-        plus_level: unitData.plus_level,
-        talents: unitData.talents.map(t => t.value),
-        ultra_talents: unitData.ultra_talents.map(u => u.value),
-        orb: unitData.orb,
-        favorited: unitData.favorited,
-        hidden: unitData.hidden
-    };
 }
