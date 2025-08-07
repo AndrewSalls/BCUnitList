@@ -172,11 +172,22 @@ export function appendChip(id, form, parent, saveCallback, ownedOnly) {
         removeButton.classList.remove("hidden");
         searchWrapper.classList.add("hidden");
         sortIcons(parent);
+        document.querySelectorAll(`#search-suggestion-dropdown div.global-hidden`).forEach(d => d.classList.remove("global-hidden"));
         saveCallback && saveCallback();
     }
 
     makeSearchable(unitSearchInput, resolveSearch);
-    advancedSearchBtn.onclick = () => openSearchModal((u, f) => resolveSearch(u.id, f), ownedOnly);
+    advancedSearchBtn.onclick = () => {
+        for(const chipID of parent.querySelectorAll(".chip.set-unit")) {
+            //@ts-ignore VSCode fix your type hints
+            const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${chipID.dataset.id ?? "0"}"]`);
+            formNameOptions.forEach(o => {
+                o.classList.add("global-hidden");
+                o.classList.remove("suggestion-hovered");
+            });
+        }
+        openSearchModal((u, f) => resolveSearch(u.id, f), ownedOnly);
+    };
     searchWrapper.append(unitSearchInput, advancedSearchBtn);
 
     if(id !== null && form !== null) {

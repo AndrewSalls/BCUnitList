@@ -12,6 +12,7 @@ export default function makeSearchable(input, findCallback) {
     const suggestionDropdown = /** @type {HTMLDivElement} */ (document.querySelector("#search-suggestion-dropdown"));
 
     function displayDropdown() {
+        suggestionDropdown.querySelectorAll(".hidden").forEach(s => s.classList.remove("hidden"));
         input.dispatchEvent(new Event("keyup"));
         targettedInput = input;
         const inputBounds = input.getBoundingClientRect();
@@ -129,7 +130,6 @@ export default function makeSearchable(input, findCallback) {
             findCallback(id, form);
             input.value = "";
             input.blur();
-            suggestionDropdown.querySelectorAll(".hidden").forEach(s => s.classList.remove("hidden"));
         } else {
             const cleanValue = input.value.trim().toLowerCase();
 
