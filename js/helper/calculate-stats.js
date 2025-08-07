@@ -87,8 +87,6 @@ export function calculateHealth(initialValue, updatedData, fixedData, calculator
             // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
             health *= getAbilityOrb("Colossus Slayer", updatedData).reduce((prev, curr) => Math.max(prev, ORB_MAP.type_mults.def.Colossus_Slayer[curr.rank]), 1);
         }
-        // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
-        health *= getAbilityOrb("Stories of Legend Buff", updatedData).reduce((prev, curr) => Math.max(prev, ORB_MAP.type_mults.def.SoL_Buff[curr.rank]), 1);
     }
 
     if(calculatorOptions.includeTalents) {
@@ -137,8 +135,6 @@ export function calculateDamage(initialValue, updatedData, fixedData, calculator
             // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
             damage *= getAbilityOrb("Colossus Slayer", updatedData).reduce((prev, curr) => Math.max(prev, ORB_MAP.type_mults.atk.Colossus_Slayer[curr.rank]), 1);
         }
-        // @ts-ignore Type hints do not detect that filter prevents null orbs from being reduced
-        damage *= getAbilityOrb("Stories of Legend Buff", updatedData).reduce((prev, curr) => Math.max(prev, ORB_MAP.type_mults.atk.SoL_Buff[curr.rank]), 1);
     }
 
     if(calculatorOptions.includeTalents) {

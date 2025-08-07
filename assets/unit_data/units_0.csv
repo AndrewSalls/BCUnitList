@@ -84,7 +84,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 82,EX,Y,Blue Shinobi,Orange Shinobi,,,Plus10,0,,
 83,UR,Y,Sodom,Earth King Sodom,God-Emperor Sodom,,UR,2,Weaken10-Target_Relic1-Curse_Immune1-Defense10-Attack10,Behemoth_Slayer1-Sage_Slayer1-Weaken_Immune1
 84,UR,Y,Megidora,Holy Dragon Megidora,God-Emperor Megidora,,UR,1,Knockback10-Wave10-Curse_Immune1-Defense10-Attack10,Cost_Down10-Target_Metal1-Target_Relic1
-85,UR,Y,Vars,Dragon King Vars,God-Emperor Vars,,UR,1,Knockback10-Curse_Immune1-Target_Relic1-Defense10-Attack10,
+85,UR,Y,Vars,Dragon King Vars,God-Emperor Vars,,UR,1,Knockback10-Curse_Immune1-Target_Relic1-Defense10-Attack10,Slow10-Attack_Rate10-Wave_Immune1
 86,UR,Y,Kamukura,God Dragon Kamukura,God-Emperor Kamukura,,UR,2,Resistant1-Curse_Immune1-Slow_Resist10-Defense10-Attack10,Sage_Slayer1-Slow10-Cost_Down10
 87,UR,Y,Raiden,Dragonslayer Raiden,God-Emperor Raiden,,UR,1,Dodge10-Knockback_Immune1-Freeze_Resist10-Defense10-Attack10,Slow_Immune1-Surge_Immune1-Behemoth_Slayer1
 88,RR,Y,Rope Jump Cat,Pair Rope Jump Cat,Noodle Cats,,,0,,

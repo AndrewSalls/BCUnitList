@@ -21,6 +21,7 @@ ID,Form,Cost,Health,Damage,Range,KBCount,Speed,Cooldown,HasArea,Traits,Abilities
 306,0,4950,4000,1800,450,5,10,193.33,T,Zombie,Knockback-Zombie_Killer
 306,1,4950,4000,1800,450,5,10,193.33,T,Zombie,Knockback-Zombie_Killer
 306,2,4950,4200,1800,450,7,10,193.33,T,Zombie,Knockback-Zombie_Killer
+306,3,4950,5200,1800,450,7,10,193.33,T,Zombie,Explosion-Explosion_Immune-Knockback-Omnistrike-Sage_Slayer-Zombie_Killer
 307,0,1050,450,400,350,3,14,30,T,Zombie,Long_Distance-Slow-Zombie_Killer
 307,1,1050,600,550,350,3,14,30,T,Zombie,Long_Distance-Slow-Zombie_Killer
 307,2,1050,750,550,350,3,20,30,T,Zombie,Long_Distance-Slow-Zombie_Killer

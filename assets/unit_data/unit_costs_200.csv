@@ -74,7 +74,7 @@ ID,LevelFormat,TrueXPCost,TrueMaterial1,TrueMaterialCount1,TrueMaterial2,TrueMat
 272,,1000000,green_fruit,5,epic_seed,1,,,,,,,175-175-100-175-175,,,,,,,,,,,,225-150-150
 273,,,,,,,,,,,,,,,,,,,,,,,,,
 274,,,,,,,,,,,,,,,,,,,,,,,,,
-275,,,,,,,,,,,,,,,,,,,,,,,,,
+275,,1000000,purple_fruit,4,yellow_fruit,4,epic_fruit,3,,,,,,,,,,,,,,,,,
 276,,500000,gold_seed,1,red_fruit,3,blue_fruit,3,yellow_fruit,3,epic_fruit,3,,,,,,,,,,,,,
 277,BadCollab,,,,,,,,,,,,,,,,,,,,,,,,
 278,BadCollab,,,,,,,,,,,,,,,,,,,,,,,,

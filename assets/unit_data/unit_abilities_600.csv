@@ -246,5 +246,6 @@ ID,Form,Cost,Health,Damage,Range,KBCount,Speed,Cooldown,HasArea,Traits,Abilities
 697,2,1050,1200,540,200,4,12,22.33,T,Zombie,Behemoth_Slayer-Massive_Damage-Mini_Wave-Soulstrike-Zombie_Killer
 698,0,3150,7000,1500,250,1,30,86.67,F,Alien-Angel,Knockback-Multi_Hit-Weaken_Immune
 698,1,3150,7000,1500,250,1,30,86.67,F,Alien-Zombie,Freeze_Immune-Knockback-Multi_Hit
+698,2,3150,7000,1500,250,1,30,86.67,F,Aku-Alien,Knockback-Multi_Hit-Surge_Immune
 699,0,3600,2000,1460,470,3,20,93.33,T,Traitless,Long_Distance-Slow-Wave_Immune
 699,1,3600,2300,1860,470,3,20,93.33,T,Traitless,Long_Distance-Slow-Wave_Immune
