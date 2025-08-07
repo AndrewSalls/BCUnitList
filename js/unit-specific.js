@@ -50,7 +50,7 @@ function initialize() {
     document.body.appendChild(createSearchModal());
     document.body.appendChild(datalist);
 
-    REQUEST_TYPES.GET_NAMES(true).then(names => initializeDataset(datalist, names));
+    REQUEST_TYPES.GET_NAMES().then(names => initializeDataset(datalist, names));
     makeSearchable(searchBox, id => {
         loadSpecific(id);
     });

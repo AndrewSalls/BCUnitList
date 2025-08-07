@@ -33,8 +33,8 @@ export async function getUnitData(categories) {
                         totalLevel += desc[p].level + desc[p].plus_level;
 
                         desc[p].stats = stats[p];
-                        desc[p].collab = collabUnits.includes(desc.id);
-                        desc[p].unobtainable = unobtainableUnits.includes(desc.id);
+                        desc[p].collab = collabUnits.includes(desc[p].id);
+                        desc[p].unobtainable = unobtainableUnits.includes(desc[p].id);
                     }
 
                     res(desc);
