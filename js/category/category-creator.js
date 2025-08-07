@@ -94,6 +94,7 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
                     completionMessager("Category removed...", false);
                 });
             }
+            remover.disabled = true;
         };
 
         createButton.onclick = () => {

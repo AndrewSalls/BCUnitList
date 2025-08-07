@@ -60,6 +60,8 @@ h3 {
     width: 40vw;
     height: 5vh;
     border-radius: 100vw;
+}
+.super-category-button:not(.inactive) {
     background-color: var(--generic-content);
 }
 

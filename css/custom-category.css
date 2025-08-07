@@ -44,3 +44,7 @@
     height: 5vh;
     border-radius: 1000000px;
 }
+
+#delete-category, #cancel-category-creation {
+    background-color: var(--warning);
+}
