@@ -31,14 +31,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 5vh;
+    column-gap: 1vh;
 }
 
 #search-box {
     width: 18vw;
-    height: 5vh;
+    height: 100%;
     border: 3px solid var(--text);
     border-radius: 1000000000px;
     padding: 0 1vw;
+}
+
+#search-search, #search-extra {
+    height: 100%;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1000000px;
 }
 
 #unit-border {

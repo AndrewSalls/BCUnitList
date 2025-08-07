@@ -3,15 +3,17 @@ import makeSearchable from "../../helper/make-searchable.js";
 import makeDraggable, { sortIcons } from "../../helper/make-draggable.js";
 import { FORM } from "../../data/unit-data.js";
 import SETTINGS from "../../../assets/settings.js";
+import { openSearchModal } from "./create-search-modal.js";
 
 /**
  * Creates an element used to create a loadout.
  * @param {import("../../data/loadout-data.js").LOADOUT|null} loadoutData Loadout data to initialize the loadout to, or null if the loadout should start blank.
  * @param {{ cannon: boolean, style: boolean, foundation: boolean }[]} unlockedCannons Whether each cannon part for each cannon type has been unlocked.
  * @param {(() => void)|null} saveCallback A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
+ * @param {boolean|null} ownedOnly Whether searching for units via the chip should only allow owned units to appear.
  * @returns {HTMLDivElement} The created element.
  */
-export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback) {
+export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback, ownedOnly) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-wrapper");
     wrapper.classList.add("v-align");
@@ -36,7 +38,7 @@ export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback)
     contentWrapper.classList.add("h-align");
 
     contentWrapper.append(
-        createUnitInput(loadoutData && loadoutData.units, loadoutData && loadoutData.forms, saveCallback),
+        createUnitInput(loadoutData && loadoutData.units, loadoutData && loadoutData.forms, saveCallback, ownedOnly),
         createCannonInput(loadoutData && loadoutData.baseLevels, unlockedCannons, saveCallback)
     );
     wrapper.append(options, contentWrapper);
@@ -50,19 +52,20 @@ export function createMinimalLoadout(loadoutData, unlockedCannons, saveCallback)
  * @param {FORM[]|null} forms A list of up to 10 unit forms, the same length as {@link units}, or null if all slots are empty.
  * @param {(() => void)|null} saveCallback A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
  * @returns {HTMLDivElement} The created loadout unit selector.
+ * @param {boolean|null} ownedOnly Whether searching for units via the chip should only allow owned units to appear.
  */
-export function createUnitInput(units, forms, saveCallback) {
+export function createUnitInput(units, forms, saveCallback, ownedOnly) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("loadout-unit-wrapper");
 
     let x = 0;
     if(units && forms) {
         for(x = 0; x < 10 && x < units.length; x++) {
-            appendChip(units[x], forms[x], wrapper, saveCallback);
+            appendChip(units[x], forms[x], wrapper, saveCallback, ownedOnly);
         }
     }
     while(x < 10) {
-        appendChip(null, null, wrapper, saveCallback);
+        appendChip(null, null, wrapper, saveCallback, ownedOnly);
         x++
     }
 
@@ -77,8 +80,9 @@ export function createUnitInput(units, forms, saveCallback) {
  * @param {FORM|null} form The form of the unit to append to be used, or null if the slot is empty.
  * @param {HTMLDivElement} parent The parent element to append the chip to.
  * @param {(() => void)|null} saveCallback A function used to tell the page to save the updated loadout, or null if the loadout should not be saved.
+ * @param {boolean|null} ownedOnly Whether searching for units via the chip should only allow owned units to appear.
  */
-export function appendChip(id, form, parent, saveCallback) {
+export function appendChip(id, form, parent, saveCallback, ownedOnly) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("chip");
 
@@ -116,10 +120,13 @@ export function appendChip(id, form, parent, saveCallback) {
 
         img.src = "./assets/img/unit_icon/unknown.png";
         removeButton.classList.add("hidden");
-        unitSearchInput.classList.remove("hidden");
+        searchWrapper.classList.remove("hidden");
         sortIcons(parent);
         saveCallback && saveCallback();
     }
+
+    const searchWrapper = document.createElement("div");
+    searchWrapper.classList.add("unset-search-wrapper");
 
     const unitSearchInput = document.createElement("input");
     unitSearchInput.classList.add("unset-search");
@@ -140,7 +147,15 @@ export function appendChip(id, form, parent, saveCallback) {
         document.querySelectorAll(`#search-suggestion-dropdown div.global-hidden`).forEach(d => d.classList.remove("global-hidden"));
     });
 
-    makeSearchable(unitSearchInput, (searchID, searchForm) => {
+    const advancedSearchBtn = document.createElement("button");
+    advancedSearchBtn.classList.add("advanced-search-open");
+    advancedSearchBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10.5" y="0" width="3" height="24" />
+            <rect x="0" y="10.5" width="24" height="3" />
+        </svg>`;
+
+    const resolveSearch = (searchID, searchForm) => {
         const formNameOptions = document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${searchID}"]`);
         formNameOptions.forEach(o => {
             o.classList.add("global-hidden");
@@ -155,10 +170,14 @@ export function appendChip(id, form, parent, saveCallback) {
             img.src = `./assets/img/unit_icon/${searchID}_${searchForm}.png`;
         }
         removeButton.classList.remove("hidden");
-        unitSearchInput.classList.add("hidden");
+        searchWrapper.classList.add("hidden");
         sortIcons(parent);
         saveCallback && saveCallback();
-    });
+    }
+
+    makeSearchable(unitSearchInput, resolveSearch);
+    advancedSearchBtn.onclick = () => openSearchModal((u, f) => resolveSearch(u.id, f), ownedOnly);
+    searchWrapper.append(unitSearchInput, advancedSearchBtn);
 
     if(id !== null && form !== null) {
         wrapper.classList.add("set-unit");
@@ -167,10 +186,10 @@ export function appendChip(id, form, parent, saveCallback) {
         wrapper.dataset.maxForm = `${document.querySelectorAll(`#search-suggestion-dropdown div[data-target="${id}"]`).length - 1}`;
         img.src = `./assets/img/unit_icon/${id}_${form}.png`;
         removeButton.classList.remove("hidden");
-        unitSearchInput.classList.add("hidden");
+        searchWrapper.classList.add("hidden");
     }
 
-    wrapper.append(img, removeButton, unitSearchInput);
+    wrapper.append(img, removeButton, searchWrapper);
     parent.appendChild(wrapper);
 }
 

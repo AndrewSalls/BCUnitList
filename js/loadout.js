@@ -4,6 +4,7 @@ import { encodeLink } from "./helper/encoder.js";
 import { createMinimalLoadout } from "./unit-table/creation/create-loadout-table.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 import SETTINGS from "../assets/settings.js";
+import createSearchModal from "./unit-table/creation/create-search-modal.js";
 
 let unlockedCannons = [];
 
@@ -39,6 +40,8 @@ function initializeContent() {
     
     const viewShared = /** @type {HTMLButtonElement} */ (document.querySelector("#query-display-loadout"));
     viewShared.onclick = () => window.location.href = "./loadout-display.html";
+
+    document.body.appendChild(createSearchModal());
 }
 
 /**
@@ -84,7 +87,7 @@ function createLoadout(loadoutData) {
             REQUEST_TYPES.DELETE_LOADOUT(position);
         }
     };
-    minimalLoadout = createMinimalLoadout(loadoutData, unlockedCannons, requestSave);
+    minimalLoadout = createMinimalLoadout(loadoutData, unlockedCannons, requestSave, true);
     
     const options = minimalLoadout.querySelector(".loadout-options");
     minimalLoadout.querySelector(".loadout-name")?.addEventListener("input", requestSave);

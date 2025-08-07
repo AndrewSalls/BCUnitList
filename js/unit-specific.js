@@ -7,6 +7,7 @@ import createOrbMenu from "./unit-table/orb/create-orb-selector.js";
 import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
 import SETTINGS from "../assets/settings.js";
 import createStatRow from "./unit-table/creation/create-stat-row.js";
+import createSearchModal, { openSearchModal } from "./unit-table/creation/create-search-modal.js";
 
 /**
  * @readonly
@@ -45,11 +46,16 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 function initialize() {
     const datalist = createSearchDropdown();
+    const searchBox = /** @type {HTMLInputElement} */ (document.querySelector("#search-box"));
+    document.body.appendChild(createSearchModal());
     document.body.appendChild(datalist);
-    makeSearchable(/** @type {HTMLInputElement} */ (document.querySelector("#search-box")), id => {
+
+    REQUEST_TYPES.GET_NAMES(true).then(names => initializeDataset(datalist, names));
+    makeSearchable(searchBox, id => {
         loadSpecific(id);
     });
-    REQUEST_TYPES.GET_NAMES(true).then(names => initializeDataset(datalist, names));
+
+    /** @type {HTMLButtonElement} */ (document.querySelector("#search-extra")).onclick = () => openSearchModal((u) => loadSpecific(u.id));
 
     let target = window.localStorage.getItem("su");
     if(!target || Number.isNaN(target)) {

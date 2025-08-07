@@ -19,6 +19,7 @@
     grid-template-rows: 100%;
     background-color: var(--highlight-bg);
     border-radius: 5px;
+    position: relative;
 }
 
 #advanced-search-options {
@@ -342,4 +343,17 @@
 
 .advanced-resource img {
     filter: grayscale(1);
+}
+
+#advanced-search-exit {
+    position: absolute;
+    left: 0.5vw;
+    top: 1vh;
+    width: 1vw;
+    height: 1vw;
+    cursor: pointer;
+    transition: 0.1s linear filter;
+}
+#advanced-search-exit:hover {
+    filter: invert(0.3);
 }

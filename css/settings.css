@@ -164,3 +164,7 @@ h4 {
 .descending .sort-direction {
     transform: rotate(180deg);
 }
+
+#delete-save {
+    background-color: var(--warning);
+}

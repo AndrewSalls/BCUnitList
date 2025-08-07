@@ -10,6 +10,7 @@ import { initializeOrbSelection } from "./unit-table/orb/orb-selection.js";
 import { getValuesFromRow } from "./helper/link-row.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 import SETTINGS from "../assets/settings.js";
+import createSearchModal from "./unit-table/creation/create-search-modal.js";
 
 let idFormMap = new Map();
 
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeContent() {
     document.body.appendChild(createOrbMenu());
     initializeOrbSelection();
+    document.body.appendChild(createSearchModal());
 
     const table = createSearchableTable("Loadout", []);
     table.querySelector(".searchable-table-title")?.parentElement?.remove();
@@ -51,7 +53,7 @@ function initializeContent() {
 
             /** @type {HTMLImageElement} */ (c.querySelector(".unit-icon")).src = "./assets/img/unit_icon/unknown.png";
             c.querySelector(".remove-unit")?.classList.add("hidden");
-            c.querySelector(".unset-search")?.classList.remove("hidden");
+            c.querySelector(".unset-search-wrapper")?.classList.remove("hidden");
         });
 
         /** @type {HTMLInputElement} */ (document.querySelector("#loadout-cannon input")).value = "1";
@@ -102,7 +104,7 @@ function initializeContent() {
                     chips[x].dataset.maxForm = `${u.max_form}`;
     
                     chips[x].querySelector(".remove-unit")?.classList.remove("hidden");
-                    chips[x].querySelector(".unset-search")?.classList.add("hidden");
+                    chips[x].querySelector(".unset-search-wrapper")?.classList.add("hidden");
 
                     u.current_form = decoded.forms[x];
                     u.level = decoded.units[x].level;
@@ -220,7 +222,7 @@ async function loadLoadouts() {
     document.body.appendChild(datalist);
     initializeDataset(datalist, await REQUEST_TYPES.GET_NAMES(true));
 
-    const emptyLoadout = createMinimalLoadout(null, unlockedCannons, syncLoadoutAndTable);
+    const emptyLoadout = createMinimalLoadout(null, unlockedCannons, syncLoadoutAndTable, null);
     document.querySelector("#loadout-box")?.appendChild(emptyLoadout);
 }
 

@@ -6,6 +6,28 @@ import UnitData from "../../data/unit-data.js";
 import { getUnitTraitTargets } from "../../helper/calculate-stat-mult.js";
 import { calculateCost, calculateDamage, calculateHealth, calculateKnockbacks, calculateRange, calculateRechargeTime, calculateSpeed, CALCULATOR_LEVEL_OPTIONS } from "../../helper/calculate-stats.js";
 
+let unitSelectCallback = null;
+
+/**
+ * Opens a created search modal.
+ * @param {(u: import("../../data/unit-data.js").UNIT_DATA, form: number) => void} unitCallback A function to call for any unit selected from a search result.
+ * @param {boolean|null} ownedOnly Whether the owned filter should always be on (true), off (false), or not restricted (null).
+ */
+export function openSearchModal(unitCallback, ownedOnly = null) {
+    unitSelectCallback = unitCallback;
+    const actualOwnedCheckbox = /** @type {HTMLInputElement} */ (document.querySelector("#advanced-owned-wrapper input"));
+    actualOwnedCheckbox.disabled = ownedOnly !== null;
+    if(ownedOnly !== null) {
+        actualOwnedCheckbox.checked = ownedOnly;
+        actualOwnedCheckbox.parentElement?.classList.add("hidden");
+    }
+
+    const container = /** @type {HTMLDivElement} */ (document.querySelector("#advanced-results-content"));
+    container.innerHTML = "";
+
+    document.querySelector("#advanced-search-modal-wrapper")?.classList.remove("hidden");
+}
+
 const rarityMap = { N: "Normal", EX: "Special", RR: "Rare", SR: "Super Rare", UR: "Uber Rare", LR: "Legend Rare" };
 /**
  * Creates a modal that allows for more precise unit searching.
@@ -13,7 +35,15 @@ const rarityMap = { N: "Normal", EX: "Special", RR: "Rare", SR: "Super Rare", UR
  */
 export default function createSearchModal() {
     const output = document.createElement("div");
+    output.classList.add("hidden");
     output.id = "advanced-search-modal-wrapper";
+    
+    const closeX = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    closeX.id = "advanced-search-exit";
+    closeX.setAttribute("viewBox", "0 0 64 64");
+    closeX.innerHTML = '<polygon points="10,0 0,10 54,64 64,54" /><polygon points="54,0 64,10 10,64 0,54" />';
+    closeX.onclick = () => output.classList.add("hidden");
+    output.appendChild(closeX);
 
     const content = document.createElement("div");
     content.id = "advanced-search-modal";
@@ -89,7 +119,12 @@ export default function createSearchModal() {
 
     wrapperContents.appendChild(randomToggle);
     otherWrapper.append(wrapperLabel, wrapperContents);
-    searchOptions.append(optionLabel, nameSearchAlign, raritySelection, traitSelection, abilityMultibox, statMultiRange, otherWrapper);
+
+    const resetButton = document.createElement("button");
+    resetButton.onclick = resetAllFilters;
+    resetButton.textContent = "Reset Filters";
+
+    searchOptions.append(optionLabel, nameSearchAlign, resetButton, raritySelection, traitSelection, abilityMultibox, statMultiRange, otherWrapper);
 
     const results = createResults();
 
@@ -610,7 +645,7 @@ function displayResults(results) {
     const container = /** @type {HTMLDivElement} */ (document.querySelector("#advanced-results-content"));
     container.innerHTML = "";
 
-    for(const key of Object.keys(results).sort()) {
+    for(const key of Object.keys(results).sort((a, b) => parseInt(a) - parseInt(b))) {
         const result = document.createElement("div");
         result.classList.add(`${rarityMap[results[key].data.rarity].toLowerCase().replaceAll(" ", "-")}-color`);
         result.classList.add("advanced-result-wrapper");
@@ -629,7 +664,10 @@ function displayResults(results) {
         icon.title = [results[key].data.normal_form, results[key].data.evolved_form, results[key].data.true_form, results[key].data.ultra_form][maxValidForm];
         icon.dataset.form = `${maxValidForm}`;
         iconWrapper.appendChild(icon);
-        // TODO: click to submit unit as search result
+        icon.onclick = () => {
+            document.querySelector("#advanced-search-modal-wrapper")?.classList.add("hidden");
+            unitSelectCallback(results[key].data, parseInt(icon.dataset.form ?? "0"));
+        }
 
         const id = document.createElement("p");
         id.classList.add("advanced-result-id");
@@ -691,4 +729,17 @@ function displayResults(results) {
 
         container.appendChild(result);
     }
+}
+
+/**
+ * Sets all search filters to their default state, except for checkboxes.
+ */
+function resetAllFilters() {
+    document.querySelectorAll("#advanced-rarity-spacer .advanced-rarity-selector").forEach(i => i.classList.add("inactive"));
+    document.querySelectorAll("#advanced-trait-spacer .advanced-trait-selector-wrapper").forEach(i => i.classList.add("inactive"));
+    document.querySelectorAll("#advanced-ability-spacer .advanced-ability-selector").forEach(i => i.classList.add("inactive"));
+    /** @type {NodeListOf<HTMLInputElement>} */ (document.querySelectorAll("#advanced-stats-spacer input[type='text']")).forEach(i => i.value = "");
+    /** @type {HTMLButtonElement} */ (document.querySelector("#advanced-level-box .advanced-level-option[data-level-type='0']")).click();
+
+    /** @type {HTMLDivElement} */ (document.querySelector("#advanced-results-content")).innerHTML = "";
 }

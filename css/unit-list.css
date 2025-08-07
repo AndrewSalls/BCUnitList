@@ -85,6 +85,13 @@ h2 {
     text-align: center;
 }
 
- #legend-table .open-table-option {
+#legend-table .open-table-option {
     animation: rainbow 8s linear 0s infinite forwards;
- }
+}
+
+#unit-advanced-search {
+    height: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 5px;
+    margin-left: 1vh;
+}

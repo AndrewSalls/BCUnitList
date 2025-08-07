@@ -8,6 +8,7 @@ import { attachTableOptionsAndFilters, initializeTableModal } from "./unit-table
 import makeSearchable, { createSearchDropdown, initializeDataset } from "./helper/make-searchable.js";
 import { checkPort, REQUEST_TYPES } from "./communication/iframe-link.js";
 import { RARITY } from "./data/unit-data.js";
+import createSearchModal, { openSearchModal } from "./unit-table/creation/create-search-modal.js";
 
 /**
  * Initializes page elements once page has loaded.
@@ -28,10 +29,13 @@ window.addEventListener("DOMContentLoaded", () => {
  * Initializes static content on the page.
  */
 function loadUnitTables() {
+    const scrollable = /** @type {HTMLDivElement} */ (document.querySelector("#loading-content"));
     const loadingBar = createLoadingBar(8, () => {});
 
     const datalist = createSearchDropdown();
     document.body.appendChild(datalist);
+    document.body.appendChild(createSearchModal());
+
     makeSearchable(/** @type {HTMLInputElement} */ (document.querySelector("#unit-search")), targettedID => {
         const target = [...document.querySelectorAll(".row-id")].find(r => r.textContent === `${targettedID}`)?.parentElement;
         if(target && !target.classList.contains("hidden") && !target.classList.contains("filter-hidden")) {
@@ -39,7 +43,7 @@ function loadUnitTables() {
                 //@ts-ignore Inside a table, so parentElements must exist. Table is malformatted if searchable-table-title element is missing
                 target.parentElement.parentElement.querySelector(".searchable-table-title").click();
             }
-            window.scrollTo({ left: 0, top: window.scrollY + target.getBoundingClientRect().top, behavior: "smooth" });
+            scrollable.scrollTo({ left: 0, top: scrollable.scrollTop + target.getBoundingClientRect().top - 60, behavior: "smooth" });
         }
     });
     REQUEST_TYPES.GET_NAMES().then(names => initializeDataset(datalist, names)).then(_ => loadingBar.increment());
@@ -106,6 +110,17 @@ function initializeQuickNav() {
 
     const navToggle = /** @type {HTMLDivElement} */ (nav.querySelector("#quick-nav-access"));
     navToggle.onclick = () => nav.classList.toggle("raised");
+
+    /** @type {HTMLButtonElement} */ (document.querySelector("#unit-advanced-search")).onclick = () => openSearchModal(u => {
+            const target = [...document.querySelectorAll(".row-id")].find(r => r.textContent === `${u.id}`)?.parentElement;
+            if(target && !target.classList.contains("hidden") && !target.classList.contains("filter-hidden")) {
+                if(target.parentElement?.classList.contains("hidden")) {
+                    //@ts-ignore Inside a table, so parentElements must exist. Table is malformatted if searchable-table-title element is missing
+                    target.parentElement.parentElement.querySelector(".searchable-table-title").click();
+                }
+                scrollable.scrollTo({ left: 0, top: scrollable.scrollTop + target.getBoundingClientRect().top - 60, behavior: "smooth" });
+            }
+        });
 
     const normalJump = /** @type {HTMLButtonElement} */ (nav.querySelector("#normal-jump"));
     const normalTable = /** @type {HTMLDivElement} */ (document.querySelector("#normal-table"));
