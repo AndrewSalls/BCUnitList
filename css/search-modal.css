@@ -120,6 +120,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    border-radius: 6px;
     display: none;
 }
 .advanced-trait-selector-wrapper.inactive svg {
