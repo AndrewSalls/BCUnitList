@@ -109,9 +109,6 @@ export default function makeSearchable(input, findCallback) {
                 form = parseInt(hovered.dataset.form ?? "0");
             } else if(!isNaN(parseInt(input.value))) {
                 id = parseInt(input.value);
-                if(id < 0 || id > parseInt(suggestionDropdown.dataset.max_count ?? "0")) {
-                    return;
-                }
                 const potential = suggestionDropdown.querySelector(`div[data-target="${id}"]`);
                 if(!potential || potential.classList.contains("hidden")) {
                     return;
