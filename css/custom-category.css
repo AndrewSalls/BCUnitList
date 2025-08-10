@@ -48,3 +48,7 @@
 #delete-category, #cancel-category-creation {
     background-color: var(--warning);
 }
+
+#add-unit-advanced {
+    margin-left: 1vw;
+}

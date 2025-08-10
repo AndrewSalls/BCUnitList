@@ -1,5 +1,6 @@
 //@ts-check
 import makeSearchable, { createSearchDropdown, initializeDataset } from "../helper/make-searchable.js";
+import createSearchModal, { openSearchModal } from "../unit-table/creation/create-search-modal.js";
 import { createSubCategoryButton, createSuperCategoryButton } from "./create-settings-category.js";
 
 const MAX_CATEGORY_NAME_LENGTH = 64;
@@ -25,7 +26,9 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
 
     const datalist = createSearchDropdown();
     document.body.appendChild(datalist);
-    makeSearchable(/** @type {HTMLInputElement} */ (document.querySelector("#add-unit")), /** @type {number} */ (id) => {
+    document.body.appendChild(createSearchModal());
+
+    const searchResultFunc = (id) => {
         if(!selectedUnits.has(id)) {
             selectedUnits.add(id);
             const chip = createChip(id);
@@ -51,8 +54,12 @@ export function initializeCategoryCreator(getCategories, modifyCategory, removeC
                 o.classList.remove("suggestion-hovered");
             });
         }
-    });
+    };
+
+    makeSearchable(/** @type {HTMLInputElement} */ (document.querySelector("#add-unit")), searchResultFunc);
     initializeDataset(datalist, names);
+    /** @type {HTMLButtonElement} */ (document.querySelector("#add-unit-advanced")).onclick = () => openSearchModal((u, f) => searchResultFunc(u.id), false);
+    
 
     cancelButton.onclick = () => {
         selectedUnits.clear();
