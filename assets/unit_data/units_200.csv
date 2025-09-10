@@ -12,7 +12,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 210,EX,Y,Li'l Tank Cat,Li'l Wall Cat,Li'l Eraser Cat,,Lil,1,Toxic_Resist10-Soulstrike1-Dodge10-Defense10-Attack10,
 211,EX,Y,Li'l Axe Cat,Li'l Brave Cat,Li'l Dark Cat,,Lil,1,Target_Aku1-Freeze10-Surge_Resist10-Defense10-Attack10,
 212,UR,Y,The White Rabbit,The Black Cat,The Grey Fox,The Spectral Cat,UR,2,Warp_Immune1-Curse_Immune1-Cost_Down10-Defense10-Attack10,
-213,EX,Y,Catburger,Cat Royale,Value Meal Cat,,,0,,
+213,EX,Y,Catburger,Cat Royale,Value Meal Cat,,Plus35,0,,
 214,RR,Y,HYAKUTARO,HYAKUTARO CC,,,,0,,
 215,RR,Y,MARCO,MARCO CC,,,GachaRare,0,,
 216,RR,Y,TARMA,TARMA CC,,,GachaRare,0,,
@@ -60,7 +60,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 258,UR,Y,Anubis the Protector,Anubis the Unblemished,Almighty Anubis,,UR,2,Surge10-Surge_Immune1-Barrier_Breaker10-Defense10-Attack10,Attack_Rate10-Cost_Down10-Shield_Pierce10
 259,UR,Y,Radiant Aphrodite,Megaphrodite,Almighty Aphrodite,,UR,2,Slow10-Curse_Resist10-Wave_Resist10-Freeze_Resist10-Weaken_Resist10,Attack_Rate10-Attack10
 260,SR,Y,Catway,Drone Cat,Time Traveller Cat,,,0,,
-261,UR,Y,Hayabusa,Oni Hayabusa,Akuma Hayabusa,,UR,1,Target_Aku1-Shield_Pierce10-Curse_Resist10-Defense10-Attack10,
+261,UR,Y,Hayabusa,Oni Hayabusa,Akuma Hayabusa,,UR,1,Target_Aku1-Shield_Pierce10-Curse_Resist10-Defense10-Attack10,Strong1-Attack_Rate10-Surge_Immune1
 262,EX,N,Nyamusu,Neko Nyamusu,,,Plus10,0,,
 263,EX,N,Pochi,Tank Pochi,,,Plus10,0,,
 264,EX,N,Kuromi,Kuromi and Cats,,,Plus10,0,,

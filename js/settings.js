@@ -198,7 +198,7 @@ function initializeSaveOptions() {
             window.localStorage.removeItem(key);
         }
 
-        REQUEST_TYPES.DELETE_USER_DATA();
+        REQUEST_TYPES.DELETE_USER_DATA("Save data deleted...", true);
     });
 }
 

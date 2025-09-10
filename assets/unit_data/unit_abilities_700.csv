@@ -35,6 +35,7 @@ ID,Form,Cost,Health,Damage,Range,KBCount,Speed,Cooldown,HasArea,Traits,Abilities
 714,1,4725,2790,380,400,3,12,140,T,Alien-Floating,Long_Distance-Massive_Damage-Multi_Hit-Surge
 715,0,5100,8400,700,150,2,45,153.33,T,Metal-Red-Zombie,Omnistrike-Resistant-Soulstrike-Weaken-Zombie_Killer
 715,1,5100,8400,700,150,2,45,153.33,T,Metal-Red-Zombie,Omnistrike-Resistant-Soulstrike-Weaken-Zombie_Killer
+715,2,5100,10000,700,150,4,55,153.33,T,Metal-Red-Zombie,Knockback-Omnistrike-Resistant-Soulstrike-Wave-Weaken-Zombie_Killer
 716,0,180,100,2,100,1,5,6.67,F,,
 716,1,180,100,2,100,1,5,6.67,F,Traitless,Strong
 716,2,1125,2000,720,250,2,8,23.33,T,Traitless,Behemoth_Slayer-Strong

@@ -40,6 +40,7 @@
 
 .table-filter-group .h-align {
     margin: 1vh 0;
+    align-items: stretch;
 }
 
 .table-filter-group button {

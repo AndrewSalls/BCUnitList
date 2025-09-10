@@ -29,3 +29,13 @@ ID,Form,Cost,Health,Damage,Range,KBCount,Speed,Cooldown,HasArea,Traits,Abilities
 815,0,4650,6000,2250,400,3,12,133.33,T,Traitless,Conjure-Eva_Killer-Explosion_Immune-Insane_Damage-Knockback-Long_Distance-Multi_Hit-Sage_Slayer-Slow_Immune-Wave_Immune
 815,1,4650,6000,2250,400,3,12,133.33,T,Traitless,Conjure-Eva_Killer-Explosion_Immune-Insane_Damage-Knockback-Long_Distance-Multi_Hit-Sage_Slayer-Slow_Immune-Wave_Immune
 816,0,0,0,2700,800,1,0,0,T,All,Dodge-Kamikaze-Shockwave_Immune-Slow-Weaken
+817,0,1095,1200,500,330,3,12,25.67,T,Alien-Black,Behemoth_Slayer-Colossus_Slayer-Curse-Warp_Immune
+817,1,3975,3500,1450,380,3,12,113.33,T,Alien-Black,Barrier_Breaker-Behemoth_Slayer-Colossus_Slayer-Conjure-Curse-Resistant-Warp_Immune
+818,0,0,0,2700,800,1,0,0,T,All,Dodge-Kamikaze-Shockwave_Immune-Weaken
+819,0,360,850,300,170,1,25,13.33,T,Floating-Red,Freeze_Immune-Resistant-Sage_Slayer-Wave_Immune
+819,1,360,850,300,170,1,25,13.33,T,Floating-Red,Freeze_Immune-Resistant-Sage_Slayer-Wave_Immune
+820,0,3900,3200,1000,460,5,9,153.33,T,Black-Traitless,Conjure-Mini_Wave-Wave_Immune-Weaken
+820,1,3900,4000,1350,460,5,9,153.33,T,Black-Traitless,Conjure-Mini_Wave-Wave_Immune-Weaken
+821,0,0,0,2700,800,1,0,0,T,All,Dodge-Kamikaze-Shockwave_Immune-Slow
+822,0,690,580,90,250,3,16,26.67,F,Metal,Metal_Killer-Money_Up-Slow
+822,1,690,720,115,250,3,16,26.67,F,Metal,Metal_Killer-Money_Up-Slow
