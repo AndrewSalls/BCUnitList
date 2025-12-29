@@ -102,6 +102,7 @@ ID,Form,Cost,Health,Damage,Range,KBCount,Speed,Cooldown,HasArea,Traits,Abilities
 137,0,750,900,400,320,3,14,12.67,T,Angel-Black,Massive_Damage
 137,1,5925,5800,4800,450,2,4,160,T,Angel-Black,Massive_Damage
 137,2,5925,6800,4800,485,2,4,160,T,Angel-Black,Massive_Damage-Multi_Hit
+137,3,750,1100,400,320,3,19,12.67,T,Angel-Black,Massive_Damage-Omnistrike-Survive
 138,0,600,450,250,280,3,8,16,T,Angel-Metal,Slow
 138,1,4800,2200,2400,425,4,7,150,T,Angel-Metal,Slow
 138,2,4800,2800,3000,455,4,7,150,T,Angel-Metal,Slow

@@ -62,7 +62,7 @@ async function readDescriptiveData(fileNumber, levelCaps) {
             dynamicTyping: true,
             skipEmptyLines: true
         }).data)
-        .then(entries => entries.map((/** @type {Object} */ entry) => {
+        .then(entries => entries.map((/** @type {any} */ entry) => {
                 let levelType = levelCaps.find((/** @type {{ Type: any; }} */ t) => t.Type === entry.LevelCapFormat);
                 if(!levelType) {
                     levelType = levelCaps.find((/** @type {{ Type: string; }} */ t) => t.Type === "Default");
@@ -104,6 +104,12 @@ async function readDescriptiveData(fileNumber, levelCaps) {
                     for(let x = 0; x < decompressed.ultra_talents.length; x++) {
                         unitData.ultra_talents[x].value = decompressed.ultra_talents[x];
                     }
+                    
+                    if(unitData.id === 25) {
+                        window.localStorage.setItem("bhtf", `${unitData.current_form > 1 ? "1" : "0"}`);
+                    } else if(unitData.id === 127) {
+                        window.localStorage.setItem("bloom", `${unitData.current_form > 1 ? "1" : "0"}`);
+                    }
                 } else if(entry.ID === 0) { // Cat must be at least level 1, ensures no weirdness with not owning any units
                     unitData.level = 1;
                 }
@@ -116,7 +122,7 @@ async function readDescriptiveData(fileNumber, levelCaps) {
 /**
  * Reads in a file containing all stat data (data that describes quantities of a unit).
  * @param {number} fileNumber The starting unit id of the read file, a multiple of 100.
- * @returns {Promise<any>} An unfinited unit object.
+ * @returns {Promise<any>} An unfinished unit object.
  */
 async function readStatData(fileNumber) {
     const output = [];

@@ -11,7 +11,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 209,EX,Y,Li'l Cat,Li'l Macho Cat,Li'l Mohawk Cat,,Lil,1,Critical1-Wave_Immune1-Slow_Immune1-Defense10-Attack10,
 210,EX,Y,Li'l Tank Cat,Li'l Wall Cat,Li'l Eraser Cat,,Lil,1,Toxic_Resist10-Soulstrike1-Dodge10-Defense10-Attack10,
 211,EX,Y,Li'l Axe Cat,Li'l Brave Cat,Li'l Dark Cat,,Lil,1,Target_Aku1-Freeze10-Surge_Resist10-Defense10-Attack10,
-212,UR,Y,The White Rabbit,The Black Cat,The Grey Fox,The Spectral Cat,UR,2,Warp_Immune1-Curse_Immune1-Cost_Down10-Defense10-Attack10,
+212,UR,Y,The White Rabbit,The Black Cat,The Grey Fox,The Spectral Cat,UR,1,Warp_Immune1-Curse_Immune1-Cost_Down10-Defense10-Attack10,
 213,EX,Y,Catburger,Cat Royale,Value Meal Cat,,Plus35,0,,
 214,RR,Y,HYAKUTARO,HYAKUTARO CC,,,,0,,
 215,RR,Y,MARCO,MARCO CC,,,GachaRare,0,,
@@ -56,11 +56,11 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 254,RR,N,Pretty Cat,Lovely Pretty Cat,Cyber Pretty Cat,,,0,,
 255,RR,N,Cyclops,Cyclops of Steel,Cyclops of Time-space,,,0,,
 256,EX,N,Golem,Rabbit Golem,Volcano Golem,,,0,,
-257,UR,Y,Thunder God Zeus,The Majestic Zeus,Almighty Zeus,,UR,1,Wave_Resist10-Weaken_Resist10-Target_Zombie1-Defense10-Attack10,Behemoth_Slayer1-Slow10
+257,UR,Y,Thunder God Zeus,The Majestic Zeus,Almighty Zeus,,UR,2,Wave_Resist10-Weaken_Resist10-Target_Zombie1-Defense10-Attack10,Behemoth_Slayer1-Slow10
 258,UR,Y,Anubis the Protector,Anubis the Unblemished,Almighty Anubis,,UR,2,Surge10-Surge_Immune1-Barrier_Breaker10-Defense10-Attack10,Attack_Rate10-Cost_Down10-Shield_Pierce10
 259,UR,Y,Radiant Aphrodite,Megaphrodite,Almighty Aphrodite,,UR,2,Slow10-Curse_Resist10-Wave_Resist10-Freeze_Resist10-Weaken_Resist10,Attack_Rate10-Attack10
 260,SR,Y,Catway,Drone Cat,Time Traveller Cat,,,0,,
-261,UR,Y,Hayabusa,Oni Hayabusa,Akuma Hayabusa,,UR,1,Target_Aku1-Shield_Pierce10-Curse_Resist10-Defense10-Attack10,Strong1-Attack_Rate10-Surge_Immune1
+261,UR,Y,Hayabusa,Oni Hayabusa,Akuma Hayabusa,,UR,2,Target_Aku1-Shield_Pierce10-Curse_Resist10-Defense10-Attack10,Strong1-Attack_Rate10-Surge_Immune1
 262,EX,N,Nyamusu,Neko Nyamusu,,,Plus10,0,,
 263,EX,N,Pochi,Tank Pochi,,,Plus10,0,,
 264,EX,N,Kuromi,Kuromi and Cats,,,Plus10,0,,
@@ -70,7 +70,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 268,EX,Y,Red Riding Mina,Crimson Mina,Awakened Mina,,,0,,
 269,UR,Y,Baby Gao,Mighty Lord Gao,,,UR,0,,
 270,UR,Y,Crazed Yuki,Crazed Yuki & Cat,Crazed Catgirl Yuki,,UR,1,Move_Speed10-Wave_Resist10-Survive10-Defense10-Attack10,
-271,UR,Y,Shining Amaterasu,Glorious Amaterasu,Almighty Amaterasu,,UR,1,Zombie_Killer1-Barrier_Breaker10-Survive10-Defense10-Attack10,
+271,UR,Y,Shining Amaterasu,Glorious Amaterasu,Almighty Amaterasu,,UR,2,Zombie_Killer1-Barrier_Breaker10-Survive10-Defense10-Attack10,Dodge10-Strengthen10
 272,UR,Y,Splendid Ganesha,Exalted Ganesha,Almighty Ganesha,,UR,2,Strengthen10-Weaken_Resist10-Knockback_Immune1-Defense10-Attack10,Attack_Rate10-Wave_Immune1-Freeze_Immune1
 273,SR,Y,Cheerleader Cat,Waitress Cat,Soba Cat,,,0,,
 274,UR,Y,Tropical Kalisa,"Tropical Kalisa, type X",,,UR,0,,

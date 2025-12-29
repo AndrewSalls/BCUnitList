@@ -41,7 +41,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 39,SR,Y,Apple Cat,Face Cat,iCat,,GachaSR,1,Slow_Resist10-Freeze_Resist10-Move_Speed10-Defense10-Attack10,
 40,SR,Y,Bath Cat,Sexy Bathtub Cat,Luxury Bath Cat,,GachaSR,1,Knockback10-Weaken_Resist10-Wave_Resist10-Defense10-Attack10,
 41,RR,Y,Salon Cat,Paris Cat,Cyborg Cat,,GachaRare,1,Survive10-Toxic_Immune1-Freeze_Resist10-Defense10-Attack10,
-42,UR,Y,Ice Cat,Ice Queen Cat,Ice Crystal Cat,,UR,1,Survive10-Slow_Resist10-Curse_Immune1-Defense10-Attack10,Strengthen10-Dodge10-Target_Metal1
+42,UR,Y,Ice Cat,Ice Queen Cat,Ice Crystal Cat,,UR,2,Survive10-Slow_Resist10-Curse_Immune1-Defense10-Attack10,Strengthen10-Dodge10-Target_Metal1
 43,UR,Y,Cat Machine,Cat Machine Mk 2,Cat Machine Mk 3,,UR,2,Freeze10-Knockback_Immune1-Move_Speed10-Defense10-Attack10,Attack_Rate10-Curse_Immune1-Barrier_Breaker10
 44,UR,Y,Lesser Demon Cat,Greater Demon Cat,Greater Balrog Cat,,UR,1,Strengthen10-Wave_Resist10-Defense10-Attack10-Cost_Down10,
 45,EX,N,Maiko Cat,Geisha Cat,,,,0,,
@@ -56,9 +56,9 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 54,EX,N,Type 10,Cat Transportation Type 10,,,,0,,
 55,RR,Y,Witch Cat,Sorceress Cat,Enchantress Cat,,GachaRare,1,Slow10-Survive10-Target_Zombie1-Defense10-Attack10,
 56,RR,Y,Archer Cat,Cupid Cat,Cataur,,GachaRare,1,Zombie_Killer1-Target_Zombie1-Defense10-Attack10-Recover_Speed10,
-57,UR,Y,Marauder Cat,Berserker Cat,Paladin Cat,,UR,1,Freeze10-Zombie_Killer1-Slow_Immune1-Defense10-Attack10,Critical10-Dodge10-Money_Up1
+57,UR,Y,Marauder Cat,Berserker Cat,Paladin Cat,,UR,2,Freeze10-Zombie_Killer1-Slow_Immune1-Defense10-Attack10,Critical10-Dodge10-Money_Up1
 58,RR,Y,Swordsman Cat,Sword Master Cat,Elemental Duelist Cat,,GachaRare,1,Weaken_Resist10-Target_Angel1-Defense10-Attack10-Recover_Speed10,
-59,UR,Y,Baby Cat,Baby Cats,Cats in the Cradle,Cats in the Stroller,UR,2,Slow10-Slow_Resist10-Curse_Immune1-Defense10-Attack10,
+59,UR,Y,Baby Cat,Baby Cats,Cats in the Cradle,Cats in the Stroller,UR,1,Slow10-Slow_Resist10-Curse_Immune1-Defense10-Attack10,
 60,RR,Y,Bronze Cat,Michelangelo Cat,Quizmaster Cat,,,0,,
 61,SR,Y,Sushi Cat,Fried Shrimp Cat,Roe Cat,,GachaSR,1,Freeze_Resist10-Slow_Resist10-Defense10-Attack10-Cost_Down10,
 62,EX,N,Toy Machine Cat,Vendor Cat,,,,0,,
@@ -72,9 +72,9 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 70,RR,Y,Salaryman Cat,Grudge Cat,Ritual Cat,,,0,,
 71,UR,Y,Sanada Yukimura,Wargod Yukimura,Immortal Yukimura,,UR,1,Strengthen10-Freeze_Resist10-Slow_Resist10-Defense10-Attack10,
 72,UR,Y,Maeda Keiji,Wargod Keiji,Immortal Keiji,,UR,2,Strengthen10-Weaken_Resist10-Cost_Down10-Defense10-Attack10,Target_Floating1-Wave10-Freeze_Immune1
-73,UR,Y,Oda Nobunaga,Wargod Nobunaga,Immortal Nobunaga,Phantasmal Nobunaga,UR,2,Survive10-Wave_Resist10-Curse_Immune1-Defense10-Move_Speed10,
+73,UR,Y,Oda Nobunaga,Wargod Nobunaga,Immortal Nobunaga,Phantasmal Nobunaga,UR,1,Survive10-Wave_Resist10-Curse_Immune1-Defense10-Move_Speed10,
 74,RR,Y,Reindeer Fish Cat,Sashimi Cat,Xmas Pudding Cat,,,0,,
-75,UR,Y,Windy,"Windy, type α",Divine Windy,Ultimate Windy,UR,2,Freeze10-Strengthen10-Curse_Immune1-Defense10-Attack10,
+75,UR,Y,Windy,"Windy, type α",Divine Windy,Ultimate Windy,UR,1,Freeze10-Strengthen10-Curse_Immune1-Defense10-Attack10,
 76,UR,Y,Thundia,"Thundia, type β",Divine Thundia,Ultimate Thundia,UR,1,Strengthen10-Wave_Resist10-Curse_Immune1-Defense10-Attack10,
 77,RR,N,Droid Cat,Droid Cat Mk 2,SpringDroid,,,0,,
 78,RR,Y,Space Cat,Major Space Cat,Space Marine Cat,,,0,,
@@ -83,10 +83,10 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 81,RR,Y,Doll Cats,Cat-o-tron,Nyalladin,,,0,,
 82,EX,Y,Blue Shinobi,Orange Shinobi,,,Plus10,0,,
 83,UR,Y,Sodom,Earth King Sodom,God-Emperor Sodom,,UR,2,Weaken10-Target_Relic1-Curse_Immune1-Defense10-Attack10,Behemoth_Slayer1-Sage_Slayer1-Weaken_Immune1
-84,UR,Y,Megidora,Holy Dragon Megidora,God-Emperor Megidora,,UR,1,Knockback10-Wave10-Curse_Immune1-Defense10-Attack10,Cost_Down10-Target_Metal1-Target_Relic1
-85,UR,Y,Vars,Dragon King Vars,God-Emperor Vars,,UR,1,Knockback10-Curse_Immune1-Target_Relic1-Defense10-Attack10,Slow10-Attack_Rate10-Wave_Immune1
+84,UR,Y,Megidora,Holy Dragon Megidora,God-Emperor Megidora,,UR,2,Knockback10-Wave10-Curse_Immune1-Defense10-Attack10,Cost_Down10-Target_Metal1-Target_Relic1
+85,UR,Y,Vars,Dragon King Vars,God-Emperor Vars,,UR,2,Knockback10-Curse_Immune1-Target_Relic1-Defense10-Attack10,Slow10-Attack_Rate10-Wave_Immune1
 86,UR,Y,Kamukura,God Dragon Kamukura,God-Emperor Kamukura,,UR,2,Resistant1-Curse_Immune1-Slow_Resist10-Defense10-Attack10,Sage_Slayer1-Slow10-Cost_Down10
-87,UR,Y,Raiden,Dragonslayer Raiden,God-Emperor Raiden,,UR,1,Dodge10-Knockback_Immune1-Freeze_Resist10-Defense10-Attack10,Slow_Immune1-Surge_Immune1-Behemoth_Slayer1
+87,UR,Y,Raiden,Dragonslayer Raiden,God-Emperor Raiden,,UR,2,Dodge10-Knockback_Immune1-Freeze_Resist10-Defense10-Attack10,Slow_Immune1-Surge_Immune1-Behemoth_Slayer1
 88,RR,Y,Rope Jump Cat,Pair Rope Jump Cat,Noodle Cats,,,0,,
 89,UR,N,Nimue,Neutralization Type Nimue,,,UR,0,,
 90,UR,N,Monkey King,SSS Monkey King,,,UR,0,,

@@ -25,10 +25,21 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function randomizeSplash() {
+    const dateCheck = new Date().getDate();
+    const beatITF3 = window.localStorage.getItem("bhtf") === "1";
+    const noFlowerTF = window.localStorage.getItem("bloom") !== "1";
+    if((dateCheck === 21 || dateCheck === 1) && beatITF3 && noFlowerTF) {
+        /** @type {HTMLDivElement} */ (document.querySelector("#home-splash")).textContent = SPLASH_TEXT["22t"];
+        return;
+    } else if((dateCheck === 22 || dateCheck === 2) && beatITF3 && noFlowerTF) {
+        /** @type {HTMLDivElement} */ (document.querySelector("#home-splash")).textContent = SPLASH_TEXT["22"];
+        return;
+    }
+
     const rand = Math.random();
-    if(rand < 0.65) {
+    if(rand < 0.7) {
         /** @type {HTMLDivElement} */ (document.querySelector("#home-splash")).textContent = SPLASH_TEXT.common[Math.floor(Math.random() * SPLASH_TEXT.common.length)];
-    } else if(rand < 0.99) {
+    } else if(rand < 0.995) {
         /** @type {HTMLDivElement} */ (document.querySelector("#home-splash")).textContent = SPLASH_TEXT.uncommon[Math.floor(Math.random() * SPLASH_TEXT.uncommon.length)];
     } else {
         /** @type {HTMLDivElement} */ (document.querySelector("#home-splash")).textContent = SPLASH_TEXT.rare[Math.floor(Math.random() * SPLASH_TEXT.rare.length)];
@@ -40,14 +51,7 @@ function initializePages() {
     document.querySelector("#home-cat-quote").onclick = () => {
         randomizeSplash();
     };
-
     randomizeSplash();
-    const dateCheck = new Date().getDate(); // This is separate so that it only triggers on initial page load
-    if(dateCheck === 21 || dateCheck === 1) {
-        /** @type {HTMLDivElement} */ (document.querySelector("#home-splash")).textContent = SPLASH_TEXT["22t"];
-    } else if(dateCheck === 22 || dateCheck === 2) {
-        /** @type {HTMLDivElement} */ (document.querySelector("#home-splash")).textContent = SPLASH_TEXT["22"];
-    }
 
     /** @type {HTMLSpanElement} */ (document.querySelector("#home-update-ver")).textContent = SETTINGS.gameVersion;
 }

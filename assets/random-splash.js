@@ -83,7 +83,7 @@ const SPLASH_TEXT = {
         "There's a fire burning in your heart. Never let anyone put it out, not even you."
     ],
     "22t": "Flower Cat's true form is available tomorrow!",
-    "22": "2:22 PM, Flower Cat Awakens, don't forget!"
+    "22": "Flower Cat awakens today! Set a timer for 2:22 PM!"
 };
 
 export default SPLASH_TEXT;

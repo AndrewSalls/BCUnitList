@@ -36,7 +36,7 @@ ID,LevelFormat,TrueXPCost,TrueMaterial1,TrueMaterialCount1,TrueMaterial2,TrueMat
 134,,1000000,purple_fruit,7,red_fruit,2,blue_fruit,3,yellow_fruit,7,epic_fruit,4,235-175-175-175-175,,,,,,,,,,,,225-285-150
 135,,1000000,yellow_fruit,30,epic_fruit,10,,,,,,,100-235-100-175-175,2000000,yellow_stone,10,yellow_fruit,10,,,,,,,
 136,,1000000,green_fruit,2,red_fruit,7,blue_fruit,3,yellow_fruit,7,epic_fruit,4,235-175-175-175-175,,,,,,,,,,,,285-150-285
-137,,1000000,green_fruit,2,purple_fruit,7,red_fruit,3,yellow_fruit,7,epic_fruit,4,100-100-175-175-175,,,,,,,,,,,,
+137,,1000000,green_fruit,2,purple_fruit,7,red_fruit,3,yellow_fruit,7,epic_fruit,4,100-100-175-175-175,2000000,green_gem,2,red_stone,5,purple_stone,5,gold_fruit,1,,,
 138,,1000000,green_fruit,3,red_fruit,3,blue_fruit,5,yellow_fruit,7,epic_fruit,3,235-175-175-175-175,2000000,yellow_gem,1,red_stone,5,purple_stone,5,epic_fruit,2,,,
 139,Borger,,,,,,,,,,,,,,,,,,,,,,,,
 140,Serial,,,,,,,,,,,,,,,,,,,,,,,,

@@ -19,6 +19,8 @@ const ORB_MAP = {
         }
     },
     "ranks": ["D", "C", "B", "A", "S"],
-    "abilities": ["Death Mini-Surge", "Resist Wave", "Cash Back", "Resist Knockback", "Stories of Legend Buff", "Colossus Slayer", "Cat Cannon Charge", "Resistant To Toxic", "Dodge Attack", "Resist Slow", "Resist Curse", "Uncanny Legends Buff", "Single Surge Counter", "Berserker", "Shortened Cooldown", "Resist Freeze", "Resist Weaken"]
+    "abilities": ["Death Mini-Surge", "Resist Wave", "Cash Back", "Resist Knockback", "Stories of Legend Buff", "Colossus Slayer", "Cat Cannon Charge",
+        "Resistant To Toxic", "Dodge Attack", "Resist Slow", "Resist Curse", "Uncanny Legends Buff", "Single Surge Counter", "Berserker", "Shortened Cooldown",
+        "Resist Freeze", "Resist Weaken", "Production Cost Down", "Resist Surge", "Extra Money", "Resist Explosions"]
 };
 export default ORB_MAP;

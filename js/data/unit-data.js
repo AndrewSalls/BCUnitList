@@ -222,6 +222,11 @@ export default class UnitData {
         }
 
         window.localStorage.setItem("ur", `${parseInt(window.localStorage.getItem("ur") ?? "0") + userRankDelta}`);
+        if(id === 25) {
+            window.localStorage.setItem("bhtf", `${this.#unitData[id].current_form > 1 ? "1" : "0"}`);
+        } else if(id === 127) {
+            window.localStorage.setItem("bloom", `${this.#unitData[id].current_form > 1 ? "1" : "0"}`);
+        }
     }
 
     /**

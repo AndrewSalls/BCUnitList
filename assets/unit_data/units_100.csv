@@ -24,7 +24,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 122,RR,Y,Vacation Queen,Office Lady Cat,Call Center Cat,,,0,,
 123,EX,Y,Bean Cats,Brah Cats,Val Val Cat,,,0,,
 124,UR,Y,Date Masamune,Wargod Masamune,Immortal Masamune,,UR,2,Knockback10-Wave_Resist10-Slow_Immune1-Defense10-Attack10,Mini_Wave10
-125,UR,Y,Takeda Shingen,Wargod Shingen,Immortal Shingen,,UR,1,Barrier_Breaker10-Target_Angel1-Defense10-Attack10-Cost_Down10,Target_Red1-Target_Zombie1-Target_Aku1
+125,UR,Y,Takeda Shingen,Wargod Shingen,Immortal Shingen,,UR,2,Barrier_Breaker10-Target_Angel1-Defense10-Attack10-Cost_Down10,Target_Red1-Target_Zombie1-Target_Aku1
 126,RR,Y,Clockwork Cat,Puppetmaster Cat,Puppetmaster & Charley,,,0,,
 127,EX,Y,Flower Cat,Cooldown Cat,Bombercat,,,0,,
 128,RR,Y,Vengeful Cat,Groucho Cat,Kite Cat,,,0,,
@@ -34,10 +34,10 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 132,RR,Y,Kung Fu Cat X,Drunken Master Cat X,Iron Claw X,,,0,,
 133,EX,N,Hikakin,Bikyakin,Mukyakin,,,0,,
 134,UR,Y,Urashima Taro,Guardian Gamereon,King Gamereon,,UR,2,Slow10-Freeze_Resist10-Knockback_Resist10-Defense10-Attack10,Cost_Down10-Curse10-Slow_Immune1
-135,UR,Y,The Grateful Crane,Super Galaxy Cosmo,Ultima Galaxy Cosmo,Supernova Cosmo,UR,2,Colossus_Slayer1-Curse10-Curse_Immune1-Defense10-Attack10,
+135,UR,Y,The Grateful Crane,Super Galaxy Cosmo,Ultima Galaxy Cosmo,Supernova Cosmo,UR,1,Colossus_Slayer1-Curse10-Curse_Immune1-Defense10-Attack10,
 136,UR,Y,Momotaro,The Peach Angels,The Peach Devils,,UR,2,Weaken10-Freeze10-Slow_Resist10-Defense10-Attack10,Mini_Wave10-Wave_Immune1-Knockback10
-137,UR,Y,Kasa Jizo,Jizo's Moving Castle,Jizo's Mega-Castle,,UR,1,Curse_Immune1-Toxic_Immune1-Surge_Resist10-Defense10-Attack10,
-138,UR,Y,Princess Kaguya,The Death Moon,The Chaos Moon,Ultra Kaguya,UR,2,Knockback10-Slow10-Slow_Resist10-Defense10-Attack10,
+137,UR,Y,Kasa Jizo,Jizo's Moving Castle,Jizo's Mega-Castle,Ultra Kasa Jizo,UR,1,Curse_Immune1-Toxic_Immune1-Surge_Resist10-Defense10-Attack10,
+138,UR,Y,Princess Kaguya,The Death Moon,The Chaos Moon,Ultra Kaguya,UR,1,Knockback10-Slow10-Slow_Resist10-Defense10-Attack10,
 139,EX,N,Nekondo,Nekondo HG,Nekondo SP,,,0,,
 140,EX,Y,Squish Ball Cat,Muscleman Cat,,,,0,,
 141,EX,N,God,Secret God,,,,0,,
@@ -57,7 +57,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 155,UR,N,Chicken Cat,Rooster Cat,,,,0,,
 156,RR,N,Dragon League Swordsman,Dragon League Witch,,,,0,,
 157,EX,N,Nubobo,Gorubo,,,,0,,
-158,UR,Y,Uesugi Kenshin,Wargod Kenshin,Immortal Kenshin,Hellrider Kenshin,UR,2,Target_Relic1-Curse_Immune1-Weaken_Resist10-Defense10-Attack10,
+158,UR,Y,Uesugi Kenshin,Wargod Kenshin,Immortal Kenshin,Hellrider Kenshin,UR,1,Target_Relic1-Curse_Immune1-Weaken_Resist10-Defense10-Attack10,
 159,UR,Y,Kalisa,"Kalisa, type χ",Divine Kalisa,,UR,1,Slow10-Curse_Immune1-Defense10-Attack10-Move_Speed10,
 160,SR,Y,Yurinchi,Phoenix Yurinchi,Gekirinchi,,GachaSR,0,,
 161,UR,Y,Crazed Princess Punt,Crazed Princess Punt CC,Manic Princess Punt,,UR,1,Critical1-Target_Zombie1-Zombie_Killer1-Defense10-Attack10,
@@ -76,14 +76,14 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 174,UR,Y,Mola King,Living Legend,Master of the Pacific,,UR,1,Dodge10-Mini_Surge10-Attack10,
 175,EX,Y,Meowla Meowla,Catorpedo,,,,0,,
 176,RR,Y,Marshmallow Cat,Creepmallow,,,,0,,
-177,UR,Y,Dioramos,Archdragon Dioramos,God-Emperor Dioramos,Ascendant Dioramos,UR,2,Strengthen10-Freeze_Resist10-Weaken_Resist10-Defense10-Attack10,
+177,UR,Y,Dioramos,Archdragon Dioramos,God-Emperor Dioramos,Ascendant Dioramos,UR,1,Strengthen10-Freeze_Resist10-Weaken_Resist10-Defense10-Attack10,
 178,EX,N,Mob Cat,Yakuza Vampire,,,,0,,
 179,RR,Y,Takuya & Yuki,"Takuya, Yuki & Cat",Takuya & Lovely Yuki,,,0,,
 180,UR,Y,Mystery Girl Yuki,Mystery Yuki & Cat,Mystery Catgirl Yuki,,UR,1,Knockback10-Toxic_Resist10-Cost_Down10-Defense10-Attack10,
 181,EX,Y,Yuki Cat,Lovely Yuki Cat,,,,0,,
 182,EX,N,Cuckoo Crew 12,Cuckoo Crew 12+1,,,,0,,
 183,RR,Y,Cat Kart R,Cat Kart G,Cat Kart P,,,0,,
-184,EX,Y,Mr. Ninja,Mint,,,Plus20,0,,
+184,EX,Y,Mr. Ninja,Mint,,,Plus25,0,,
 185,UR,Y,Hearscht,Hearscht CC,Revolutionary Hearscht CC,,UR,1,Freeze10-Knockback_Immune1-Strengthen10-Defense10-Attack10,
 186,UR,Y,Cornelia,Cornelia CC,,,UR,0,,
 187,UR,Y,Juvens,Juvens CC,Holiday Juvens CC,,UR,0,,
@@ -94,7 +94,7 @@ ID,Rarity,InEN,NF,EF,TF,UF,LevelCapFormat,OrbCount,Talents,UltraTalents
 192,EX,N,Yamaoka Minori,Queen Minori,,,,0,,
 193,EX,N,Nakamura Kanae,Queen Kanae,,,,0,,
 194,UR,Y,Akira,Shadow Akira,Inferno Akira,,UR,2,Freeze10-Strengthen10-Survive10-Defense10-Attack10,Target_Aku1-Surge10
-195,UR,Y,Mekako Saionji,Dr. Mekako,Mission Control Mekako,,UR,1,Weaken10-Knockback10-Survive10-Defense10-Attack10,Target_Angel1-Dodge10
+195,UR,Y,Mekako Saionji,Dr. Mekako,Mission Control Mekako,,UR,2,Weaken10-Knockback10-Survive10-Defense10-Attack10,Target_Angel1-Dodge10
 196,UR,Y,Catman,Dark Catman,Ultimate Catman,,UR,1,Dodge10-Warp_Immune1-Freeze_Immune1-Defense10-Attack10,
 197,RR,Y,Psychocat,Neo Psychocat,Corrupted Psychocat,,GachaRare,1,Weaken10-Slow10-Freeze_Resist10-Target_Zombie1-Defense10,
 198,RR,Y,Onmyoji Cat,Magica Cat,Thaumaturge Cat,,GachaRare,1,Freeze_Resist10-Curse_Resist10-Wave_Immune1-Defense10-Attack10,
