@@ -63,6 +63,7 @@ body {
     min-width: 20vw;
     padding: 1vh 1vw;
     border-radius: 0 10000px 0 0;
+    pointer-events: none;
 }
 @keyframes fadeout {
     0% {

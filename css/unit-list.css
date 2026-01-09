@@ -75,12 +75,6 @@
     filter: brightness(0.8);
 }
 
-#unit-search {
-    border: 2px solid var(--text);
-    color: var(--text);
-    border-radius: 5px;
-}
-
 h2 {
     text-align: center;
 }
@@ -89,9 +83,37 @@ h2 {
     animation: rainbow 8s linear 0s infinite forwards;
 }
 
-#unit-advanced-search {
+#quick-nav-search > .h-align {
+    position: relative;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
     height: 100%;
-    aspect-ratio: 1/1;
+}
+
+#unit-search {
+    border: 2px solid var(--text);
+    color: var(--text);
     border-radius: 5px;
-    margin-left: 1vh;
+    height: 20px;
+}
+
+#quick-nav-search #unit-advanced-search {
+    aspect-ratio: 1/1;
+    border-radius: 3px;
+    border: none;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--content) !important;
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    right: 1.6px;
+}
+
+#unit-advanced-search svg {
+    width: 100%;
+    height: 100%;
 }

@@ -204,6 +204,10 @@
     justify-content: center;
 }
 
+.option-checkbox-align h6 {
+    margin-bottom: 0;
+}
+
 .option-checkbox-align input[type='checkbox'] {
     box-sizing: border-box;
     width: 24px;

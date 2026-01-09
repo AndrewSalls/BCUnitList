@@ -350,10 +350,13 @@
     position: absolute;
     left: 0.5vw;
     top: 1vh;
-    width: 1vw;
-    height: 1vw;
+    width: 1.5vw;
+    height: 1.5vw;
     cursor: pointer;
     transition: 0.1s linear filter;
+    fill: var(--content-border);
+    stroke: var(--text);
+    stroke-width: 5px;
 }
 #advanced-search-exit:hover {
     filter: invert(0.3);

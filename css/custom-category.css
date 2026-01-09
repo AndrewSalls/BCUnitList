@@ -49,6 +49,15 @@
     background-color: var(--warning);
 }
 
+#add-unit {
+    border: 1px solid var(--text);
+    border-right: none;
+}
+
 #add-unit-advanced {
-    margin-left: 1vw;
+    height: 100%;
+    aspect-ratio: 1/1;
+    padding: 2px;
+    border: 1px solid var(--text);
+    border-left: 0;
 }

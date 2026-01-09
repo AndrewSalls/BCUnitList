@@ -38,8 +38,8 @@ export default function createSearchModal() {
     
     const closeX = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     closeX.id = "advanced-search-exit";
-    closeX.setAttribute("viewBox", "0 0 64 64");
-    closeX.innerHTML = '<polygon points="10,0 0,10 54,64 64,54" /><polygon points="54,0 64,10 10,64 0,54" />';
+    closeX.setAttribute("viewBox", "-5 -5 74 74");
+    closeX.innerHTML = '<path d="M10 0 0 10 22 32 0 54 10 64 32 42 54 64 64 54 42 32 64 10 54 0 32 22Z" />';
     closeX.onclick = () => output.classList.add("hidden");
     output.appendChild(closeX);
 

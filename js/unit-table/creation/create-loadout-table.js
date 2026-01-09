@@ -150,9 +150,8 @@ export function appendChip(id, form, parent, saveCallback, ownedOnly) {
     const advancedSearchBtn = document.createElement("button");
     advancedSearchBtn.classList.add("advanced-search-open");
     advancedSearchBtn.innerHTML = `
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <rect x="10.5" y="0" width="3" height="24" />
-            <rect x="0" y="10.5" width="24" height="3" />
+        <svg viewBox="0 0 9.72 9.72" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.7 4.59c.1.11.16.26.16.41v4.42c0 .27.32.4.51.21L5.6 8.22c.17-.2.26-.3.26-.49V5c0-.15.06-.3.16-.41L9.56.76C9.83.47 9.62 0 9.23 0H.5C.11 0-.1.47.17.76L3.7 4.59z" />
         </svg>`;
 
     const resolveSearch = (searchID, searchForm) => {
