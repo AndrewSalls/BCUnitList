@@ -290,10 +290,16 @@ function createFilterSelection() {
     ];
     traitModals.push(createModalButton("Has Ability Orb Equipped", "trait-ability-filter", "Ability"));
     const typeModals = ORB_DATA.types.map((t, i) => createModalButton(`Has ${t} Orb Equipped`, `type-effect-${i}-filter`, t));
-    const typeModals2 = ORB_DATA.abilities.map((t, i) => createModalButton(`Has ${t} Orb Equipped`, `type-ability-${i}-filter`, t));
+    const typeModals2 = ORB_DATA.abilities.map((t, i) => createModalButton(`Has ${t} Orb Equipped`, `type-ability-${i}-filter`, t))
+        .reduce((/** @type {HTMLButtonElement[][]} */ acc, item, index) => {
+            const pos = Math.floor(index / 8);
+            acc[pos] ??= [];
+            acc[pos].push(item);
+            return acc;
+        }, []);
     const rankModals = ORB_DATA.ranks.map((r, i) => createModalButton(`Has ${r} Rank Orb Equipped`, `rank-${i}-filter`, r));
 
-    filterButtonCollection.appendChild(createModalButtonSuperGroup("Talent Orbs", traitModals, typeModals, typeModals2, rankModals));
+    filterButtonCollection.appendChild(createModalButtonSuperGroup("Talent Orbs", traitModals, typeModals, ...typeModals2, rankModals));
 
     wrapper.append(label, filterButtonCollection);
     return wrapper;
